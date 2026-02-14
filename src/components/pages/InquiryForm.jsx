@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import apiInstance from "../../config/api";
+import inquiryService from "../../services/inquiryService";
 
 const InquiryForm = () => {
   const [formData, setFormData] = useState({
@@ -59,9 +59,10 @@ const InquiryForm = () => {
       return;
     }
 
-    try {
-      await apiInstance.post("/api/Inquiry", formData);
+    // Call service and handle response
+    const result = await inquiryService.submitInquiry(formData);
 
+    if (result.success) {
       setStatus({
         type: "success",
         message:
@@ -76,39 +77,28 @@ const InquiryForm = () => {
         courseInterest: "",
         message: "",
       });
-    } catch (error) {
-      console.error("API Error:", error);
-
-      let errorMessage = "Something went wrong. Please try again.";
-
-      if (error.response) {
-        // Check for validation errors from backend
-        if (error.response.data?.errors) {
-          const backendErrors = {};
-          Object.keys(error.response.data.errors).forEach((key) => {
-            const fieldName = key.charAt(0).toLowerCase() + key.slice(1);
-            backendErrors[fieldName] = error.response.data.errors[key][0];
-          });
-          setValidationErrors(backendErrors);
-          errorMessage = "Please fix the validation errors below.";
-        } else {
-          errorMessage =
-            error.response?.data?.message ||
-            `Server Error: ${error.response.status}`;
-        }
-      } else if (error.request) {
-        // Request made but no response
-        errorMessage =
-          "Cannot connect to server. Please check if the backend is running.";
+    } else {
+      // Handle validation errors from backend
+      if (result.errors) {
+        const backendErrors = {};
+        Object.keys(result.errors).forEach((key) => {
+          const fieldName = key.charAt(0).toLowerCase() + key.slice(1);
+          backendErrors[fieldName] = result.errors[key][0];
+        });
+        setValidationErrors(backendErrors);
+        setStatus({
+          type: "error",
+          message: "Please fix the validation errors below.",
+        });
+      } else {
+        setStatus({
+          type: "error",
+          message: result.message,
+        });
       }
-
-      setStatus({
-        type: "error",
-        message: errorMessage,
-      });
-    } finally {
-      setLoading(false);
     }
+
+    setLoading(false);
   };
 
   return (
