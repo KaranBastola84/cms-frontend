@@ -1,11 +1,53 @@
 import apiInstance from "../config/api";
 
+/**
+ * Helper function to decode JWT token
+ * @param {string} token - JWT token
+ * @returns {Object|null} Decoded token payload or null
+ */
+const decodeToken = (token) => {
+  try {
+    const base64Url = token.split('.')[1];
+    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    const jsonPayload = decodeURIComponent(
+      atob(base64)
+        .split('')
+        .map((c) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+        .join('')
+    );
+    return JSON.parse(jsonPayload);
+  } catch (error) {
+    console.error("Error decoding token:", error);
+    return null;
+  }
+};
+
+/**
+ * Check if JWT token is expired
+ * @param {string} token - JWT token
+ * @returns {boolean} True if token is expired
+ */
+const isTokenExpired = (token) => {
+  if (!token) return true;
+  
+  const decoded = decodeToken(token);
+  if (!decoded || !decoded.exp) return true;
+  
+  // Check if token expires in less than 1 minute
+  const expirationTime = decoded.exp * 1000; // Convert to milliseconds
+  const currentTime = Date.now();
+  const buffer = 60 * 1000; // 1 minute buffer
+  
+  return expirationTime - currentTime < buffer;
+};
+
 const authService = {
   /**
    * Login user with username and password
    * @param {string} username - User's username
    * @param {string} password - User's password
    * @returns {Promise} Response with user data and tokens
+   * @throws {Error} If login fails
    */
   login: async (username, password) => {
     try {
@@ -18,7 +60,6 @@ const authService = {
         // Store tokens in localStorage
         localStorage.setItem("accessToken", response.data.result.access);
         localStorage.setItem("refreshToken", response.data.result.refresh);
-        localStorage.setItem("authToken", response.data.result.access); // For compatibility with api.js interceptor
         
         // Store user data
         localStorage.setItem("userData", JSON.stringify(response.data.result.user));
@@ -28,30 +69,43 @@ const authService = {
           data: response.data.result,
         };
       } else {
-        return {
-          success: false,
-          message: response.data.errorMessage.join(", ") || "Login failed",
-        };
+        throw new Error(response.data.errorMessage?.join(", ") || "Login failed");
       }
     } catch (error) {
-      console.error("Login error:", error);
-      return {
-        success: false,
-        message: error.response?.data?.errorMessage?.join(", ") || 
-                 error.response?.data?.message || 
-                 "An error occurred during login",
-      };
+      const errorMessage = 
+        error.response?.data?.errorMessage?.join(", ") || 
+        error.response?.data?.message || 
+        error.message ||
+        "An error occurred during login";
+      throw new Error(errorMessage);
     }
   },
 
   /**
-   * Logout user
+   * Logout user and call logout API
    */
-  logout: () => {
-    localStorage.removeItem("accessToken");
-    localStorage.removeItem("refreshToken");
-    localStorage.removeItem("authToken");
-    localStorage.removeItem("userData");
+  logout: async () => {
+    try {
+      const refreshToken = localStorage.getItem("refreshToken");
+      
+      // Call logout API if refresh token exists
+      if (refreshToken) {
+        await apiInstance.post("/api/Auth/logout", {
+          refresh: refreshToken,
+        });
+      }
+    } catch (error) {
+      console.error("Logout API error:", error);
+      // Continue with local logout even if API call fails
+    } finally {
+      // Clear all local storage
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("refreshToken");
+      localStorage.removeItem("userData");
+      
+      // Redirect to login
+      window.location.href = "/login";
+    }
   },
 
   /**
@@ -69,12 +123,15 @@ const authService = {
   },
 
   /**
-   * Check if user is authenticated
-   * @returns {boolean} True if user has valid token
+   * Check if user is authenticated with valid token
+   * @returns {boolean} True if user has valid, non-expired token
    */
   isAuthenticated: () => {
     const token = localStorage.getItem("accessToken");
-    return !!token;
+    if (!token) return false;
+    
+    // Check if token is expired
+    return !isTokenExpired(token);
   },
 
   /**
@@ -91,6 +148,29 @@ const authService = {
    */
   getRefreshToken: () => {
     return localStorage.getItem("refreshToken");
+  },
+
+  /**
+   * Check if access token is expired
+   * @returns {boolean} True if token is expired
+   */
+  isAccessTokenExpired: () => {
+    const token = localStorage.getItem("accessToken");
+    return isTokenExpired(token);
+  },
+
+  /**
+   * Update user data in localStorage
+   * @param {Object} userData - Updated user data
+   */
+  updateUser: (userData) => {
+    try {
+      localStorage.setItem("userData", JSON.stringify(userData));
+      return true;
+    } catch (error) {
+      console.error("Error updating user data:", error);
+      return false;
+    }
   },
 };
 

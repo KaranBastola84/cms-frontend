@@ -10,6 +10,7 @@ const Login = () => {
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [validationErrors, setValidationErrors] = useState({});
 
   const navigate = useNavigate();
   const { login } = useAuth();
@@ -22,23 +23,48 @@ const Login = () => {
     });
     // Clear error when user starts typing
     if (error) setError("");
+    if (validationErrors[name]) {
+      setValidationErrors({
+        ...validationErrors,
+        [name]: null,
+      });
+    }
+  };
+
+  const validateForm = () => {
+    const errors = {};
+
+    if (!formData.username || formData.username.trim().length < 3) {
+      errors.username = "Username must be at least 3 characters";
+    }
+
+    if (!formData.password || formData.password.length < 6) {
+      errors.password = "Password must be at least 6 characters";
+    }
+
+    return errors;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Form submitted");
     setLoading(true);
     setError("");
+    setValidationErrors({});
+
+    // Frontend validation
+    const errors = validateForm();
+    if (Object.keys(errors).length > 0) {
+      setValidationErrors(errors);
+      setLoading(false);
+      return;
+    }
 
     try {
-      console.log("Attempting login...");
       const result = await login(formData.username, formData.password);
-      console.log("Login result:", result);
 
       if (result.success) {
         // Navigate to role-specific dashboard
         const userRole = result.user.role;
-        console.log("User role:", userRole);
 
         switch (userRole) {
           case "Admin":
@@ -102,10 +128,20 @@ const Login = () => {
               value={formData.username}
               onChange={handleChange}
               required
-              className="px-4 py-2.5 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-all disabled:bg-gray-100 disabled:cursor-not-allowed"
+              className={`px-4 py-2.5 text-sm border rounded-lg focus:outline-none focus:ring-2 transition-all disabled:bg-gray-100 disabled:cursor-not-allowed ${
+                validationErrors.username
+                  ? "border-red-500 focus:border-red-600 focus:ring-red-200 bg-red-50"
+                  : "border-gray-300 focus:border-amber-500 focus:ring-amber-500"
+              }`}
               placeholder="Enter your username"
               disabled={loading}
             />
+            {validationErrors.username && (
+              <p className="text-red-500 text-xs mt-1 flex items-center gap-1">
+                <AlertCircle className="w-3 h-3" />
+                {validationErrors.username}
+              </p>
+            )}
           </div>
 
           <div className="flex flex-col gap-2">
@@ -123,10 +159,20 @@ const Login = () => {
               value={formData.password}
               onChange={handleChange}
               required
-              className="px-4 py-2.5 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-all disabled:bg-gray-100 disabled:cursor-not-allowed"
+              className={`px-4 py-2.5 text-sm border rounded-lg focus:outline-none focus:ring-2 transition-all disabled:bg-gray-100 disabled:cursor-not-allowed ${
+                validationErrors.password
+                  ? "border-red-500 focus:border-red-600 focus:ring-red-200 bg-red-50"
+                  : "border-gray-300 focus:border-amber-500 focus:ring-amber-500"
+              }`}
               placeholder="Enter your password"
               disabled={loading}
             />
+            {validationErrors.password && (
+              <p className="text-red-500 text-xs mt-1 flex items-center gap-1">
+                <AlertCircle className="w-3 h-3" />
+                {validationErrors.password}
+              </p>
+            )}
           </div>
 
           <button

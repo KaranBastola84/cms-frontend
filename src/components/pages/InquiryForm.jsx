@@ -49,6 +49,71 @@ const InquiryForm = () => {
         [name]: null,
       });
     }
+
+    // Clear general status message when user edits
+    if (status.type === "error") {
+      setStatus({ type: "", message: "" });
+    }
+  };
+
+  // Validation helper functions
+  const validateFullName = (name) => {
+    if (!name || name.trim().length < 2) {
+      return "Name must be at least 2 characters long";
+    }
+    if (name.length > 100) {
+      return "Name must not exceed 100 characters";
+    }
+    if (!/^[a-zA-Z\s'-]+$/.test(name)) {
+      return "Name can only contain letters, spaces, hyphens, and apostrophes";
+    }
+    return null;
+  };
+
+  const validateEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!email || !emailRegex.test(email)) {
+      return "Please enter a valid email address";
+    }
+    if (email.length > 255) {
+      return "Email must not exceed 255 characters";
+    }
+    return null;
+  };
+
+  const validatePhoneNumber = (phone) => {
+    // Remove all non-digit characters for validation
+    const cleanPhone = phone.replace(/\D/g, "");
+
+    if (!phone || cleanPhone.length < 10) {
+      return "Phone number must be at least 10 digits";
+    }
+    if (cleanPhone.length > 15) {
+      return "Phone number must not exceed 15 digits";
+    }
+    // Allow common formats: +1234567890, (123) 456-7890, 123-456-7890, etc.
+    const phoneRegex = /^[\d\s\-\+\(\)]+$/;
+    if (!phoneRegex.test(phone)) {
+      return "Please enter a valid phone number";
+    }
+    return null;
+  };
+
+  const validateMessage = (message) => {
+    if (!message || message.trim().length < 10) {
+      return "Message must be at least 10 characters long";
+    }
+    if (message.length > 1000) {
+      return "Message must not exceed 1000 characters";
+    }
+    return null;
+  };
+
+  const validateCourse = (course) => {
+    if (!course) {
+      return "Please select a course";
+    }
+    return null;
   };
 
   const handleSubmit = async (e) => {
@@ -59,15 +124,28 @@ const InquiryForm = () => {
 
     // Frontend validation
     const errors = {};
-    if (formData.message.length < 10) {
-      errors.message = "Message must be at least 10 characters long.";
-    }
-    if (formData.message.length > 1000) {
-      errors.message = "Message must not exceed 1000 characters.";
-    }
+
+    const nameError = validateFullName(formData.fullName);
+    if (nameError) errors.fullName = nameError;
+
+    const emailError = validateEmail(formData.email);
+    if (emailError) errors.email = emailError;
+
+    const phoneError = validatePhoneNumber(formData.phoneNumber);
+    if (phoneError) errors.phoneNumber = phoneError;
+
+    const courseError = validateCourse(formData.courseInterest);
+    if (courseError) errors.courseInterest = courseError;
+
+    const messageError = validateMessage(formData.message);
+    if (messageError) errors.message = messageError;
 
     if (Object.keys(errors).length > 0) {
       setValidationErrors(errors);
+      setStatus({
+        type: "error",
+        message: "Please fix the validation errors below.",
+      });
       setLoading(false);
       return;
     }
@@ -171,9 +249,19 @@ const InquiryForm = () => {
                 value={formData.fullName}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-2.5 text-sm border border-gray-300 rounded-lg focus:border-amber-500 focus:ring-2 focus:ring-amber-500 focus:outline-none transition-all"
+                className={`w-full px-4 py-2.5 text-sm border rounded-lg focus:outline-none focus:ring-2 transition-all ${
+                  validationErrors.fullName
+                    ? "border-red-500 focus:border-red-600 focus:ring-red-200 bg-red-50"
+                    : "border-gray-300 focus:border-amber-500 focus:ring-amber-500"
+                }`}
                 placeholder="Enter your full name"
               />
+              {validationErrors.fullName && (
+                <p className="text-red-500 text-xs mt-1 flex items-center gap-1">
+                  <AlertCircle className="w-3 h-3" />
+                  {validationErrors.fullName}
+                </p>
+              )}
             </div>
 
             {/* Email & Phone Grid */}
@@ -193,9 +281,19 @@ const InquiryForm = () => {
                   value={formData.email}
                   onChange={handleChange}
                   required
-                  className="w-full px-4 py-2.5 text-sm border border-gray-300 rounded-lg focus:border-amber-500 focus:ring-2 focus:ring-amber-500 focus:outline-none transition-all"
+                  className={`w-full px-4 py-2.5 text-sm border rounded-lg focus:outline-none focus:ring-2 transition-all ${
+                    validationErrors.email
+                      ? "border-red-500 focus:border-red-600 focus:ring-red-200 bg-red-50"
+                      : "border-gray-300 focus:border-amber-500 focus:ring-amber-500"
+                  }`}
                   placeholder="your.email@example.com"
                 />
+                {validationErrors.email && (
+                  <p className="text-red-500 text-xs mt-1 flex items-center gap-1">
+                    <AlertCircle className="w-3 h-3" />
+                    {validationErrors.email}
+                  </p>
+                )}
               </div>
 
               <div>
@@ -213,9 +311,19 @@ const InquiryForm = () => {
                   value={formData.phoneNumber}
                   onChange={handleChange}
                   required
-                  className="w-full px-4 py-2.5 text-sm border border-gray-300 rounded-lg focus:border-amber-500 focus:ring-2 focus:ring-amber-500 focus:outline-none transition-all"
+                  className={`w-full px-4 py-2.5 text-sm border rounded-lg focus:outline-none focus:ring-2 transition-all ${
+                    validationErrors.phoneNumber
+                      ? "border-red-500 focus:border-red-600 focus:ring-red-200 bg-red-50"
+                      : "border-gray-300 focus:border-amber-500 focus:ring-amber-500"
+                  }`}
                   placeholder="+1 (555) 123-4567"
                 />
+                {validationErrors.phoneNumber && (
+                  <p className="text-red-500 text-xs mt-1 flex items-center gap-1">
+                    <AlertCircle className="w-3 h-3" />
+                    {validationErrors.phoneNumber}
+                  </p>
+                )}
               </div>
             </div>
 
@@ -234,7 +342,11 @@ const InquiryForm = () => {
                 value={formData.courseInterest}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-2.5 text-sm border border-gray-300 rounded-lg focus:border-amber-500 focus:ring-2 focus:ring-amber-500 focus:outline-none transition-all cursor-pointer"
+                className={`w-full px-4 py-2.5 text-sm border rounded-lg focus:outline-none focus:ring-2 transition-all cursor-pointer ${
+                  validationErrors.courseInterest
+                    ? "border-red-500 focus:border-red-600 focus:ring-red-200 bg-red-50"
+                    : "border-gray-300 focus:border-amber-500 focus:ring-amber-500"
+                }`}
               >
                 <option value="">Choose a course...</option>
                 {courses.map((course, index) => (
@@ -243,6 +355,12 @@ const InquiryForm = () => {
                   </option>
                 ))}
               </select>
+              {validationErrors.courseInterest && (
+                <p className="text-red-500 text-xs mt-1 flex items-center gap-1">
+                  <AlertCircle className="w-3 h-3" />
+                  {validationErrors.courseInterest}
+                </p>
+              )}
             </div>
 
             {/* Message */}

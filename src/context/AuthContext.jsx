@@ -2,11 +2,12 @@ import React, { useState, useEffect } from "react";
 import { AuthContext } from "../contexts/AuthContext";
 import authService from "../services/authService";
 
+// Auth Provider Component
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // Check if user is logged in on mount
+  // Check if user is logged in
   useEffect(() => {
     const initAuth = () => {
       const userData = authService.getCurrentUser();
@@ -14,6 +15,9 @@ export const AuthProvider = ({ children }) => {
 
       if (isAuthenticated && userData) {
         setUser(userData);
+      } else if (userData) {
+        // User data exists but token is expired, clear it
+        authService.logout();
       }
       setLoading(false);
     };
@@ -22,29 +26,21 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const login = async (username, password) => {
-    try {
-      const response = await authService.login(username, password);
-
-      if (response.success) {
-        setUser(response.data.user);
-        return { success: true, user: response.data.user };
-      } else {
-        throw new Error(response.message);
-      }
-    } catch (error) {
-      throw new Error(error.message || "Login failed. Please try again.");
+    const response = await authService.login(username, password);
+    if (response.success) {
+      setUser(response.data.user);
+      return { success: true, user: response.data.user };
     }
   };
 
-  const logout = () => {
-    authService.logout();
+  const logout = async () => {
+    await authService.logout();
     setUser(null);
-    window.location.href = "/login";
   };
 
   const updateUser = (userData) => {
     setUser(userData);
-    localStorage.setItem("userData", JSON.stringify(userData));
+    authService.updateUser(userData);
   };
 
   const value = {

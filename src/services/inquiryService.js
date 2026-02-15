@@ -19,7 +19,6 @@ const inquiryService = {
   submitInquiry: async (inquiryData) => {
     try {
       const response = await apiInstance.post("/api/Inquiry", inquiryData);
-      console.log("Submit Inquiry Response:", response.data);
 
       return {
         success: true,
@@ -61,7 +60,6 @@ const inquiryService = {
   getAllInquiries: async () => {
     try {
       const response = await apiInstance.get("/api/Inquiry");
-      console.log("Get All Inquiries Response:", response.data);
 
       return {
         success: true,
@@ -90,7 +88,6 @@ const inquiryService = {
   getInquiryById: async (id) => {
     try {
       const response = await apiInstance.get(`/api/Inquiry/${id}`);
-      console.log("Get Inquiry By ID Response:", response.data);
 
       return {
         success: true,
@@ -119,7 +116,6 @@ const inquiryService = {
   deleteInquiry: async (id) => {
     try {
       const response = await apiInstance.delete(`/api/Inquiry/${id}`);
-      console.log("Delete Inquiry Response:", response.data);
 
       return {
         success: true,

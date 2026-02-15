@@ -23,8 +23,7 @@ const DashboardLayout = ({ children }) => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
   const handleLogout = () => {
-    logout();
-    navigate("/login");
+    logout(); // redirection to /login
   };
 
   // Navigation items based on role

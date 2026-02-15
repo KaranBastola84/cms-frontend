@@ -8,8 +8,7 @@ const Header = () => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    logout();
-    navigate("/login");
+    logout(); // handles redirection to /login
   };
 
   return (
