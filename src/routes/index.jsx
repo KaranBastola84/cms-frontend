@@ -46,7 +46,9 @@ const AppRoutes = () => {
         path="/login"
         element={
           <PublicRoute>
-            <Login />
+            <Layout>
+              <Login />
+            </Layout>
           </PublicRoute>
         }
       />
