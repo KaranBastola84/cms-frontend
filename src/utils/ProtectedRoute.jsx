@@ -13,13 +13,13 @@ export const ProtectedRoute = ({ children, allowedRoles = [] }) => {
   // Check if user has required role
   if (allowedRoles.length > 0 && !allowedRoles.includes(user?.role)) {
     // Redirect to appropriate dashboard based on role
-    if (user?.role === "admin") {
+    if (user?.role === "Admin") {
       return <Navigate to="/admin/dashboard" replace />;
-    } else if (user?.role === "staff") {
+    } else if (user?.role === "Staff") {
       return <Navigate to="/staff/dashboard" replace />;
-    } else if (user?.role === "trainer") {
+    } else if (user?.role === "Trainer") {
       return <Navigate to="/trainer/dashboard" replace />;
-    } else if (user?.role === "student") {
+    } else if (user?.role === "Student") {
       return <Navigate to="/student/dashboard" replace />;
     }
     return <Navigate to="/" replace />;
@@ -34,16 +34,36 @@ export const PublicRoute = ({ children }) => {
 
   if (isAuthenticated) {
     // Redirect to appropriate dashboard
-    if (user?.role === "admin") {
+    if (user?.role === "Admin") {
       return <Navigate to="/admin/dashboard" replace />;
-    } else if (user?.role === "staff") {
+    } else if (user?.role === "Staff") {
       return <Navigate to="/staff/dashboard" replace />;
-    } else if (user?.role === "trainer") {
+    } else if (user?.role === "Trainer") {
       return <Navigate to="/trainer/dashboard" replace />;
-    } else if (user?.role === "student") {
+    } else if (user?.role === "Student") {
       return <Navigate to="/student/dashboard" replace />;
     }
   }
 
   return children;
+};
+
+// Redirect to home or dashboard based on auth status
+export const HomeRedirect = () => {
+  const { isAuthenticated, user } = useAuth();
+
+  if (isAuthenticated) {
+    // Redirect to appropriate dashboard
+    if (user?.role === "Admin") {
+      return <Navigate to="/admin/dashboard" replace />;
+    } else if (user?.role === "Staff") {
+      return <Navigate to="/staff/dashboard" replace />;
+    } else if (user?.role === "Trainer") {
+      return <Navigate to="/trainer/dashboard" replace />;
+    } else if (user?.role === "Student") {
+      return <Navigate to="/student/dashboard" replace />;
+    }
+  }
+
+  return <Navigate to="/" replace />;
 };
