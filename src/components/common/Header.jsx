@@ -1,12 +1,11 @@
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import toast from "react-hot-toast";
 import { Coffee, FileText, LogIn, LogOut, User } from "lucide-react";
 import { useAuth } from "../../hooks/useAuth";
 
 const Header = () => {
   const { user, logout } = useAuth();
-  const navigate = useNavigate();
 
   const handleLogout = () => {
     toast.success("Logged out successfully");
@@ -14,17 +13,17 @@ const Header = () => {
   };
 
   return (
-    <header className="bg-linear-to-r from-amber-800 via-amber-700 to-amber-800 py-4 shadow-md sticky top-0 z-50 border-b border-amber-900/20">
+    <header className="latte-gradient py-4 shadow-coffee-md sticky top-0 z-50 border-b border-[#C8A27B]/30 backdrop-blur-sm">
       <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
         <Link to="/" className="no-underline flex items-center gap-3 group">
-          <div className="bg-white/10 p-2 rounded-lg group-hover:bg-white/20 transition-colors duration-200">
-            <Coffee className="w-6 h-6 text-amber-100" strokeWidth={2.5} />
+          <div className="coffee-gradient p-2.5 rounded-xl group-hover:opacity-90 transition-all duration-200 shadow-sm">
+            <Coffee className="w-6 h-6 text-[#EFE7D3]" strokeWidth={2.5} />
           </div>
           <div className="flex flex-col">
-            <h1 className="text-white text-xl font-bold m-0 tracking-tight">
+            <h1 className="text-[#1A1A1A] text-xl font-bold m-0 tracking-tight">
               Coffee School
             </h1>
-            <span className="text-amber-200 text-xs font-medium tracking-wide">
+            <span className="text-[#6B4423] text-xs font-semibold tracking-wide">
               Management System
             </span>
           </div>
@@ -33,28 +32,30 @@ const Header = () => {
         <nav className="flex items-center gap-4">
           <Link
             to="/inquiry"
-            className="text-white no-underline text-sm font-medium hover:text-amber-100 transition-colors duration-200 px-3 py-2 rounded-lg hover:bg-white/10 flex items-center gap-2"
+            className="text-[#4A2F19] no-underline text-sm font-semibold hover:text-[#1A1A1A] transition-all duration-200 px-4 py-2 rounded-lg hover:bg-white/50 flex items-center gap-2"
           >
             <FileText className="w-4 h-4" />
             <span>Inquiry</span>
           </Link>
 
           {user ? (
-            <div className="flex items-center gap-3 bg-white/10 px-4 py-2 rounded-lg backdrop-blur-sm">
-              <div className="flex items-center gap-2">
-                <div className="bg-white/20 p-1.5 rounded-full">
+            <div className="flex items-center gap-3 bg-white/60 px-4 py-2.5 rounded-xl backdrop-blur-sm border border-[#C8A27B]/40 shadow-sm">
+              <div className="flex items-center gap-2.5">
+                <div className="coffee-gradient p-1.5 rounded-full shadow-sm">
                   <User className="w-4 h-4 text-white" />
                 </div>
                 <div className="flex flex-col">
-                  <span className="text-white text-sm font-medium">
+                  <span className="text-[#1A1A1A] text-sm font-bold">
                     {user.username}
                   </span>
-                  <span className="text-amber-200 text-xs">{user.role}</span>
+                  <span className="text-[#6B4423] text-xs font-semibold">
+                    {user.role}
+                  </span>
                 </div>
               </div>
               <button
                 onClick={handleLogout}
-                className="bg-red-600 hover:bg-red-700 text-white px-3 py-1.5 rounded-lg transition-colors duration-200 text-xs font-medium shadow-sm hover:shadow-md flex items-center gap-1.5"
+                className="bg-[#ef4444] hover:bg-[#dc2626] text-white px-3 py-1.5 rounded-lg transition-all duration-200 text-xs font-semibold shadow-sm hover:shadow-md flex items-center gap-1.5 hover:scale-105"
               >
                 <LogOut className="w-3.5 h-3.5" />
                 <span>Logout</span>
@@ -63,10 +64,10 @@ const Header = () => {
           ) : (
             <Link
               to="/login"
-              className="bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-lg transition-colors duration-200 text-sm font-medium no-underline shadow-sm hover:shadow-md flex items-center gap-2 backdrop-blur-sm"
+              className="bg-[#4A2F19] hover:bg-[#6B4423] text-white px-4 py-2.5 rounded-xl transition-all duration-200 text-sm font-bold no-underline shadow-coffee-md hover:shadow-coffee-lg flex items-center gap-2 hover:scale-105"
             >
-              <LogIn className="w-4 h-4" />
-              <span>Login</span>
+              <LogIn className="w-4 h-4 text-white" />
+              <span className="text-white">Login</span>
             </Link>
           )}
         </nav>

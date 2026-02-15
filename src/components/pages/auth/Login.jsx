@@ -91,16 +91,16 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-[calc(100vh-200px)] flex items-center justify-center p-6 bg-linear-to-br from-amber-50 via-orange-50 to-amber-100">
-      <div className="bg-white rounded-xl shadow-lg p-8 w-full max-w-md border border-gray-200">
+    <div className="min-h-[calc(100vh-200px)] flex items-center justify-center p-6 cream-gradient">
+      <div className="bg-white rounded-2xl shadow-coffee-lg p-8 w-full max-w-md border border-[#C8A27B]/30 fade-in hover-lift">
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center p-3 bg-linear-to-br from-amber-500 to-amber-600 rounded-xl mb-4 shadow-sm">
-            <Coffee className="w-8 h-8 text-white" strokeWidth={2.5} />
+          <div className="inline-flex items-center justify-center p-4 coffee-gradient rounded-2xl mb-4 shadow-coffee-md">
+            <Coffee className="w-9 h-9 text-[#EFE7D3]" strokeWidth={2.5} />
           </div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">
+          <h2 className="text-3xl font-bold text-[#1A1A1A] mb-2">
             Welcome Back
           </h2>
-          <p className="text-sm text-gray-600">
+          <p className="text-sm text-[#4A2F19] font-medium">
             Sign in to Coffee School Management System
           </p>
         </div>
@@ -109,9 +109,9 @@ const Login = () => {
           <div className="flex flex-col gap-2">
             <label
               htmlFor="username"
-              className="text-sm font-semibold text-gray-700 flex items-center gap-2"
+              className="text-sm font-bold text-[#1A1A1A] flex items-center gap-2"
             >
-              <User className="w-4 h-4" />
+              <User className="w-4 h-4 text-[#4A2F19]" />
               Username
             </label>
             <input
@@ -121,11 +121,11 @@ const Login = () => {
               value={formData.username}
               onChange={handleChange}
               required
-              className={`px-4 py-2.5 text-sm border rounded-lg focus:outline-none focus:ring-2 transition-all disabled:bg-gray-100 disabled:cursor-not-allowed ${
+              className={`coffee-input ${
                 validationErrors.username
                   ? "border-red-500 focus:border-red-600 focus:ring-red-200 bg-red-50"
-                  : "border-gray-300 focus:border-amber-500 focus:ring-amber-500"
-              }`}
+                  : ""
+              } disabled:bg-gray-100 disabled:cursor-not-allowed`}
               placeholder="Enter your username"
               disabled={loading}
             />
@@ -140,9 +140,9 @@ const Login = () => {
           <div className="flex flex-col gap-2">
             <label
               htmlFor="password"
-              className="text-sm font-semibold text-gray-700 flex items-center gap-2"
+              className="text-sm font-bold text-[#1A1A1A] flex items-center gap-2"
             >
-              <Lock className="w-4 h-4" />
+              <Lock className="w-4 h-4 text-[#4A2F19]" />
               Password
             </label>
             <input
@@ -152,11 +152,11 @@ const Login = () => {
               value={formData.password}
               onChange={handleChange}
               required
-              className={`px-4 py-2.5 text-sm border rounded-lg focus:outline-none focus:ring-2 transition-all disabled:bg-gray-100 disabled:cursor-not-allowed ${
+              className={`coffee-input ${
                 validationErrors.password
                   ? "border-red-500 focus:border-red-600 focus:ring-red-200 bg-red-50"
-                  : "border-gray-300 focus:border-amber-500 focus:ring-amber-500"
-              }`}
+                  : ""
+              } disabled:bg-gray-100 disabled:cursor-not-allowed`}
               placeholder="Enter your password"
               disabled={loading}
             />
@@ -170,10 +170,8 @@ const Login = () => {
 
           <button
             type="submit"
-            className={`px-4 py-3 text-sm font-semibold border-none rounded-lg cursor-pointer transition-all mt-2 shadow-sm flex items-center justify-center gap-2 ${
-              loading
-                ? "bg-gray-400 cursor-not-allowed opacity-60"
-                : "bg-linear-to-r from-amber-600 to-amber-700 hover:from-amber-700 hover:to-amber-800 text-white hover:shadow-md"
+            className={`btn-coffee-primary text-sm mt-2 flex items-center justify-center gap-2 ${
+              loading ? "opacity-60 cursor-not-allowed" : ""
             }`}
             disabled={loading}
           >

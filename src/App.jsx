@@ -15,21 +15,33 @@ function App() {
             duration: 4000,
             style: {
               background: "#fff",
-              color: "#363636",
+              color: "#1A1A1A",
               padding: "16px",
-              borderRadius: "8px",
-              boxShadow: "0 4px 12px rgba(0, 0, 0, 0.15)",
+              borderRadius: "12px",
+              boxShadow: "0 4px 12px rgba(74, 47, 25, 0.15)",
+              border: "1px solid rgba(200, 162, 123, 0.2)",
+              fontWeight: "600",
             },
             success: {
               iconTheme: {
-                primary: "#d97706",
+                primary: "#4A2F19",
                 secondary: "#fff",
+              },
+              style: {
+                background: "#EFE7D3",
+                color: "#1A1A1A",
+                border: "1px solid rgba(74, 47, 25, 0.2)",
               },
             },
             error: {
               iconTheme: {
-                primary: "#dc2626",
+                primary: "#ef4444",
                 secondary: "#fff",
+              },
+              style: {
+                background: "#fee",
+                color: "#1A1A1A",
+                border: "1px solid rgba(239, 68, 68, 0.2)",
               },
             },
           }}

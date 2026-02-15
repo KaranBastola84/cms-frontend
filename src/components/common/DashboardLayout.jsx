@@ -70,30 +70,34 @@ const DashboardLayout = ({ children }) => {
   const navItems = getNavItems();
 
   return (
-    <div className="flex h-screen bg-gray-100">
+    <div className="flex h-screen bg-[#F5EFE6]">
       {/* Sidebar */}
       <aside
         className={`${
           sidebarOpen ? "w-64" : "w-20"
-        } bg-linear-to-b from-amber-800 to-amber-900 text-white transition-all duration-300 flex flex-col`}
+        } coffee-gradient text-white transition-all duration-300 flex flex-col shadow-coffee-lg`}
       >
         {/* Logo */}
-        <div className="p-4 flex items-center justify-between border-b border-amber-700">
+        <div className="p-4 flex items-center justify-between border-b border-[#6B4423]/30">
           <Link
             to={`/${user?.role?.toLowerCase()}/dashboard`}
-            className="flex items-center gap-3 no-underline text-white"
+            className="flex items-center gap-3 no-underline text-white group"
           >
-            <Coffee className="w-8 h-8" strokeWidth={2.5} />
+            <div className="bg-white/15 p-2 rounded-xl group-hover:bg-white/25 transition-all">
+              <Coffee className="w-7 h-7 text-[#EFE7D3]" strokeWidth={2.5} />
+            </div>
             {sidebarOpen && (
               <div>
                 <h2 className="text-lg font-bold m-0">Coffee School</h2>
-                <p className="text-xs text-amber-200 m-0">CMS</p>
+                <p className="text-xs text-[#EFE7D3] m-0 font-semibold">
+                  Management System
+                </p>
               </div>
             )}
           </Link>
           <button
             onClick={() => setSidebarOpen(!sidebarOpen)}
-            className="p-1 hover:bg-amber-700 rounded-lg transition-colors"
+            className="p-1.5 hover:bg-white/10 rounded-lg transition-all"
           >
             {sidebarOpen ? (
               <X className="w-5 h-5" />
@@ -104,7 +108,7 @@ const DashboardLayout = ({ children }) => {
         </div>
 
         {/* Navigation */}
-        <nav className="flex-1 p-4 space-y-2">
+        <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
           {navItems.map((item) => {
             const Icon = item.icon;
             const isActive = location.pathname === item.path;
@@ -112,16 +116,16 @@ const DashboardLayout = ({ children }) => {
               <Link
                 key={item.path}
                 to={item.path}
-                className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors no-underline ${
+                className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all no-underline ${
                   isActive
-                    ? "bg-amber-700 text-white"
-                    : "text-amber-100 hover:bg-amber-700/50"
+                    ? "bg-white/20 text-white shadow-sm scale-[1.02]"
+                    : "text-[#EFE7D3] hover:bg-white/10 hover:text-white"
                 }`}
                 title={!sidebarOpen ? item.name : ""}
               >
                 <Icon className="w-5 h-5 shrink-0" />
                 {sidebarOpen && (
-                  <span className="font-medium">{item.name}</span>
+                  <span className="font-semibold">{item.name}</span>
                 )}
               </Link>
             );
@@ -129,23 +133,25 @@ const DashboardLayout = ({ children }) => {
         </nav>
 
         {/* User Section */}
-        <div className="p-4 border-t border-amber-700">
+        <div className="p-4 border-t border-[#6B4423]/30">
           <div className="flex items-center gap-3 mb-3">
-            <div className="w-10 h-10 rounded-full bg-amber-600 flex items-center justify-center shrink-0">
-              <User className="w-5 h-5" />
+            <div className="w-10 h-10 rounded-full bg-[#C8A27B] flex items-center justify-center shrink-0 shadow-sm">
+              <User className="w-5 h-5 text-white" />
             </div>
             {sidebarOpen && (
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-semibold truncate m-0">
+                <p className="text-sm font-bold truncate m-0">
                   {user?.username}
                 </p>
-                <p className="text-xs text-amber-200 m-0">{user?.role}</p>
+                <p className="text-xs text-[#EFE7D3] m-0 font-medium">
+                  {user?.role}
+                </p>
               </div>
             )}
           </div>
           <button
             onClick={handleLogout}
-            className={`w-full flex items-center gap-3 px-4 py-2 rounded-lg bg-red-600 hover:bg-red-700 transition-colors text-white ${
+            className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl bg-[#ef4444] hover:bg-[#dc2626] transition-all text-white shadow-sm hover:shadow-md font-semibold ${
               !sidebarOpen && "justify-center"
             }`}
           >
@@ -158,21 +164,22 @@ const DashboardLayout = ({ children }) => {
       {/* Main Content */}
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* Top Bar */}
-        <header className="bg-white shadow-sm border-b border-gray-200 px-6 py-4">
+        <header className="bg-white shadow-coffee-sm border-b border-[#C8A27B]/20 px-6 py-4">
           <div className="flex items-center justify-between">
-            <h1 className="text-2xl font-bold text-gray-900 m-0">
+            <h1 className="text-2xl font-bold text-[#1A1A1A] m-0 flex items-center gap-2">
               {user?.role} Dashboard
             </h1>
             <div className="flex items-center gap-4">
-              <span className="text-sm text-gray-600">
-                Welcome back, <strong>{user?.username}</strong>!
+              <span className="text-sm text-[#4A2F19]">
+                Welcome back,{" "}
+                <strong className="text-[#1A1A1A]">{user?.username}</strong>!
               </span>
             </div>
           </div>
         </header>
 
         {/* Page Content */}
-        <main className="flex-1 overflow-y-auto p-6 bg-gray-50">
+        <main className="flex-1 overflow-y-auto p-6 bg-[#EFE7D3]/40">
           <div className="max-w-7xl mx-auto">{children}</div>
         </main>
       </div>
