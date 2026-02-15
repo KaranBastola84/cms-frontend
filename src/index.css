@@ -237,12 +237,12 @@ p {
 }
 
 /* Link Styles */
-a {
+a:not(.no-underline) {
   color: var(--dark-coffee);
   text-decoration: none;
 }
 
-a:hover {
+a:not(.no-underline):hover {
   color: var(--dark-text);
 }
 
