@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import React from "react";
+import { Link, useLocation } from "react-router-dom";
 import toast from "react-hot-toast";
 import {
   Coffee,
@@ -10,18 +10,12 @@ import {
   FileText,
   Settings,
   LogOut,
-  Menu,
-  X,
-  ChevronDown,
-  User,
 } from "lucide-react";
 import { useAuth } from "../../hooks/useAuth";
 
 const DashboardLayout = ({ children }) => {
   const { user, logout } = useAuth();
-  const navigate = useNavigate();
   const location = useLocation();
-  const [sidebarOpen, setSidebarOpen] = useState(true);
 
   const handleLogout = () => {
     toast.success("Logged out successfully");
@@ -72,39 +66,25 @@ const DashboardLayout = ({ children }) => {
   return (
     <div className="flex h-screen bg-[#F5EFE6]">
       {/* Sidebar */}
-      <aside
-        className={`${
-          sidebarOpen ? "w-64" : "w-20"
-        } coffee-gradient text-white transition-all duration-300 flex flex-col shadow-coffee-lg`}
-      >
+      <aside className="w-64 latte-gradient border-r border-[#C8A27B]/30 flex flex-col shadow-coffee-lg">
         {/* Logo */}
-        <div className="p-4 flex items-center justify-between border-b border-[#6B4423]/30">
+        <div className="p-4 flex items-center border-b border-[#C8A27B]/30">
           <Link
             to={`/${user?.role?.toLowerCase()}/dashboard`}
-            className="flex items-center gap-3 no-underline text-white group"
+            className="flex items-center gap-3 no-underline group"
           >
-            <div className="bg-white/15 p-2 rounded-xl group-hover:bg-white/25 transition-all">
+            <div className="coffee-gradient p-2 rounded-xl group-hover:opacity-90 transition-all shadow-sm">
               <Coffee className="w-7 h-7 text-[#EFE7D3]" strokeWidth={2.5} />
             </div>
-            {sidebarOpen && (
-              <div>
-                <h2 className="text-lg font-bold m-0">Coffee School</h2>
-                <p className="text-xs text-[#EFE7D3] m-0 font-semibold">
-                  Management System
-                </p>
-              </div>
-            )}
+            <div>
+              <h2 className="text-lg font-bold m-0 text-[#1A1A1A]">
+                Coffee School
+              </h2>
+              <p className="text-xs text-[#6B4423] m-0 font-semibold">
+                Management System
+              </p>
+            </div>
           </Link>
-          <button
-            onClick={() => setSidebarOpen(!sidebarOpen)}
-            className="p-1.5 hover:bg-white/10 rounded-lg transition-all"
-          >
-            {sidebarOpen ? (
-              <X className="w-5 h-5" />
-            ) : (
-              <Menu className="w-5 h-5" />
-            )}
-          </button>
         </div>
 
         {/* Navigation */}
@@ -118,45 +98,25 @@ const DashboardLayout = ({ children }) => {
                 to={item.path}
                 className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all no-underline ${
                   isActive
-                    ? "bg-white/20 text-white shadow-sm scale-[1.02]"
-                    : "text-[#EFE7D3] hover:bg-white/10 hover:text-white"
+                    ? "bg-[#4A2F19] text-[#EFE7D3] shadow-coffee-sm scale-[1.02] font-bold"
+                    : "text-[#4A2F19] hover:bg-[#EFE7D3]/50 hover:text-[#1A1A1A] font-semibold"
                 }`}
-                title={!sidebarOpen ? item.name : ""}
               >
                 <Icon className="w-5 h-5 shrink-0" />
-                {sidebarOpen && (
-                  <span className="font-semibold">{item.name}</span>
-                )}
+                <span>{item.name}</span>
               </Link>
             );
           })}
         </nav>
 
         {/* User Section */}
-        <div className="p-4 border-t border-[#6B4423]/30">
-          <div className="flex items-center gap-3 mb-3">
-            <div className="w-10 h-10 rounded-full bg-[#C8A27B] flex items-center justify-center shrink-0 shadow-sm">
-              <User className="w-5 h-5 text-white" />
-            </div>
-            {sidebarOpen && (
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-bold truncate m-0">
-                  {user?.username}
-                </p>
-                <p className="text-xs text-[#EFE7D3] m-0 font-medium">
-                  {user?.role}
-                </p>
-              </div>
-            )}
-          </div>
+        <div className="p-4 border-t border-[#C8A27B]/30">
           <button
             onClick={handleLogout}
-            className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl bg-[#ef4444] hover:bg-[#dc2626] transition-all text-white shadow-sm hover:shadow-md font-semibold ${
-              !sidebarOpen && "justify-center"
-            }`}
+            className="w-full flex items-center justify-center gap-3 px-4 py-3 rounded-xl bg-[#ef4444] hover:bg-[#dc2626] transition-all text-white shadow-sm hover:shadow-md font-bold hover:scale-105"
           >
-            <LogOut className="w-5 h-5 shrink-0" />
-            {sidebarOpen && <span>Logout</span>}
+            <LogOut className="w-5 h-5" />
+            <span>Logout</span>
           </button>
         </div>
       </aside>
