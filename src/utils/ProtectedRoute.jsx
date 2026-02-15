@@ -47,3 +47,23 @@ export const PublicRoute = ({ children }) => {
 
   return children;
 };
+
+// Redirect to home or dashboard based on auth status
+export const HomeRedirect = () => {
+  const { isAuthenticated, user } = useAuth();
+
+  if (isAuthenticated) {
+    // Redirect to appropriate dashboard
+    if (user?.role === "Admin") {
+      return <Navigate to="/admin/dashboard" replace />;
+    } else if (user?.role === "Staff") {
+      return <Navigate to="/staff/dashboard" replace />;
+    } else if (user?.role === "Trainer") {
+      return <Navigate to="/trainer/dashboard" replace />;
+    } else if (user?.role === "Student") {
+      return <Navigate to="/student/dashboard" replace />;
+    }
+  }
+
+  return <Navigate to="/" replace />;
+};

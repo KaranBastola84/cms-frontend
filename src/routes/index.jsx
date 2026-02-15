@@ -1,9 +1,14 @@
 import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import Layout from "../components/common/Layout";
+import DashboardLayout from "../components/common/DashboardLayout";
 import Login from "../components/pages/auth/Login";
 import InquiryForm from "../components/pages/InquiryForm";
-import { ProtectedRoute, PublicRoute } from "../utils/ProtectedRoute";
+import {
+  ProtectedRoute,
+  PublicRoute,
+  HomeRedirect,
+} from "../utils/ProtectedRoute";
 
 // Import dashboards
 import AdminDashboard from "../components/pages/admin/AdminDashboard";
@@ -13,63 +18,87 @@ import StudentDashboard from "../components/pages/student/StudentDashboard";
 
 const AppRoutes = () => {
   return (
-    <Layout>
-      <Routes>
-        {/* Public Routes */}
-        <Route path="/" element={<InquiryForm />} />
-        <Route path="/inquiry" element={<InquiryForm />} />
+    <Routes>
+      {/* Public Routes - Redirect to dashboard if logged in */}
+      <Route
+        path="/"
+        element={
+          <PublicRoute>
+            <Layout>
+              <InquiryForm />
+            </Layout>
+          </PublicRoute>
+        }
+      />
+      <Route
+        path="/inquiry"
+        element={
+          <PublicRoute>
+            <Layout>
+              <InquiryForm />
+            </Layout>
+          </PublicRoute>
+        }
+      />
 
-        {/* Auth Routes - Redirect to dashboard if already logged in */}
-        <Route
-          path="/login"
-          element={
-            <PublicRoute>
-              <Login />
-            </PublicRoute>
-          }
-        />
+      {/* Auth Routes - No Layout */}
+      <Route
+        path="/login"
+        element={
+          <PublicRoute>
+            <Login />
+          </PublicRoute>
+        }
+      />
 
-        {/* Protected Role-Based Dashboard Routes */}
-        <Route
-          path="/admin/dashboard"
-          element={
-            <ProtectedRoute allowedRoles={["Admin"]}>
+      {/* Protected Dashboard Routes with Dashboard Layout */}
+      <Route
+        path="/admin/dashboard"
+        element={
+          <ProtectedRoute allowedRoles={["Admin"]}>
+            <DashboardLayout>
               <AdminDashboard />
-            </ProtectedRoute>
-          }
-        />
+            </DashboardLayout>
+          </ProtectedRoute>
+        }
+      />
 
-        <Route
-          path="/staff/dashboard"
-          element={
-            <ProtectedRoute allowedRoles={["Staff"]}>
+      <Route
+        path="/staff/dashboard"
+        element={
+          <ProtectedRoute allowedRoles={["Staff"]}>
+            <DashboardLayout>
               <StaffDashboard />
-            </ProtectedRoute>
-          }
-        />
+            </DashboardLayout>
+          </ProtectedRoute>
+        }
+      />
 
-        <Route
-          path="/trainer/dashboard"
-          element={
-            <ProtectedRoute allowedRoles={["Trainer"]}>
+      <Route
+        path="/trainer/dashboard"
+        element={
+          <ProtectedRoute allowedRoles={["Trainer"]}>
+            <DashboardLayout>
               <TrainerDashboard />
-            </ProtectedRoute>
-          }
-        />
+            </DashboardLayout>
+          </ProtectedRoute>
+        }
+      />
 
-        <Route
-          path="/student/dashboard"
-          element={
-            <ProtectedRoute allowedRoles={["Student"]}>
+      <Route
+        path="/student/dashboard"
+        element={
+          <ProtectedRoute allowedRoles={["Student"]}>
+            <DashboardLayout>
               <StudentDashboard />
-            </ProtectedRoute>
-          }
-        />
+            </DashboardLayout>
+          </ProtectedRoute>
+        }
+      />
 
-        {/* Catch all - redirect to home */}
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
-    </Layout>
+      {/* Catch all - redirect based on auth status */}
+      <Route path="*" element={<HomeRedirect />} />
+    </Routes>
   );
 };
 
