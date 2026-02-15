@@ -1,4 +1,5 @@
 import axios from 'axios';
+import toast from 'react-hot-toast';
 
 // API configuration with fallback
 export const APP_CONFIG = {
@@ -78,6 +79,7 @@ apiInstance.interceptors.response.use(
         // No refresh token, redirect to login
         isRefreshing = false;
         localStorage.clear();
+        toast.error('Session expired. Please login again.');
         window.location.href = '/login';
         return Promise.reject(error);
       }
@@ -117,15 +119,16 @@ apiInstance.interceptors.response.use(
         
         // Clear all auth data and redirect to login
         localStorage.clear();
+        toast.error('Session expired. Please login again.');
         window.location.href = '/login';
         return Promise.reject(refreshError);
       }
     } else if (error.response?.status === 403) {
-      console.error('Forbidden: You do not have permission');
+      toast.error('You do not have permission to perform this action');
     } else if (error.response?.status >= 500) {
-      console.error('Server error. Please try again later');
+      toast.error('Server error. Please try again later');
     } else if (!error.response) {
-      console.error('Network error. Check your connection');
+      toast.error('Network error. Please check your connection');
     }
     
     return Promise.reject(error);

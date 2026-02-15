@@ -1,5 +1,6 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 import { Coffee, FileText, LogIn, LogOut, User } from "lucide-react";
 import { useAuth } from "../../hooks/useAuth";
 
@@ -8,6 +9,7 @@ const Header = () => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
+    toast.success("Logged out successfully");
     logout(); // handles redirection to /login
   };
 

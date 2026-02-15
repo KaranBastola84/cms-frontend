@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
+import toast from "react-hot-toast";
 import {
   Coffee,
   LayoutDashboard,
@@ -23,6 +24,7 @@ const DashboardLayout = ({ children }) => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
   const handleLogout = () => {
+    toast.success("Logged out successfully");
     logout(); // redirection to /login
   };
 

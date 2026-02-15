@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 import { Coffee, User, Lock, AlertCircle, Loader2 } from "lucide-react";
 import { useAuth } from "../../../hooks/useAuth";
 
@@ -9,7 +10,6 @@ const Login = () => {
     password: "",
   });
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
   const [validationErrors, setValidationErrors] = useState({});
 
   const navigate = useNavigate();
@@ -21,8 +21,7 @@ const Login = () => {
       ...formData,
       [name]: value,
     });
-    // Clear error when user starts typing
-    if (error) setError("");
+    // Clear validation error when user starts typing
     if (validationErrors[name]) {
       setValidationErrors({
         ...validationErrors,
@@ -48,13 +47,13 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setError("");
     setValidationErrors({});
 
     // Frontend validation
     const errors = validateForm();
     if (Object.keys(errors).length > 0) {
       setValidationErrors(errors);
+      toast.error("Please fix the validation errors");
       setLoading(false);
       return;
     }
@@ -63,6 +62,8 @@ const Login = () => {
       const result = await login(formData.username, formData.password);
 
       if (result.success) {
+        toast.success(`Welcome back, ${result.user.username}!`);
+
         // Navigate to role-specific dashboard
         const userRole = result.user.role;
 
@@ -84,8 +85,7 @@ const Login = () => {
         }
       }
     } catch (err) {
-      console.error("Login error:", err);
-      setError(err.message || "Invalid username or password");
+      toast.error(err.message || "Invalid username or password");
       setLoading(false);
     }
   };
@@ -106,13 +106,6 @@ const Login = () => {
         </div>
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-          {error && (
-            <div className="bg-red-50 border border-red-200 rounded-lg px-4 py-3 flex items-start gap-3">
-              <AlertCircle className="w-5 h-5 text-red-600 shrink-0 mt-0.5" />
-              <p className="text-red-700 text-sm m-0">{error}</p>
-            </div>
-          )}
-
           <div className="flex flex-col gap-2">
             <label
               htmlFor="username"

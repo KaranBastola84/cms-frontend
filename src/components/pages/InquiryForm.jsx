@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import toast from "react-hot-toast";
 import {
   Coffee,
   User,
@@ -154,10 +155,16 @@ const InquiryForm = () => {
     const result = await inquiryService.submitInquiry(formData);
 
     if (result.success) {
+      toast.success(
+        "Thank you! Your inquiry has been submitted successfully. We will contact you soon.",
+        {
+          duration: 5000,
+        },
+      );
+
       setStatus({
         type: "success",
-        message:
-          "Thank you! Your inquiry has been submitted successfully. We will contact you soon.",
+        message: "Inquiry submitted successfully!",
       });
 
       // Reset form
@@ -177,11 +184,13 @@ const InquiryForm = () => {
           backendErrors[fieldName] = result.errors[key][0];
         });
         setValidationErrors(backendErrors);
+        toast.error("Please fix the validation errors below.");
         setStatus({
           type: "error",
           message: "Please fix the validation errors below.",
         });
       } else {
+        toast.error(result.message || "Failed to submit inquiry");
         setStatus({
           type: "error",
           message: result.message,
