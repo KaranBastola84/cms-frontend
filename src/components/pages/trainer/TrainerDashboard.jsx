@@ -1,6 +1,6 @@
 import React from "react";
 
-function trainerDashboard() {
+function TrainerDashboard() {
   return (
     <>
       <div>This is a trainer dashboard</div>
@@ -8,4 +8,4 @@ function trainerDashboard() {
   );
 }
 
-export default trainerDashboard;
+export default TrainerDashboard;

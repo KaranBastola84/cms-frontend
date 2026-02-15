@@ -1,6 +1,6 @@
 import React from "react";
 
-function staffDashboard() {
+function StaffDashboard() {
   return (
     <>
       <div>This is a staff dashboard</div>
@@ -8,4 +8,4 @@ function staffDashboard() {
   );
 }
 
-export default staffDashboard;
+export default StaffDashboard;

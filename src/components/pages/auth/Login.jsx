@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Coffee, User, Lock, AlertCircle, Loader2 } from "lucide-react";
-import { useAuth } from "../../hooks/useAuth";
+import { useAuth } from "../../../hooks/useAuth";
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -26,16 +26,40 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log("Form submitted");
     setLoading(true);
     setError("");
 
     try {
-      await login(formData.username, formData.password);
-      // Redirect to home page on success
-      navigate("/");
+      console.log("Attempting login...");
+      const result = await login(formData.username, formData.password);
+      console.log("Login result:", result);
+
+      if (result.success) {
+        // Navigate to role-specific dashboard
+        const userRole = result.user.role;
+        console.log("User role:", userRole);
+
+        switch (userRole) {
+          case "Admin":
+            navigate("/admin/dashboard", { replace: true });
+            break;
+          case "Staff":
+            navigate("/staff/dashboard", { replace: true });
+            break;
+          case "Trainer":
+            navigate("/trainer/dashboard", { replace: true });
+            break;
+          case "Student":
+            navigate("/student/dashboard", { replace: true });
+            break;
+          default:
+            navigate("/", { replace: true });
+        }
+      }
     } catch (err) {
+      console.error("Login error:", err);
       setError(err.message || "Invalid username or password");
-    } finally {
       setLoading(false);
     }
   };

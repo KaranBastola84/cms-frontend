@@ -1,15 +1,15 @@
 import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import Layout from "../components/common/Layout";
-import Login from "../components/auth/Login";
+import Login from "../components/pages/auth/Login";
 import InquiryForm from "../components/pages/InquiryForm";
 import { ProtectedRoute, PublicRoute } from "../utils/ProtectedRoute";
 
 // Import dashboards
-import AdminDashboard from "../components/admin/adminDashboard";
-import StaffDashboard from "../components/staff/staffDashboard";
-import TrainerDashboard from "../components/trainer/trainerDashboard";
-import StudentDashboard from "../components/student/studentDashboard";
+import AdminDashboard from "../components/pages/admin/AdminDashboard";
+import StaffDashboard from "../components/pages/staff/StaffDashboard";
+import TrainerDashboard from "../components/pages/trainer/TrainerDashboard";
+import StudentDashboard from "../components/pages/student/StudentDashboard";
 
 const AppRoutes = () => {
   return (
