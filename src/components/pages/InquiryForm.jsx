@@ -102,33 +102,26 @@ const InquiryForm = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-amber-100">
-      {/* Header */}
-      <div className="bg-amber-900 text-white py-4 shadow-lg">
-        <div className="container mx-auto px-4">
-          <div className="flex items-center space-x-2">
-            <span className="text-3xl">☕</span>
-            <span className="text-2xl font-bold">Coffee School</span>
-          </div>
-        </div>
-      </div>
-
+    <div className="min-h-screen bg-linear-to-br from-amber-50 via-orange-50 to-amber-100">
       {/* Form Section */}
       <div className="container mx-auto px-4 py-12">
         <div className="max-w-2xl mx-auto">
           <div className="text-center mb-8">
-            <h1 className="text-4xl font-bold text-amber-900 mb-4">
-              Submit Your Inquiry
-            </h1>
-            <p className="text-gray-600">
-              Interested in our courses? Fill out the form below and we'll get
-              back to you soon!
+            <div className="flex items-center justify-center space-x-3 mb-4">
+              <span className="text-5xl">☕</span>
+              <h1 className="text-4xl font-bold text-amber-900">
+                Submit Your Inquiry
+              </h1>
+            </div>
+            <p className="text-amber-800 text-lg">
+              Interested in our coffee courses? Fill out the form below and
+              we'll get back to you soon!
             </p>
           </div>
 
           <form
             onSubmit={handleSubmit}
-            className="bg-white rounded-2xl shadow-xl p-8 border-2 border-amber-100"
+            className="bg-white rounded-2xl shadow-xl p-8 border-2 border-amber-200"
           >
             {/* Status Message */}
             {status.message && (
@@ -146,10 +139,10 @@ const InquiryForm = () => {
             {/* Name */}
             <div className="mb-6">
               <label
-                className="block text-gray-700 font-semibold mb-2"
+                className="block text-amber-900 font-semibold mb-2"
                 htmlFor="fullName"
               >
-                Full Name <span className="text-red-500">*</span>
+                Full Name <span className="text-red-600">*</span>
               </label>
               <input
                 type="text"
@@ -158,7 +151,7 @@ const InquiryForm = () => {
                 value={formData.fullName}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-3 border-2 border-amber-200 rounded-lg focus:border-amber-500 focus:outline-none transition"
+                className="w-full px-4 py-3 border-2 border-amber-300 rounded-lg focus:border-amber-600 focus:ring-2 focus:ring-amber-200 focus:outline-none transition"
                 placeholder="Enter your full name"
               />
             </div>
@@ -166,10 +159,10 @@ const InquiryForm = () => {
             {/* Email */}
             <div className="mb-6">
               <label
-                className="block text-gray-700 font-semibold mb-2"
+                className="block text-amber-900 font-semibold mb-2"
                 htmlFor="email"
               >
-                Email Address <span className="text-red-500">*</span>
+                Email Address <span className="text-red-600">*</span>
               </label>
               <input
                 type="email"
@@ -178,7 +171,7 @@ const InquiryForm = () => {
                 value={formData.email}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-3 border-2 border-amber-200 rounded-lg focus:border-amber-500 focus:outline-none transition"
+                className="w-full px-4 py-3 border-2 border-amber-300 rounded-lg focus:border-amber-600 focus:ring-2 focus:ring-amber-200 focus:outline-none transition"
                 placeholder="your.email@example.com"
               />
             </div>
@@ -186,10 +179,10 @@ const InquiryForm = () => {
             {/* Phone */}
             <div className="mb-6">
               <label
-                className="block text-gray-700 font-semibold mb-2"
+                className="block text-amber-900 font-semibold mb-2"
                 htmlFor="phoneNumber"
               >
-                Phone Number <span className="text-red-500">*</span>
+                Phone Number <span className="text-red-600">*</span>
               </label>
               <input
                 type="tel"
@@ -198,7 +191,7 @@ const InquiryForm = () => {
                 value={formData.phoneNumber}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-3 border-2 border-amber-200 rounded-lg focus:border-amber-500 focus:outline-none transition"
+                className="w-full px-4 py-3 border-2 border-amber-300 rounded-lg focus:border-amber-600 focus:ring-2 focus:ring-amber-200 focus:outline-none transition"
                 placeholder="+1 (555) 123-4567"
               />
             </div>
@@ -206,10 +199,10 @@ const InquiryForm = () => {
             {/* Course Selection */}
             <div className="mb-6">
               <label
-                className="block text-gray-700 font-semibold mb-2"
+                className="block text-amber-900 font-semibold mb-2"
                 htmlFor="courseInterest"
               >
-                Course of Interest <span className="text-red-500">*</span>
+                Course of Interest <span className="text-red-600">*</span>
               </label>
               <select
                 id="courseInterest"
@@ -217,7 +210,7 @@ const InquiryForm = () => {
                 value={formData.courseInterest}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-3 border-2 border-amber-200 rounded-lg focus:border-amber-500 focus:outline-none transition"
+                className="w-full px-4 py-3 border-2 border-amber-300 rounded-lg focus:border-amber-600 focus:ring-2 focus:ring-amber-200 focus:outline-none transition"
               >
                 <option value="">Select a course</option>
                 {courses.map((course, index) => (
@@ -231,10 +224,10 @@ const InquiryForm = () => {
             {/* Message */}
             <div className="mb-6">
               <label
-                className="block text-gray-700 font-semibold mb-2"
+                className="block text-amber-900 font-semibold mb-2"
                 htmlFor="message"
               >
-                Additional Message <span className="text-red-500">*</span>
+                Additional Message <span className="text-red-600">*</span>
               </label>
               <textarea
                 id="message"
@@ -245,10 +238,10 @@ const InquiryForm = () => {
                 minLength={10}
                 maxLength={1000}
                 required
-                className={`w-full px-4 py-3 border-2 rounded-lg focus:outline-none transition resize-none ${
+                className={`w-full px-4 py-3 border-2 rounded-lg focus:outline-none focus:ring-2 transition resize-none ${
                   validationErrors.message
-                    ? "border-red-500 focus:border-red-500"
-                    : "border-amber-200 focus:border-amber-500"
+                    ? "border-red-500 focus:border-red-600 focus:ring-red-200"
+                    : "border-amber-300 focus:border-amber-600 focus:ring-amber-200"
                 }`}
                 placeholder="Tell us more about your interest or any questions you have... (minimum 10 characters)"
               ></textarea>
@@ -279,10 +272,10 @@ const InquiryForm = () => {
               <button
                 type="submit"
                 disabled={loading}
-                className={`flex-1 bg-amber-600 text-white py-4 rounded-lg font-bold text-lg transition shadow-lg ${
+                className={`flex-1 bg-amber-700 text-white py-4 rounded-lg font-bold text-lg transition shadow-lg ${
                   loading
                     ? "opacity-50 cursor-not-allowed"
-                    : "hover:bg-amber-700 hover:shadow-xl"
+                    : "hover:bg-amber-800 hover:shadow-xl"
                 }`}
               >
                 {loading ? "Submitting..." : "Submit Inquiry"}
@@ -298,7 +291,7 @@ const InquiryForm = () => {
                     message: "",
                   })
                 }
-                className="px-8 py-4 bg-gray-200 text-gray-700 rounded-lg font-bold hover:bg-gray-300 transition"
+                className="px-8 py-4 bg-amber-100 text-amber-900 rounded-lg font-bold hover:bg-amber-200 transition border-2 border-amber-300"
               >
                 Reset
               </button>
@@ -306,12 +299,12 @@ const InquiryForm = () => {
           </form>
 
           {/* Additional Info */}
-          <div className="mt-8 text-center text-gray-600">
+          <div className="mt-8 text-center text-amber-800">
             <p>
               Or call us directly at{" "}
               <a
                 href="tel:+9779826320515"
-                className="text-amber-600 font-semibold"
+                className="text-amber-900 font-bold hover:text-amber-700 transition"
               >
                 +977 9826320515
               </a>

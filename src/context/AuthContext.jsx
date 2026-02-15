@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import apiInstance from "../config/api";
 import { AuthContext } from "../contexts/AuthContext";
+import authService from "../services/authService";
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
@@ -9,17 +9,11 @@ export const AuthProvider = ({ children }) => {
   // Check if user is logged in on mount
   useEffect(() => {
     const initAuth = () => {
-      const token = localStorage.getItem("authToken");
-      const userData = localStorage.getItem("userData");
+      const userData = authService.getCurrentUser();
+      const isAuthenticated = authService.isAuthenticated();
 
-      if (token && userData) {
-        try {
-          setUser(JSON.parse(userData));
-        } catch (error) {
-          console.error("Error parsing user data:", error);
-          localStorage.removeItem("authToken");
-          localStorage.removeItem("userData");
-        }
+      if (isAuthenticated && userData) {
+        setUser(userData);
       }
       setLoading(false);
     };
@@ -27,34 +21,25 @@ export const AuthProvider = ({ children }) => {
     initAuth();
   }, []);
 
-  const login = async (email, password) => {
+  const login = async (username, password) => {
     try {
-      const response = await apiInstance.post("/api/Auth/login", {
-        email,
-        password,
-      });
+      const response = await authService.login(username, password);
 
-      const { token, user: userData } = response.data;
-
-      // Store token and user data
-      localStorage.setItem("authToken", token);
-      localStorage.setItem("userData", JSON.stringify(userData));
-
-      setUser(userData);
-
-      return userData;
+      if (response.success) {
+        setUser(response.data.user);
+        return { success: true, user: response.data.user };
+      } else {
+        throw new Error(response.message);
+      }
     } catch (error) {
-      throw new Error(
-        error.response?.data?.message || "Login failed. Please try again.",
-      );
+      throw new Error(error.message || "Login failed. Please try again.");
     }
   };
 
   const logout = () => {
-    localStorage.removeItem("authToken");
-    localStorage.removeItem("userData");
+    authService.logout();
     setUser(null);
-    window.location.href = "/";
+    window.location.href = "/login";
   };
 
   const updateUser = (userData) => {
@@ -68,10 +53,10 @@ export const AuthProvider = ({ children }) => {
     logout,
     updateUser,
     isAuthenticated: !!user,
-    isAdmin: user?.role === "admin",
-    isStaff: user?.role === "staff",
-    isTrainer: user?.role === "trainer",
-    isStudent: user?.role === "student",
+    isAdmin: user?.role === "Admin",
+    isStaff: user?.role === "Staff",
+    isTrainer: user?.role === "Trainer",
+    isStudent: user?.role === "Student",
   };
 
   if (loading) {

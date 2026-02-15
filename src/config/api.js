@@ -38,10 +38,13 @@ apiInstance.interceptors.response.use(
   (error) => {
     // Handle token expiration
     if (error.response?.status === 401) {
+      // Clear all auth tokens
       localStorage.removeItem('authToken');
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('refreshToken');
       localStorage.removeItem('userData');
-      //redirect to home page
-      window.location.href = '/';
+      // Redirect to login page
+      window.location.href = '/login';
     } else if (error.response?.status === 403) {
       console.error('Forbidden: You do not have permission');
     } else if (error.response?.status >= 500) {
