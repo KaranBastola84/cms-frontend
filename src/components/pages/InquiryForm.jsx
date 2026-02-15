@@ -1,4 +1,17 @@
 import React, { useState } from "react";
+import {
+  Coffee,
+  User,
+  Mail,
+  Phone,
+  BookOpen,
+  MessageSquare,
+  Send,
+  RotateCcw,
+  CheckCircle2,
+  AlertCircle,
+  Clock,
+} from "lucide-react";
 import inquiryService from "../../services/inquiryService";
 
 const InquiryForm = () => {
@@ -102,57 +115,54 @@ const InquiryForm = () => {
   };
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-amber-50/80 via-orange-50/60 to-amber-100/80 relative">
-      {/* Decorative Elements */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-10 left-20 w-64 h-64 bg-amber-300/10 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-10 right-20 w-80 h-80 bg-orange-300/10 rounded-full blur-3xl"></div>
-      </div>
-
+    <div className="min-h-screen bg-linear-to-br from-amber-50 via-orange-50 to-amber-100 py-12">
       {/* Form Section */}
-      <div className="container mx-auto px-4 py-10 relative z-10">
+      <div className="container mx-auto px-4">
         <div className="max-w-3xl mx-auto">
           {/* Header */}
-          <div className="text-center mb-8">
-            <div className="inline-block p-4 bg-linear-to-br from-amber-100 to-amber-200 rounded-3xl mb-4 shadow-lg">
-              <span className="text-6xl">☕</span>
+          <div className="text-center mb-10">
+            <div className="inline-flex items-center justify-center p-4 bg-linear-to-br from-amber-500 to-amber-600 rounded-xl mb-4 shadow-md">
+              <Coffee className="w-10 h-10 text-white" strokeWidth={2.5} />
             </div>
-            <h1 className="text-4xl font-bold text-amber-900 mb-2">
+            <h1 className="text-3xl font-bold text-gray-900 mb-3">
               Course Inquiry
             </h1>
-            <p className="text-amber-700/90 text-base max-w-xl mx-auto">
+            <p className="text-gray-700 text-base max-w-xl mx-auto">
               Interested in mastering the art of coffee? Fill out the form below
-              and our team will get back to you within 24 hours!
+              and our team will get back to you within 24 hours.
             </p>
           </div>
 
           <form
             onSubmit={handleSubmit}
-            className="bg-white/95 backdrop-blur-sm rounded-3xl shadow-2xl p-8 border border-amber-200/50"
+            className="bg-white rounded-xl shadow-lg p-8 border border-gray-200"
           >
             {/* Status Message */}
             {status.message && (
               <div
-                className={`mb-6 p-4 rounded-xl shadow-md border-l-4 ${
+                className={`mb-6 p-4 rounded-lg flex items-start gap-3 border ${
                   status.type === "success"
-                    ? "bg-green-50 text-green-800 border-green-500"
-                    : "bg-red-50 text-red-800 border-red-500"
+                    ? "bg-green-50 text-green-800 border-green-200"
+                    : "bg-red-50 text-red-800 border-red-200"
                 }`}
               >
-                <p className="m-0 text-sm flex items-center gap-2">
-                  <span>{status.type === "success" ? "✅" : "⚠️"}</span>
-                  {status.message}
-                </p>
+                {status.type === "success" ? (
+                  <CheckCircle2 className="w-5 h-5 shrink-0 mt-0.5" />
+                ) : (
+                  <AlertCircle className="w-5 h-5 shrink-0 mt-0.5" />
+                )}
+                <p className="m-0 text-sm">{status.message}</p>
               </div>
             )}
 
             {/* Name */}
             <div className="mb-5">
               <label
-                className="block text-xs font-bold text-amber-900 uppercase tracking-wide mb-1.5"
+                className="text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2"
                 htmlFor="fullName"
               >
-                👤 Full Name <span className="text-red-600">*</span>
+                <User className="w-4 h-4" />
+                Full Name <span className="text-red-600">*</span>
               </label>
               <input
                 type="text"
@@ -161,7 +171,7 @@ const InquiryForm = () => {
                 value={formData.fullName}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-2.5 text-sm border-2 border-amber-300/60 bg-amber-50/30 rounded-lg focus:border-amber-600 focus:ring-2 focus:ring-amber-400/30 focus:outline-none transition-all"
+                className="w-full px-4 py-2.5 text-sm border border-gray-300 rounded-lg focus:border-amber-500 focus:ring-2 focus:ring-amber-500 focus:outline-none transition-all"
                 placeholder="Enter your full name"
               />
             </div>
@@ -170,10 +180,11 @@ const InquiryForm = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
               <div>
                 <label
-                  className="block text-xs font-bold text-amber-900 uppercase tracking-wide mb-1.5"
+                  className="text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2"
                   htmlFor="email"
                 >
-                  ✉️ Email Address <span className="text-red-600">*</span>
+                  <Mail className="w-4 h-4" />
+                  Email Address <span className="text-red-600">*</span>
                 </label>
                 <input
                   type="email"
@@ -182,17 +193,18 @@ const InquiryForm = () => {
                   value={formData.email}
                   onChange={handleChange}
                   required
-                  className="w-full px-4 py-2.5 text-sm border-2 border-amber-300/60 bg-amber-50/30 rounded-lg focus:border-amber-600 focus:ring-2 focus:ring-amber-400/30 focus:outline-none transition-all"
+                  className="w-full px-4 py-2.5 text-sm border border-gray-300 rounded-lg focus:border-amber-500 focus:ring-2 focus:ring-amber-500 focus:outline-none transition-all"
                   placeholder="your.email@example.com"
                 />
               </div>
 
               <div>
                 <label
-                  className="block text-xs font-bold text-amber-900 uppercase tracking-wide mb-1.5"
+                  className="text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2"
                   htmlFor="phoneNumber"
                 >
-                  📞 Phone Number <span className="text-red-600">*</span>
+                  <Phone className="w-4 h-4" />
+                  Phone Number <span className="text-red-600">*</span>
                 </label>
                 <input
                   type="tel"
@@ -201,7 +213,7 @@ const InquiryForm = () => {
                   value={formData.phoneNumber}
                   onChange={handleChange}
                   required
-                  className="w-full px-4 py-2.5 text-sm border-2 border-amber-300/60 bg-amber-50/30 rounded-lg focus:border-amber-600 focus:ring-2 focus:ring-amber-400/30 focus:outline-none transition-all"
+                  className="w-full px-4 py-2.5 text-sm border border-gray-300 rounded-lg focus:border-amber-500 focus:ring-2 focus:ring-amber-500 focus:outline-none transition-all"
                   placeholder="+1 (555) 123-4567"
                 />
               </div>
@@ -210,10 +222,11 @@ const InquiryForm = () => {
             {/* Course Selection */}
             <div className="mb-5">
               <label
-                className="block text-xs font-bold text-amber-900 uppercase tracking-wide mb-1.5"
+                className="text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2"
                 htmlFor="courseInterest"
               >
-                ☕ Course of Interest <span className="text-red-600">*</span>
+                <BookOpen className="w-4 h-4" />
+                Course of Interest <span className="text-red-600">*</span>
               </label>
               <select
                 id="courseInterest"
@@ -221,7 +234,7 @@ const InquiryForm = () => {
                 value={formData.courseInterest}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-2.5 text-sm border-2 border-amber-300/60 bg-amber-50/30 rounded-lg focus:border-amber-600 focus:ring-2 focus:ring-amber-400/30 focus:outline-none transition-all cursor-pointer"
+                className="w-full px-4 py-2.5 text-sm border border-gray-300 rounded-lg focus:border-amber-500 focus:ring-2 focus:ring-amber-500 focus:outline-none transition-all cursor-pointer"
               >
                 <option value="">Choose a course...</option>
                 {courses.map((course, index) => (
@@ -235,10 +248,11 @@ const InquiryForm = () => {
             {/* Message */}
             <div className="mb-6">
               <label
-                className="block text-xs font-bold text-amber-900 uppercase tracking-wide mb-1.5"
+                className="text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2"
                 htmlFor="message"
               >
-                💬 Your Message <span className="text-red-600">*</span>
+                <MessageSquare className="w-4 h-4" />
+                Your Message <span className="text-red-600">*</span>
               </label>
               <textarea
                 id="message"
@@ -249,23 +263,24 @@ const InquiryForm = () => {
                 minLength={10}
                 maxLength={1000}
                 required
-                className={`w-full px-4 py-3 text-sm border-2 rounded-lg focus:outline-none focus:ring-2 transition-all resize-none ${
+                className={`w-full px-4 py-3 text-sm border rounded-lg focus:outline-none focus:ring-2 transition-all resize-none ${
                   validationErrors.message
-                    ? "border-red-500 focus:border-red-600 focus:ring-red-200 bg-red-50/30"
-                    : "border-amber-300/60 focus:border-amber-600 focus:ring-amber-400/30 bg-amber-50/30"
+                    ? "border-red-500 focus:border-red-600 focus:ring-red-200 bg-red-50"
+                    : "border-gray-300 focus:border-amber-500 focus:ring-amber-500"
                 }`}
                 placeholder="Tell us about your coffee journey and what you hope to learn... (min. 10 characters)"
               ></textarea>
-              <div className="flex justify-between items-center mt-1">
+              <div className="flex justify-between items-center mt-2">
                 <div>
                   {validationErrors.message && (
-                    <p className="text-red-500 text-sm">
+                    <p className="text-red-500 text-sm flex items-center gap-1">
+                      <AlertCircle className="w-4 h-4" />
                       {validationErrors.message}
                     </p>
                   )}
                 </div>
                 <p
-                  className={`text-sm ${
+                  className={`text-xs font-medium ${
                     formData.message.length < 10
                       ? "text-red-500"
                       : formData.message.length > 1000
@@ -283,13 +298,23 @@ const InquiryForm = () => {
               <button
                 type="submit"
                 disabled={loading}
-                className={`flex-1 py-3.5 rounded-xl font-bold text-sm uppercase tracking-wide shadow-lg transition-all ${
+                className={`flex-1 py-3 rounded-lg font-semibold text-sm shadow-sm transition-all flex items-center justify-center gap-2 ${
                   loading
                     ? "bg-gray-400 cursor-not-allowed opacity-60"
-                    : "bg-linear-to-r from-amber-700 to-amber-800 hover:from-amber-800 hover:to-amber-900 text-white hover:shadow-xl transform hover:scale-[1.02]"
+                    : "bg-linear-to-r from-amber-600 to-amber-700 hover:from-amber-700 hover:to-amber-800 text-white hover:shadow-md"
                 }`}
               >
-                {loading ? "⏳ Sending..." : "📨 Submit Inquiry"}
+                {loading ? (
+                  <>
+                    <Clock className="w-4 h-4 animate-pulse" />
+                    Sending...
+                  </>
+                ) : (
+                  <>
+                    <Send className="w-4 h-4" />
+                    Submit Inquiry
+                  </>
+                )}
               </button>
               <button
                 type="button"
@@ -302,25 +327,28 @@ const InquiryForm = () => {
                     message: "",
                   })
                 }
-                className="px-8 py-3.5 bg-amber-100 hover:bg-amber-200 text-amber-900 rounded-xl font-bold text-sm uppercase tracking-wide transition-all border-2 border-amber-300/60 hover:border-amber-400"
+                className="px-6 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg font-semibold text-sm transition-all border border-gray-300 hover:border-gray-400 flex items-center justify-center gap-2"
               >
-                🔄 Reset
+                <RotateCcw className="w-4 h-4" />
+                Reset
               </button>
             </div>
           </form>
 
           {/* Additional Info */}
-          <div className="mt-8 p-6 bg-linear-to-r from-amber-100/60 to-orange-100/60 rounded-2xl border border-amber-300/40 text-center backdrop-blur-sm">
-            <p className="text-sm text-amber-900 mb-2 font-medium">
-              📞 Prefer to talk? Call us directly!
+          <div className="mt-8 p-6 bg-white rounded-xl border border-gray-200 text-center shadow-sm">
+            <p className="text-sm text-gray-700 mb-2 font-medium flex items-center justify-center gap-2">
+              <Phone className="w-4 h-4 text-amber-600" />
+              Prefer to talk? Call us directly!
             </p>
             <a
               href="tel:+9779826320515"
-              className="inline-block text-xl font-bold text-amber-900 hover:text-amber-700 transition-colors no-underline"
+              className="inline-block text-xl font-bold text-amber-700 hover:text-amber-800 transition-colors no-underline"
             >
               +977 9826320515
             </a>
-            <p className="text-xs text-amber-700 mt-2">
+            <p className="text-xs text-gray-600 mt-2 flex items-center justify-center gap-1">
+              <Clock className="w-3 h-3" />
               Available Mon-Fri, 9 AM - 6 PM
             </p>
           </div>
