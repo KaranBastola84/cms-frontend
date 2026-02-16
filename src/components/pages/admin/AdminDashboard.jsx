@@ -16,6 +16,7 @@ import toast from "react-hot-toast";
 
 function AdminDashboard() {
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
   const [overview, setOverview] = useState(null);
   const [financial, setFinancial] = useState(null);
   const [activities, setActivities] = useState([]);
@@ -28,6 +29,7 @@ function AdminDashboard() {
 
   const fetchDashboardData = async () => {
     setLoading(true);
+    setError(false);
     try {
       const [
         overviewData,
@@ -58,20 +60,27 @@ function AdminDashboard() {
         }),
       ]);
 
+      // Check if backend is completely unavailable
+      if (
+        !overviewData &&
+        !financialData &&
+        !activitiesData &&
+        !chartsData &&
+        !attendanceData
+      ) {
+        setError(true);
+        toast.error(
+          "Unable to connect to the backend server. Please check if the server is running.",
+        );
+      }
+
       setOverview(overviewData);
       setFinancial(financialData);
       setActivities(activitiesData);
       setCharts(chartsData);
       setAttendance(attendanceData);
-
-      // Log any data loading issues
-      if (!overviewData) console.warn("Overview data not loaded");
-      if (!financialData) console.warn("Financial data not loaded");
-      if (!activitiesData) console.warn("Activities data not loaded");
-      if (!chartsData) console.warn("Charts data not loaded");
-      if (!attendanceData)
-        console.warn("Attendance data not loaded - Backend timezone issue");
     } catch (error) {
+      setError(true);
       toast.error("Failed to load dashboard data");
       console.error("Dashboard data fetch error:", error);
     } finally {
@@ -82,7 +91,80 @@ function AdminDashboard() {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-96">
-        <Loader2 className="w-8 h-8 text-[#4A2F19] animate-spin" />
+        <div className="text-center">
+          <Loader2 className="w-8 h-8 text-[#4A2F19] animate-spin mx-auto mb-2" />
+          <p className="text-[#6B4423] text-sm">Loading dashboard data...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Show error state if backend is unavailable
+  if (
+    error &&
+    !overview &&
+    !financial &&
+    !activities &&
+    !charts &&
+    !attendance
+  ) {
+    return (
+      <div className="fade-in">
+        <div className="coffee-card mb-6 coffee-gradient text-white hover-lift">
+          <div className="flex items-center gap-4">
+            <div className="bg-white/20 p-4 rounded-2xl">
+              <Coffee className="w-10 h-10" strokeWidth={2.5} />
+            </div>
+            <div>
+              <h2 className="text-2xl font-bold m-0 mb-2">Admin Dashboard</h2>
+              <p className="text-[#EFE7D3] m-0 font-medium">
+                Manage your coffee school from one central location.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div className="coffee-card bg-red-50 border-2 border-red-200">
+          <div className="text-center py-12">
+            <div className="bg-red-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+              <svg
+                className="w-8 h-8 text-red-600"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+                />
+              </svg>
+            </div>
+            <h3 className="text-xl font-bold text-red-900 mb-2">
+              Backend Server Unavailable
+            </h3>
+            <p className="text-red-700 mb-4 max-w-md mx-auto">
+              Unable to connect to the backend server. Please ensure:
+            </p>
+            <ul className="text-left text-red-700 max-w-md mx-auto space-y-2 mb-6">
+              <li className="flex items-center gap-2">
+                <span className="w-2 h-2 bg-red-500 rounded-full"></span>
+                The backend server is running
+              </li>
+              <li className="flex items-center gap-2">
+                <span className="w-2 h-2 bg-red-500 rounded-full"></span>
+                You are logged in with valid credentials
+              </li>
+            </ul>
+            <button
+              onClick={fetchDashboardData}
+              className="px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+            >
+              Retry Connection
+            </button>
+          </div>
+        </div>
       </div>
     );
   }
@@ -704,13 +786,9 @@ function AdminDashboard() {
                 )}
             </div>
           ) : (
-            <div className="p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
-              <p className="text-sm text-yellow-800 m-0 mb-2 font-semibold">
-                ⚠️ Attendance data temporarily unavailable
-              </p>
-              <p className="text-xs text-yellow-700 m-0">
-                There is a backend database timezone issue. The backend team is
-                working on fixing it.
+            <div className="p-4 bg-gray-50 border border-gray-200 rounded-lg text-center">
+              <p className="text-sm text-gray-600 m-0">
+                No attendance data available
               </p>
             </div>
           )}
