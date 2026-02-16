@@ -12,6 +12,7 @@ import {
 
 // Import dashboards
 import AdminDashboard from "../components/pages/admin/AdminDashboard";
+import AuditLogs from "../components/pages/admin/AuditLogs";
 import StaffDashboard from "../components/pages/staff/StaffDashboard";
 import TrainerDashboard from "../components/pages/trainer/TrainerDashboard";
 import StudentDashboard from "../components/pages/student/StudentDashboard";
@@ -60,6 +61,17 @@ const AppRoutes = () => {
           <ProtectedRoute allowedRoles={["Admin"]}>
             <DashboardLayout>
               <AdminDashboard />
+            </DashboardLayout>
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/admin/audit-logs"
+        element={
+          <ProtectedRoute allowedRoles={["Admin"]}>
+            <DashboardLayout>
+              <AuditLogs />
             </DashboardLayout>
           </ProtectedRoute>
         }
