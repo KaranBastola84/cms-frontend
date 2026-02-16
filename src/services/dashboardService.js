@@ -84,6 +84,20 @@ const dashboardService = {
       throw error;
     }
   },
+
+  // Get notifications
+  getNotifications: async (limit = 50) => {
+    try {
+      const response = await api.get(`/api/Dashboard/notifications?limit=${limit}`);
+      if (response.data.success) {
+        return response.data.data;
+      }
+      throw new Error('Failed to fetch notifications');
+    } catch (error) {
+      console.error('Error fetching notifications:', error);
+      throw error;
+    }
+  },
 };
 
 export default dashboardService;
