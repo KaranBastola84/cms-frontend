@@ -32,12 +32,42 @@ function AuditLogs() {
   const [expandedLog, setExpandedLog] = useState(null);
 
   const actionTypes = {
-    0: { label: "Create", icon: UserPlus, color: "text-green-600", bg: "bg-green-50" },
-    1: { label: "Update", icon: Edit, color: "text-blue-600", bg: "bg-blue-50" },
-    2: { label: "Delete", icon: Trash2, color: "text-red-600", bg: "bg-red-50" },
-    3: { label: "Login", icon: LogIn, color: "text-emerald-600", bg: "bg-emerald-50" },
-    4: { label: "Logout", icon: LogIn, color: "text-gray-600", bg: "bg-gray-50" },
-    5: { label: "Failed Login", icon: XCircle, color: "text-red-600", bg: "bg-red-50" },
+    0: {
+      label: "Create",
+      icon: UserPlus,
+      color: "text-green-600",
+      bg: "bg-green-50",
+    },
+    1: {
+      label: "Update",
+      icon: Edit,
+      color: "text-blue-600",
+      bg: "bg-blue-50",
+    },
+    2: {
+      label: "Delete",
+      icon: Trash2,
+      color: "text-red-600",
+      bg: "bg-red-50",
+    },
+    3: {
+      label: "Login",
+      icon: LogIn,
+      color: "text-emerald-600",
+      bg: "bg-emerald-50",
+    },
+    4: {
+      label: "Logout",
+      icon: LogIn,
+      color: "text-gray-600",
+      bg: "bg-gray-50",
+    },
+    5: {
+      label: "Failed Login",
+      icon: XCircle,
+      color: "text-red-600",
+      bg: "bg-red-50",
+    },
   };
 
   const modules = [
@@ -68,7 +98,9 @@ function AuditLogs() {
 
     // Filter by action type
     if (filterAction !== "All") {
-      filtered = filtered.filter((log) => log.actionType === parseInt(filterAction));
+      filtered = filtered.filter(
+        (log) => log.actionType === parseInt(filterAction),
+      );
     }
 
     // Search filter
@@ -76,8 +108,10 @@ function AuditLogs() {
       filtered = filtered.filter(
         (log) =>
           log.userEmail?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          log.additionalInfo?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          log.ipAddress?.toLowerCase().includes(searchTerm.toLowerCase())
+          log.additionalInfo
+            ?.toLowerCase()
+            .includes(searchTerm.toLowerCase()) ||
+          log.ipAddress?.toLowerCase().includes(searchTerm.toLowerCase()),
       );
     }
 
@@ -224,7 +258,8 @@ function AuditLogs() {
         <div className="mt-4 flex items-center gap-2 text-sm text-[#6B4423]">
           <Filter className="w-4 h-4" />
           <span>
-            Showing <strong>{filteredLogs.length}</strong> of <strong>{logs.length}</strong> logs
+            Showing <strong>{filteredLogs.length}</strong> of{" "}
+            <strong>{logs.length}</strong> logs
           </span>
         </div>
       </div>
@@ -234,7 +269,9 @@ function AuditLogs() {
         {filteredLogs.length === 0 ? (
           <div className="coffee-card text-center py-12">
             <Shield className="w-16 h-16 mx-auto mb-4 text-[#6B4423] opacity-30" />
-            <p className="text-[#4A2F19] font-semibold mb-2">No audit logs found</p>
+            <p className="text-[#4A2F19] font-semibold mb-2">
+              No audit logs found
+            </p>
             <p className="text-sm text-[#6B4423]">
               {searchTerm || filterModule !== "All" || filterAction !== "All"
                 ? "Try adjusting your filters"
@@ -299,9 +336,7 @@ function AuditLogs() {
                         <FileText className="w-3 h-3" />
                         <span>ID: {log.entityId}</span>
                       </div>
-                      <div>
-                        {formatTimestamp(log.timestamp)}
-                      </div>
+                      <div>{formatTimestamp(log.timestamp)}</div>
                     </div>
 
                     {/* Expanded Details */}
