@@ -21,11 +21,8 @@ const Header = () => {
           </div>
           <div className="flex flex-col">
             <h1 className="text-[#1A1A1A] text-xl font-bold m-0 tracking-tight">
-              Coffee School
+              Brewista Coffee School
             </h1>
-            <span className="text-[#6B4423] text-xs font-semibold tracking-wide">
-              Management System
-            </span>
           </div>
         </Link>
 
