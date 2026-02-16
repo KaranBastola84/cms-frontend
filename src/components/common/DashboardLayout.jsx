@@ -120,10 +120,32 @@ const DashboardLayout = ({ children }) => {
     return date.toLocaleDateString();
   };
 
-  const markAllAsRead = () => {
-    setNotifications((prev) => prev.map((n) => ({ ...n, isRead: true })));
-    setUnreadCount(0);
-    toast.success("All notifications marked as read");
+  const markSingleAsRead = async (notificationKey) => {
+    try {
+      await dashboardService.markNotificationAsRead(notificationKey);
+      // Update local state
+      setNotifications((prev) =>
+        prev.map((n) => (n.id === notificationKey ? { ...n, isRead: true } : n))
+      );
+      setUnreadCount((prev) => Math.max(0, prev - 1));
+      toast.success("Notification marked as read");
+    } catch (error) {
+      console.error("Error marking notification as read:", error);
+      toast.error("Failed to mark notification as read");
+    }
+  };
+
+  const markAllAsRead = async () => {
+    try {
+      const result = await dashboardService.markAllNotificationsAsRead();
+      // Update local state
+      setNotifications((prev) => prev.map((n) => ({ ...n, isRead: true })));
+      setUnreadCount(0);
+      toast.success(result.message || "All notifications marked as read");
+    } catch (error) {
+      console.error("Error marking all notifications as read:", error);
+      toast.error("Failed to mark all notifications as read");
+    }
   };
 
   // Fetch notifications on mount
@@ -622,7 +644,12 @@ const DashboardLayout = ({ children }) => {
                           {notifications.map((notification) => (
                             <div
                               key={notification.id}
-                              className={`p-4 transition-colors border ${getSeverityStyle(notification.severity)} ${
+                              onClick={() => {
+                                if (!notification.isRead) {
+                                  markSingleAsRead(notification.id);
+                                }
+                              }}
+                              className={`p-4 transition-colors border cursor-pointer ${getSeverityStyle(notification.severity)} ${
                                 !notification.isRead ? "font-semibold" : ""
                               }`}
                             >

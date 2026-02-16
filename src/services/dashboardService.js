@@ -98,6 +98,45 @@ const dashboardService = {
       throw error;
     }
   },
+
+  // Mark a single notification as read
+  markNotificationAsRead: async (notificationKey) => {
+    try {
+      const response = await api.post('/api/Dashboard/notifications/mark-read', {
+        notificationKey
+      });
+      // Handle both 'success' and 'isSuccess' fields
+      if (response.data.success === true || response.data.isSuccess === true) {
+        return response.data.data || response.data.result;
+      }
+      console.error('Mark notification as read response:', response.data);
+      throw new Error(response.data.errorMessage?.join(', ') || response.data.message || 'Failed to mark notification as read');
+    } catch (error) {
+      console.error('Error marking notification as read:', error);
+      throw error;
+    }
+  },
+
+  // Mark all notifications as read
+  markAllNotificationsAsRead: async () => {
+    try {
+      const response = await api.post('/api/Dashboard/notifications/mark-all-read');
+      // Handle both 'success' and 'isSuccess' fields
+      if (response.data.success === true || response.data.isSuccess === true) {
+        // Backend returns message in errorMessage array
+        const message = response.data.errorMessage?.[0] || response.data.message || 'All notifications marked as read';
+        return {
+          ...response.data,
+          message
+        };
+      }
+      console.error('Mark all notifications as read response:', response.data);
+      throw new Error(response.data.message || response.data.errorMessage?.join(', ') || 'Failed to mark all notifications as read');
+    } catch (error) {
+      console.error('Error marking all notifications as read:', error);
+      throw error;
+    }
+  },
 };
 
 export default dashboardService;
