@@ -656,22 +656,14 @@ const DashboardLayout = ({ children }) => {
                     </div>
 
                     {notifications.length > 0 && (
-                      <div className="p-3 bg-[#EFE7D3] border-t border-[#4A2F19]/10 flex gap-2">
+                      <div className="p-3 bg-[#EFE7D3] border-t border-[#4A2F19]/10">
                         <button
                           onClick={() => {
                             markAllAsRead();
                           }}
-                          className="flex-1 text-center text-sm text-[#4A2F19] font-semibold hover:text-[#6B4423] transition-colors py-2 px-3 rounded hover:bg-[#4A2F19]/10"
+                          className="w-full text-center text-sm text-[#4A2F19] font-semibold hover:text-[#6B4423] transition-colors py-2 px-3 rounded hover:bg-[#4A2F19]/10"
                         >
-                          Mark All Read
-                        </button>
-                        <button
-                          onClick={() => {
-                            setShowNotifications(false);
-                          }}
-                          className="flex-1 text-center text-sm text-[#4A2F19] font-semibold hover:text-[#6B4423] transition-colors py-2 px-3 rounded hover:bg-[#4A2F19]/10"
-                        >
-                          View All
+                          Mark All as Read
                         </button>
                       </div>
                     )}
