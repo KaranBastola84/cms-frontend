@@ -89,10 +89,10 @@ const dashboardService = {
   getNotifications: async (limit = 50) => {
     try {
       const response = await api.get(`/api/Dashboard/notifications?limit=${limit}`);
-      if (response.data.success) {
-        return response.data.data;
+      if (response.data.isSuccess) {
+        return response.data.result;
       }
-      throw new Error('Failed to fetch notifications');
+      throw new Error(response.data.errorMessage?.join(', ') || 'Failed to fetch notifications');
     } catch (error) {
       console.error('Error fetching notifications:', error);
       throw error;

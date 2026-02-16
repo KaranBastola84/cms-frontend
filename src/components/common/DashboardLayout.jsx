@@ -120,24 +120,6 @@ const DashboardLayout = ({ children }) => {
     return date.toLocaleDateString();
   };
 
-  const handleNotificationClick = (notification) => {
-    // Mark as read locally (optimistic update)
-    if (!notification.isRead) {
-      setNotifications((prev) =>
-        prev.map((n) =>
-          n.id === notification.id ? { ...n, isRead: true } : n,
-        ),
-      );
-      setUnreadCount((prev) => Math.max(0, prev - 1));
-    }
-
-    // Navigate to action URL if available
-    if (notification.actionUrl) {
-      setShowNotifications(false);
-      window.location.href = notification.actionUrl;
-    }
-  };
-
   const markAllAsRead = () => {
     setNotifications((prev) => prev.map((n) => ({ ...n, isRead: true })));
     setUnreadCount(0);
@@ -640,12 +622,9 @@ const DashboardLayout = ({ children }) => {
                           {notifications.map((notification) => (
                             <div
                               key={notification.id}
-                              className={`p-4 transition-colors cursor-pointer border ${getSeverityStyle(notification.severity)} ${
+                              className={`p-4 transition-colors border ${getSeverityStyle(notification.severity)} ${
                                 !notification.isRead ? "font-semibold" : ""
                               }`}
-                              onClick={() =>
-                                handleNotificationClick(notification)
-                              }
                             >
                               <div className="flex gap-3">
                                 <div
