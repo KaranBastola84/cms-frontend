@@ -341,7 +341,7 @@ const DashboardLayout = ({ children }) => {
         {
           name: "Inquiries",
           icon: FileText,
-          path: "/staff/inquiries",
+          path: "/admin/inquiries",
           permission: "view-inquiries",
         },
       ],
