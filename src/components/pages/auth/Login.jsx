@@ -53,7 +53,9 @@ const Login = () => {
     const errors = validateForm();
     if (Object.keys(errors).length > 0) {
       setValidationErrors(errors);
-      toast.error("Please fix the validation errors");
+      toast.error("Please fix the validation errors", {
+        duration: 4000,
+      });
       setLoading(false);
       return;
     }
@@ -85,7 +87,15 @@ const Login = () => {
         }
       }
     } catch (err) {
-      toast.error(err.message || "Invalid username or password");
+      // Show error with longer duration for better visibility
+      toast.error(err.message || "Invalid username or password", {
+        duration: 5000, // 5 seconds
+        style: {
+          background: "#FEE2E2",
+          color: "#991B1B",
+          fontWeight: "600",
+        },
+      });
       setLoading(false);
     }
   };
