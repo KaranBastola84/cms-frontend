@@ -58,16 +58,7 @@ const Inquiries = () => {
   const [actionLoading, setActionLoading] = useState(false);
   const [followUps, setFollowUps] = useState([]);
 
-  // Status enum mapping (backend uses integers)
-  const statusEnum = {
-    Pending: 0,
-    InProgress: 1,
-    Contacted: 2,
-    Enrolled: 3,
-    Rejected: 4,
-    Closed: 5,
-  };
-
+  // Status mapping (backend uses integer enum values)
   const statuses = [
     {
       value: 0,
