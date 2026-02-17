@@ -253,41 +253,6 @@ const inquiryService = {
   },
 
   /**
-   * Convert inquiry to student (Admin/Staff only)
-   * @param {number} id - Inquiry ID
-   * @param {Object} data - Student data
-   * @returns {Promise<Object>}
-   */
-  convertToStudent: async (id, data) => {
-    try {
-      const response = await apiInstance.post(
-        `/api/Inquiry/${id}/convert-to-student`,
-        data
-      );
-
-      if (response.data.isSuccess) {
-        return {
-          success: true,
-          data: response.data.result,
-          message: "Inquiry converted to student successfully",
-        };
-      } else {
-        throw new Error(
-          response.data.errorMessage?.join(", ") ||
-            "Failed to convert inquiry"
-        );
-      }
-    } catch (error) {
-      const errorMessage =
-        error.response?.data?.errorMessage?.join(", ") ||
-        error.response?.data?.message ||
-        error.message ||
-        "Failed to convert inquiry to student";
-      throw new Error(errorMessage);
-    }
-  },
-
-  /**
    * Get inquiry analytics (Admin/Staff only)
    * @returns {Promise<Object>}
    */

@@ -18,7 +18,6 @@ import {
   UserCog,
   X,
   Send,
-  GraduationCap,
 } from "lucide-react";
 
 const Inquiries = () => {
@@ -37,7 +36,6 @@ const Inquiries = () => {
   const [showDetailsModal, setShowDetailsModal] = useState(false);
   const [showStatusModal, setShowStatusModal] = useState(false);
   const [showAssignModal, setShowAssignModal] = useState(false);
-  const [showConvertModal, setShowConvertModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   // Form data
@@ -47,40 +45,48 @@ const Inquiries = () => {
   });
   const [followUpNote, setFollowUpNote] = useState("");
   const [assignedToId, setAssignedToId] = useState("");
-  const [convertData, setConvertData] = useState({
-    password: "",
-    address: "",
-    emergencyContact: "",
-    feesTotal: "",
-    feesPaid: "",
-  });
 
   const [actionLoading, setActionLoading] = useState(false);
   const [followUps, setFollowUps] = useState([]);
 
+  // Status mapping (backend uses integer enum values)
   const statuses = [
     {
-      value: "Pending",
+      value: 0,
+      name: "Pending",
       label: "Pending",
       color: "bg-yellow-100 text-yellow-700",
     },
     {
-      value: "InProgress",
+      value: 1,
+      name: "InProgress",
       label: "In Progress",
       color: "bg-blue-100 text-blue-700",
     },
     {
-      value: "Contacted",
+      value: 2,
+      name: "Contacted",
       label: "Contacted",
       color: "bg-purple-100 text-purple-700",
     },
     {
-      value: "Enrolled",
+      value: 3,
+      name: "Enrolled",
       label: "Enrolled",
       color: "bg-green-100 text-green-700",
     },
-    { value: "Rejected", label: "Rejected", color: "bg-red-100 text-red-700" },
-    { value: "Closed", label: "Closed", color: "bg-gray-100 text-gray-700" },
+    {
+      value: 4,
+      name: "Rejected",
+      label: "Rejected",
+      color: "bg-red-100 text-red-700",
+    },
+    {
+      value: 5,
+      name: "Closed",
+      label: "Closed",
+      color: "bg-gray-100 text-gray-700",
+    },
   ];
 
   useEffect(() => {
@@ -134,14 +140,20 @@ const Inquiries = () => {
   };
 
   const handleUpdateStatus = async () => {
-    if (!selectedInquiry || !statusData.status) {
+    if (!selectedInquiry || statusData.status === "") {
       toast.error("Please select a status");
       return;
     }
 
     setActionLoading(true);
     try {
-      await inquiryService.updateStatus(selectedInquiry.id, statusData);
+      // Convert status to integer and prepare payload
+      const payload = {
+        status: parseInt(statusData.status),
+        responseNotes: statusData.responseNotes || null,
+      };
+
+      await inquiryService.updateStatus(selectedInquiry.id, payload);
       toast.success("Status updated successfully");
       setShowStatusModal(false);
       setStatusData({ status: "", responseNotes: "" });
@@ -197,40 +209,6 @@ const Inquiries = () => {
       await fetchFollowUps(selectedInquiry.id);
     } catch (error) {
       toast.error(error.message || "Failed to add follow-up");
-    } finally {
-      setActionLoading(false);
-    }
-  };
-
-  const handleConvert = async () => {
-    if (!selectedInquiry) return;
-
-    setActionLoading(true);
-    try {
-      const data = {};
-      if (convertData.password) data.password = convertData.password;
-      if (convertData.address) data.address = convertData.address;
-      if (convertData.emergencyContact)
-        data.emergencyContact = convertData.emergencyContact;
-      if (convertData.feesTotal)
-        data.feesTotal = parseFloat(convertData.feesTotal);
-      if (convertData.feesPaid)
-        data.feesPaid = parseFloat(convertData.feesPaid);
-
-      await inquiryService.convertToStudent(selectedInquiry.id, data);
-      toast.success("Inquiry converted to student successfully");
-      setShowConvertModal(false);
-      setConvertData({
-        password: "",
-        address: "",
-        emergencyContact: "",
-        feesTotal: "",
-        feesPaid: "",
-      });
-      setSelectedInquiry(null);
-      fetchInquiries();
-    } catch (error) {
-      toast.error(error.message || "Failed to convert inquiry");
     } finally {
       setActionLoading(false);
     }
@@ -439,9 +417,11 @@ const Inquiries = () => {
                         </span>
                       </td>
                       <td className="px-6 py-4">
-                        {inquiry.assignedToUsername ? (
+                        {inquiry.assignedTo?.username ||
+                        inquiry.assignedToUsername ? (
                           <span className="text-sm text-[#4A2F19] font-semibold">
-                            {inquiry.assignedToUsername}
+                            {inquiry.assignedTo?.username ||
+                              inquiry.assignedToUsername}
                           </span>
                         ) : (
                           <span className="text-sm text-[#6B4423] italic">
@@ -488,18 +468,6 @@ const Inquiries = () => {
                           >
                             <UserCog className="w-4 h-4" />
                           </button>
-                          {!inquiry.isConverted && (
-                            <button
-                              onClick={() => {
-                                setSelectedInquiry(inquiry);
-                                setShowConvertModal(true);
-                              }}
-                              className="p-2 bg-green-100 hover:bg-green-200 text-green-700 rounded-lg transition-colors"
-                              title="Convert to Student"
-                            >
-                              <GraduationCap className="w-4 h-4" />
-                            </button>
-                          )}
                           <button
                             onClick={() => {
                               setSelectedInquiry(inquiry);
@@ -603,7 +571,9 @@ const Inquiries = () => {
                     Assigned To
                   </p>
                   <p className="text-[#1A1A1A]">
-                    {selectedInquiry.assignedToUsername || "Unassigned"}
+                    {selectedInquiry.assignedTo?.username ||
+                      selectedInquiry.assignedToUsername ||
+                      "Unassigned"}
                   </p>
                 </div>
               </div>
@@ -831,153 +801,6 @@ const Inquiries = () => {
                   <UserPlus className="w-4 h-4" />
                 )}
                 Assign
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Convert to Student Modal */}
-      {showConvertModal && selectedInquiry && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 overflow-y-auto">
-          <div className="bg-white rounded-xl shadow-2xl max-w-2xl w-full p-6 my-8">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-xl font-bold text-[#1A1A1A]">
-                Convert to Student
-              </h3>
-              <button
-                onClick={() => {
-                  setShowConvertModal(false);
-                  setSelectedInquiry(null);
-                }}
-                className="text-[#6B4423] hover:text-[#1A1A1A]"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-
-            <div className="mb-4 p-4 bg-[#F8F4EE] rounded-lg">
-              <p className="text-sm text-[#4A2F19]">
-                <strong>Name:</strong> {selectedInquiry.fullName}
-              </p>
-              <p className="text-sm text-[#4A2F19]">
-                <strong>Email:</strong> {selectedInquiry.email}
-              </p>
-            </div>
-
-            <div className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-semibold text-[#4A2F19] mb-2">
-                    Password (Optional)
-                  </label>
-                  <input
-                    type="password"
-                    value={convertData.password}
-                    onChange={(e) =>
-                      setConvertData({
-                        ...convertData,
-                        password: e.target.value,
-                      })
-                    }
-                    className="w-full px-4 py-2 border-2 border-[#C8A27B]/40 rounded-xl bg-[#F8F4EE] focus:outline-none focus:border-[#4A2F19]"
-                    placeholder="Auto-generated if blank"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-semibold text-[#4A2F19] mb-2">
-                    Emergency Contact
-                  </label>
-                  <input
-                    type="text"
-                    value={convertData.emergencyContact}
-                    onChange={(e) =>
-                      setConvertData({
-                        ...convertData,
-                        emergencyContact: e.target.value,
-                      })
-                    }
-                    className="w-full px-4 py-2 border-2 border-[#C8A27B]/40 rounded-xl bg-[#F8F4EE] focus:outline-none focus:border-[#4A2F19]"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-sm font-semibold text-[#4A2F19] mb-2">
-                  Address
-                </label>
-                <textarea
-                  value={convertData.address}
-                  onChange={(e) =>
-                    setConvertData({ ...convertData, address: e.target.value })
-                  }
-                  rows={2}
-                  className="w-full px-4 py-2 border-2 border-[#C8A27B]/40 rounded-xl bg-[#F8F4EE] focus:outline-none focus:border-[#4A2F19]"
-                />
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-semibold text-[#4A2F19] mb-2">
-                    Total Fees
-                  </label>
-                  <input
-                    type="number"
-                    value={convertData.feesTotal}
-                    onChange={(e) =>
-                      setConvertData({
-                        ...convertData,
-                        feesTotal: e.target.value,
-                      })
-                    }
-                    className="w-full px-4 py-2 border-2 border-[#C8A27B]/40 rounded-xl bg-[#F8F4EE] focus:outline-none focus:border-[#4A2F19]"
-                    placeholder="0.00"
-                    step="0.01"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-semibold text-[#4A2F19] mb-2">
-                    Fees Paid
-                  </label>
-                  <input
-                    type="number"
-                    value={convertData.feesPaid}
-                    onChange={(e) =>
-                      setConvertData({
-                        ...convertData,
-                        feesPaid: e.target.value,
-                      })
-                    }
-                    className="w-full px-4 py-2 border-2 border-[#C8A27B]/40 rounded-xl bg-[#F8F4EE] focus:outline-none focus:border-[#4A2F19]"
-                    placeholder="0.00"
-                    step="0.01"
-                  />
-                </div>
-              </div>
-            </div>
-
-            <div className="flex gap-3 mt-6">
-              <button
-                onClick={() => {
-                  setShowConvertModal(false);
-                  setSelectedInquiry(null);
-                }}
-                disabled={actionLoading}
-                className="flex-1 px-4 py-3 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-xl font-semibold transition-colors disabled:opacity-50"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={handleConvert}
-                disabled={actionLoading}
-                className="flex-1 px-4 py-3 bg-green-600 hover:bg-green-700 text-white rounded-xl font-semibold flex items-center justify-center gap-2 disabled:opacity-50"
-              >
-                {actionLoading ? (
-                  <RefreshCw className="w-4 h-4 animate-spin" />
-                ) : (
-                  <GraduationCap className="w-4 h-4" />
-                )}
-                Convert to Student
               </button>
             </div>
           </div>
