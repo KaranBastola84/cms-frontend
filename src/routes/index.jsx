@@ -3,6 +3,7 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import Layout from "../components/common/Layout";
 import DashboardLayout from "../components/common/DashboardLayout";
 import Login from "../components/pages/auth/Login";
+import StaffVerification from "../components/pages/auth/StaffVerification";
 import InquiryForm from "../components/pages/InquiryForm";
 import {
   ProtectedRoute,
@@ -53,6 +54,17 @@ const AppRoutes = () => {
           <PublicRoute>
             <Layout>
               <Login />
+            </Layout>
+          </PublicRoute>
+        }
+      />
+
+      <Route
+        path="/staff-verification"
+        element={
+          <PublicRoute>
+            <Layout>
+              <StaffVerification />
             </Layout>
           </PublicRoute>
         }
