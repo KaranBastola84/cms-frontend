@@ -16,6 +16,7 @@ import AuditLogs from "../components/pages/admin/AuditLogs";
 import StaffDashboard from "../components/pages/staff/StaffDashboard";
 import TrainerDashboard from "../components/pages/trainer/TrainerDashboard";
 import StudentDashboard from "../components/pages/student/StudentDashboard";
+import Settings from "../components/pages/Settings";
 
 const AppRoutes = () => {
   return (
@@ -105,6 +106,20 @@ const AppRoutes = () => {
           <ProtectedRoute allowedRoles={["Student"]}>
             <DashboardLayout>
               <StudentDashboard />
+            </DashboardLayout>
+          </ProtectedRoute>
+        }
+      />
+
+      {/* Settings Route - Accessible to all authenticated users */}
+      <Route
+        path="/settings"
+        element={
+          <ProtectedRoute
+            allowedRoles={["Admin", "Staff", "Trainer", "Student"]}
+          >
+            <DashboardLayout>
+              <Settings />
             </DashboardLayout>
           </ProtectedRoute>
         }
