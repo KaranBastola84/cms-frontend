@@ -195,6 +195,21 @@ const Login = () => {
             )}
           </button>
         </form>
+
+        {/* Staff Verification Link */}
+        <div className="mt-6 pt-6 border-t border-[#C8A27B]/30 text-center">
+          <p className="text-sm text-[#6B4423] mb-2">New Staff Member?</p>
+          <a
+            href="/staff-verification"
+            className="inline-flex items-center gap-2 text-[#4A2F19] font-semibold hover:text-[#6B4423] transition-colors text-sm"
+          >
+            <Coffee className="w-4 h-4" />
+            Verify Your Account
+          </a>
+          <p className="text-xs text-[#6B4423] mt-2">
+            Check your email for the OTP code
+          </p>
+        </div>
       </div>
     </div>
   );

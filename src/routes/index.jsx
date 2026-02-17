@@ -3,6 +3,7 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import Layout from "../components/common/Layout";
 import DashboardLayout from "../components/common/DashboardLayout";
 import Login from "../components/pages/auth/Login";
+import StaffVerification from "../components/pages/auth/StaffVerification";
 import InquiryForm from "../components/pages/InquiryForm";
 import {
   ProtectedRoute,
@@ -15,6 +16,7 @@ import AdminDashboard from "../components/pages/admin/AdminDashboard";
 import AuditLogs from "../components/pages/admin/AuditLogs";
 import AllUsers from "../components/pages/admin/AllUsers";
 import Inquiries from "../components/pages/admin/Inquiries";
+import StaffManagement from "../components/pages/admin/StaffManagement";
 import StaffDashboard from "../components/pages/staff/StaffDashboard";
 import TrainerDashboard from "../components/pages/trainer/TrainerDashboard";
 import StudentDashboard from "../components/pages/student/StudentDashboard";
@@ -52,6 +54,17 @@ const AppRoutes = () => {
           <PublicRoute>
             <Layout>
               <Login />
+            </Layout>
+          </PublicRoute>
+        }
+      />
+
+      <Route
+        path="/staff-verification"
+        element={
+          <PublicRoute>
+            <Layout>
+              <StaffVerification />
             </Layout>
           </PublicRoute>
         }
@@ -97,6 +110,17 @@ const AppRoutes = () => {
           <ProtectedRoute allowedRoles={["Admin", "Staff"]}>
             <DashboardLayout>
               <Inquiries />
+            </DashboardLayout>
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/admin/staff-management"
+        element={
+          <ProtectedRoute allowedRoles={["Admin"]}>
+            <DashboardLayout>
+              <StaffManagement />
             </DashboardLayout>
           </ProtectedRoute>
         }
