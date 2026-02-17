@@ -52,7 +52,7 @@ const userService = {
       if (response.data.isSuccess) {
         return {
           success: true,
-          message: "Password changed successfully",
+          message: response.data.result || "Password changed successfully",
         };
       } else {
         throw new Error(

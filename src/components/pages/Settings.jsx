@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useAuth } from "../../hooks/useAuth";
 import userService from "../../services/userService";
 import toast from "react-hot-toast";
 import {
@@ -14,6 +15,7 @@ import {
 } from "lucide-react";
 
 const Settings = () => {
+  const { logout } = useAuth();
   const [profile, setProfile] = useState(null);
   const [loadingProfile, setLoadingProfile] = useState(true);
   const [changingPassword, setChangingPassword] = useState(false);
@@ -75,25 +77,28 @@ const Settings = () => {
       return;
     }
 
-    if (passwordData.currentPassword === passwordData.newPassword) {
-      toast.error("New password must be different from current password");
-      return;
-    }
-
     setChangingPassword(true);
     try {
-      await userService.changePassword(
+      const result = await userService.changePassword(
         passwordData.currentPassword,
         passwordData.newPassword,
         passwordData.confirmPassword,
       );
-      toast.success("Password changed successfully");
+
+      toast.success(result.message || "Password changed successfully");
+
       // Reset form
       setPasswordData({
         currentPassword: "",
         newPassword: "",
         confirmPassword: "",
       });
+
+      // Logout user after 2 seconds and redirect to login
+      setTimeout(() => {
+        toast.loading("Redirecting to login...");
+        logout();
+      }, 2000);
     } catch (error) {
       toast.error(error.message || "Failed to change password");
     } finally {
