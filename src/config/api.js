@@ -54,8 +54,12 @@ apiInstance.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
 
-    // Handle token expiration with refresh
-    if (error.response?.status === 401 && !originalRequest._retry) {
+    // Skip token refresh logic for login and public endpoints
+    const isLoginRequest = originalRequest.url?.includes('/api/Auth/login');
+    const isRefreshRequest = originalRequest.url?.includes('/api/Auth/refresh');
+
+    // Handle token expiration with refresh (skip for login/refresh endpoints)
+    if (error.response?.status === 401 && !originalRequest._retry && !isLoginRequest && !isRefreshRequest) {
       if (isRefreshing) {
         // If already refreshing, queue the request
         return new Promise((resolve, reject) => {

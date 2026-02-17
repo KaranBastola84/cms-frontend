@@ -13,9 +13,11 @@ import {
 // Import dashboards
 import AdminDashboard from "../components/pages/admin/AdminDashboard";
 import AuditLogs from "../components/pages/admin/AuditLogs";
+import AllUsers from "../components/pages/admin/AllUsers";
 import StaffDashboard from "../components/pages/staff/StaffDashboard";
 import TrainerDashboard from "../components/pages/trainer/TrainerDashboard";
 import StudentDashboard from "../components/pages/student/StudentDashboard";
+import Settings from "../components/pages/Settings";
 
 const AppRoutes = () => {
   return (
@@ -78,6 +80,17 @@ const AppRoutes = () => {
       />
 
       <Route
+        path="/admin/users"
+        element={
+          <ProtectedRoute allowedRoles={["Admin"]}>
+            <DashboardLayout>
+              <AllUsers />
+            </DashboardLayout>
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
         path="/staff/dashboard"
         element={
           <ProtectedRoute allowedRoles={["Staff"]}>
@@ -105,6 +118,20 @@ const AppRoutes = () => {
           <ProtectedRoute allowedRoles={["Student"]}>
             <DashboardLayout>
               <StudentDashboard />
+            </DashboardLayout>
+          </ProtectedRoute>
+        }
+      />
+
+      {/* Settings Route - Accessible to all authenticated users */}
+      <Route
+        path="/admin/settings"
+        element={
+          <ProtectedRoute
+            allowedRoles={["Admin", "Staff", "Trainer", "Student"]}
+          >
+            <DashboardLayout>
+              <Settings />
             </DashboardLayout>
           </ProtectedRoute>
         }

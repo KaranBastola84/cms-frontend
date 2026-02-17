@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import {
   Coffee,
@@ -38,6 +38,7 @@ import dashboardService from "../../services/dashboardService";
 const DashboardLayout = ({ children }) => {
   const { user, logout } = useAuth();
   const location = useLocation();
+  const navigate = useNavigate();
   const [openDropdowns, setOpenDropdowns] = useState({});
   const [notifications, setNotifications] = useState([]);
   const [unreadCount, setUnreadCount] = useState(0);
@@ -125,7 +126,9 @@ const DashboardLayout = ({ children }) => {
       await dashboardService.markNotificationAsRead(notificationKey);
       // Update local state
       setNotifications((prev) =>
-        prev.map((n) => (n.id === notificationKey ? { ...n, isRead: true } : n))
+        prev.map((n) =>
+          n.id === notificationKey ? { ...n, isRead: true } : n,
+        ),
       );
       setUnreadCount((prev) => Math.max(0, prev - 1));
       toast.success("Notification marked as read");
@@ -700,7 +703,11 @@ const DashboardLayout = ({ children }) => {
               </div>
 
               {/* Profile */}
-              <div className="flex items-center gap-2 px-3 py-2 rounded-xl hover:bg-[#EFE7D3]/50 transition-all cursor-pointer group">
+              <div
+                onClick={() => navigate("/admin/settings")}
+                className="flex items-center gap-2 px-3 py-2 rounded-xl hover:bg-[#EFE7D3]/50 transition-all cursor-pointer group"
+                title="Settings"
+              >
                 <UserCircle className="w-8 h-8 text-[#4A2F19] group-hover:text-[#1A1A1A]" />
               </div>
             </div>

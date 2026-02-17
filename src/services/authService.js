@@ -72,11 +72,25 @@ const authService = {
         throw new Error(response.data.errorMessage?.join(", ") || "Login failed");
       }
     } catch (error) {
-      const errorMessage = 
-        error.response?.data?.errorMessage?.join(", ") || 
-        error.response?.data?.message || 
-        error.message ||
-        "An error occurred during login";
+      // Handle specific error scenarios
+      let errorMessage = "An error occurred during login";
+      
+      if (error.response?.status === 401) {
+        // Check if it's an inactive account
+        const errorMessages = error.response?.data?.errorMessage;
+        if (errorMessages && errorMessages.some(msg => msg.toLowerCase().includes("inactive"))) {
+          errorMessage = "Your account is inactive. Please contact the administrator.";
+        } else {
+          errorMessage = error.response?.data?.errorMessage?.join(", ") || "Invalid username or password";
+        }
+      } else if (error.response?.data?.errorMessage) {
+        errorMessage = error.response.data.errorMessage.join(", ");
+      } else if (error.response?.data?.message) {
+        errorMessage = error.response.data.message;
+      } else if (error.message) {
+        errorMessage = error.message;
+      }
+      
       throw new Error(errorMessage);
     }
   },
