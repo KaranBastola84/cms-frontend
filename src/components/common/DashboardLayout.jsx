@@ -704,7 +704,7 @@ const DashboardLayout = ({ children }) => {
 
               {/* Profile */}
               <div
-                onClick={() => navigate("/settings")}
+                onClick={() => navigate("/admin/settings")}
                 className="flex items-center gap-2 px-3 py-2 rounded-xl hover:bg-[#EFE7D3]/50 transition-all cursor-pointer group"
                 title="Settings"
               >

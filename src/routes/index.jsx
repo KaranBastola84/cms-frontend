@@ -125,7 +125,7 @@ const AppRoutes = () => {
 
       {/* Settings Route - Accessible to all authenticated users */}
       <Route
-        path="/settings"
+        path="/admin/settings"
         element={
           <ProtectedRoute
             allowedRoles={["Admin", "Staff", "Trainer", "Student"]}
