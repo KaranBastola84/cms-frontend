@@ -167,7 +167,7 @@ const userManagementService = {
       const response = await apiInstance.put(
         `/api/UserManagement/users/${userId}/role`,
         {
-          newRole,
+          Role: newRole,
         }
       );
 
