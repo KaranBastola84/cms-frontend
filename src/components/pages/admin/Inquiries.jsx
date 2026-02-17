@@ -58,29 +58,53 @@ const Inquiries = () => {
   const [actionLoading, setActionLoading] = useState(false);
   const [followUps, setFollowUps] = useState([]);
 
+  // Status enum mapping (backend uses integers)
+  const statusEnum = {
+    Pending: 0,
+    InProgress: 1,
+    Contacted: 2,
+    Enrolled: 3,
+    Rejected: 4,
+    Closed: 5,
+  };
+
   const statuses = [
     {
-      value: "Pending",
+      value: 0,
+      name: "Pending",
       label: "Pending",
       color: "bg-yellow-100 text-yellow-700",
     },
     {
-      value: "InProgress",
+      value: 1,
+      name: "InProgress",
       label: "In Progress",
       color: "bg-blue-100 text-blue-700",
     },
     {
-      value: "Contacted",
+      value: 2,
+      name: "Contacted",
       label: "Contacted",
       color: "bg-purple-100 text-purple-700",
     },
     {
-      value: "Enrolled",
+      value: 3,
+      name: "Enrolled",
       label: "Enrolled",
       color: "bg-green-100 text-green-700",
     },
-    { value: "Rejected", label: "Rejected", color: "bg-red-100 text-red-700" },
-    { value: "Closed", label: "Closed", color: "bg-gray-100 text-gray-700" },
+    {
+      value: 4,
+      name: "Rejected",
+      label: "Rejected",
+      color: "bg-red-100 text-red-700",
+    },
+    {
+      value: 5,
+      name: "Closed",
+      label: "Closed",
+      color: "bg-gray-100 text-gray-700",
+    },
   ];
 
   useEffect(() => {
@@ -134,14 +158,20 @@ const Inquiries = () => {
   };
 
   const handleUpdateStatus = async () => {
-    if (!selectedInquiry || !statusData.status) {
+    if (!selectedInquiry || statusData.status === "") {
       toast.error("Please select a status");
       return;
     }
 
     setActionLoading(true);
     try {
-      await inquiryService.updateStatus(selectedInquiry.id, statusData);
+      // Convert status to integer and prepare payload
+      const payload = {
+        status: parseInt(statusData.status),
+        responseNotes: statusData.responseNotes || null,
+      };
+
+      await inquiryService.updateStatus(selectedInquiry.id, payload);
       toast.success("Status updated successfully");
       setShowStatusModal(false);
       setStatusData({ status: "", responseNotes: "" });
