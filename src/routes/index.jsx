@@ -14,6 +14,7 @@ import {
 import AdminDashboard from "../components/pages/admin/AdminDashboard";
 import AuditLogs from "../components/pages/admin/AuditLogs";
 import AllUsers from "../components/pages/admin/AllUsers";
+import Inquiries from "../components/pages/admin/Inquiries";
 import StaffDashboard from "../components/pages/staff/StaffDashboard";
 import TrainerDashboard from "../components/pages/trainer/TrainerDashboard";
 import StudentDashboard from "../components/pages/student/StudentDashboard";
@@ -85,6 +86,17 @@ const AppRoutes = () => {
           <ProtectedRoute allowedRoles={["Admin"]}>
             <DashboardLayout>
               <AllUsers />
+            </DashboardLayout>
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/admin/inquiries"
+        element={
+          <ProtectedRoute allowedRoles={["Admin", "Staff"]}>
+            <DashboardLayout>
+              <Inquiries />
             </DashboardLayout>
           </ProtectedRoute>
         }

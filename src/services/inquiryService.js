@@ -7,132 +7,309 @@ import apiInstance from "../config/api";
 
 const inquiryService = {
   /**
-   * Submit a new inquiry
+   * Submit a new inquiry (Public - No Auth Required)
    * @param {Object} inquiryData - The inquiry form data
-   * @param {string} inquiryData.fullName - Full name of the inquirer
-   * @param {string} inquiryData.email - Email address
-   * @param {string} inquiryData.phoneNumber - Phone number
-   * @param {string} inquiryData.courseInterest - Course interested in
-   * @param {string} inquiryData.message - Inquiry message (10-1000 chars)
-   * @returns {Promise<{success: boolean, data: any, message: string, errors: object}>}
+   * @returns {Promise<Object>}
    */
   submitInquiry: async (inquiryData) => {
     try {
       const response = await apiInstance.post("/api/Inquiry", inquiryData);
 
-      return {
-        success: true,
-        data: response.data,
-        message: "Inquiry submitted successfully",
-        errors: null,
-      };
-    } catch (error) {
-      console.error("Submit Inquiry Error:", error);
-
-      // Handle validation errors
-      if (error.response?.data?.errors) {
+      if (response.data.isSuccess) {
         return {
-          success: false,
-          data: null,
-          message: "Validation failed",
-          errors: error.response.data.errors,
+          success: true,
+          data: response.data.result,
+          message: "Inquiry submitted successfully",
         };
+      } else {
+        throw new Error(
+          response.data.errorMessage?.join(", ") || "Failed to submit inquiry"
+        );
       }
-
-      // Handle other errors
-      return {
-        success: false,
-        data: null,
-        message:
-          error.response?.data?.message ||
-          error.response?.data?.title ||
-          error.message ||
-          "Failed to submit inquiry",
-        errors: null,
-      };
-    }
-  },
-
-  /**
-   * Get all inquiries (for admin panel - future use)
-   * @returns {Promise<{success: boolean, data: any, message: string}>}
-   */
-  getAllInquiries: async () => {
-    try {
-      const response = await apiInstance.get("/api/Inquiry");
-
-      return {
-        success: true,
-        data: response.data,
-        message: "Inquiries fetched successfully",
-      };
     } catch (error) {
-      console.error("Get All Inquiries Error:", error);
-
-      return {
-        success: false,
-        data: null,
-        message:
-          error.response?.data?.message ||
-          error.message ||
-          "Failed to fetch inquiries",
-      };
+      const errorMessage =
+        error.response?.data?.errorMessage?.join(", ") ||
+        error.response?.data?.message ||
+        error.message ||
+        "Failed to submit inquiry";
+      throw new Error(errorMessage);
     }
   },
 
   /**
-   * Get inquiry by ID (for admin panel - future use)
+   * Get all inquiries with filtering and pagination (Admin/Staff only)
+   * @param {Object} params - Query parameters
+   * @returns {Promise<Object>}
+   */
+  getAllInquiries: async (params = {}) => {
+    try {
+      const queryParams = new URLSearchParams();
+      if (params.status) queryParams.append("status", params.status);
+      if (params.assignedToId)
+        queryParams.append("assignedToId", params.assignedToId);
+      if (params.page) queryParams.append("page", params.page);
+      if (params.pageSize) queryParams.append("pageSize", params.pageSize);
+
+      const queryString = queryParams.toString();
+      const url = queryString ? `/api/Inquiry?${queryString}` : "/api/Inquiry";
+
+      const response = await apiInstance.get(url);
+
+      if (response.data.isSuccess) {
+        return response.data.result;
+      } else {
+        throw new Error(
+          response.data.errorMessage?.join(", ") || "Failed to fetch inquiries"
+        );
+      }
+    } catch (error) {
+      const errorMessage =
+        error.response?.data?.errorMessage?.join(", ") ||
+        error.response?.data?.message ||
+        error.message ||
+        "Failed to fetch inquiries";
+      throw new Error(errorMessage);
+    }
+  },
+
+  /**
+   * Get inquiry by ID (Admin/Staff only)
    * @param {number} id - Inquiry ID
-   * @returns {Promise<{success: boolean, data: any, message: string}>}
+   * @returns {Promise<Object>}
    */
   getInquiryById: async (id) => {
     try {
       const response = await apiInstance.get(`/api/Inquiry/${id}`);
 
-      return {
-        success: true,
-        data: response.data,
-        message: "Inquiry fetched successfully",
-      };
+      if (response.data.isSuccess) {
+        return response.data.result;
+      } else {
+        throw new Error(
+          response.data.errorMessage?.join(", ") || "Failed to fetch inquiry"
+        );
+      }
     } catch (error) {
-      console.error("Get Inquiry By ID Error:", error);
-
-      return {
-        success: false,
-        data: null,
-        message:
-          error.response?.data?.message ||
-          error.message ||
-          "Failed to fetch inquiry",
-      };
+      const errorMessage =
+        error.response?.data?.errorMessage?.join(", ") ||
+        error.response?.data?.message ||
+        error.message ||
+        "Failed to fetch inquiry";
+      throw new Error(errorMessage);
     }
   },
 
   /**
-   * Delete inquiry (for admin panel - future use)
+   * Delete inquiry (Admin only)
    * @param {number} id - Inquiry ID
-   * @returns {Promise<{success: boolean, data: any, message: string}>}
+   * @returns {Promise<Object>}
    */
   deleteInquiry: async (id) => {
     try {
       const response = await apiInstance.delete(`/api/Inquiry/${id}`);
 
-      return {
-        success: true,
-        data: response.data,
-        message: "Inquiry deleted successfully",
-      };
+      if (response.data.isSuccess) {
+        return {
+          success: true,
+          message: response.data.result || "Inquiry deleted successfully",
+        };
+      } else {
+        throw new Error(
+          response.data.errorMessage?.join(", ") || "Failed to delete inquiry"
+        );
+      }
     } catch (error) {
-      console.error("Delete Inquiry Error:", error);
+      const errorMessage =
+        error.response?.data?.errorMessage?.join(", ") ||
+        error.response?.data?.message ||
+        error.message ||
+        "Failed to delete inquiry";
+      throw new Error(errorMessage);
+    }
+  },
 
-      return {
-        success: false,
-        data: null,
-        message:
-          error.response?.data?.message ||
-          error.message ||
-          "Failed to delete inquiry",
-      };
+  /**
+   * Update inquiry status (Admin/Staff only)
+   * @param {number} id - Inquiry ID
+   * @param {Object} data - Status update data
+   * @returns {Promise<Object>}
+   */
+  updateStatus: async (id, data) => {
+    try {
+      const response = await apiInstance.put(
+        `/api/Inquiry/${id}/status`,
+        data
+      );
+
+      if (response.data.isSuccess) {
+        return {
+          success: true,
+          message: response.data.result || "Status updated successfully",
+        };
+      } else {
+        throw new Error(
+          response.data.errorMessage?.join(", ") || "Failed to update status"
+        );
+      }
+    } catch (error) {
+      const errorMessage =
+        error.response?.data?.errorMessage?.join(", ") ||
+        error.response?.data?.message ||
+        error.message ||
+        "Failed to update status";
+      throw new Error(errorMessage);
+    }
+  },
+
+  /**
+   * Assign inquiry to staff (Admin/Staff only)
+   * @param {number} id - Inquiry ID
+   * @param {number} assignedToId - User ID to assign to
+   * @returns {Promise<Object>}
+   */
+  assignInquiry: async (id, assignedToId) => {
+    try {
+      const response = await apiInstance.put(`/api/Inquiry/${id}/assign`, {
+        assignedToId,
+      });
+
+      if (response.data.isSuccess) {
+        return {
+          success: true,
+          message: response.data.result || "Inquiry assigned successfully",
+        };
+      } else {
+        throw new Error(
+          response.data.errorMessage?.join(", ") || "Failed to assign inquiry"
+        );
+      }
+    } catch (error) {
+      const errorMessage =
+        error.response?.data?.errorMessage?.join(", ") ||
+        error.response?.data?.message ||
+        error.message ||
+        "Failed to assign inquiry";
+      throw new Error(errorMessage);
+    }
+  },
+
+  /**
+   * Add follow-up note (Admin/Staff only)
+   * @param {number} id - Inquiry ID
+   * @param {string} note - Follow-up note
+   * @returns {Promise<Object>}
+   */
+  addFollowUp: async (id, note) => {
+    try {
+      const response = await apiInstance.post(`/api/Inquiry/${id}/followup`, {
+        note,
+      });
+
+      if (response.data.isSuccess) {
+        return {
+          success: true,
+          data: response.data.result,
+          message: "Follow-up added successfully",
+        };
+      } else {
+        throw new Error(
+          response.data.errorMessage?.join(", ") || "Failed to add follow-up"
+        );
+      }
+    } catch (error) {
+      const errorMessage =
+        error.response?.data?.errorMessage?.join(", ") ||
+        error.response?.data?.message ||
+        error.message ||
+        "Failed to add follow-up";
+      throw new Error(errorMessage);
+    }
+  },
+
+  /**
+   * Get follow-up notes (Admin/Staff only)
+   * @param {number} id - Inquiry ID
+   * @returns {Promise<Array>}
+   */
+  getFollowUps: async (id) => {
+    try {
+      const response = await apiInstance.get(`/api/Inquiry/${id}/followup`);
+
+      if (response.data.isSuccess) {
+        return response.data.result;
+      } else {
+        throw new Error(
+          response.data.errorMessage?.join(", ") ||
+            "Failed to fetch follow-ups"
+        );
+      }
+    } catch (error) {
+      const errorMessage =
+        error.response?.data?.errorMessage?.join(", ") ||
+        error.response?.data?.message ||
+        error.message ||
+        "Failed to fetch follow-ups";
+      throw new Error(errorMessage);
+    }
+  },
+
+  /**
+   * Convert inquiry to student (Admin/Staff only)
+   * @param {number} id - Inquiry ID
+   * @param {Object} data - Student data
+   * @returns {Promise<Object>}
+   */
+  convertToStudent: async (id, data) => {
+    try {
+      const response = await apiInstance.post(
+        `/api/Inquiry/${id}/convert-to-student`,
+        data
+      );
+
+      if (response.data.isSuccess) {
+        return {
+          success: true,
+          data: response.data.result,
+          message: "Inquiry converted to student successfully",
+        };
+      } else {
+        throw new Error(
+          response.data.errorMessage?.join(", ") ||
+            "Failed to convert inquiry"
+        );
+      }
+    } catch (error) {
+      const errorMessage =
+        error.response?.data?.errorMessage?.join(", ") ||
+        error.response?.data?.message ||
+        error.message ||
+        "Failed to convert inquiry to student";
+      throw new Error(errorMessage);
+    }
+  },
+
+  /**
+   * Get inquiry analytics (Admin/Staff only)
+   * @returns {Promise<Object>}
+   */
+  getAnalytics: async () => {
+    try {
+      const response = await apiInstance.get("/api/Inquiry/analytics");
+
+      if (response.data.isSuccess) {
+        return response.data.result;
+      } else {
+        throw new Error(
+          response.data.errorMessage?.join(", ") ||
+            "Failed to fetch analytics"
+        );
+      }
+    } catch (error) {
+      const errorMessage =
+        error.response?.data?.errorMessage?.join(", ") ||
+        error.response?.data?.message ||
+        error.message ||
+        "Failed to fetch analytics";
+      throw new Error(errorMessage);
     }
   },
 };

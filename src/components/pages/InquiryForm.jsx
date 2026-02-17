@@ -152,9 +152,9 @@ const InquiryForm = () => {
     }
 
     // Call service and handle response
-    const result = await inquiryService.submitInquiry(formData);
+    try {
+      await inquiryService.submitInquiry(formData);
 
-    if (result.success) {
       toast.success(
         "Thank you! Your inquiry has been submitted successfully. We will contact you soon.",
         {
@@ -175,27 +175,14 @@ const InquiryForm = () => {
         courseInterest: "",
         message: "",
       });
-    } else {
-      // Handle validation errors from backend
-      if (result.errors) {
-        const backendErrors = {};
-        Object.keys(result.errors).forEach((key) => {
-          const fieldName = key.charAt(0).toLowerCase() + key.slice(1);
-          backendErrors[fieldName] = result.errors[key][0];
-        });
-        setValidationErrors(backendErrors);
-        toast.error("Please fix the validation errors below.");
-        setStatus({
-          type: "error",
-          message: "Please fix the validation errors below.",
-        });
-      } else {
-        toast.error(result.message || "Failed to submit inquiry");
-        setStatus({
-          type: "error",
-          message: result.message,
-        });
-      }
+    } catch (error) {
+      toast.error(error.message || "Failed to submit inquiry");
+      setStatus({
+        type: "error",
+        message: error.message || "Failed to submit inquiry",
+      });
+    } finally {
+      setLoading(false);
     }
 
     setLoading(false);
