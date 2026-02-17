@@ -460,9 +460,11 @@ const Inquiries = () => {
                         </span>
                       </td>
                       <td className="px-6 py-4">
-                        {inquiry.assignedToUsername ? (
+                        {inquiry.assignedTo?.username ||
+                        inquiry.assignedToUsername ? (
                           <span className="text-sm text-[#4A2F19] font-semibold">
-                            {inquiry.assignedToUsername}
+                            {inquiry.assignedTo?.username ||
+                              inquiry.assignedToUsername}
                           </span>
                         ) : (
                           <span className="text-sm text-[#6B4423] italic">
@@ -624,7 +626,9 @@ const Inquiries = () => {
                     Assigned To
                   </p>
                   <p className="text-[#1A1A1A]">
-                    {selectedInquiry.assignedToUsername || "Unassigned"}
+                    {selectedInquiry.assignedTo?.username ||
+                      selectedInquiry.assignedToUsername ||
+                      "Unassigned"}
                   </p>
                 </div>
               </div>
