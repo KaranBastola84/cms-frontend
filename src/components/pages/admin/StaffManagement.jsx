@@ -48,6 +48,7 @@ const StaffManagement = () => {
   });
 
   const staffRoles = [
+    "All Rounder",
     "Barista Trainer",
     "Front Desk",
     "Course Coordinator",
