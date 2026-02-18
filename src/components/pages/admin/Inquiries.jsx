@@ -575,8 +575,7 @@ const Inquiries = () => {
                   <p className="text-[#1A1A1A]">
                     {selectedInquiry.assignedTo
                       ? `${selectedInquiry.assignedTo.firstName} ${selectedInquiry.assignedTo.lastName}`
-                      : selectedInquiry.assignedToUsername ||
-                        "Unassigned"}
+                      : selectedInquiry.assignedToUsername || "Unassigned"}
                   </p>
                 </div>
               </div>
