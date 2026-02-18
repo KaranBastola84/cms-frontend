@@ -48,6 +48,7 @@ const TrainerManagement = () => {
   });
 
   const trainerRoles = [
+    "All Rounder",
     "Barista Trainer",
     "Latte Art Trainer",
     "Espresso Specialist",
