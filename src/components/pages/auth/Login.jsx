@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
-import { Coffee, User, Lock, AlertCircle, Loader2 } from "lucide-react";
+import { Coffee, User, Lock, AlertCircle, Loader2, GraduationCap } from "lucide-react";
 import { useAuth } from "../../../hooks/useAuth";
 
 const Login = () => {
@@ -196,17 +196,31 @@ const Login = () => {
           </button>
         </form>
 
-        {/* Staff Verification Link */}
-        <div className="mt-6 pt-6 border-t border-[#C8A27B]/30 text-center">
-          <p className="text-sm text-[#6B4423] mb-2">New Staff Member?</p>
-          <a
-            href="/staff-verification"
-            className="inline-flex items-center gap-2 text-[#4A2F19] font-semibold hover:text-[#6B4423] transition-colors text-sm"
-          >
-            <Coffee className="w-4 h-4" />
-            Verify Your Account
-          </a>
-          <p className="text-xs text-[#6B4423] mt-2">
+        {/* Staff and Trainer Verification Links */}
+        <div className="mt-6 pt-6 border-t border-[#C8A27B]/30">
+          <p className="text-sm text-[#6B4423] mb-3 text-center font-semibold">New Account?</p>
+          
+          <div className="grid grid-cols-2 gap-3">
+            {/* Staff Verification */}
+            <a
+              href="/staff-verification"
+              className="flex flex-col items-center gap-2 p-3 bg-[#F8F4EE] hover:bg-[#EFE7D3] border-2 border-[#C8A27B]/30 hover:border-[#4A2F19] rounded-xl transition-all duration-200 group"
+            >
+              <Coffee className="w-5 h-5 text-[#4A2F19] group-hover:scale-110 transition-transform" />
+              <span className="text-xs font-semibold text-[#4A2F19]">Staff Verification</span>
+            </a>
+
+            {/* Trainer Verification */}
+            <a
+              href="/trainer-verification"
+              className="flex flex-col items-center gap-2 p-3 bg-[#F8F4EE] hover:bg-[#EFE7D3] border-2 border-[#C8A27B]/30 hover:border-[#4A2F19] rounded-xl transition-all duration-200 group"
+            >
+              <GraduationCap className="w-5 h-5 text-[#4A2F19] group-hover:scale-110 transition-transform" />
+              <span className="text-xs font-semibold text-[#4A2F19]">Trainer Verification</span>
+            </a>
+          </div>
+
+          <p className="text-xs text-[#6B4423] mt-3 text-center">
             Check your email for the OTP code
           </p>
         </div>

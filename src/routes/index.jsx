@@ -4,6 +4,7 @@ import Layout from "../components/common/Layout";
 import DashboardLayout from "../components/common/DashboardLayout";
 import Login from "../components/pages/auth/Login";
 import StaffVerification from "../components/pages/auth/StaffVerification";
+import TrainerVerification from "../components/pages/auth/TrainerVerification";
 import InquiryForm from "../components/pages/InquiryForm";
 import {
   ProtectedRoute,
@@ -66,6 +67,17 @@ const AppRoutes = () => {
           <PublicRoute>
             <Layout>
               <StaffVerification />
+            </Layout>
+          </PublicRoute>
+        }
+      />
+
+      <Route
+        path="/trainer-verification"
+        element={
+          <PublicRoute>
+            <Layout>
+              <TrainerVerification />
             </Layout>
           </PublicRoute>
         }
