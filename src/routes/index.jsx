@@ -17,6 +17,7 @@ import AuditLogs from "../components/pages/admin/AuditLogs";
 import AllUsers from "../components/pages/admin/AllUsers";
 import Inquiries from "../components/pages/admin/Inquiries";
 import StaffManagement from "../components/pages/admin/StaffManagement";
+import TrainerManagement from "../components/pages/admin/TrainerManagement";
 import StaffDashboard from "../components/pages/staff/StaffDashboard";
 import TrainerDashboard from "../components/pages/trainer/TrainerDashboard";
 import StudentDashboard from "../components/pages/student/StudentDashboard";
@@ -121,6 +122,17 @@ const AppRoutes = () => {
           <ProtectedRoute allowedRoles={["Admin"]}>
             <DashboardLayout>
               <StaffManagement />
+            </DashboardLayout>
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/admin/trainer-management"
+        element={
+          <ProtectedRoute allowedRoles={["Admin"]}>
+            <DashboardLayout>
+              <TrainerManagement />
             </DashboardLayout>
           </ProtectedRoute>
         }
