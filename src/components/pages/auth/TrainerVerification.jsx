@@ -127,7 +127,10 @@ const TrainerVerification = () => {
       <div className="bg-white rounded-2xl shadow-coffee-lg p-8 w-full max-w-md border border-[#C8A27B]/30 fade-in hover-lift">
         <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center p-4 coffee-gradient rounded-2xl mb-4 shadow-coffee-md">
-            <GraduationCap className="w-9 h-9 text-[#EFE7D3]" strokeWidth={2.5} />
+            <GraduationCap
+              className="w-9 h-9 text-[#EFE7D3]"
+              strokeWidth={2.5}
+            />
           </div>
           <h2 className="text-3xl font-bold text-[#1A1A1A] mb-2">
             Trainer Verification
