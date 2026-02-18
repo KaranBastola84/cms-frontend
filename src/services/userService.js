@@ -31,6 +31,44 @@ const userService = {
   },
 
   /**
+   * Update user profile
+   * @param {Object} profileData - Profile data to update
+   * @param {string} profileData.firstName - First name
+   * @param {string} profileData.lastName - Last name
+   * @param {string} profileData.email - Email address
+   * @param {string} profileData.phoneNumber - Phone number
+   * @returns {Promise<Object>} Updated profile data
+   * @throws {Error} If profile update fails
+   */
+  updateProfile: async (profileData) => {
+    try {
+      const response = await apiInstance.put(
+        "/api/UserManagement/profile",
+        profileData
+      );
+
+      if (response.data.isSuccess) {
+        return {
+          success: true,
+          data: response.data.result,
+          message: "Profile updated successfully",
+        };
+      } else {
+        throw new Error(
+          response.data.errorMessage?.join(", ") || "Failed to update profile"
+        );
+      }
+    } catch (error) {
+      const errorMessage =
+        error.response?.data?.errorMessage?.join(", ") ||
+        error.response?.data?.message ||
+        error.message ||
+        "An error occurred while updating profile";
+      throw new Error(errorMessage);
+    }
+  },
+
+  /**
    * Change user password
    * @param {string} currentPassword - Current password
    * @param {string} newPassword - New password
