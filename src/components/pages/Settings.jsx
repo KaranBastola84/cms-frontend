@@ -12,6 +12,9 @@ import {
   EyeOff,
   Save,
   RefreshCw,
+  Edit,
+  X,
+  Phone,
 } from "lucide-react";
 
 const Settings = () => {
@@ -19,6 +22,8 @@ const Settings = () => {
   const [profile, setProfile] = useState(null);
   const [loadingProfile, setLoadingProfile] = useState(true);
   const [changingPassword, setChangingPassword] = useState(false);
+  const [editingProfile, setEditingProfile] = useState(false);
+  const [savingProfile, setSavingProfile] = useState(false);
   const [showCurrentPassword, setShowCurrentPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -27,6 +32,13 @@ const Settings = () => {
     currentPassword: "",
     newPassword: "",
     confirmPassword: "",
+  });
+
+  const [profileData, setProfileData] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    phoneNumber: "",
   });
 
   useEffect(() => {
@@ -38,10 +50,83 @@ const Settings = () => {
     try {
       const data = await userService.getProfile();
       setProfile(data);
+      // Initialize profile data for editing
+      setProfileData({
+        firstName: data.firstName || "",
+        lastName: data.lastName || "",
+        email: data.email || "",
+        phoneNumber: data.phoneNumber || "",
+      });
     } catch (error) {
       toast.error(error.message || "Failed to load profile");
     } finally {
       setLoadingProfile(false);
+    }
+  };
+
+  const handleProfileChange = (e) => {
+    const { name, value } = e.target;
+    setProfileData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleEditProfile = () => {
+    setEditingProfile(true);
+  };
+
+  const handleCancelEdit = () => {
+    // Reset to original profile data
+    setProfileData({
+      firstName: profile.firstName || "",
+      lastName: profile.lastName || "",
+      email: profile.email || "",
+      phoneNumber: profile.phoneNumber || "",
+    });
+    setEditingProfile(false);
+  };
+
+  const handleSaveProfile = async () => {
+    // Validation
+    if (!profileData.firstName || !profileData.firstName.trim()) {
+      toast.error("First name is required");
+      return;
+    }
+
+    if (!profileData.lastName || !profileData.lastName.trim()) {
+      toast.error("Last name is required");
+      return;
+    }
+
+    if (!profileData.email || !profileData.email.trim()) {
+      toast.error("Email is required");
+      return;
+    }
+
+    // Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(profileData.email)) {
+      toast.error("Please enter a valid email address");
+      return;
+    }
+
+    if (!profileData.phoneNumber || !profileData.phoneNumber.trim()) {
+      toast.error("Phone number is required");
+      return;
+    }
+
+    setSavingProfile(true);
+    try {
+      const result = await userService.updateProfile(profileData);
+      toast.success(result.message || "Profile updated successfully");
+      setEditingProfile(false);
+      // Refresh profile data
+      await fetchProfile();
+    } catch (error) {
+      toast.error(error.message || "Failed to update profile");
+    } finally {
+      setSavingProfile(false);
     }
   };
 
@@ -139,108 +224,267 @@ const Settings = () => {
 
         {/* Profile Information Section */}
         <div className="bg-white rounded-xl shadow-coffee-md p-6 mb-6 border border-[#C8A27B]/30">
-          <div className="flex items-center gap-3 mb-6 pb-4 border-b border-[#C8A27B]/30">
-            <div className="coffee-gradient p-3 rounded-xl">
-              <User className="w-6 h-6 text-white" />
+          <div className="flex items-center justify-between mb-6 pb-4 border-b border-[#C8A27B]/30">
+            <div className="flex items-center gap-3">
+              <div className="coffee-gradient p-3 rounded-xl">
+                <User className="w-6 h-6 text-white" />
+              </div>
+              <h2 className="text-xl font-bold text-[#1A1A1A]">
+                Profile Information
+              </h2>
             </div>
-            <h2 className="text-xl font-bold text-[#1A1A1A]">
-              Profile Information
-            </h2>
+            {!editingProfile && (
+              <button
+                onClick={handleEditProfile}
+                className="flex items-center gap-2 px-4 py-2 bg-[#4A2F19] hover:bg-[#6B4423] text-white rounded-lg font-semibold transition-colors"
+              >
+                <Edit className="w-4 h-4" />
+                Edit Profile
+              </button>
+            )}
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Username */}
-            <div className="flex items-start gap-3">
-              <div className="bg-[#EFE7D3] p-2 rounded-lg">
-                <User className="w-5 h-5 text-[#4A2F19]" />
-              </div>
-              <div>
-                <p className="text-sm text-[#6B4423] font-semibold mb-1">
-                  Username
-                </p>
-                <p className="text-[#1A1A1A] font-bold">{profile?.username}</p>
-              </div>
-            </div>
+          {editingProfile ? (
+            // Edit Mode
+            <div className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {/* First Name */}
+                <div>
+                  <label className="block text-sm font-semibold text-[#4A2F19] mb-2">
+                    First Name <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    name="firstName"
+                    value={profileData.firstName}
+                    onChange={handleProfileChange}
+                    className="w-full px-4 py-3 border-2 border-[#C8A27B]/40 rounded-xl bg-[#F8F4EE] focus:outline-none focus:border-[#4A2F19] transition-colors"
+                    placeholder="Enter first name"
+                    disabled={savingProfile}
+                  />
+                </div>
 
-            {/* Email */}
-            <div className="flex items-start gap-3">
-              <div className="bg-[#EFE7D3] p-2 rounded-lg">
-                <Mail className="w-5 h-5 text-[#4A2F19]" />
-              </div>
-              <div>
-                <p className="text-sm text-[#6B4423] font-semibold mb-1">
-                  Email
-                </p>
-                <p className="text-[#1A1A1A] font-bold">{profile?.email}</p>
-              </div>
-            </div>
+                {/* Last Name */}
+                <div>
+                  <label className="block text-sm font-semibold text-[#4A2F19] mb-2">
+                    Last Name <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    name="lastName"
+                    value={profileData.lastName}
+                    onChange={handleProfileChange}
+                    className="w-full px-4 py-3 border-2 border-[#C8A27B]/40 rounded-xl bg-[#F8F4EE] focus:outline-none focus:border-[#4A2F19] transition-colors"
+                    placeholder="Enter last name"
+                    disabled={savingProfile}
+                  />
+                </div>
 
-            {/* Role */}
-            <div className="flex items-start gap-3">
-              <div className="bg-[#EFE7D3] p-2 rounded-lg">
-                <Shield className="w-5 h-5 text-[#4A2F19]" />
-              </div>
-              <div>
-                <p className="text-sm text-[#6B4423] font-semibold mb-1">
-                  Role
-                </p>
-                <span className="inline-block px-3 py-1 bg-[#4A2F19] text-white text-sm font-bold rounded-lg">
-                  {profile?.role}
-                </span>
-              </div>
-            </div>
+                {/* Email */}
+                <div>
+                  <label className="block text-sm font-semibold text-[#4A2F19] mb-2">
+                    Email <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="email"
+                    name="email"
+                    value={profileData.email}
+                    onChange={handleProfileChange}
+                    className="w-full px-4 py-3 border-2 border-[#C8A27B]/40 rounded-xl bg-[#F8F4EE] focus:outline-none focus:border-[#4A2F19] transition-colors"
+                    placeholder="Enter email"
+                    disabled={savingProfile}
+                  />
+                </div>
 
-            {/* Account Status */}
-            <div className="flex items-start gap-3">
-              <div className="bg-[#EFE7D3] p-2 rounded-lg">
-                <Shield className="w-5 h-5 text-[#4A2F19]" />
+                {/* Phone Number */}
+                <div>
+                  <label className="block text-sm font-semibold text-[#4A2F19] mb-2">
+                    Phone Number <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="tel"
+                    name="phoneNumber"
+                    value={profileData.phoneNumber}
+                    onChange={handleProfileChange}
+                    className="w-full px-4 py-3 border-2 border-[#C8A27B]/40 rounded-xl bg-[#F8F4EE] focus:outline-none focus:border-[#4A2F19] transition-colors"
+                    placeholder="Enter phone number"
+                    disabled={savingProfile}
+                  />
+                </div>
               </div>
-              <div>
-                <p className="text-sm text-[#6B4423] font-semibold mb-1">
-                  Account Status
-                </p>
-                <span
-                  className={`inline-block px-3 py-1 text-sm font-bold rounded-lg ${
-                    profile?.isActive
-                      ? "bg-green-100 text-green-700"
-                      : "bg-red-100 text-red-700"
-                  }`}
+
+              {/* Action Buttons */}
+              <div className="flex justify-end gap-3 pt-4">
+                <button
+                  onClick={handleCancelEdit}
+                  disabled={savingProfile}
+                  className="px-6 py-3 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-xl font-semibold transition-colors disabled:opacity-50 flex items-center gap-2"
                 >
-                  {profile?.isActive ? "Active" : "Inactive"}
-                </span>
+                  <X className="w-5 h-5" />
+                  Cancel
+                </button>
+                <button
+                  onClick={handleSaveProfile}
+                  disabled={savingProfile}
+                  className="coffee-gradient text-white px-6 py-3 rounded-xl font-bold hover:opacity-90 transition-all duration-200 shadow-coffee-md hover:shadow-coffee-lg flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {savingProfile ? (
+                    <>
+                      <RefreshCw className="w-5 h-5 animate-spin" />
+                      <span>Saving...</span>
+                    </>
+                  ) : (
+                    <>
+                      <Save className="w-5 h-5" />
+                      <span>Save Changes</span>
+                    </>
+                  )}
+                </button>
               </div>
             </div>
+          ) : (
+            // View Mode
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* First Name */}
+              <div className="flex items-start gap-3">
+                <div className="bg-[#EFE7D3] p-2 rounded-lg">
+                  <User className="w-5 h-5 text-[#4A2F19]" />
+                </div>
+                <div>
+                  <p className="text-sm text-[#6B4423] font-semibold mb-1">
+                    First Name
+                  </p>
+                  <p className="text-[#1A1A1A] font-bold">
+                    {profile?.firstName || "Not set"}
+                  </p>
+                </div>
+              </div>
 
-            {/* Created At */}
-            <div className="flex items-start gap-3">
-              <div className="bg-[#EFE7D3] p-2 rounded-lg">
-                <Calendar className="w-5 h-5 text-[#4A2F19]" />
+              {/* Last Name */}
+              <div className="flex items-start gap-3">
+                <div className="bg-[#EFE7D3] p-2 rounded-lg">
+                  <User className="w-5 h-5 text-[#4A2F19]" />
+                </div>
+                <div>
+                  <p className="text-sm text-[#6B4423] font-semibold mb-1">
+                    Last Name
+                  </p>
+                  <p className="text-[#1A1A1A] font-bold">
+                    {profile?.lastName || "Not set"}
+                  </p>
+                </div>
               </div>
-              <div>
-                <p className="text-sm text-[#6B4423] font-semibold mb-1">
-                  Member Since
-                </p>
-                <p className="text-[#1A1A1A] font-bold">
-                  {formatDate(profile?.createdAt)}
-                </p>
-              </div>
-            </div>
 
-            {/* Last Updated */}
-            <div className="flex items-start gap-3">
-              <div className="bg-[#EFE7D3] p-2 rounded-lg">
-                <Calendar className="w-5 h-5 text-[#4A2F19]" />
+              {/* Email */}
+              <div className="flex items-start gap-3">
+                <div className="bg-[#EFE7D3] p-2 rounded-lg">
+                  <Mail className="w-5 h-5 text-[#4A2F19]" />
+                </div>
+                <div>
+                  <p className="text-sm text-[#6B4423] font-semibold mb-1">
+                    Email
+                  </p>
+                  <p className="text-[#1A1A1A] font-bold">{profile?.email}</p>
+                </div>
               </div>
-              <div>
-                <p className="text-sm text-[#6B4423] font-semibold mb-1">
-                  Last Updated
-                </p>
-                <p className="text-[#1A1A1A] font-bold">
-                  {formatDate(profile?.updatedAt)}
-                </p>
+
+              {/* Phone Number */}
+              <div className="flex items-start gap-3">
+                <div className="bg-[#EFE7D3] p-2 rounded-lg">
+                  <Phone className="w-5 h-5 text-[#4A2F19]" />
+                </div>
+                <div>
+                  <p className="text-sm text-[#6B4423] font-semibold mb-1">
+                    Phone Number
+                  </p>
+                  <p className="text-[#1A1A1A] font-bold">
+                    {profile?.phoneNumber || "Not set"}
+                  </p>
+                </div>
+              </div>
+
+              {/* Username (Read-only) */}
+              <div className="flex items-start gap-3">
+                <div className="bg-[#EFE7D3] p-2 rounded-lg">
+                  <User className="w-5 h-5 text-[#4A2F19]" />
+                </div>
+                <div>
+                  <p className="text-sm text-[#6B4423] font-semibold mb-1">
+                    Username
+                  </p>
+                  <p className="text-[#1A1A1A] font-bold">
+                    {profile?.username}
+                  </p>
+                </div>
+              </div>
+
+              {/* Role (Read-only) */}
+              <div className="flex items-start gap-3">
+                <div className="bg-[#EFE7D3] p-2 rounded-lg">
+                  <Shield className="w-5 h-5 text-[#4A2F19]" />
+                </div>
+                <div>
+                  <p className="text-sm text-[#6B4423] font-semibold mb-1">
+                    Role
+                  </p>
+                  <span className="inline-block px-3 py-1 bg-[#4A2F19] text-white text-sm font-bold rounded-lg">
+                    {profile?.role}
+                  </span>
+                </div>
+              </div>
+
+              {/* Account Status (Read-only) */}
+              <div className="flex items-start gap-3">
+                <div className="bg-[#EFE7D3] p-2 rounded-lg">
+                  <Shield className="w-5 h-5 text-[#4A2F19]" />
+                </div>
+                <div>
+                  <p className="text-sm text-[#6B4423] font-semibold mb-1">
+                    Account Status
+                  </p>
+                  <span
+                    className={`inline-block px-3 py-1 text-sm font-bold rounded-lg ${
+                      profile?.isActive
+                        ? "bg-green-100 text-green-700"
+                        : "bg-red-100 text-red-700"
+                    }`}
+                  >
+                    {profile?.isActive ? "Active" : "Inactive"}
+                  </span>
+                </div>
+              </div>
+
+              {/* Created At (Read-only) */}
+              <div className="flex items-start gap-3">
+                <div className="bg-[#EFE7D3] p-2 rounded-lg">
+                  <Calendar className="w-5 h-5 text-[#4A2F19]" />
+                </div>
+                <div>
+                  <p className="text-sm text-[#6B4423] font-semibold mb-1">
+                    Member Since
+                  </p>
+                  <p className="text-[#1A1A1A] font-bold">
+                    {formatDate(profile?.createdAt)}
+                  </p>
+                </div>
+              </div>
+
+              {/* Last Updated (Read-only) */}
+              <div className="flex items-start gap-3">
+                <div className="bg-[#EFE7D3] p-2 rounded-lg">
+                  <Calendar className="w-5 h-5 text-[#4A2F19]" />
+                </div>
+                <div>
+                  <p className="text-sm text-[#6B4423] font-semibold mb-1">
+                    Last Updated
+                  </p>
+                  <p className="text-[#1A1A1A] font-bold">
+                    {formatDate(profile?.updatedAt)}
+                  </p>
+                </div>
               </div>
             </div>
-          </div>
+          )}
         </div>
 
         {/* Change Password Section */}

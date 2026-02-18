@@ -4,6 +4,7 @@ import Layout from "../components/common/Layout";
 import DashboardLayout from "../components/common/DashboardLayout";
 import Login from "../components/pages/auth/Login";
 import StaffVerification from "../components/pages/auth/StaffVerification";
+import TrainerVerification from "../components/pages/auth/TrainerVerification";
 import InquiryForm from "../components/pages/InquiryForm";
 import {
   ProtectedRoute,
@@ -17,6 +18,7 @@ import AuditLogs from "../components/pages/admin/AuditLogs";
 import AllUsers from "../components/pages/admin/AllUsers";
 import Inquiries from "../components/pages/admin/Inquiries";
 import StaffManagement from "../components/pages/admin/StaffManagement";
+import TrainerManagement from "../components/pages/admin/TrainerManagement";
 import StaffDashboard from "../components/pages/staff/StaffDashboard";
 import TrainerDashboard from "../components/pages/trainer/TrainerDashboard";
 import StudentDashboard from "../components/pages/student/StudentDashboard";
@@ -65,6 +67,17 @@ const AppRoutes = () => {
           <PublicRoute>
             <Layout>
               <StaffVerification />
+            </Layout>
+          </PublicRoute>
+        }
+      />
+
+      <Route
+        path="/trainer-verification"
+        element={
+          <PublicRoute>
+            <Layout>
+              <TrainerVerification />
             </Layout>
           </PublicRoute>
         }
@@ -121,6 +134,17 @@ const AppRoutes = () => {
           <ProtectedRoute allowedRoles={["Admin"]}>
             <DashboardLayout>
               <StaffManagement />
+            </DashboardLayout>
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/admin/trainer-management"
+        element={
+          <ProtectedRoute allowedRoles={["Admin"]}>
+            <DashboardLayout>
+              <TrainerManagement />
             </DashboardLayout>
           </ProtectedRoute>
         }

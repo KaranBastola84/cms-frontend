@@ -417,11 +417,13 @@ const Inquiries = () => {
                         </span>
                       </td>
                       <td className="px-6 py-4">
-                        {inquiry.assignedTo?.username ||
-                        inquiry.assignedToUsername ? (
+                        {inquiry.assignedTo ? (
                           <span className="text-sm text-[#4A2F19] font-semibold">
-                            {inquiry.assignedTo?.username ||
-                              inquiry.assignedToUsername}
+                            {`${inquiry.assignedTo.firstName} ${inquiry.assignedTo.lastName}`}
+                          </span>
+                        ) : inquiry.assignedToUsername ? (
+                          <span className="text-sm text-[#4A2F19] font-semibold">
+                            {inquiry.assignedToUsername}
                           </span>
                         ) : (
                           <span className="text-sm text-[#6B4423] italic">
@@ -571,9 +573,9 @@ const Inquiries = () => {
                     Assigned To
                   </p>
                   <p className="text-[#1A1A1A]">
-                    {selectedInquiry.assignedTo?.username ||
-                      selectedInquiry.assignedToUsername ||
-                      "Unassigned"}
+                    {selectedInquiry.assignedTo
+                      ? `${selectedInquiry.assignedTo.firstName} ${selectedInquiry.assignedTo.lastName}`
+                      : selectedInquiry.assignedToUsername || "Unassigned"}
                   </p>
                 </div>
               </div>
@@ -641,7 +643,9 @@ const Inquiries = () => {
                       <p className="text-[#1A1A1A] text-sm">{followUp.note}</p>
                       <div className="flex items-center gap-2 mt-2 text-xs text-[#6B4423]">
                         <span className="font-semibold">
-                          {followUp.createdBy?.username || "Unknown"}
+                          {followUp.createdBy
+                            ? `${followUp.createdBy.firstName} ${followUp.createdBy.lastName}`
+                            : "Unknown"}
                         </span>
                         <span>•</span>
                         <span>{formatDate(followUp.createdAt)}</span>
