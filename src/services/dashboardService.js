@@ -107,7 +107,7 @@ const dashboardService = {
       });
       // Handle both 'success' and 'isSuccess' fields
       if (response.data.success === true || response.data.isSuccess === true) {
-        return response.data.data || response.data.result;
+        return response.data.result;
       }
       console.error('Mark notification as read response:', response.data);
       throw new Error(response.data.errorMessage?.join(', ') || response.data.message || 'Failed to mark notification as read');
