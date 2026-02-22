@@ -1,7 +1,14 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import toast from "react-hot-toast";
-import { Coffee, FileText, LogIn, LogOut, User } from "lucide-react";
+import {
+  Coffee,
+  FileText,
+  LogIn,
+  LogOut,
+  User,
+  ShoppingBag,
+} from "lucide-react";
 import { useAuth } from "../../hooks/useAuth";
 
 const Header = () => {
@@ -27,6 +34,14 @@ const Header = () => {
         </Link>
 
         <nav className="flex items-center gap-4">
+          <Link
+            to="/products"
+            className="text-[#4A2F19] no-underline text-sm font-semibold hover:text-[#1A1A1A] transition-all duration-200 px-4 py-2 rounded-lg hover:bg-white/50 flex items-center gap-2"
+          >
+            <ShoppingBag className="w-4 h-4" />
+            <span>Products</span>
+          </Link>
+
           <Link
             to="/inquiry"
             className="text-[#4A2F19] no-underline text-sm font-semibold hover:text-[#1A1A1A] transition-all duration-200 px-4 py-2 rounded-lg hover:bg-white/50 flex items-center gap-2"

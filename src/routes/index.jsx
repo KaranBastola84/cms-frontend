@@ -6,6 +6,7 @@ import Login from "../components/pages/auth/Login";
 import StaffVerification from "../components/pages/auth/StaffVerification";
 import TrainerVerification from "../components/pages/auth/TrainerVerification";
 import InquiryForm from "../components/pages/InquiryForm";
+import Products from "../components/pages/Products";
 import {
   ProtectedRoute,
   PublicRoute,
@@ -44,6 +45,17 @@ const AppRoutes = () => {
           <PublicRoute>
             <Layout>
               <InquiryForm />
+            </Layout>
+          </PublicRoute>
+        }
+      />
+
+      <Route
+        path="/products"
+        element={
+          <PublicRoute>
+            <Layout>
+              <Products />
             </Layout>
           </PublicRoute>
         }
