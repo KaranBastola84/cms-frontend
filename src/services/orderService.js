@@ -10,24 +10,29 @@ import apiInstance from '../config/api';
 // ============================================
 
 /**
- * Create new order (Guest checkout)
+ * Create new order (Public - No Auth Required)
  * @param {Object} orderData - Order information
  * @param {string} orderData.customerName - Customer full name
  * @param {string} orderData.customerEmail - Customer email
  * @param {string} orderData.customerPhone - Customer phone number
- * @param {string} orderData.shippingAddress - Shipping address
- * @param {Array} orderData.items - Array of order items
- * @param {number} orderData.items[].productId - Product ID
- * @param {number} orderData.items[].quantity - Quantity ordered
- * @param {number} orderData.items[].unitPrice - Price at time of order
- * @param {string} orderData.paymentMethod - Payment method (Cash/Card/Online)
- * @param {string} orderData.notes - Optional order notes
- * @returns {Promise} Created order with order ID
+ * @param {string} orderData.deliveryAddress - Delivery address
+ * @param {string} orderData.customerNotes - Optional customer notes
+ * @param {Array} orderData.orderItems - Array of order items
+ * @param {number} orderData.orderItems[].productId - Product ID
+ * @param {number} orderData.orderItems[].quantity - Quantity ordered
+ * @returns {Promise} Created order with order ID and number
+ * 
+ * Features:
+ * - Validates product availability and stock
+ * - Auto-calculates total amount
+ * - Generates unique order number (ORD-{year}-{sequential})
+ * - Sends confirmation email
+ * - Stock NOT reduced (only when admin confirms)
  */
 export const createOrder = async (orderData) => {
   try {
     const response = await apiInstance.post('/api/Order', orderData);
-    return response.data.result;
+    return response.data.data; // API returns { success, data, message }
   } catch (error) {
     console.error('Error creating order:', error);
     throw error.response?.data || error.message;
@@ -35,16 +40,31 @@ export const createOrder = async (orderData) => {
 };
 
 /**
- * Get order details by ID (Public - for order confirmation)
+ * Get order details by ID (Public/Admin - for order confirmation/management)
  * @param {number} id - Order ID
- * @returns {Promise} Order details with items
+ * @returns {Promise} Order details with items and status
  */
 export const getOrderById = async (id) => {
   try {
     const response = await apiInstance.get(`/api/Order/${id}`);
-    return response.data.result;
+    return response.data.data;
   } catch (error) {
     console.error('Error fetching order:', error);
+    throw error.response?.data || error.message;
+  }
+};
+
+/**
+ * Get customer orders by email (Admin only)
+ * @param {string} email - Customer email
+ * @returns {Promise} Array of customer orders
+ */
+export const getOrdersByCustomerEmail = async (email) => {
+  try {
+    const response = await apiInstance.get(`/api/Order/customer/${email}`);
+    return response.data.data;
+  } catch (error) {
+    console.error('Error fetching customer orders:', error);
     throw error.response?.data || error.message;
   }
 };
@@ -56,19 +76,17 @@ export const getOrderById = async (id) => {
 /**
  * Get all orders with filters (Admin only)
  * @param {Object} params - Query parameters
- * @param {string} params.orderStatus - Filter by status (Pending/Processing/Shipped/Delivered/Cancelled)
+ * @param {string} params.status - Filter by status (Pending/Confirmed/InProgress/Delivered/Cancelled)
  * @param {string} params.paymentStatus - Filter by payment (Pending/Paid/Refunded)
- * @param {string} params.search - Search by customer name, email, or order ID
- * @param {string} params.startDate - Filter orders from date (ISO 8601)
- * @param {string} params.endDate - Filter orders to date (ISO 8601)
+ * @param {string} params.search - Search by order number, customer name, email, phone
  * @param {number} params.page - Page number (default: 1)
- * @param {number} params.pageSize - Items per page (default: 20)
+ * @param {number} params.pageSize - Items per page (default: 20, max: 100)
  * @returns {Promise} { orders: [], pagination: { currentPage, pageSize, totalCount, totalPages } }
  */
 export const getAllOrders = async (params = {}) => {
   try {
     const response = await apiInstance.get('/api/Order', { params });
-    return response.data.result;
+    return response.data.data;
   } catch (error) {
     console.error('Error fetching orders:', error);
     throw error.response?.data || error.message;
@@ -76,15 +94,38 @@ export const getAllOrders = async (params = {}) => {
 };
 
 /**
- * Update order status (Admin only)
- * @param {number} id - Order ID
- * @param {string} orderStatus - New status (Pending/Processing/Shipped/Delivered/Cancelled)
- * @returns {Promise} Updated order
+ * Get all pending orders (Admin only)
+ * @returns {Promise} Array of pending orders
  */
-export const updateOrderStatus = async (id, orderStatus) => {
+export const getPendingOrders = async () => {
   try {
-    const response = await apiInstance.put(`/api/Order/${id}/status`, { orderStatus });
-    return response.data.result;
+    const response = await apiInstance.get('/api/Order/pending');
+    return response.data.data;
+  } catch (error) {
+    console.error('Error fetching pending orders:', error);
+    throw error.response?.data || error.message;
+  }
+};
+
+/**
+ * Update order status (Admin only) - CRITICAL
+ * @param {number} id - Order ID
+ * @param {string} status - New status (Pending/Confirmed/InProgress/Delivered/Cancelled)
+ * @param {string} adminNotes - Optional admin notes
+ * @returns {Promise} Status update result
+ * 
+ * CRITICAL BEHAVIOR:
+ * - Pending → Confirmed: Stock is REDUCED (with pessimistic locking)
+ * - Confirmed → Other: Stock is RESTORED
+ * - Low stock alerts triggered if threshold reached
+ */
+export const updateOrderStatus = async (id, status, adminNotes = null) => {
+  try {
+    const payload = { status };
+    if (adminNotes) payload.adminNotes = adminNotes;
+    
+    const response = await apiInstance.put(`/api/Order/${id}/status`, payload);
+    return response.data.data;
   } catch (error) {
     console.error('Error updating order status:', error);
     throw error.response?.data || error.message;
@@ -95,48 +136,18 @@ export const updateOrderStatus = async (id, orderStatus) => {
  * Update payment status (Admin only)
  * @param {number} id - Order ID
  * @param {string} paymentStatus - New payment status (Pending/Paid/Refunded)
- * @returns {Promise} Updated order
+ * @param {string} adminNotes - Optional admin notes
+ * @returns {Promise} Payment status update result (auto-records paid date)
  */
-export const updatePaymentStatus = async (id, paymentStatus) => {
+export const updatePaymentStatus = async (id, paymentStatus, adminNotes = null) => {
   try {
-    const response = await apiInstance.put(`/api/Order/${id}/payment-status`, { paymentStatus });
-    return response.data.result;
+    const payload = { paymentStatus };
+    if (adminNotes) payload.adminNotes = adminNotes;
+    
+    const response = await apiInstance.put(`/api/Order/${id}/payment-status`, payload);
+    return response.data.data;
   } catch (error) {
     console.error('Error updating payment status:', error);
-    throw error.response?.data || error.message;
-  }
-};
-
-/**
- * Cancel order (Admin only)
- * Updates status to Cancelled and restores product stock
- * @param {number} id - Order ID
- * @param {string} cancellationReason - Reason for cancellation
- * @returns {Promise} Updated order
- */
-export const cancelOrder = async (id, cancellationReason) => {
-  try {
-    const response = await apiInstance.put(`/api/Order/${id}/cancel`, { cancellationReason });
-    return response.data.result;
-  } catch (error) {
-    console.error('Error cancelling order:', error);
-    throw error.response?.data || error.message;
-  }
-};
-
-/**
- * Get order statistics (Admin only)
- * @param {Object} params - Query parameters
- * @param {string} params.startDate - Start date for stats
- * @param {string} params.endDate - End date for stats
- * @returns {Promise} Order statistics
- */
-export const getOrderStats = async (params = {}) => {
-  try {
-    const response = await apiInstance.get('/api/Order/stats', { params });
-    return response.data.result;
-  } catch (error) {
-    console.error('Error fetching order stats:', error);
     throw error.response?.data || error.message;
   }
 };
@@ -147,8 +158,8 @@ export default {
   getOrderById,
   // Admin
   getAllOrders,
+  getPendingOrders,
+  getOrdersByCustomerEmail,
   updateOrderStatus,
   updatePaymentStatus,
-  cancelOrder,
-  getOrderStats,
 };

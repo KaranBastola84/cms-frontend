@@ -6,9 +6,6 @@ import {
   Plus,
   Minus,
   Package,
-  CreditCard,
-  Wallet,
-  Banknote,
   ArrowLeft,
 } from "lucide-react";
 import toast from "react-hot-toast";
@@ -31,9 +28,8 @@ const Checkout = () => {
     customerName: "",
     customerEmail: "",
     customerPhone: "",
-    shippingAddress: "",
-    paymentMethod: "Cash",
-    notes: "",
+    deliveryAddress: "",
+    customerNotes: "",
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -81,7 +77,7 @@ const Checkout = () => {
       !formData.customerName ||
       !formData.customerEmail ||
       !formData.customerPhone ||
-      !formData.shippingAddress
+      !formData.deliveryAddress
     ) {
       toast.error("Please fill in all required fields");
       return;
@@ -94,37 +90,34 @@ const Checkout = () => {
       return;
     }
 
-    // Prepare order data
+    // Prepare order data to match API specification
     const orderData = {
-      ...formData,
-      items: cartItems.map((item) => ({
+      customerName: formData.customerName,
+      customerEmail: formData.customerEmail,
+      customerPhone: formData.customerPhone,
+      deliveryAddress: formData.deliveryAddress,
+      customerNotes: formData.customerNotes || "",
+      orderItems: cartItems.map((item) => ({
         productId: item.id,
         quantity: item.quantity,
-        unitPrice: item.price,
       })),
     };
 
     setIsSubmitting(true);
     try {
       const result = await createOrder(orderData);
-      toast.success("Order placed successfully!");
+      toast.success(result.message || "Order placed successfully!");
       clearCart();
-      navigate(`/order-confirmation/${result.id}`);
+      navigate(`/order-confirmation/${result.orderId}`);
     } catch (error) {
-      toast.error(
-        error.errorMessage?.[0] || "Failed to place order. Please try again.",
-      );
+      const errorMsg =
+        error.message || "Failed to place order. Please try again.";
+      toast.error(errorMsg);
       console.error(error);
     } finally {
       setIsSubmitting(false);
     }
   };
-
-  const paymentMethods = [
-    { value: "Cash", icon: Banknote, label: "Cash on Delivery" },
-    { value: "Card", icon: CreditCard, label: "Credit/Debit Card" },
-    { value: "Online", icon: Wallet, label: "Online Payment" },
-  ];
 
   if (cartItems.length === 0) {
     return (
@@ -323,11 +316,11 @@ const Checkout = () => {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Shipping Address <span className="text-red-500">*</span>
+                    Delivery Address <span className="text-red-500">*</span>
                   </label>
                   <textarea
-                    name="shippingAddress"
-                    value={formData.shippingAddress}
+                    name="deliveryAddress"
+                    value={formData.deliveryAddress}
                     onChange={handleInputChange}
                     rows={3}
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C8A27B] focus:border-transparent"
@@ -341,8 +334,8 @@ const Checkout = () => {
                     Order Notes (Optional)
                   </label>
                   <textarea
-                    name="notes"
-                    value={formData.notes}
+                    name="customerNotes"
+                    value={formData.customerNotes}
                     onChange={handleInputChange}
                     rows={2}
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C8A27B] focus:border-transparent"
@@ -381,38 +374,6 @@ const Checkout = () => {
                       Rs. {total.toFixed(2)}
                     </span>
                   </div>
-                </div>
-              </div>
-
-              {/* Payment Method */}
-              <div className="mb-6">
-                <label className="block text-sm font-medium text-gray-700 mb-3">
-                  Payment Method
-                </label>
-                <div className="space-y-2">
-                  {paymentMethods.map((method) => (
-                    <label
-                      key={method.value}
-                      className={`flex items-center gap-3 p-3 border rounded-lg cursor-pointer transition-colors ${
-                        formData.paymentMethod === method.value
-                          ? "border-[#C8A27B] bg-[#EFE7D3]"
-                          : "border-gray-200 hover:border-[#C8A27B]"
-                      }`}
-                    >
-                      <input
-                        type="radio"
-                        name="paymentMethod"
-                        value={method.value}
-                        checked={formData.paymentMethod === method.value}
-                        onChange={handleInputChange}
-                        className="text-[#C8A27B] focus:ring-[#C8A27B]"
-                      />
-                      <method.icon className="w-5 h-5 text-gray-600" />
-                      <span className="font-medium text-gray-900">
-                        {method.label}
-                      </span>
-                    </label>
-                  ))}
                 </div>
               </div>
 

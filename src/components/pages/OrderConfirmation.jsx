@@ -6,7 +6,6 @@ import {
   Truck,
   MapPin,
   Calendar,
-  CreditCard,
   ShoppingBag,
   ArrowLeft,
   Loader,
@@ -162,32 +161,20 @@ const OrderConfirmation = () => {
             <div>
               <h3 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
                 <MapPin className="w-5 h-5" />
-                Shipping Address
+                Delivery Address
               </h3>
-              <p className="text-gray-600">{order.shippingAddress}</p>
+              <p className="text-gray-600">{order.deliveryAddress}</p>
             </div>
           </div>
 
-          {/* Payment Info */}
-          <div className="grid md:grid-cols-2 gap-6 mb-6 pb-6 border-b">
-            <div>
-              <h3 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
-                <CreditCard className="w-5 h-5" />
-                Payment Method
-              </h3>
-              <p className="text-gray-600">{order.paymentMethod}</p>
-            </div>
-
-            <div>
-              <h3 className="font-semibold text-gray-900 mb-3">
-                Payment Status
-              </h3>
-              <span
-                className={`inline-block px-3 py-1 rounded-lg font-semibold ${getPaymentStatusColor(order.paymentStatus)}`}
-              >
-                {order.paymentStatus}
-              </span>
-            </div>
+          {/* Payment Status */}
+          <div className="mb-6 pb-6 border-b">
+            <h3 className="font-semibold text-gray-900 mb-3">Payment Status</h3>
+            <span
+              className={`inline-block px-3 py-1 rounded-lg font-semibold ${getPaymentStatusColor(order.paymentStatus)}`}
+            >
+              {order.paymentStatus}
+            </span>
           </div>
 
           {/* Order Items */}
@@ -259,12 +246,24 @@ const OrderConfirmation = () => {
           </div>
 
           {/* Order Notes */}
-          {order.notes && (
-            <div className="mt-6 p-4 bg-blue-50 rounded-lg">
-              <p className="text-sm font-semibold text-gray-900 mb-1">
-                Order Notes:
-              </p>
-              <p className="text-gray-600">{order.notes}</p>
+          {(order.customerNotes || order.adminNotes) && (
+            <div className="mt-6 space-y-3">
+              {order.customerNotes && (
+                <div className="p-4 bg-blue-50 rounded-lg">
+                  <p className="text-sm font-semibold text-gray-900 mb-1">
+                    Customer Notes:
+                  </p>
+                  <p className="text-gray-600">{order.customerNotes}</p>
+                </div>
+              )}
+              {order.adminNotes && (
+                <div className="p-4 bg-green-50 rounded-lg">
+                  <p className="text-sm font-semibold text-gray-900 mb-1">
+                    Admin Notes:
+                  </p>
+                  <p className="text-gray-600">{order.adminNotes}</p>
+                </div>
+              )}
             </div>
           )}
         </div>
