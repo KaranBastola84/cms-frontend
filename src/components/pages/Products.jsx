@@ -10,6 +10,7 @@ import {
   ChevronRight,
 } from "lucide-react";
 import toast from "react-hot-toast";
+import { getImageUrl } from "../../config/api";
 import {
   getAllProducts,
   getFeaturedProducts,
@@ -140,7 +141,6 @@ const Products = () => {
 
   return (
     <div className="min-h-screen bg-linear-to-b from-[#FFF9F0] to-white">
-
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Featured Products Section */}
         {featuredProducts.length > 0 && (
@@ -341,7 +341,7 @@ const ProductCard = ({ product, onViewDetails, onAddToCart, featured }) => {
       >
         {product.imageUrl ? (
           <img
-            src={product.imageUrl}
+            src={getImageUrl(product.imageUrl)}
             alt={product.name}
             className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
           />
@@ -434,7 +434,7 @@ const ProductDetailModal = ({ product, onClose, onAddToCart }) => {
           <div className="relative h-96 bg-gray-100">
             {product.imageUrl ? (
               <img
-                src={product.imageUrl}
+                src={getImageUrl(product.imageUrl)}
                 alt={product.name}
                 className="w-full h-full object-cover"
               />

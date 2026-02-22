@@ -24,7 +24,7 @@ import apiInstance from '../config/api';
 export const getAllProducts = async (params = {}) => {
   try {
     const response = await apiInstance.get('/api/Product', { params });
-    return response.data.data; // Extract data from { success, data, message }
+    return response.data.result; // Extract result from { result, isSuccess, statusCode }
   } catch (error) {
     console.error('Error fetching products:', error);
     throw error.response?.data || error.message;
@@ -39,7 +39,7 @@ export const getAllProducts = async (params = {}) => {
 export const getProductById = async (id) => {
   try {
     const response = await apiInstance.get(`/api/Product/${id}`);
-    return response.data.data; // Extract data from { success, data, message }
+    return response.data.result; // Extract result from { result, isSuccess, statusCode }
   } catch (error) {
     console.error('Error fetching product:', error);
     throw error.response?.data || error.message;
@@ -56,7 +56,7 @@ export const getFeaturedProducts = async (limit = 10) => {
     const response = await apiInstance.get('/api/Product/featured', {
       params: { limit }
     });
-    return response.data.data; // Extract data from { success, data, message }
+    return response.data.result; // Extract result from { result, isSuccess, statusCode }
   } catch (error) {
     console.error('Error fetching featured products:', error);
     throw error.response?.data || error.message;
@@ -72,7 +72,7 @@ export const getFeaturedProducts = async (limit = 10) => {
 export const getProductsByCategory = async (category, params = {}) => {
   try {
     const response = await apiInstance.get(`/api/Product/category/${category}`, { params });
-    return response.data.data; // Extract data from { success, data, message }
+    return response.data.result; // Extract result from { result, isSuccess, statusCode }
   } catch (error) {
     console.error('Error fetching products by category:', error);
     throw error.response?.data || error.message;
@@ -86,7 +86,7 @@ export const getProductsByCategory = async (category, params = {}) => {
 export const getCategories = async () => {
   try {
     const response = await apiInstance.get('/api/Product/categories');
-    return response.data.data; // Extract data from { success, data, message }
+    return response.data.result; // Extract result from { result, isSuccess, statusCode }
   } catch (error) {
     console.error('Error fetching categories:', error);
     throw error.response?.data || error.message;
@@ -113,7 +113,7 @@ export const getCategories = async () => {
 export const createProduct = async (productData) => {
   try {
     const response = await apiInstance.post('/api/Product', productData);
-    return response.data.data; // Extract data from { success, data, message }
+    return response.data.result; // Extract result from { result, isSuccess, statusCode }
   } catch (error) {
     console.error('Error creating product:', error);
     throw error.response?.data || error.message;
@@ -129,7 +129,7 @@ export const createProduct = async (productData) => {
 export const updateProduct = async (id, productData) => {
   try {
     const response = await apiInstance.put(`/api/Product/${id}`, productData);
-    return response.data.data; // Extract data from { success, data, message }
+    return response.data.result; // Extract result from { result, isSuccess, statusCode }
   } catch (error) {
     console.error('Error updating product:', error);
     throw error.response?.data || error.message;
@@ -145,7 +145,7 @@ export const updateProduct = async (id, productData) => {
 export const updateProductStock = async (id, stockQuantity) => {
   try {
     const response = await apiInstance.put(`/api/Product/${id}/stock`, { stockQuantity });
-    return response.data.data; // Extract data from { success, data, message }
+    return response.data.result; // Extract result from { result, isSuccess, statusCode }
   } catch (error) {
     console.error('Error updating product stock:', error);
     throw error.response?.data || error.message;
@@ -161,7 +161,7 @@ export const updateProductStock = async (id, stockQuantity) => {
 export const deleteProduct = async (id) => {
   try {
     const response = await apiInstance.delete(`/api/Product/${id}`);
-    return response.data.data; // Extract data from { success, data, message }
+    return response.data.result; // Extract result from { result, isSuccess, statusCode }
   } catch (error) {
     console.error('Error deleting product:', error);
     throw error.response?.data || error.message;
@@ -186,7 +186,7 @@ export const uploadProductImage = async (id, imageFile) => {
         'Content-Type': 'multipart/form-data',
       },
     });
-    return response.data.data; // Extract data from { success, data, message }
+    return response.data.result; // Extract result from { result, isSuccess, statusCode }
   } catch (error) {
     console.error('Error uploading product image:', error);
     throw error.response?.data || error.message;
@@ -201,7 +201,7 @@ export const uploadProductImage = async (id, imageFile) => {
 export const deleteProductImage = async (id) => {
   try {
     const response = await apiInstance.delete(`/api/Product/${id}/image`);
-    return response.data.data; // Extract data from { success, data, message }
+    return response.data.result; // Extract result from { result, isSuccess, statusCode }
   } catch (error) {
     console.error('Error deleting product image:', error);
     throw error.response?.data || error.message;
