@@ -124,8 +124,12 @@ const Products = () => {
       toast.error("Product is out of stock");
       return;
     }
-    addToCartContext(product, 1);
-    toast.success(`${product.name} added to cart`);
+    const result = addToCartContext(product, 1);
+    if (result.success) {
+      toast.success(result.message);
+    } else {
+      toast.error(result.message);
+    }
   };
 
   return (

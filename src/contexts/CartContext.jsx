@@ -22,16 +22,40 @@ export const CartProvider = ({ children }) => {
    * Add item to cart or update quantity if already exists
    * @param {Object} product - Product to add
    * @param {number} quantity - Quantity to add (default: 1)
+   * @returns {Object} { success: boolean, message: string }
    */
   const addToCart = (product, quantity = 1) => {
+    let result = { success: false, message: "" };
+
     setCartItems((prevItems) => {
       const existingItem = prevItems.find((item) => item.id === product.id);
+      const currentQuantity = existingItem ? existingItem.quantity : 0;
+      const newTotalQuantity = currentQuantity + quantity;
+
+      // Check if new total exceeds stock
+      if (newTotalQuantity > product.stockQuantity) {
+        result = {
+          success: false,
+          message:
+            currentQuantity > 0
+              ? `Cannot add more. You already have ${currentQuantity} in cart (max: ${product.stockQuantity})`
+              : `Only ${product.stockQuantity} items available in stock`,
+        };
+        return prevItems; // Don't update cart
+      }
+
+      result = {
+        success: true,
+        message: existingItem
+          ? `Updated ${product.name} quantity to ${newTotalQuantity}`
+          : `${product.name} added to cart`,
+      };
 
       if (existingItem) {
         // Update quantity if item already in cart
         return prevItems.map((item) =>
           item.id === product.id
-            ? { ...item, quantity: item.quantity + quantity }
+            ? { ...item, quantity: newTotalQuantity }
             : item,
         );
       } else {
@@ -49,6 +73,8 @@ export const CartProvider = ({ children }) => {
         ];
       }
     });
+
+    return result;
   };
 
   /**
