@@ -8,11 +8,15 @@ import {
   LogOut,
   User,
   ShoppingBag,
+  ShoppingCart,
 } from "lucide-react";
 import { useAuth } from "../../hooks/useAuth";
+import { useCart } from "../../hooks/useCart";
 
 const Header = () => {
   const { user, logout } = useAuth();
+  const { getItemCount } = useCart();
+  const cartItemCount = getItemCount();
 
   const handleLogout = () => {
     toast.success("Logged out successfully");
@@ -40,6 +44,19 @@ const Header = () => {
           >
             <ShoppingBag className="w-4 h-4" />
             <span>Products</span>
+          </Link>
+
+          <Link
+            to="/checkout"
+            className="text-[#4A2F19] no-underline text-sm font-semibold hover:text-[#1A1A1A] transition-all duration-200 px-4 py-2 rounded-lg hover:bg-white/50 flex items-center gap-2 relative"
+          >
+            <ShoppingCart className="w-4 h-4" />
+            <span>Cart</span>
+            {cartItemCount > 0 && (
+              <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+                {cartItemCount}
+              </span>
+            )}
           </Link>
 
           <Link

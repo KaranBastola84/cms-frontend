@@ -7,6 +7,8 @@ import StaffVerification from "../components/pages/auth/StaffVerification";
 import TrainerVerification from "../components/pages/auth/TrainerVerification";
 import InquiryForm from "../components/pages/InquiryForm";
 import Products from "../components/pages/Products";
+import Checkout from "../components/pages/Checkout";
+import OrderConfirmation from "../components/pages/OrderConfirmation";
 import {
   ProtectedRoute,
   PublicRoute,
@@ -51,14 +53,31 @@ const AppRoutes = () => {
         }
       />
 
+      {/* E-commerce Routes - Accessible to everyone */}
       <Route
         path="/products"
         element={
-          <PublicRoute>
-            <Layout>
-              <Products />
-            </Layout>
-          </PublicRoute>
+          <Layout>
+            <Products />
+          </Layout>
+        }
+      />
+
+      <Route
+        path="/checkout"
+        element={
+          <Layout>
+            <Checkout />
+          </Layout>
+        }
+      />
+
+      <Route
+        path="/order-confirmation/:orderId"
+        element={
+          <Layout>
+            <OrderConfirmation />
+          </Layout>
         }
       />
 
