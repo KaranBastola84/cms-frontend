@@ -11,11 +11,18 @@ import {
   Clock,
   DollarSign,
   Eye,
+  Edit,
 } from "lucide-react";
 import {
   createPaymentPlan,
   getPaymentPlanById,
   payInstallment,
+  getAllPaymentPlans,
+  getStudentPaymentPlans,
+  getCoursePaymentPlans,
+  updatePaymentPlanStatus,
+  getOverdueInstallments,
+  getUpcomingInstallments,
 } from "../../../services/paymentPlanService";
 import toast from "react-hot-toast";
 
@@ -30,6 +37,11 @@ function PaymentPlans() {
   const [selectedPlan, setSelectedPlan] = useState(null);
   const [showPayModal, setShowPayModal] = useState(false);
   const [selectedInstallment, setSelectedInstallment] = useState(null);
+  const [showStatusModal, setShowStatusModal] = useState(false);
+  const [filterByStudent, setFilterByStudent] = useState("");
+  const [filterByCourse, setFilterByCourse] = useState("");
+  const [overdueInstallments, setOverdueInstallments] = useState([]);
+  const [upcomingInstallments, setUpcomingInstallments] = useState([]);
 
   const [newPlan, setNewPlan] = useState({
     studentId: "",
@@ -42,38 +54,26 @@ function PaymentPlans() {
   });
 
   useEffect(() => {
-    // For demo, using mock data. Replace with actual API call
-    const mockPlans = [
-      {
-        paymentPlanId: 1,
-        studentName: "John Doe",
-        courseName: "Web Development",
-        totalAmount: 5000,
-        paidAmount: 2000,
-        balanceAmount: 3000,
-        status: "Active",
-        numberOfInstallments: 5,
-        paidInstallments: 2,
-        pendingInstallments: 3,
-      },
-      {
-        paymentPlanId: 2,
-        studentName: "Jane Smith",
-        courseName: "Data Science",
-        totalAmount: 6000,
-        paidAmount: 6000,
-        balanceAmount: 0,
-        status: "Completed",
-        numberOfInstallments: 6,
-        paidInstallments: 6,
-        pendingInstallments: 0,
-      },
-    ];
-
-    setPaymentPlans(mockPlans);
-    setFilteredPlans(mockPlans);
-    setLoading(false);
+    fetchAllPaymentPlans();
+    fetchOverdueInstallments();
+    fetchUpcomingInstallments();
   }, []);
+
+  const fetchAllPaymentPlans = async () => {
+    setLoading(true);
+    try {
+      const data = await getAllPaymentPlans();
+      setPaymentPlans(data || []);
+      setFilteredPlans(data || []);
+    } catch (error) {
+      toast.error("Failed to load payment plans");
+      console.error("Error fetching payment plans:", error);
+      setPaymentPlans([]);
+      setFilteredPlans([]);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const filterPlans = useCallback(() => {
     let filtered = paymentPlans;
@@ -112,8 +112,7 @@ function PaymentPlans() {
         installmentFrequency: "Monthly",
         description: "",
       });
-      // Refresh plans
-      // fetchPaymentPlans();
+      fetchAllPaymentPlans();
     } catch (error) {
       toast.error("Failed to create payment plan");
       console.error("Error creating payment plan:", error);
@@ -153,6 +152,76 @@ function PaymentPlans() {
     } catch (error) {
       toast.error("Failed to process payment");
       console.error("Error paying installment:", error);
+    }
+  };
+
+  const filterPlansByStudent = async () => {
+    if (!filterByStudent) {
+      toast.error("Please enter a student ID");
+      return;
+    }
+    setLoading(true);
+    try {
+      const plans = await getStudentPaymentPlans(parseInt(filterByStudent));
+      setPaymentPlans(plans || []);
+      setFilteredPlans(plans || []);
+      toast.success(`Showing plans for student ID ${filterByStudent}`);
+    } catch (error) {
+      toast.error("Failed to fetch student plans");
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const filterPlansByCourse = async () => {
+    if (!filterByCourse) {
+      toast.error("Please enter a course ID");
+      return;
+    }
+    setLoading(true);
+    try {
+      const plans = await getCoursePaymentPlans(parseInt(filterByCourse));
+      setPaymentPlans(plans || []);
+      setFilteredPlans(plans || []);
+      toast.success(`Showing plans for course ID ${filterByCourse}`);
+    } catch (error) {
+      toast.error("Failed to fetch course plans");
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleUpdateStatus = async (planId, newStatus) => {
+    try {
+      await updatePaymentPlanStatus(planId, newStatus);
+      toast.success("Payment plan status updated");
+      setShowStatusModal(false);
+      setSelectedPlan(null);
+      // Refresh plans list
+      window.location.reload();
+    } catch (error) {
+      toast.error("Failed to update status");
+      console.error(error);
+    }
+  };
+
+  const fetchOverdueInstallments = async () => {
+    try {
+      const overdue = await getOverdueInstallments();
+      setOverdueInstallments(overdue || []);
+    } catch (error) {
+      console.error("Failed to fetch overdue installments:", error);
+    }
+  };
+
+  const fetchUpcomingInstallments = async () => {
+    try {
+      const upcoming = await getUpcomingInstallments(7);
+      setUpcomingInstallments(upcoming || []);
+    } catch (error) {
+      console.error("Failed to fetch upcoming installments:", error);
     }
   };
 
@@ -216,7 +285,7 @@ function PaymentPlans() {
 
       {/* Filters */}
       <div className="bg-white rounded-lg shadow-md p-6 border border-[#E8DCC8]">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <div className="relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#8B6F47] w-5 h-5" />
             <input
@@ -239,6 +308,69 @@ function PaymentPlans() {
             <option value="Cancelled">Cancelled</option>
             <option value="OnHold">On Hold</option>
           </select>
+
+          <div className="flex gap-2">
+            <input
+              type="number"
+              placeholder="Student ID"
+              value={filterByStudent}
+              onChange={(e) => setFilterByStudent(e.target.value)}
+              className="flex-1 px-4 py-2 border border-[#E8DCC8] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4A2F19]"
+            />
+            <button
+              onClick={filterPlansByStudent}
+              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+            >
+              <Filter className="w-4 h-4" />
+            </button>
+          </div>
+
+          <div className="flex gap-2">
+            <input
+              type="number"
+              placeholder="Course ID"
+              value={filterByCourse}
+              onChange={(e) => setFilterByCourse(e.target.value)}
+              className="flex-1 px-4 py-2 border border-[#E8DCC8] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4A2F19]"
+            />
+            <button
+              onClick={filterPlansByCourse}
+              className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
+            >
+              <Filter className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
+
+        {/* Overdue & Upcoming Alerts */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+          {overdueInstallments.length > 0 && (
+            <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+              <div className="flex items-center gap-2 mb-2">
+                <XCircle className="w-5 h-5 text-red-600" />
+                <h3 className="font-semibold text-red-800">
+                  Overdue Installments
+                </h3>
+              </div>
+              <p className="text-sm text-red-700">
+                {overdueInstallments.length} installment(s) are overdue
+              </p>
+            </div>
+          )}
+
+          {upcomingInstallments.length > 0 && (
+            <div className="bg-orange-50 border border-orange-200 rounded-lg p-4">
+              <div className="flex items-center gap-2 mb-2">
+                <Clock className="w-5 h-5 text-orange-600" />
+                <h3 className="font-semibold text-orange-800">
+                  Upcoming Installments
+                </h3>
+              </div>
+              <p className="text-sm text-orange-700">
+                {upcomingInstallments.length} installment(s) due in next 7 days
+              </p>
+            </div>
+          )}
         </div>
       </div>
 
@@ -317,6 +449,15 @@ function PaymentPlans() {
                 >
                   <Eye className="w-4 h-4 mr-2" />
                   View Details
+                </button>
+                <button
+                  onClick={() => {
+                    setSelectedPlan(plan);
+                    setShowStatusModal(true);
+                  }}
+                  className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center"
+                >
+                  <Edit className="w-4 h-4" />
                 </button>
               </div>
             </div>
@@ -635,6 +776,83 @@ function PaymentPlans() {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* Status Update Modal */}
+      {showStatusModal && selectedPlan && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg shadow-xl max-w-md w-full mx-4">
+            <div className="p-6 border-b border-[#E8DCC8]">
+              <h2 className="text-2xl font-bold text-[#3D2817]">
+                Update Payment Plan Status
+              </h2>
+            </div>
+            <div className="p-6 space-y-4">
+              <div>
+                <p className="text-sm text-[#8B6F47] mb-2">Student</p>
+                <p className="text-lg font-medium text-[#3D2817]">
+                  {selectedPlan.studentName}
+                </p>
+              </div>
+              <div>
+                <p className="text-sm text-[#8B6F47] mb-2">Course</p>
+                <p className="text-lg font-medium text-[#3D2817]">
+                  {selectedPlan.courseName}
+                </p>
+              </div>
+              <div>
+                <p className="text-sm text-[#8B6F47] mb-2">Current Status</p>
+                <span
+                  className={`px-3 py-1 text-xs rounded-full ${
+                    selectedPlan.status === "Active"
+                      ? "bg-green-100 text-green-800"
+                      : selectedPlan.status === "Completed"
+                        ? "bg-blue-100 text-blue-800"
+                        : selectedPlan.status === "OnHold"
+                          ? "bg-orange-100 text-orange-800"
+                          : "bg-red-100 text-red-800"
+                  }`}
+                >
+                  {selectedPlan.status}
+                </span>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-[#3D2817] mb-2">
+                  New Status
+                </label>
+                <select
+                  value={selectedPlan.status}
+                  onChange={(e) =>
+                    setSelectedPlan({ ...selectedPlan, status: e.target.value })
+                  }
+                  className="w-full px-4 py-2 border border-[#E8DCC8] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4A2F19]"
+                >
+                  <option value="Active">Active</option>
+                  <option value="Completed">Completed</option>
+                  <option value="Cancelled">Cancelled</option>
+                  <option value="OnHold">On Hold</option>
+                </select>
+              </div>
+              <div className="flex gap-4 pt-4">
+                <button
+                  onClick={handleUpdateStatus}
+                  className="flex-1 px-4 py-2 bg-[#4A2F19] text-white rounded-lg hover:bg-[#3D2817] transition-colors"
+                >
+                  Update Status
+                </button>
+                <button
+                  onClick={() => {
+                    setShowStatusModal(false);
+                    setSelectedPlan(null);
+                  }}
+                  className="flex-1 px-4 py-2 bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400 transition-colors"
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       )}

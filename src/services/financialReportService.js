@@ -7,6 +7,59 @@ import apiInstance from "../config/api";
  */
 
 // ============================================
+// VALIDATION HELPERS
+// ============================================
+
+/**
+ * Validate ID parameter
+ * @param {number} id - ID to validate
+ * @param {string} fieldName - Name of the field for error message
+ * @throws {Error} If ID is invalid
+ */
+const validateId = (id, fieldName = "ID") => {
+  if (!id || typeof id !== "number" || id <= 0) {
+    throw new Error(`Invalid ${fieldName}: must be a positive number`);
+  }
+};
+
+/**
+ * Validate date string format (YYYY-MM-DD)
+ * @param {string} date - Date string to validate
+ * @param {string} fieldName - Name of the field for error message
+ * @throws {Error} If date is invalid
+ */
+const validateDate = (date, fieldName = "Date") => {
+  if (!date || typeof date !== "string") {
+    throw new Error(`${fieldName} is required and must be a string`);
+  }
+
+  const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+  if (!dateRegex.test(date)) {
+    throw new Error(`${fieldName} must be in YYYY-MM-DD format`);
+  }
+
+  const parsedDate = new Date(date);
+  if (isNaN(parsedDate.getTime())) {
+    throw new Error(`${fieldName} is not a valid date`);
+  }
+};
+
+/**
+ * Validate date range
+ * @param {string} startDate - Start date
+ * @param {string} endDate - End date
+ * @throws {Error} If date range is invalid
+ */
+const validateDateRange = (startDate, endDate) => {
+  validateDate(startDate, "Start date");
+  validateDate(endDate, "End date");
+
+  if (new Date(startDate) > new Date(endDate)) {
+    throw new Error("Start date must be before or equal to end date");
+  }
+};
+
+// ============================================
 // FINANCIAL REPORTS
 // ============================================
 
@@ -50,6 +103,11 @@ export const getOutstandingPayments = async () => {
  */
 export const getPaymentDefaulters = async (overdueThresholdDays = 7) => {
   try {
+    // Validate threshold days
+    if (typeof overdueThresholdDays !== "number" || overdueThresholdDays < 0) {
+      throw new Error("Overdue threshold days must be a non-negative number");
+    }
+
     const response = await apiInstance.get("/api/FinancialReport/defaulters", {
       params: { overdueThresholdDays },
     });
@@ -68,6 +126,8 @@ export const getPaymentDefaulters = async (overdueThresholdDays = 7) => {
  */
 export const getRevenueReport = async (startDate, endDate) => {
   try {
+    validateDateRange(startDate, endDate);
+
     const response = await apiInstance.get("/api/FinancialReport/revenue", {
       params: { startDate, endDate },
     });
@@ -91,9 +151,16 @@ export const getCourseRevenue = async (
   endDate = null,
 ) => {
   try {
+    validateId(courseId, "Course ID");
+
     const params = {};
-    if (startDate) params.startDate = startDate;
-    if (endDate) params.endDate = endDate;
+    if (startDate && endDate) {
+      validateDateRange(startDate, endDate);
+      params.startDate = startDate;
+      params.endDate = endDate;
+    } else if (startDate || endDate) {
+      throw new Error("Both startDate and endDate must be provided together");
+    }
 
     const response = await apiInstance.get(
       `/api/FinancialReport/course/${courseId}/revenue`,

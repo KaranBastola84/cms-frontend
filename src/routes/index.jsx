@@ -29,6 +29,13 @@ import TrainerDashboard from "../components/pages/trainer/TrainerDashboard";
 import StudentDashboard from "../components/pages/student/StudentDashboard";
 import Settings from "../components/pages/Settings";
 
+// Import Payment & Finance pages
+import FinancialDashboard from "../components/pages/admin/FinancialDashboard";
+import OutstandingPayments from "../components/pages/admin/OutstandingPayments";
+import PaymentPlans from "../components/pages/admin/PaymentPlans";
+import FeeManagement from "../components/pages/admin/FeeManagement";
+import RevenueReports from "../components/pages/admin/RevenueReports";
+
 const AppRoutes = () => {
   return (
     <Routes>
@@ -200,6 +207,62 @@ const AppRoutes = () => {
           <ProtectedRoute allowedRoles={["Admin"]}>
             <DashboardLayout>
               <OrderManagement />
+            </DashboardLayout>
+          </ProtectedRoute>
+        }
+      />
+
+      {/* Payment & Finance Routes */}
+      <Route
+        path="/admin/finance/dashboard"
+        element={
+          <ProtectedRoute allowedRoles={["Admin", "Staff"]}>
+            <DashboardLayout>
+              <FinancialDashboard />
+            </DashboardLayout>
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/admin/finance/outstanding-payments"
+        element={
+          <ProtectedRoute allowedRoles={["Admin", "Staff"]}>
+            <DashboardLayout>
+              <OutstandingPayments />
+            </DashboardLayout>
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/admin/finance/payment-plans"
+        element={
+          <ProtectedRoute allowedRoles={["Admin", "Staff"]}>
+            <DashboardLayout>
+              <PaymentPlans />
+            </DashboardLayout>
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/admin/finance/fee-management"
+        element={
+          <ProtectedRoute allowedRoles={["Admin"]}>
+            <DashboardLayout>
+              <FeeManagement />
+            </DashboardLayout>
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/admin/finance/revenue-reports"
+        element={
+          <ProtectedRoute allowedRoles={["Admin", "Staff"]}>
+            <DashboardLayout>
+              <RevenueReports />
             </DashboardLayout>
           </ProtectedRoute>
         }
