@@ -7,6 +7,36 @@ import apiInstance from "../config/api";
  */
 
 // ============================================
+// VALIDATION HELPERS
+// ============================================
+
+/**
+ * Validate required parameters
+ * @param {Object} params - Parameters to validate
+ * @param {Array<string>} requiredFields - Required field names
+ * @throws {Error} If validation fails
+ */
+const validateRequired = (params, requiredFields) => {
+  for (const field of requiredFields) {
+    if (params[field] === undefined || params[field] === null) {
+      throw new Error(`${field} is required`);
+    }
+  }
+};
+
+/**
+ * Validate ID parameter
+ * @param {number} id - ID to validate
+ * @param {string} fieldName - Name of the field for error message
+ * @throws {Error} If ID is invalid
+ */
+const validateId = (id, fieldName = "ID") => {
+  if (!id || typeof id !== "number" || id <= 0) {
+    throw new Error(`Invalid ${fieldName}: must be a positive number`);
+  }
+};
+
+// ============================================
 // RECEIPT MANAGEMENT
 // ============================================
 
@@ -17,12 +47,50 @@ import apiInstance from "../config/api";
  * @param {number} receiptData.amount - Payment amount
  * @param {string} receiptData.paymentMethod - Payment method (e.g., "Stripe")
  * @param {string} receiptData.description - Payment description
- * @param {number} receiptData.paymentPlanId - Payment plan ID
- * @param {number} receiptData.installmentId - Installment ID
+ * @param {number} [receiptData.paymentPlanId] - Payment plan ID (optional)
+ * @param {number} [receiptData.installmentId] - Installment ID (optional)
  * @returns {Promise} Generated receipt details
  */
 export const generateReceipt = async (receiptData) => {
   try {
+    // Validate required fields
+    validateRequired(receiptData, [
+      "studentId",
+      "amount",
+      "paymentMethod",
+      "description",
+    ]);
+
+    // Validate student ID
+    validateId(receiptData.studentId, "Student ID");
+
+    // Validate amount
+    if (typeof receiptData.amount !== "number" || receiptData.amount <= 0) {
+      throw new Error("Amount must be a positive number");
+    }
+
+    // Validate payment method
+    if (
+      typeof receiptData.paymentMethod !== "string" ||
+      !receiptData.paymentMethod.trim()
+    ) {
+      throw new Error("Payment method must be a non-empty string");
+    }
+
+    // Validate optional IDs if provided
+    if (
+      receiptData.paymentPlanId !== undefined &&
+      receiptData.paymentPlanId !== null
+    ) {
+      validateId(receiptData.paymentPlanId, "Payment plan ID");
+    }
+    if (
+      receiptData.installmentId !== undefined &&
+      receiptData.installmentId !== null
+    ) {
+      validateId(receiptData.installmentId, "Installment ID");
+    }
+
     const response = await apiInstance.post("/api/Receipt", receiptData);
     return response.data.result;
   } catch (error) {
@@ -38,6 +106,8 @@ export const generateReceipt = async (receiptData) => {
  */
 export const getReceiptById = async (id) => {
   try {
+    validateId(id, "Receipt ID");
+
     const response = await apiInstance.get(`/api/Receipt/${id}`);
     return response.data.result;
   } catch (error) {
@@ -53,6 +123,8 @@ export const getReceiptById = async (id) => {
  */
 export const getStudentReceipts = async (studentId) => {
   try {
+    validateId(studentId, "Student ID");
+
     const response = await apiInstance.get(`/api/Receipt/student/${studentId}`);
     return response.data.result;
   } catch (error) {
@@ -68,6 +140,14 @@ export const getStudentReceipts = async (studentId) => {
  */
 export const getReceiptByNumber = async (receiptNumber) => {
   try {
+    if (
+      !receiptNumber ||
+      typeof receiptNumber !== "string" ||
+      !receiptNumber.trim()
+    ) {
+      throw new Error("Receipt number must be a non-empty string");
+    }
+
     const response = await apiInstance.get(
       `/api/Receipt/number/${receiptNumber}`,
     );
@@ -85,6 +165,8 @@ export const getReceiptByNumber = async (receiptNumber) => {
  */
 export const downloadReceiptPDF = async (id) => {
   try {
+    validateId(id, "Receipt ID");
+
     const response = await apiInstance.get(`/api/Receipt/${id}/download`, {
       responseType: "blob",
     });
@@ -102,8 +184,10 @@ export const downloadReceiptPDF = async (id) => {
  */
 export const deleteReceipt = async (id) => {
   try {
+    validateId(id, "Receipt ID");
+
     const response = await apiInstance.delete(`/api/Receipt/${id}`);
-    return response.data;
+    return response.data.result || response.data;
   } catch (error) {
     console.error("Error deleting receipt:", error);
     throw error.response?.data || error.message;
@@ -117,6 +201,8 @@ export const deleteReceipt = async (id) => {
  */
 export const downloadReceipt = async (id, filename = null) => {
   try {
+    validateId(id, "Receipt ID");
+
     const blob = await downloadReceiptPDF(id);
     const url = window.URL.createObjectURL(blob);
     const link = document.createElement("a");
