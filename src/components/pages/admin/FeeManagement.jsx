@@ -73,39 +73,11 @@ function FeeManagement() {
       const data = await getAllFeeStructures();
       setFeeStructures(data || []);
       setFilteredFees(data || []);
-    } catch {
-      // Mock data for demo
-      const mockData = [
-        {
-          feeStructureId: 1,
-          courseId: 5,
-          courseName: "Web Development",
-          feeType: "CourseFee",
-          amount: 5000,
-          description: "Full Course Fee",
-          isActive: true,
-        },
-        {
-          feeStructureId: 2,
-          courseId: 5,
-          courseName: "Web Development",
-          feeType: "RegistrationFee",
-          amount: 500,
-          description: "One-time Registration",
-          isActive: true,
-        },
-        {
-          feeStructureId: 3,
-          courseId: 6,
-          courseName: "Data Science",
-          feeType: "CourseFee",
-          amount: 6000,
-          description: "Full Course Fee",
-          isActive: true,
-        },
-      ];
-      setFeeStructures(mockData);
-      setFilteredFees(mockData);
+    } catch (error) {
+      toast.error("Failed to load fee structures");
+      console.error("Error fetching fee structures:", error);
+      setFeeStructures([]);
+      setFilteredFees([]);
     } finally {
       setLoading(false);
     }

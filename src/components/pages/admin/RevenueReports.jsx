@@ -41,18 +41,9 @@ function RevenueReports() {
       setRevenueData(data);
       toast.success("Revenue report generated");
     } catch (error) {
-      // Mock data for demo
-      const mockData = {
-        startDate: startDate,
-        endDate: endDate,
-        totalRevenue: 45000,
-        studentFeesRevenue: 35000,
-        productSalesRevenue: 10000,
-        totalTransactions: 125,
-        averageTransactionValue: 360,
-      };
-      setRevenueData(mockData);
+      toast.error("Failed to generate revenue report");
       console.error("Error fetching revenue report:", error);
+      setRevenueData(null);
     } finally {
       setLoading(false);
     }
@@ -70,17 +61,9 @@ function RevenueReports() {
       setCourseRevenueData(data);
       toast.success("Course revenue report generated");
     } catch (error) {
-      // Mock data for demo
-      const mockData = {
-        courseId: selectedCourseId,
-        courseName: "Web Development",
-        totalRevenue: 85000,
-        totalStudentsEnrolled: 25,
-        averageRevenuePerStudent: 3400,
-        outstandingAmount: 15000,
-      };
-      setCourseRevenueData(mockData);
+      toast.error("Failed to generate course revenue report");
       console.error("Error fetching course revenue:", error);
+      setCourseRevenueData(null);
     } finally {
       setLoading(false);
     }
