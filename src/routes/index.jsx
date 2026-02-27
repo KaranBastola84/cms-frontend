@@ -6,6 +6,9 @@ import Login from "../components/pages/auth/Login";
 import StaffVerification from "../components/pages/auth/StaffVerification";
 import TrainerVerification from "../components/pages/auth/TrainerVerification";
 import InquiryForm from "../components/pages/InquiryForm";
+import Products from "../components/pages/Products";
+import Checkout from "../components/pages/Checkout";
+import OrderConfirmation from "../components/pages/OrderConfirmation";
 import {
   ProtectedRoute,
   PublicRoute,
@@ -19,6 +22,8 @@ import AllUsers from "../components/pages/admin/AllUsers";
 import Inquiries from "../components/pages/admin/Inquiries";
 import StaffManagement from "../components/pages/admin/StaffManagement";
 import TrainerManagement from "../components/pages/admin/TrainerManagement";
+import ProductManagement from "../components/pages/admin/ProductManagement";
+import OrderManagement from "../components/pages/admin/OrderManagement";
 import StaffDashboard from "../components/pages/staff/StaffDashboard";
 import TrainerDashboard from "../components/pages/trainer/TrainerDashboard";
 import StudentDashboard from "../components/pages/student/StudentDashboard";
@@ -46,6 +51,34 @@ const AppRoutes = () => {
               <InquiryForm />
             </Layout>
           </PublicRoute>
+        }
+      />
+
+      {/* E-commerce Routes - Accessible to everyone */}
+      <Route
+        path="/products"
+        element={
+          <Layout>
+            <Products />
+          </Layout>
+        }
+      />
+
+      <Route
+        path="/checkout"
+        element={
+          <Layout>
+            <Checkout />
+          </Layout>
+        }
+      />
+
+      <Route
+        path="/order-confirmation/:orderId"
+        element={
+          <Layout>
+            <OrderConfirmation />
+          </Layout>
         }
       />
 
@@ -145,6 +178,28 @@ const AppRoutes = () => {
           <ProtectedRoute allowedRoles={["Admin"]}>
             <DashboardLayout>
               <TrainerManagement />
+            </DashboardLayout>
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/admin/products"
+        element={
+          <ProtectedRoute allowedRoles={["Admin"]}>
+            <DashboardLayout>
+              <ProductManagement />
+            </DashboardLayout>
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/admin/orders"
+        element={
+          <ProtectedRoute allowedRoles={["Admin"]}>
+            <DashboardLayout>
+              <OrderManagement />
             </DashboardLayout>
           </ProtectedRoute>
         }

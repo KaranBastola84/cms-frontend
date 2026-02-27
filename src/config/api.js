@@ -139,4 +139,24 @@ apiInstance.interceptors.response.use(
   }
 );
 
+/**
+ * Helper function to get full image URL from relative path
+ * @param {string} relativePath - Relative image path from API (e.g., "/Uploads/Products/image.jpg")
+ * @returns {string} Full image URL
+ */
+export const getImageUrl = (relativePath) => {
+  if (!relativePath) return null;
+  
+  // If already a full URL (starts with http:// or https://), return as is
+  if (relativePath.startsWith('http://') || relativePath.startsWith('https://')) {
+    return relativePath;
+  }
+  
+  // Remove leading slash if present to avoid double slashes
+  const cleanPath = relativePath.startsWith('/') ? relativePath.slice(1) : relativePath;
+  
+  // Combine base URL with relative path
+  return `${APP_CONFIG.baseURL}/${cleanPath}`;
+};
+
 export default apiInstance;
