@@ -280,12 +280,6 @@ const DashboardLayout = ({ children }) => {
           permission: "business",
           items: [
             {
-              name: "Payment & Finance",
-              icon: DollarSign,
-              path: "/admin/payment-finance",
-              permission: "payment-finance",
-            },
-            {
               name: "Products",
               icon: Package,
               path: "/admin/products",
@@ -296,6 +290,43 @@ const DashboardLayout = ({ children }) => {
               icon: ShoppingCart,
               path: "/admin/orders",
               permission: "sales",
+            },
+          ],
+        },
+        {
+          groupName: "Payment & Finance",
+          icon: DollarSign,
+          permission: "payment-finance",
+          items: [
+            {
+              name: "Financial Dashboard",
+              icon: LayoutDashboard,
+              path: "/admin/finance/dashboard",
+              permission: "payment-finance",
+            },
+            {
+              name: "Outstanding Payments",
+              icon: AlertCircle,
+              path: "/admin/finance/outstanding-payments",
+              permission: "payment-finance",
+            },
+            {
+              name: "Payment Plans",
+              icon: Calendar,
+              path: "/admin/finance/payment-plans",
+              permission: "payment-finance",
+            },
+            {
+              name: "Fee Management",
+              icon: Settings,
+              path: "/admin/finance/fee-management",
+              permission: "payment-finance",
+            },
+            {
+              name: "Revenue Reports",
+              icon: FileText,
+              path: "/admin/finance/revenue-reports",
+              permission: "payment-finance",
             },
           ],
         },
@@ -343,6 +374,37 @@ const DashboardLayout = ({ children }) => {
           icon: FileText,
           path: "/admin/inquiries",
           permission: "view-inquiries",
+        },
+        {
+          groupName: "Payment & Finance",
+          icon: DollarSign,
+          permission: "payment-finance",
+          items: [
+            {
+              name: "Financial Dashboard",
+              icon: LayoutDashboard,
+              path: "/admin/finance/dashboard",
+              permission: "payment-finance",
+            },
+            {
+              name: "Outstanding Payments",
+              icon: AlertCircle,
+              path: "/admin/finance/outstanding-payments",
+              permission: "payment-finance",
+            },
+            {
+              name: "Payment Plans",
+              icon: Calendar,
+              path: "/admin/finance/payment-plans",
+              permission: "payment-finance",
+            },
+            {
+              name: "Revenue Reports",
+              icon: FileText,
+              path: "/admin/finance/revenue-reports",
+              permission: "payment-finance",
+            },
+          ],
         },
       ],
       Trainer: [
