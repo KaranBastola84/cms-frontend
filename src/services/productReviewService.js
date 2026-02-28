@@ -34,7 +34,7 @@ const productReviewService = {
     const response = await apiInstance.get(
       `/api/ProductReview/product/${productId}`,
     );
-    return response.data.result;
+    return response.data.result?.reviews || [];
   },
 
   /**
