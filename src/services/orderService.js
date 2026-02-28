@@ -1,4 +1,4 @@
-import apiInstance from '../config/api';
+import apiInstance from "../config/api";
 
 /**
  * Order Service
@@ -21,7 +21,7 @@ import apiInstance from '../config/api';
  * @param {number} orderData.orderItems[].productId - Product ID
  * @param {number} orderData.orderItems[].quantity - Quantity ordered
  * @returns {Promise} Created order with order ID and number
- * 
+ *
  * Features:
  * - Validates product availability and stock
  * - Auto-calculates total amount
@@ -31,10 +31,10 @@ import apiInstance from '../config/api';
  */
 export const createOrder = async (orderData) => {
   try {
-    const response = await apiInstance.post('/api/Order', orderData);
+    const response = await apiInstance.post("/api/Order", orderData);
     return response.data.result; // API returns { result, isSuccess, statusCode, errorMessage }
   } catch (error) {
-    console.error('Error creating order:', error);
+    console.error("Error creating order:", error);
     throw error.response?.data || error.message;
   }
 };
@@ -49,7 +49,7 @@ export const getOrderById = async (id) => {
     const response = await apiInstance.get(`/api/Order/${id}`);
     return response.data.result;
   } catch (error) {
-    console.error('Error fetching order:', error);
+    console.error("Error fetching order:", error);
     throw error.response?.data || error.message;
   }
 };
@@ -64,7 +64,7 @@ export const getOrdersByCustomerEmail = async (email) => {
     const response = await apiInstance.get(`/api/Order/customer/${email}`);
     return response.data.result;
   } catch (error) {
-    console.error('Error fetching customer orders:', error);
+    console.error("Error fetching customer orders:", error);
     throw error.response?.data || error.message;
   }
 };
@@ -85,10 +85,10 @@ export const getOrdersByCustomerEmail = async (email) => {
  */
 export const getAllOrders = async (params = {}) => {
   try {
-    const response = await apiInstance.get('/api/Order', { params });
+    const response = await apiInstance.get("/api/Order", { params });
     return response.data.result;
   } catch (error) {
-    console.error('Error fetching orders:', error);
+    console.error("Error fetching orders:", error);
     throw error.response?.data || error.message;
   }
 };
@@ -99,10 +99,10 @@ export const getAllOrders = async (params = {}) => {
  */
 export const getPendingOrders = async () => {
   try {
-    const response = await apiInstance.get('/api/Order/pending');
+    const response = await apiInstance.get("/api/Order/pending");
     return response.data.result;
   } catch (error) {
-    console.error('Error fetching pending orders:', error);
+    console.error("Error fetching pending orders:", error);
     throw error.response?.data || error.message;
   }
 };
@@ -113,7 +113,7 @@ export const getPendingOrders = async () => {
  * @param {string} status - New status (Pending/Confirmed/InProgress/Delivered/Cancelled)
  * @param {string} adminNotes - Optional admin notes
  * @returns {Promise} Status update result
- * 
+ *
  * CRITICAL BEHAVIOR:
  * - Pending → Confirmed: Stock is REDUCED (with pessimistic locking)
  * - Confirmed → Other: Stock is RESTORED
@@ -121,13 +121,13 @@ export const getPendingOrders = async () => {
  */
 export const updateOrderStatus = async (id, status, adminNotes = null) => {
   try {
-    const payload = { status };
-    if (adminNotes) payload.adminNotes = adminNotes;
-    
+    const dto = { status };
+    if (adminNotes) dto.adminNotes = adminNotes;
+    const payload = { dto };
     const response = await apiInstance.put(`/api/Order/${id}/status`, payload);
     return response.data.result;
   } catch (error) {
-    console.error('Error updating order status:', error);
+    console.error("Error updating order status:", error);
     throw error.response?.data || error.message;
   }
 };
@@ -139,15 +139,22 @@ export const updateOrderStatus = async (id, status, adminNotes = null) => {
  * @param {string} adminNotes - Optional admin notes
  * @returns {Promise} Payment status update result (auto-records paid date)
  */
-export const updatePaymentStatus = async (id, paymentStatus, adminNotes = null) => {
+export const updatePaymentStatus = async (
+  id,
+  paymentStatus,
+  adminNotes = null,
+) => {
   try {
     const payload = { paymentStatus };
     if (adminNotes) payload.adminNotes = adminNotes;
-    
-    const response = await apiInstance.put(`/api/Order/${id}/payment-status`, payload);
+
+    const response = await apiInstance.put(
+      `/api/Order/${id}/payment-status`,
+      payload,
+    );
     return response.data.result;
   } catch (error) {
-    console.error('Error updating payment status:', error);
+    console.error("Error updating payment status:", error);
     throw error.response?.data || error.message;
   }
 };
