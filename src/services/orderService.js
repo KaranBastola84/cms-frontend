@@ -145,9 +145,9 @@ export const updatePaymentStatus = async (
   adminNotes = null,
 ) => {
   try {
-    const payload = { paymentStatus };
-    if (adminNotes) payload.adminNotes = adminNotes;
-
+    const dto = { paymentStatus };
+    if (adminNotes) dto.adminNotes = adminNotes;
+    const payload = { dto };
     const response = await apiInstance.put(
       `/api/Order/${id}/payment-status`,
       payload,
