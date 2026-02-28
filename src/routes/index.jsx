@@ -28,6 +28,7 @@ import StaffDashboard from "../components/pages/staff/StaffDashboard";
 import TrainerDashboard from "../components/pages/trainer/TrainerDashboard";
 import StudentDashboard from "../components/pages/student/StudentDashboard";
 import Settings from "../components/pages/Settings";
+import ProductReviewModeration from "../components/pages/admin/ProductReviewModeration";
 
 // Import Payment & Finance pages
 import FinancialDashboard from "../components/pages/admin/FinancialDashboard";
@@ -310,6 +311,18 @@ const AppRoutes = () => {
           >
             <DashboardLayout>
               <Settings />
+            </DashboardLayout>
+          </ProtectedRoute>
+        }
+      />
+
+      {/* Admin Product Review Moderation */}
+      <Route
+        path="/admin/product-reviews"
+        element={
+          <ProtectedRoute>
+            <DashboardLayout>
+              <ProductReviewModeration />
             </DashboardLayout>
           </ProtectedRoute>
         }

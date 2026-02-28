@@ -18,6 +18,7 @@ import {
   getFeaturedProducts,
   getCategories,
 } from "../../services/productService";
+import ProductReview from "./ProductReview";
 
 const Products = () => {
   const { addToCart: addToCartContext } = useCart();
@@ -507,6 +508,11 @@ const ProductDetailModal = ({ product, onClose, onAddToCart }) => {
               {isOutOfStock ? "Out of Stock" : "Add to Cart"}
             </button>
           </div>
+        </div>
+        {/* Product Reviews Section */}
+        <div className="mt-8">
+          <hr className="my-6" />
+          <ProductReview productId={product.id} />
         </div>
       </div>
     </div>
