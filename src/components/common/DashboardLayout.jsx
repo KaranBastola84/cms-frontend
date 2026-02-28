@@ -31,6 +31,7 @@ import {
   AlertCircle,
   CheckCircle,
   RefreshCw,
+  ShieldCheck,
 } from "lucide-react";
 import { useAuth } from "../../hooks/useAuth";
 import dashboardService from "../../services/dashboardService";
@@ -354,6 +355,12 @@ const DashboardLayout = ({ children }) => {
               permission: "settings",
             },
           ],
+        },
+        {
+          name: "Review Moderation",
+          icon: ShieldCheck,
+          path: "/admin/product-reviews",
+          permission: "review-moderation",
         },
       ],
       Staff: [
