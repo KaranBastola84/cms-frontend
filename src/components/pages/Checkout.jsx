@@ -10,7 +10,7 @@ import {
 } from "lucide-react";
 import toast from "react-hot-toast";
 import { useCart } from "../../hooks/useCart";
-import { getImageUrl } from "../../config/api";
+import { getImageUrl } from "../../utils/helpers";
 import { createOrder } from "../../services/orderService";
 
 const Checkout = () => {

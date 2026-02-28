@@ -18,7 +18,7 @@ import {
   FileText,
 } from "lucide-react";
 import toast from "react-hot-toast";
-import { getImageUrl } from "../../../config/api";
+import { getImageUrl } from "../../../utils/helpers";
 import {
   getAllOrders,
   getPendingOrders,

@@ -10,16 +10,17 @@ import {
   ChevronRight,
 } from "lucide-react";
 import toast from "react-hot-toast";
-import { getImageUrl } from "../../config/api";
+import { getImageUrl } from "../../utils/helpers";
 import { useCart } from "../../hooks/useCart";
 import {
   getAllProducts,
+  getProductById,
   getFeaturedProducts,
   getCategories,
 } from "../../services/productService";
 
 const Products = () => {
-  const { addToCart: addToCartContext, getItemCount } = useCart();
+  const { addToCart: addToCartContext } = useCart();
   const [products, setProducts] = useState([]);
   const [featuredProducts, setFeaturedProducts] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -119,6 +120,17 @@ const Products = () => {
     setCurrentPage(1);
   };
 
+  const handleViewDetails = async (product) => {
+    try {
+      setSelectedProduct(product); // Show modal immediately with list data
+      const fullProduct = await getProductById(product.id);
+      setSelectedProduct(fullProduct); // Replace with full detail
+    } catch (error) {
+      toast.error("Failed to load product details");
+      console.error(error);
+    }
+  };
+
   const addToCart = (product) => {
     if (product.stockQuantity === 0) {
       toast.error("Product is out of stock");
@@ -149,7 +161,7 @@ const Products = () => {
                 <ProductCard
                   key={product.id}
                   product={product}
-                  onViewDetails={setSelectedProduct}
+                  onViewDetails={handleViewDetails}
                   onAddToCart={addToCart}
                   featured
                 />
@@ -244,7 +256,7 @@ const Products = () => {
                 <ProductCard
                   key={product.id}
                   product={product}
-                  onViewDetails={setSelectedProduct}
+                  onViewDetails={handleViewDetails}
                   onAddToCart={addToCart}
                 />
               ))}
