@@ -8,42 +8,65 @@ const validateId = (id, label = "ID") => {
   return numericId;
 };
 
+const normalizeDateTime = (value) => {
+  if (!value) return value;
+
+  const stringValue = String(value).trim();
+
+  if (/^\d{4}-\d{2}-\d{2}$/.test(stringValue)) {
+    return `${stringValue}T00:00:00.000Z`;
+  }
+
+  const parsedDate = new Date(stringValue);
+  if (Number.isNaN(parsedDate.getTime())) {
+    return stringValue;
+  }
+
+  return parsedDate.toISOString();
+};
+
 const normalizeBatchPayload = (batchData) => {
-  const payload = { ...batchData };
+  const payload = {};
 
-  if (payload.name !== undefined) {
-    payload.name = String(payload.name).trim();
+  if (batchData.name !== undefined) {
+    payload.name = String(batchData.name).trim();
   }
 
-  if (payload.courseId !== undefined && payload.courseId !== null && payload.courseId !== "") {
-    payload.courseId = Number(payload.courseId);
+  if (
+    batchData.courseId !== undefined &&
+    batchData.courseId !== null &&
+    batchData.courseId !== ""
+  ) {
+    payload.courseId = Number(batchData.courseId);
   }
 
-  if (payload.trainerId !== undefined) {
+  if (batchData.startDate !== undefined && batchData.startDate) {
+    payload.startDate = normalizeDateTime(batchData.startDate);
+  }
+
+  if (batchData.endDate !== undefined && batchData.endDate) {
+    payload.endDate = normalizeDateTime(batchData.endDate);
+  }
+
+  if (batchData.timeSlot !== undefined) {
+    payload.timeSlot = batchData.timeSlot
+      ? String(batchData.timeSlot).trim()
+      : "";
+  }
+
+  if (batchData.trainerId !== undefined) {
     payload.trainerId =
-      payload.trainerId === null || payload.trainerId === ""
+      batchData.trainerId === null || batchData.trainerId === ""
         ? null
-        : Number(payload.trainerId);
+        : Number(batchData.trainerId);
   }
 
-  if (payload.startDate !== undefined && payload.startDate) {
-    payload.startDate = String(payload.startDate);
+  if (batchData.maxStudents !== undefined) {
+    payload.maxStudents = Number(batchData.maxStudents);
   }
 
-  if (payload.endDate !== undefined && payload.endDate) {
-    payload.endDate = String(payload.endDate);
-  }
-
-  if (payload.timeSlot !== undefined) {
-    payload.timeSlot = payload.timeSlot ? String(payload.timeSlot).trim() : "";
-  }
-
-  if (payload.maxStudents !== undefined) {
-    payload.maxStudents = Number(payload.maxStudents);
-  }
-
-  if (payload.currentStudents !== undefined) {
-    payload.currentStudents = Number(payload.currentStudents);
+  if (batchData.isActive !== undefined) {
+    payload.isActive = !!batchData.isActive;
   }
 
   return payload;
@@ -82,7 +105,9 @@ export const getActiveBatches = async () => {
 export const getBatchesByCourseId = async (courseId) => {
   try {
     const validCourseId = validateId(courseId, "course ID");
-    const response = await apiInstance.get(`/api/Batch/course/${validCourseId}`);
+    const response = await apiInstance.get(
+      `/api/Batch/course/${validCourseId}`,
+    );
     return response.data.result || [];
   } catch (error) {
     console.error("Error fetching batches by course:", error);

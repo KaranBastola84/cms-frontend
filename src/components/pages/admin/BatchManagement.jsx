@@ -36,7 +36,6 @@ const initialFormState = {
   endDate: "",
   timeSlot: "",
   maxStudents: "",
-  currentStudents: "0",
   isActive: true,
 };
 
@@ -188,7 +187,6 @@ const BatchManagement = () => {
         endDate: toDateInputValue(batch.endDate),
         timeSlot: batch.timeSlot || "",
         maxStudents: batch.maxStudents ?? "",
-        currentStudents: batch.currentStudents ?? "0",
         isActive: !!batch.isActive,
       });
       setShowFormModal(true);
@@ -213,17 +211,6 @@ const BatchManagement = () => {
     const maxStudents = Number(formData.maxStudents);
     if (!Number.isInteger(maxStudents) || maxStudents <= 0) {
       toast.error("Maximum students must be a positive whole number");
-      return false;
-    }
-
-    const currentStudents = Number(formData.currentStudents || 0);
-    if (!Number.isInteger(currentStudents) || currentStudents < 0) {
-      toast.error("Current students must be 0 or a positive whole number");
-      return false;
-    }
-
-    if (currentStudents > maxStudents) {
-      toast.error("Current students cannot exceed maximum students");
       return false;
     }
 
@@ -253,7 +240,6 @@ const BatchManagement = () => {
     endDate: formData.endDate,
     timeSlot: formData.timeSlot.trim(),
     maxStudents: Number(formData.maxStudents),
-    currentStudents: Number(formData.currentStudents || 0),
     isActive: !!formData.isActive,
   });
 
@@ -293,11 +279,6 @@ const BatchManagement = () => {
     const currentMaxStudents = Number(formData.maxStudents);
     if (currentMaxStudents !== Number(original.maxStudents)) {
       payload.maxStudents = currentMaxStudents;
-    }
-
-    const currentStudents = Number(formData.currentStudents || 0);
-    if (currentStudents !== Number(original.currentStudents || 0)) {
-      payload.currentStudents = currentStudents;
     }
 
     const currentActive = !!formData.isActive;
@@ -743,24 +724,6 @@ const BatchManagement = () => {
                     }
                     className="w-full px-3 py-2 border border-[#E8DCC8] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4A2F19]"
                     required
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-[#3D2817] mb-1">
-                    Current Students
-                  </label>
-                  <input
-                    type="number"
-                    min="0"
-                    value={formData.currentStudents}
-                    onChange={(e) =>
-                      setFormData((prev) => ({
-                        ...prev,
-                        currentStudents: e.target.value,
-                      }))
-                    }
-                    className="w-full px-3 py-2 border border-[#E8DCC8] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4A2F19]"
                   />
                 </div>
               </div>
