@@ -377,6 +377,12 @@ const DashboardLayout = ({ children }) => {
           permission: "view-courses",
         },
         {
+          name: "Batch & Schedule",
+          icon: CalendarClock,
+          path: "/staff/batches",
+          permission: "view-courses",
+        },
+        {
           name: "Inquiries",
           icon: FileText,
           path: "/admin/inquiries",

@@ -37,6 +37,7 @@ import PaymentPlans from "../components/pages/admin/PaymentPlans";
 import FeeManagement from "../components/pages/admin/FeeManagement";
 import RevenueReports from "../components/pages/admin/RevenueReports";
 import CourseManagement from "../components/pages/admin/CourseManagement";
+import BatchManagement from "../components/pages/admin/BatchManagement";
 
 const AppRoutes = () => {
   return (
@@ -204,6 +205,17 @@ const AppRoutes = () => {
       />
 
       <Route
+        path="/admin/batch-schedule"
+        element={
+          <ProtectedRoute allowedRoles={["Admin", "Staff"]}>
+            <DashboardLayout>
+              <BatchManagement />
+            </DashboardLayout>
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
         path="/admin/products"
         element={
           <ProtectedRoute allowedRoles={["Admin"]}>
@@ -298,6 +310,17 @@ const AppRoutes = () => {
           <ProtectedRoute allowedRoles={["Staff"]}>
             <DashboardLayout>
               <CourseManagement />
+            </DashboardLayout>
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/staff/batches"
+        element={
+          <ProtectedRoute allowedRoles={["Staff"]}>
+            <DashboardLayout>
+              <BatchManagement />
             </DashboardLayout>
           </ProtectedRoute>
         }
