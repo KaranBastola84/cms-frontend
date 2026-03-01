@@ -36,6 +36,7 @@ import OutstandingPayments from "../components/pages/admin/OutstandingPayments";
 import PaymentPlans from "../components/pages/admin/PaymentPlans";
 import FeeManagement from "../components/pages/admin/FeeManagement";
 import RevenueReports from "../components/pages/admin/RevenueReports";
+import CourseManagement from "../components/pages/admin/CourseManagement";
 
 const AppRoutes = () => {
   return (
@@ -192,6 +193,17 @@ const AppRoutes = () => {
       />
 
       <Route
+        path="/admin/course-management"
+        element={
+          <ProtectedRoute allowedRoles={["Admin", "Staff"]}>
+            <DashboardLayout>
+              <CourseManagement />
+            </DashboardLayout>
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
         path="/admin/products"
         element={
           <ProtectedRoute allowedRoles={["Admin"]}>
@@ -275,6 +287,17 @@ const AppRoutes = () => {
           <ProtectedRoute allowedRoles={["Staff"]}>
             <DashboardLayout>
               <StaffDashboard />
+            </DashboardLayout>
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/staff/courses"
+        element={
+          <ProtectedRoute allowedRoles={["Staff"]}>
+            <DashboardLayout>
+              <CourseManagement />
             </DashboardLayout>
           </ProtectedRoute>
         }
