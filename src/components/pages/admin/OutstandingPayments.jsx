@@ -21,7 +21,7 @@ function OutstandingPayments() {
   const [outstandingPayments, setOutstandingPayments] = useState([]);
   const [filteredPayments, setFilteredPayments] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const [filterType, setFilterType] = useState("all"); // all, overdue, pending
+  const [filterType, setFilterType] = useState("All"); // All, Overdue, Pending
   const [activeTab, setActiveTab] = useState("outstanding"); // outstanding, defaulters
   const [defaulters, setDefaulters] = useState([]);
   const [overdueDays, setOverdueDays] = useState(30); // Default threshold
@@ -44,9 +44,9 @@ function OutstandingPayments() {
     }
 
     // Apply type filter
-    if (filterType === "overdue") {
+    if (filterType === "Overdue") {
       filtered = filtered.filter((payment) => payment.overdueInstallments > 0);
-    } else if (filterType === "pending") {
+    } else if (filterType === "Pending") {
       filtered = filtered.filter(
         (payment) =>
           payment.pendingInstallments > 0 && payment.overdueInstallments === 0,
@@ -273,9 +273,9 @@ function OutstandingPayments() {
                 onChange={(e) => setFilterType(e.target.value)}
                 className="px-4 py-2 border border-[#E8DCC8] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4A2F19]"
               >
-                <option value="all">All Payments</option>
-                <option value="overdue">Overdue Only</option>
-                <option value="pending">Pending Only</option>
+                <option value="All">All Payments</option>
+                <option value="Overdue">Overdue Only</option>
+                <option value="Pending">Pending Only</option>
               </select>
 
               <button
@@ -320,7 +320,7 @@ function OutstandingPayments() {
                   {filteredPayments.length === 0 ? (
                     <tr>
                       <td
-                        colspan="7"
+                        colSpan="7"
                         className="px-6 py-8 text-center text-[#8B6F47]"
                       >
                         No outstanding payments found

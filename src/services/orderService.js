@@ -1,4 +1,8 @@
 import apiInstance from "../config/api";
+import {
+  ORDER_STATUS_ENUM_VALUES,
+  PAYMENT_STATUS_ENUM_VALUES,
+} from "../constants/orderStatus";
 
 /**
  * Order Service
@@ -73,6 +77,20 @@ export const getOrdersByCustomerEmail = async (email) => {
 // ADMIN ONLY ENDPOINTS
 // ============================================
 
+const normalizeEnumValue = (value, enumMap, fieldName) => {
+  if (typeof value === "number") {
+    return value;
+  }
+
+  if (typeof value === "string" && value in enumMap) {
+    return enumMap[value];
+  }
+
+  throw new Error(
+    `Invalid ${fieldName} value: ${value}. Expected one of: ${Object.keys(enumMap).join(", ")}`,
+  );
+};
+
 /**
  * Get all orders with filters (Admin only)
  * @param {Object} params - Query parameters
@@ -85,7 +103,33 @@ export const getOrdersByCustomerEmail = async (email) => {
  */
 export const getAllOrders = async (params = {}) => {
   try {
-    const response = await apiInstance.get("/api/Order", { params });
+    const normalizedParams = { ...params };
+
+    if (
+      normalizedParams.status !== undefined &&
+      normalizedParams.status !== ""
+    ) {
+      normalizedParams.status = normalizeEnumValue(
+        normalizedParams.status,
+        ORDER_STATUS_ENUM_VALUES,
+        "status",
+      );
+    }
+
+    if (
+      normalizedParams.paymentStatus !== undefined &&
+      normalizedParams.paymentStatus !== ""
+    ) {
+      normalizedParams.paymentStatus = normalizeEnumValue(
+        normalizedParams.paymentStatus,
+        PAYMENT_STATUS_ENUM_VALUES,
+        "paymentStatus",
+      );
+    }
+
+    const response = await apiInstance.get("/api/Order", {
+      params: normalizedParams,
+    });
     return response.data.result;
   } catch (error) {
     console.error("Error fetching orders:", error);
@@ -110,7 +154,7 @@ export const getPendingOrders = async () => {
 /**
  * Update order status (Admin only) - CRITICAL
  * @param {number} id - Order ID
- * @param {string} status - New status (Pending/Contacted/Confirmed/Delivered/Cancelled)
+ * @param {string|number} status - New status label or enum value (Pending=0, Contacted=1, Confirmed=2, Delivered=3, Cancelled=4)
  * @param {string} adminNotes - Optional admin notes
  * @returns {Promise} Status update result
  *
@@ -121,9 +165,10 @@ export const getPendingOrders = async () => {
  */
 export const updateOrderStatus = async (id, status, adminNotes = null) => {
   try {
-    const dto = { status };
-    if (adminNotes) dto.adminNotes = adminNotes;
-    const payload = { dto };
+    const payload = {
+      status: normalizeEnumValue(status, ORDER_STATUS_ENUM_VALUES, "status"),
+    };
+    if (adminNotes) payload.adminNotes = adminNotes;
     const response = await apiInstance.put(`/api/Order/${id}/status`, payload);
     return response.data.result;
   } catch (error) {
@@ -135,7 +180,7 @@ export const updateOrderStatus = async (id, status, adminNotes = null) => {
 /**
  * Update payment status (Admin only)
  * @param {number} id - Order ID
- * @param {string} paymentStatus - New payment status (Pending/Processing/Paid/Failed/Refunded/Cancelled)
+ * @param {string|number} paymentStatus - New payment status label or enum value (Pending=0, Processing=1, Paid=2, Failed=3, Refunded=4, Cancelled=5)
  * @param {string} adminNotes - Optional admin notes
  * @returns {Promise} Payment status update result (auto-records paid date)
  */
@@ -145,9 +190,14 @@ export const updatePaymentStatus = async (
   adminNotes = null,
 ) => {
   try {
-    const dto = { paymentStatus };
-    if (adminNotes) dto.adminNotes = adminNotes;
-    const payload = { dto };
+    const payload = {
+      paymentStatus: normalizeEnumValue(
+        paymentStatus,
+        PAYMENT_STATUS_ENUM_VALUES,
+        "paymentStatus",
+      ),
+    };
+    if (adminNotes) payload.adminNotes = adminNotes;
     const response = await apiInstance.put(
       `/api/Order/${id}/payment-status`,
       payload,

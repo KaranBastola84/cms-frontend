@@ -6,6 +6,14 @@ export const ORDER_STATUSES = [
   "Cancelled",
 ];
 
+export const ORDER_STATUS_ENUM_VALUES = {
+  Pending: 0,
+  Contacted: 1,
+  Confirmed: 2,
+  Delivered: 3,
+  Cancelled: 4,
+};
+
 export const ORDER_STATUS_COLORS = {
   Pending: "bg-yellow-100 text-yellow-800 border-yellow-200",
   Contacted: "bg-indigo-100 text-indigo-800 border-indigo-200",
@@ -22,6 +30,15 @@ export const PAYMENT_STATUSES = [
   "Refunded",
   "Cancelled",
 ];
+
+export const PAYMENT_STATUS_ENUM_VALUES = {
+  Pending: 0,
+  Processing: 1,
+  Paid: 2,
+  Failed: 3,
+  Refunded: 4,
+  Cancelled: 5,
+};
 
 export const PAYMENT_STATUS_COLORS = {
   Pending: "bg-orange-100 text-orange-800",
