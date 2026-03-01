@@ -76,7 +76,7 @@ export const getOrdersByCustomerEmail = async (email) => {
 /**
  * Get all orders with filters (Admin only)
  * @param {Object} params - Query parameters
- * @param {string} params.status - Filter by status (Pending/Confirmed/InProgress/Delivered/Cancelled)
+ * @param {string} params.status - Filter by status (Pending/Contacted/Confirmed/Delivered/Cancelled)
  * @param {string} params.paymentStatus - Filter by payment (Pending/Paid/Refunded)
  * @param {string} params.search - Search by order number, customer name, email, phone
  * @param {number} params.page - Page number (default: 1)
@@ -110,7 +110,7 @@ export const getPendingOrders = async () => {
 /**
  * Update order status (Admin only) - CRITICAL
  * @param {number} id - Order ID
- * @param {string} status - New status (Pending/Confirmed/InProgress/Delivered/Cancelled)
+ * @param {string} status - New status (Pending/Contacted/Confirmed/Delivered/Cancelled)
  * @param {string} adminNotes - Optional admin notes
  * @returns {Promise} Status update result
  *
