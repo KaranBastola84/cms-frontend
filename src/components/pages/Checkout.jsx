@@ -10,7 +10,7 @@ import {
 } from "lucide-react";
 import toast from "react-hot-toast";
 import { useCart } from "../../hooks/useCart";
-import { getImageUrl } from "../../config/api";
+import { getImageUrl } from "../../utils/helpers";
 import { createOrder } from "../../services/orderService";
 
 const Checkout = () => {
@@ -108,7 +108,7 @@ const Checkout = () => {
       const result = await createOrder(orderData);
       toast.success(result.message || "Order placed successfully!");
       clearCart();
-      navigate(`/order-confirmation/${result.orderId}`);
+      // Removed navigation to order confirmation page
     } catch (error) {
       const errorMsg =
         error.message || "Failed to place order. Please try again.";

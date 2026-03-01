@@ -17,7 +17,6 @@ import {
   createPaymentPlan,
   getPaymentPlanById,
   payInstallment,
-  getAllPaymentPlans,
   getStudentPaymentPlans,
   getCoursePaymentPlans,
   updatePaymentPlanStatus,
@@ -54,26 +53,11 @@ function PaymentPlans() {
   });
 
   useEffect(() => {
-    fetchAllPaymentPlans();
+    // Initial load - fetch overdue and upcoming installments for alerts
     fetchOverdueInstallments();
     fetchUpcomingInstallments();
+    setLoading(false);
   }, []);
-
-  const fetchAllPaymentPlans = async () => {
-    setLoading(true);
-    try {
-      const data = await getAllPaymentPlans();
-      setPaymentPlans(data || []);
-      setFilteredPlans(data || []);
-    } catch (error) {
-      toast.error("Failed to load payment plans");
-      console.error("Error fetching payment plans:", error);
-      setPaymentPlans([]);
-      setFilteredPlans([]);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const filterPlans = useCallback(() => {
     let filtered = paymentPlans;
@@ -112,7 +96,10 @@ function PaymentPlans() {
         installmentFrequency: "Monthly",
         description: "",
       });
-      fetchAllPaymentPlans();
+      // Clear filters after creation
+      setPaymentPlans([]);
+      setFilteredPlans([]);
+      toast.success("Payment plan created. Use filters to view plans.");
     } catch (error) {
       toast.error("Failed to create payment plan");
       console.error("Error creating payment plan:", error);
@@ -195,12 +182,20 @@ function PaymentPlans() {
 
   const handleUpdateStatus = async (planId, newStatus) => {
     try {
-      await updatePaymentPlanStatus(planId, newStatus);
+      await updatePaymentPlanStatus(
+        selectedPlan.paymentPlanId,
+        selectedPlan.status,
+      );
       toast.success("Payment plan status updated");
       setShowStatusModal(false);
       setSelectedPlan(null);
-      // Refresh plans list
-      window.location.reload();
+      // Refresh the current filter if active
+      if (filterByStudent) {
+        filterPlansByStudent();
+      } else if (filterByCourse) {
+        filterPlansByCourse();
+      }
+      setSelectedPlan(null);
     } catch (error) {
       toast.error("Failed to update status");
       console.error(error);
@@ -340,6 +335,23 @@ function PaymentPlans() {
               <Filter className="w-4 h-4" />
             </button>
           </div>
+
+          {(filterByStudent || filterByCourse || paymentPlans.length > 0) && (
+            <button
+              onClick={() => {
+                setFilterByStudent("");
+                setFilterByCourse("");
+                setPaymentPlans([]);
+                setFilteredPlans([]);
+                setStatusFilter("all");
+                setSearchTerm("");
+                toast.success("Filters cleared");
+              }}
+              className="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition-colors"
+            >
+              Clear Filters
+            </button>
+          )}
         </div>
 
         {/* Overdue & Upcoming Alerts */}
@@ -468,7 +480,12 @@ function PaymentPlans() {
       {filteredPlans.length === 0 && (
         <div className="bg-white rounded-lg shadow-md p-12 text-center border border-[#E8DCC8]">
           <CreditCard className="w-16 h-16 text-[#8B6F47] mx-auto mb-4" />
-          <p className="text-[#8B6F47]">No payment plans found</p>
+          <p className="text-[#3D2817] font-semibold mb-2">
+            No Payment Plans Loaded
+          </p>
+          <p className="text-[#8B6F47] text-sm">
+            Use the Student ID or Course ID filters above to view payment plans
+          </p>
         </div>
       )}
 

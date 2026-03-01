@@ -1,4 +1,8 @@
-import apiInstance from '../config/api';
+import apiInstance from "../config/api";
+import {
+  ORDER_STATUS_ENUM_VALUES,
+  PAYMENT_STATUS_ENUM_VALUES,
+} from "../constants/orderStatus";
 
 /**
  * Order Service
@@ -21,7 +25,7 @@ import apiInstance from '../config/api';
  * @param {number} orderData.orderItems[].productId - Product ID
  * @param {number} orderData.orderItems[].quantity - Quantity ordered
  * @returns {Promise} Created order with order ID and number
- * 
+ *
  * Features:
  * - Validates product availability and stock
  * - Auto-calculates total amount
@@ -31,10 +35,10 @@ import apiInstance from '../config/api';
  */
 export const createOrder = async (orderData) => {
   try {
-    const response = await apiInstance.post('/api/Order', orderData);
+    const response = await apiInstance.post("/api/Order", orderData);
     return response.data.result; // API returns { result, isSuccess, statusCode, errorMessage }
   } catch (error) {
-    console.error('Error creating order:', error);
+    console.error("Error creating order:", error);
     throw error.response?.data || error.message;
   }
 };
@@ -49,7 +53,7 @@ export const getOrderById = async (id) => {
     const response = await apiInstance.get(`/api/Order/${id}`);
     return response.data.result;
   } catch (error) {
-    console.error('Error fetching order:', error);
+    console.error("Error fetching order:", error);
     throw error.response?.data || error.message;
   }
 };
@@ -64,7 +68,7 @@ export const getOrdersByCustomerEmail = async (email) => {
     const response = await apiInstance.get(`/api/Order/customer/${email}`);
     return response.data.result;
   } catch (error) {
-    console.error('Error fetching customer orders:', error);
+    console.error("Error fetching customer orders:", error);
     throw error.response?.data || error.message;
   }
 };
@@ -73,11 +77,25 @@ export const getOrdersByCustomerEmail = async (email) => {
 // ADMIN ONLY ENDPOINTS
 // ============================================
 
+const normalizeEnumValue = (value, enumMap, fieldName) => {
+  if (typeof value === "number") {
+    return value;
+  }
+
+  if (typeof value === "string" && value in enumMap) {
+    return enumMap[value];
+  }
+
+  throw new Error(
+    `Invalid ${fieldName} value: ${value}. Expected one of: ${Object.keys(enumMap).join(", ")}`,
+  );
+};
+
 /**
  * Get all orders with filters (Admin only)
  * @param {Object} params - Query parameters
- * @param {string} params.status - Filter by status (Pending/Confirmed/InProgress/Delivered/Cancelled)
- * @param {string} params.paymentStatus - Filter by payment (Pending/Paid/Refunded)
+ * @param {string} params.status - Filter by status (Pending/Contacted/Confirmed/Delivered/Cancelled)
+ * @param {string} params.paymentStatus - Filter by payment (Pending/Processing/Paid/Failed/Refunded/Cancelled)
  * @param {string} params.search - Search by order number, customer name, email, phone
  * @param {number} params.page - Page number (default: 1)
  * @param {number} params.pageSize - Items per page (default: 20, max: 100)
@@ -85,10 +103,36 @@ export const getOrdersByCustomerEmail = async (email) => {
  */
 export const getAllOrders = async (params = {}) => {
   try {
-    const response = await apiInstance.get('/api/Order', { params });
+    const normalizedParams = { ...params };
+
+    if (
+      normalizedParams.status !== undefined &&
+      normalizedParams.status !== ""
+    ) {
+      normalizedParams.status = normalizeEnumValue(
+        normalizedParams.status,
+        ORDER_STATUS_ENUM_VALUES,
+        "status",
+      );
+    }
+
+    if (
+      normalizedParams.paymentStatus !== undefined &&
+      normalizedParams.paymentStatus !== ""
+    ) {
+      normalizedParams.paymentStatus = normalizeEnumValue(
+        normalizedParams.paymentStatus,
+        PAYMENT_STATUS_ENUM_VALUES,
+        "paymentStatus",
+      );
+    }
+
+    const response = await apiInstance.get("/api/Order", {
+      params: normalizedParams,
+    });
     return response.data.result;
   } catch (error) {
-    console.error('Error fetching orders:', error);
+    console.error("Error fetching orders:", error);
     throw error.response?.data || error.message;
   }
 };
@@ -99,10 +143,10 @@ export const getAllOrders = async (params = {}) => {
  */
 export const getPendingOrders = async () => {
   try {
-    const response = await apiInstance.get('/api/Order/pending');
+    const response = await apiInstance.get("/api/Order/pending");
     return response.data.result;
   } catch (error) {
-    console.error('Error fetching pending orders:', error);
+    console.error("Error fetching pending orders:", error);
     throw error.response?.data || error.message;
   }
 };
@@ -110,10 +154,10 @@ export const getPendingOrders = async () => {
 /**
  * Update order status (Admin only) - CRITICAL
  * @param {number} id - Order ID
- * @param {string} status - New status (Pending/Confirmed/InProgress/Delivered/Cancelled)
+ * @param {string|number} status - New status label or enum value (Pending=0, Contacted=1, Confirmed=2, Delivered=3, Cancelled=4)
  * @param {string} adminNotes - Optional admin notes
  * @returns {Promise} Status update result
- * 
+ *
  * CRITICAL BEHAVIOR:
  * - Pending → Confirmed: Stock is REDUCED (with pessimistic locking)
  * - Confirmed → Other: Stock is RESTORED
@@ -121,13 +165,14 @@ export const getPendingOrders = async () => {
  */
 export const updateOrderStatus = async (id, status, adminNotes = null) => {
   try {
-    const payload = { status };
+    const payload = {
+      status: normalizeEnumValue(status, ORDER_STATUS_ENUM_VALUES, "status"),
+    };
     if (adminNotes) payload.adminNotes = adminNotes;
-    
     const response = await apiInstance.put(`/api/Order/${id}/status`, payload);
     return response.data.result;
   } catch (error) {
-    console.error('Error updating order status:', error);
+    console.error("Error updating order status:", error);
     throw error.response?.data || error.message;
   }
 };
@@ -135,19 +180,31 @@ export const updateOrderStatus = async (id, status, adminNotes = null) => {
 /**
  * Update payment status (Admin only)
  * @param {number} id - Order ID
- * @param {string} paymentStatus - New payment status (Pending/Paid/Refunded)
+ * @param {string|number} paymentStatus - New payment status label or enum value (Pending=0, Processing=1, Paid=2, Failed=3, Refunded=4, Cancelled=5)
  * @param {string} adminNotes - Optional admin notes
  * @returns {Promise} Payment status update result (auto-records paid date)
  */
-export const updatePaymentStatus = async (id, paymentStatus, adminNotes = null) => {
+export const updatePaymentStatus = async (
+  id,
+  paymentStatus,
+  adminNotes = null,
+) => {
   try {
-    const payload = { paymentStatus };
+    const payload = {
+      paymentStatus: normalizeEnumValue(
+        paymentStatus,
+        PAYMENT_STATUS_ENUM_VALUES,
+        "paymentStatus",
+      ),
+    };
     if (adminNotes) payload.adminNotes = adminNotes;
-    
-    const response = await apiInstance.put(`/api/Order/${id}/payment-status`, payload);
+    const response = await apiInstance.put(
+      `/api/Order/${id}/payment-status`,
+      payload,
+    );
     return response.data.result;
   } catch (error) {
-    console.error('Error updating payment status:', error);
+    console.error("Error updating payment status:", error);
     throw error.response?.data || error.message;
   }
 };

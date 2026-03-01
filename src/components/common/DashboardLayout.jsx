@@ -31,6 +31,7 @@ import {
   AlertCircle,
   CheckCircle,
   RefreshCw,
+  ShieldCheck,
 } from "lucide-react";
 import { useAuth } from "../../hooks/useAuth";
 import dashboardService from "../../services/dashboardService";
@@ -355,6 +356,12 @@ const DashboardLayout = ({ children }) => {
             },
           ],
         },
+        {
+          name: "Review Moderation",
+          icon: ShieldCheck,
+          path: "/admin/product-reviews",
+          permission: "review-moderation",
+        },
       ],
       Staff: [
         {
@@ -368,6 +375,18 @@ const DashboardLayout = ({ children }) => {
           icon: BookOpen,
           path: "/staff/courses",
           permission: "view-courses",
+        },
+        {
+          name: "Batch & Schedule",
+          icon: CalendarClock,
+          path: "/staff/batches",
+          permission: "view-courses",
+        },
+        {
+          name: "Attendance",
+          icon: ClipboardCheck,
+          path: "/staff/attendance",
+          permission: "attendance",
         },
         {
           name: "Inquiries",

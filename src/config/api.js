@@ -1,19 +1,12 @@
-import axios from 'axios';
-import toast from 'react-hot-toast';
-
-// API configuration with fallback
-export const APP_CONFIG = {
-  baseURL: import.meta.env.VITE_API_BASE_URL,
-  // Request headers
-  headers: {
-    'Content-Type': 'application/json',
-  },
-};
+import axios from "axios";
+import toast from "react-hot-toast";
+import APP_CONFIG from "./appConfig";
+import { isPublicEndpoint } from "../utils/helpers";
 
 // Create axios instance with base configuration
 const apiInstance = axios.create({
   baseURL: APP_CONFIG.baseURL,
-  timeout: 10000,
+  timeout: 15000,
   headers: APP_CONFIG.headers,
 });
 
@@ -22,7 +15,7 @@ let isRefreshing = false;
 let failedQueue = [];
 
 const processQueue = (error, token = null) => {
-  failedQueue.forEach(prom => {
+  failedQueue.forEach((prom) => {
     if (error) {
       prom.reject(error);
     } else {
@@ -35,7 +28,7 @@ const processQueue = (error, token = null) => {
 // Request interceptor to add auth token
 apiInstance.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('accessToken');
+    const token = localStorage.getItem("accessToken");
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -43,7 +36,7 @@ apiInstance.interceptors.request.use(
   },
   (error) => {
     return Promise.reject(error);
-  }
+  },
 );
 
 // Response interceptor to handle common errors and token refresh
@@ -55,21 +48,32 @@ apiInstance.interceptors.response.use(
     const originalRequest = error.config;
 
     // Skip token refresh logic for login and public endpoints
-    const isLoginRequest = originalRequest.url?.includes('/api/Auth/login');
-    const isRefreshRequest = originalRequest.url?.includes('/api/Auth/refresh');
+    const isLoginRequest = originalRequest.url?.includes("/api/Auth/login");
+    const isRefreshRequest = originalRequest.url?.includes("/api/Auth/refresh");
 
     // Handle token expiration with refresh (skip for login/refresh endpoints)
-    if (error.response?.status === 401 && !originalRequest._retry && !isLoginRequest && !isRefreshRequest) {
+    if (
+      error.response?.status === 401 &&
+      !originalRequest._retry &&
+      !isLoginRequest &&
+      !isRefreshRequest
+    ) {
+      // For public endpoints, retry without auth instead of session-expired redirect
+      if (isPublicEndpoint(originalRequest.url)) {
+        originalRequest._retry = true;
+        delete originalRequest.headers["Authorization"];
+        return apiInstance(originalRequest);
+      }
       if (isRefreshing) {
         // If already refreshing, queue the request
         return new Promise((resolve, reject) => {
           failedQueue.push({ resolve, reject });
         })
-          .then(token => {
-            originalRequest.headers['Authorization'] = 'Bearer ' + token;
+          .then((token) => {
+            originalRequest.headers["Authorization"] = "Bearer " + token;
             return apiInstance(originalRequest);
           })
-          .catch(err => {
+          .catch((err) => {
             return Promise.reject(err);
           });
       }
@@ -77,14 +81,14 @@ apiInstance.interceptors.response.use(
       originalRequest._retry = true;
       isRefreshing = true;
 
-      const refreshToken = localStorage.getItem('refreshToken');
+      const refreshToken = localStorage.getItem("refreshToken");
 
       if (!refreshToken) {
         // No refresh token, redirect to login
         isRefreshing = false;
         localStorage.clear();
-        toast.error('Session expired. Please login again.');
-        window.location.href = '/login';
+        toast.error("Session expired. Please login again.");
+        window.location.href = "/login";
         return Promise.reject(error);
       }
 
@@ -93,70 +97,51 @@ apiInstance.interceptors.response.use(
         const response = await axios.post(
           `${APP_CONFIG.baseURL}/api/Auth/refresh`,
           {
-            access: localStorage.getItem('accessToken'),
+            access: localStorage.getItem("accessToken"),
             refresh: refreshToken,
-          }
+          },
         );
 
         if (response.data.isSuccess) {
           const { access, refresh } = response.data.result;
-          
+
           // Update tokens
-          localStorage.setItem('accessToken', access);
-          localStorage.setItem('refreshToken', refresh);
-          
+          localStorage.setItem("accessToken", access);
+          localStorage.setItem("refreshToken", refresh);
+
           // Update default header
-          apiInstance.defaults.headers.common['Authorization'] = 'Bearer ' + access;
-          originalRequest.headers['Authorization'] = 'Bearer ' + access;
-          
+          apiInstance.defaults.headers.common["Authorization"] =
+            "Bearer " + access;
+          originalRequest.headers["Authorization"] = "Bearer " + access;
+
           processQueue(null, access);
           isRefreshing = false;
-          
+
           // Retry the original request
           return apiInstance(originalRequest);
         } else {
-          throw new Error('Token refresh failed');
+          throw new Error("Token refresh failed");
         }
       } catch (refreshError) {
         processQueue(refreshError, null);
         isRefreshing = false;
-        
+
         // Clear all auth data and redirect to login
         localStorage.clear();
-        toast.error('Session expired. Please login again.');
-        window.location.href = '/login';
+        toast.error("Session expired. Please login again.");
+        window.location.href = "/login";
         return Promise.reject(refreshError);
       }
     } else if (error.response?.status === 403) {
-      toast.error('You do not have permission to perform this action');
+      toast.error("You do not have permission to perform this action");
     } else if (error.response?.status >= 500) {
-      toast.error('Server error. Please try again later');
+      toast.error("Server error. Please try again later");
     } else if (!error.response) {
-      toast.error('Network error. Please check your connection');
+      toast.error("Network error. Please check your connection");
     }
-    
-    return Promise.reject(error);
-  }
-);
 
-/**
- * Helper function to get full image URL from relative path
- * @param {string} relativePath - Relative image path from API (e.g., "/Uploads/Products/image.jpg")
- * @returns {string} Full image URL
- */
-export const getImageUrl = (relativePath) => {
-  if (!relativePath) return null;
-  
-  // If already a full URL (starts with http:// or https://), return as is
-  if (relativePath.startsWith('http://') || relativePath.startsWith('https://')) {
-    return relativePath;
-  }
-  
-  // Remove leading slash if present to avoid double slashes
-  const cleanPath = relativePath.startsWith('/') ? relativePath.slice(1) : relativePath;
-  
-  // Combine base URL with relative path
-  return `${APP_CONFIG.baseURL}/${cleanPath}`;
-};
+    return Promise.reject(error);
+  },
+);
 
 export default apiInstance;

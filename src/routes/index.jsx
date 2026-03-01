@@ -28,6 +28,7 @@ import StaffDashboard from "../components/pages/staff/StaffDashboard";
 import TrainerDashboard from "../components/pages/trainer/TrainerDashboard";
 import StudentDashboard from "../components/pages/student/StudentDashboard";
 import Settings from "../components/pages/Settings";
+import ProductReviewModeration from "../components/pages/admin/ProductReviewModeration";
 
 // Import Payment & Finance pages
 import FinancialDashboard from "../components/pages/admin/FinancialDashboard";
@@ -35,6 +36,9 @@ import OutstandingPayments from "../components/pages/admin/OutstandingPayments";
 import PaymentPlans from "../components/pages/admin/PaymentPlans";
 import FeeManagement from "../components/pages/admin/FeeManagement";
 import RevenueReports from "../components/pages/admin/RevenueReports";
+import CourseManagement from "../components/pages/admin/CourseManagement";
+import BatchManagement from "../components/pages/admin/BatchManagement";
+import AttendanceManagement from "../components/pages/admin/AttendanceManagement";
 
 const AppRoutes = () => {
   return (
@@ -191,6 +195,39 @@ const AppRoutes = () => {
       />
 
       <Route
+        path="/admin/course-management"
+        element={
+          <ProtectedRoute allowedRoles={["Admin", "Staff"]}>
+            <DashboardLayout>
+              <CourseManagement />
+            </DashboardLayout>
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/admin/batch-schedule"
+        element={
+          <ProtectedRoute allowedRoles={["Admin", "Staff"]}>
+            <DashboardLayout>
+              <BatchManagement />
+            </DashboardLayout>
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/admin/attendance"
+        element={
+          <ProtectedRoute allowedRoles={["Admin", "Staff"]}>
+            <DashboardLayout>
+              <AttendanceManagement />
+            </DashboardLayout>
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
         path="/admin/products"
         element={
           <ProtectedRoute allowedRoles={["Admin"]}>
@@ -280,6 +317,39 @@ const AppRoutes = () => {
       />
 
       <Route
+        path="/staff/courses"
+        element={
+          <ProtectedRoute allowedRoles={["Staff"]}>
+            <DashboardLayout>
+              <CourseManagement />
+            </DashboardLayout>
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/staff/batches"
+        element={
+          <ProtectedRoute allowedRoles={["Staff"]}>
+            <DashboardLayout>
+              <BatchManagement />
+            </DashboardLayout>
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/staff/attendance"
+        element={
+          <ProtectedRoute allowedRoles={["Staff"]}>
+            <DashboardLayout>
+              <AttendanceManagement />
+            </DashboardLayout>
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
         path="/trainer/dashboard"
         element={
           <ProtectedRoute allowedRoles={["Trainer"]}>
@@ -310,6 +380,18 @@ const AppRoutes = () => {
           >
             <DashboardLayout>
               <Settings />
+            </DashboardLayout>
+          </ProtectedRoute>
+        }
+      />
+
+      {/* Admin Product Review Moderation */}
+      <Route
+        path="/admin/product-reviews"
+        element={
+          <ProtectedRoute>
+            <DashboardLayout>
+              <ProductReviewModeration />
             </DashboardLayout>
           </ProtectedRoute>
         }

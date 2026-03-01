@@ -8,9 +8,6 @@ import {
   CheckCircle,
   Clock,
   Truck,
-  XCircle,
-  DollarSign,
-  Calendar,
   User,
   Phone,
   Mail,
@@ -18,7 +15,7 @@ import {
   FileText,
 } from "lucide-react";
 import toast from "react-hot-toast";
-import { getImageUrl } from "../../../config/api";
+import { getImageUrl } from "../../../utils/helpers";
 import {
   getAllOrders,
   getPendingOrders,
@@ -26,6 +23,12 @@ import {
   updateOrderStatus,
   updatePaymentStatus,
 } from "../../../services/orderService";
+import {
+  ORDER_STATUSES,
+  ORDER_STATUS_COLORS,
+  PAYMENT_STATUSES,
+  PAYMENT_STATUS_COLORS,
+} from "../../../constants/orderStatus";
 
 const OrderManagement = () => {
   const [orders, setOrders] = useState([]);
@@ -170,44 +173,38 @@ const OrderManagement = () => {
   };
 
   const getStatusColor = (status) => {
-    const colors = {
-      Pending: "bg-yellow-100 text-yellow-800 border-yellow-200",
-      Confirmed: "bg-blue-100 text-blue-800 border-blue-200",
-      InProgress: "bg-purple-100 text-purple-800 border-purple-200",
-      Delivered: "bg-green-100 text-green-800 border-green-200",
-      Cancelled: "bg-red-100 text-red-800 border-red-200",
-    };
-    return colors[status] || "bg-gray-100 text-gray-800 border-gray-200";
+    return (
+      ORDER_STATUS_COLORS[status] || "bg-gray-100 text-gray-800 border-gray-200"
+    );
   };
 
   const getPaymentColor = (status) => {
-    const colors = {
-      Pending: "bg-orange-100 text-orange-800",
-      Paid: "bg-green-100 text-green-800",
-      Refunded: "bg-gray-100 text-gray-800",
-    };
-    return colors[status] || "bg-gray-100 text-gray-800";
+    return PAYMENT_STATUS_COLORS[status] || "bg-gray-100 text-gray-800";
   };
 
-  const StatCard = ({ icon: Icon, label, value, color }) => (
-    <div
-      className="bg-white rounded-xl shadow-md p-6 border-l-4"
-      style={{ borderColor: color }}
-    >
-      <div className="flex items-center justify-between">
-        <div>
-          <p className="text-sm text-gray-600 mb-1">{label}</p>
-          <p className="text-3xl font-bold text-gray-900">{value}</p>
-        </div>
-        <div
-          className="p-3 rounded-full"
-          style={{ backgroundColor: `${color}20` }}
-        >
-          <Icon className="w-8 h-8" style={{ color }} />
+  const StatCard = ({ icon, label, value, color }) => {
+    const IconComponent = icon;
+
+    return (
+      <div
+        className="bg-white rounded-xl shadow-md p-6 border-l-4"
+        style={{ borderColor: color }}
+      >
+        <div className="flex items-center justify-between">
+          <div>
+            <p className="text-sm text-gray-600 mb-1">{label}</p>
+            <p className="text-3xl font-bold text-gray-900">{value}</p>
+          </div>
+          <div
+            className="p-3 rounded-full"
+            style={{ backgroundColor: `${color}20` }}
+          >
+            <IconComponent className="w-8 h-8" style={{ color }} />
+          </div>
         </div>
       </div>
-    </div>
-  );
+    );
+  };
 
   return (
     <div className="p-6">
@@ -301,11 +298,11 @@ const OrderManagement = () => {
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C8A27B] focus:border-transparent"
               >
                 <option value="">All Statuses</option>
-                <option value="Pending">Pending</option>
-                <option value="Confirmed">Confirmed</option>
-                <option value="InProgress">In Progress</option>
-                <option value="Delivered">Delivered</option>
-                <option value="Cancelled">Cancelled</option>
+                {ORDER_STATUSES.map((status) => (
+                  <option key={status} value={status}>
+                    {status}
+                  </option>
+                ))}
               </select>
             </div>
 
@@ -322,9 +319,11 @@ const OrderManagement = () => {
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C8A27B] focus:border-transparent"
               >
                 <option value="">All Payment Status</option>
-                <option value="Pending">Pending</option>
-                <option value="Paid">Paid</option>
-                <option value="Refunded">Refunded</option>
+                {PAYMENT_STATUSES.map((status) => (
+                  <option key={status} value={status}>
+                    {status}
+                  </option>
+                ))}
               </select>
             </div>
           </div>
@@ -526,7 +525,7 @@ const OrderDetailsModal = ({
 }) => {
   return (
     <div
-      className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
+      className="fixed inset-0 backdrop-blur-sm bg-opacity-50 flex items-center justify-center z-50 p-4"
       onClick={onClose}
     >
       <div
@@ -723,7 +722,7 @@ const UpdateStatusModal = ({ order, onClose, onUpdate }) => {
 
   return (
     <div
-      className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
+      className="fixed inset-0 backdrop-blur-sm flex items-center justify-center z-50 p-4"
       onClick={onClose}
     >
       <div
@@ -744,11 +743,13 @@ const UpdateStatusModal = ({ order, onClose, onUpdate }) => {
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C8A27B] focus:border-transparent"
               required
             >
-              <option value="Pending">Pending</option>
-              <option value="Confirmed">Confirmed (Will reduce stock)</option>
-              <option value="InProgress">In Progress</option>
-              <option value="Delivered">Delivered</option>
-              <option value="Cancelled">Cancelled</option>
+              {ORDER_STATUSES.map((status) => (
+                <option key={status} value={status}>
+                  {status === "Confirmed"
+                    ? "Confirmed (Will reduce stock)"
+                    : status}
+                </option>
+              ))}
             </select>
             {newStatus === "Confirmed" && order.status !== "Confirmed" && (
               <p className="text-xs text-orange-600 mt-2">
@@ -803,7 +804,7 @@ const UpdatePaymentModal = ({ order, onClose, onUpdate }) => {
 
   return (
     <div
-      className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
+      className="fixed inset-0 backdrop-blur-sm bg-opacity-50 flex items-center justify-center z-50 p-4"
       onClick={onClose}
     >
       <div
@@ -824,9 +825,11 @@ const UpdatePaymentModal = ({ order, onClose, onUpdate }) => {
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C8A27B] focus:border-transparent"
               required
             >
-              <option value="Pending">Pending</option>
-              <option value="Paid">Paid</option>
-              <option value="Refunded">Refunded</option>
+              {PAYMENT_STATUSES.map((status) => (
+                <option key={status} value={status}>
+                  {status}
+                </option>
+              ))}
             </select>
             {newPaymentStatus === "Paid" && order.paymentStatus !== "Paid" && (
               <p className="text-xs text-green-600 mt-2">

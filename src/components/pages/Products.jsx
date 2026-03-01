@@ -10,16 +10,18 @@ import {
   ChevronRight,
 } from "lucide-react";
 import toast from "react-hot-toast";
-import { getImageUrl } from "../../config/api";
+import { getImageUrl } from "../../utils/helpers";
 import { useCart } from "../../hooks/useCart";
 import {
   getAllProducts,
+  getProductById,
   getFeaturedProducts,
   getCategories,
 } from "../../services/productService";
+import ProductReview from "./ProductReview";
 
 const Products = () => {
-  const { addToCart: addToCartContext, getItemCount } = useCart();
+  const { addToCart: addToCartContext } = useCart();
   const [products, setProducts] = useState([]);
   const [featuredProducts, setFeaturedProducts] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -119,6 +121,17 @@ const Products = () => {
     setCurrentPage(1);
   };
 
+  const handleViewDetails = async (product) => {
+    try {
+      setSelectedProduct(product); // Show modal immediately with list data
+      const fullProduct = await getProductById(product.id);
+      setSelectedProduct(fullProduct); // Replace with full detail
+    } catch (error) {
+      toast.error("Failed to load product details");
+      console.error(error);
+    }
+  };
+
   const addToCart = (product) => {
     if (product.stockQuantity === 0) {
       toast.error("Product is out of stock");
@@ -149,7 +162,7 @@ const Products = () => {
                 <ProductCard
                   key={product.id}
                   product={product}
-                  onViewDetails={setSelectedProduct}
+                  onViewDetails={handleViewDetails}
                   onAddToCart={addToCart}
                   featured
                 />
@@ -244,7 +257,7 @@ const Products = () => {
                 <ProductCard
                   key={product.id}
                   product={product}
-                  onViewDetails={setSelectedProduct}
+                  onViewDetails={handleViewDetails}
                   onAddToCart={addToCart}
                 />
               ))}
@@ -415,7 +428,7 @@ const ProductDetailModal = ({ product, onClose, onAddToCart }) => {
 
   return (
     <div
-      className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
+      className="fixed inset-0 backdrop-blur-md bg-opacity-50 flex items-center justify-center z-50 p-4"
       onClick={onClose}
     >
       <div
@@ -495,6 +508,11 @@ const ProductDetailModal = ({ product, onClose, onAddToCart }) => {
               {isOutOfStock ? "Out of Stock" : "Add to Cart"}
             </button>
           </div>
+        </div>
+        {/* Product Reviews Section */}
+        <div className="mt-8">
+          <hr className="my-6" />
+          <ProductReview productId={product.id} />
         </div>
       </div>
     </div>

@@ -11,8 +11,12 @@ import {
   Loader,
 } from "lucide-react";
 import toast from "react-hot-toast";
-import { getImageUrl } from "../../config/api";
+import { getImageUrl } from "../../utils/helpers";
 import { getOrderById } from "../../services/orderService";
+import {
+  ORDER_STATUS_COLORS,
+  PAYMENT_STATUS_COLORS_LIGHT,
+} from "../../constants/orderStatus";
 
 const OrderConfirmation = () => {
   const { orderId } = useParams();
@@ -38,23 +42,11 @@ const OrderConfirmation = () => {
   }, [loadOrderDetails]);
 
   const getStatusColor = (status) => {
-    const colors = {
-      Pending: "text-yellow-600 bg-yellow-50 border-yellow-200",
-      Processing: "text-blue-600 bg-blue-50 border-blue-200",
-      Shipped: "text-purple-600 bg-purple-50 border-purple-200",
-      Delivered: "text-green-600 bg-green-50 border-green-200",
-      Cancelled: "text-red-600 bg-red-50 border-red-200",
-    };
-    return colors[status] || "";
+    return ORDER_STATUS_COLORS[status] || "";
   };
 
   const getPaymentStatusColor = (status) => {
-    const colors = {
-      Pending: "text-orange-600 bg-orange-50",
-      Paid: "text-green-600 bg-green-50",
-      Refunded: "text-gray-600 bg-gray-50",
-    };
-    return colors[status] || "";
+    return PAYMENT_STATUS_COLORS_LIGHT[status] || "";
   };
 
   if (loading) {

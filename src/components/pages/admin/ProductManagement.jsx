@@ -10,15 +10,11 @@ import {
   Save,
   AlertTriangle,
   Image as ImageIcon,
-  DollarSign,
-  Tag,
   TrendingUp,
   Star,
-  Eye,
-  PackageX,
 } from "lucide-react";
 import toast from "react-hot-toast";
-import { getImageUrl } from "../../../config/api";
+import { getImageUrl } from "../../../utils/helpers";
 import {
   getAllProducts,
   getCategories,
@@ -48,6 +44,13 @@ const ProductManagement = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [totalItems, setTotalItems] = useState(0);
   const pageSize = 20;
+
+  // Stats (server-side totals)
+  const [stats, setStats] = useState({
+    active: 0,
+    featured: 0,
+    lowStock: 0,
+  });
 
   // Form state
   const [formData, setFormData] = useState({
@@ -104,13 +107,31 @@ const ProductManagement = () => {
     }
   }, []);
 
+  const loadStats = useCallback(async () => {
+    try {
+      const [activeData, featuredData, lowStockData] = await Promise.all([
+        getAllProducts({ isActive: true, pageSize: 1 }),
+        getAllProducts({ isFeatured: true, pageSize: 1 }),
+        getAllProducts({ lowStock: true, pageSize: 1 }),
+      ]);
+      setStats({
+        active: activeData?.pagination?.totalCount || 0,
+        featured: featuredData?.pagination?.totalCount || 0,
+        lowStock: lowStockData?.pagination?.totalCount || 0,
+      });
+    } catch (error) {
+      console.error("Failed to load stats:", error);
+    }
+  }, []);
+
   useEffect(() => {
     loadProducts();
   }, [loadProducts]);
 
   useEffect(() => {
     loadCategories();
-  }, [loadCategories]);
+    loadStats();
+  }, [loadCategories, loadStats]);
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -171,18 +192,26 @@ const ProductManagement = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const productData = {
-        ...formData,
-        price: parseFloat(formData.price),
-        stockQuantity: parseInt(formData.stockQuantity),
-        lowStockThreshold: parseInt(formData.lowStockThreshold),
-      };
-
+      let productData;
       let result;
+
       if (editingProduct) {
+        // Exclude stockQuantity from update — stock changes go through the dedicated stock endpoint
+        const { stockQuantity, ...updateFields } = formData;
+        productData = {
+          ...updateFields,
+          price: parseFloat(formData.price),
+          lowStockThreshold: parseInt(formData.lowStockThreshold),
+        };
         result = await updateProduct(editingProduct.id, productData);
         toast.success("Product updated successfully");
       } else {
+        productData = {
+          ...formData,
+          price: parseFloat(formData.price),
+          stockQuantity: parseInt(formData.stockQuantity),
+          lowStockThreshold: parseInt(formData.lowStockThreshold),
+        };
         result = await createProduct(productData);
         toast.success("Product created successfully");
       }
@@ -200,6 +229,7 @@ const ProductManagement = () => {
 
       setShowModal(false);
       loadProducts();
+      loadStats();
     } catch (error) {
       toast.error(error.message || "Failed to save product");
       console.error(error);
@@ -226,6 +256,7 @@ const ProductManagement = () => {
       setShowDeleteConfirm(false);
       setDeletingProduct(null);
       loadProducts();
+      loadStats();
     } catch (error) {
       toast.error(
         error.message ||
@@ -245,6 +276,7 @@ const ProductManagement = () => {
         await updateProductStock(productId, parseInt(newStock));
         toast.success("Stock updated successfully");
         loadProducts();
+        loadStats();
       } catch (error) {
         toast.error("Failed to update stock");
         console.error(error);
@@ -275,19 +307,19 @@ const ProductManagement = () => {
         <StatCard
           icon={TrendingUp}
           label="Active Products"
-          value={(products || []).filter((p) => p.isActive).length}
+          value={stats.active}
           color="bg-green-500"
         />
         <StatCard
           icon={Star}
           label="Featured"
-          value={(products || []).filter((p) => p.isFeatured).length}
+          value={stats.featured}
           color="bg-yellow-500"
         />
         <StatCard
           icon={AlertTriangle}
           label="Low Stock"
-          value={(products || []).filter((p) => p.isLowStock).length}
+          value={stats.lowStock}
           color="bg-red-500"
         />
       </div>
@@ -565,7 +597,7 @@ const ProductModal = ({
   onClose,
 }) => {
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+    <div className="fixed inset-0 backdrop-blur-sm flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto">
         <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
           <h2 className="text-2xl font-bold text-[#4A2F19]">
@@ -798,7 +830,7 @@ const ProductModal = ({
 // Delete Confirmation Modal
 const DeleteConfirmModal = ({ product, onConfirm, onCancel }) => {
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+    <div className="fixed inset-0 backdrop-blur-sm bg-opacity-50 flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-2xl max-w-md w-full p-6">
         <div className="flex items-center gap-4 mb-4">
           <div className="p-3 bg-red-100 rounded-full">

@@ -162,20 +162,6 @@ export const createPaymentPlan = async (planData) => {
 };
 
 /**
- * Get all payment plans (Admin/Staff)
- * @returns {Promise} Array of all payment plans
- */
-export const getAllPaymentPlans = async () => {
-  try {
-    const response = await apiInstance.get("/api/PaymentPlan");
-    return response.data.result || [];
-  } catch (error) {
-    console.error("Error fetching all payment plans:", error);
-    throw error.response?.data || error.message;
-  }
-};
-
-/**
  * Get payment plan by ID
  * @param {number} id - Payment plan ID
  * @returns {Promise} Payment plan details with installments
