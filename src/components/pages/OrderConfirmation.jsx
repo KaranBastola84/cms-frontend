@@ -13,7 +13,10 @@ import {
 import toast from "react-hot-toast";
 import { getImageUrl } from "../../utils/helpers";
 import { getOrderById } from "../../services/orderService";
-import { ORDER_STATUS_COLORS } from "../../constants/orderStatus";
+import {
+  ORDER_STATUS_COLORS,
+  PAYMENT_STATUS_COLORS_LIGHT,
+} from "../../constants/orderStatus";
 
 const OrderConfirmation = () => {
   const { orderId } = useParams();
@@ -43,12 +46,7 @@ const OrderConfirmation = () => {
   };
 
   const getPaymentStatusColor = (status) => {
-    const colors = {
-      Pending: "text-orange-600 bg-orange-50",
-      Paid: "text-green-600 bg-green-50",
-      Refunded: "text-gray-600 bg-gray-50",
-    };
-    return colors[status] || "";
+    return PAYMENT_STATUS_COLORS_LIGHT[status] || "";
   };
 
   if (loading) {

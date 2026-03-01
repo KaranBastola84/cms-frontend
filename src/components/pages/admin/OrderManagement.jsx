@@ -29,6 +29,8 @@ import {
 import {
   ORDER_STATUSES,
   ORDER_STATUS_COLORS,
+  PAYMENT_STATUSES,
+  PAYMENT_STATUS_COLORS,
 } from "../../../constants/orderStatus";
 
 const OrderManagement = () => {
@@ -180,12 +182,7 @@ const OrderManagement = () => {
   };
 
   const getPaymentColor = (status) => {
-    const colors = {
-      Pending: "bg-orange-100 text-orange-800",
-      Paid: "bg-green-100 text-green-800",
-      Refunded: "bg-gray-100 text-gray-800",
-    };
-    return colors[status] || "bg-gray-100 text-gray-800";
+    return PAYMENT_STATUS_COLORS[status] || "bg-gray-100 text-gray-800";
   };
 
   const StatCard = ({ icon, label, value, color }) => {
@@ -325,9 +322,11 @@ const OrderManagement = () => {
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C8A27B] focus:border-transparent"
               >
                 <option value="">All Payment Status</option>
-                <option value="Pending">Pending</option>
-                <option value="Paid">Paid</option>
-                <option value="Refunded">Refunded</option>
+                {PAYMENT_STATUSES.map((status) => (
+                  <option key={status} value={status}>
+                    {status}
+                  </option>
+                ))}
               </select>
             </div>
           </div>
@@ -829,9 +828,11 @@ const UpdatePaymentModal = ({ order, onClose, onUpdate }) => {
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C8A27B] focus:border-transparent"
               required
             >
-              <option value="Pending">Pending</option>
-              <option value="Paid">Paid</option>
-              <option value="Refunded">Refunded</option>
+              {PAYMENT_STATUSES.map((status) => (
+                <option key={status} value={status}>
+                  {status}
+                </option>
+              ))}
             </select>
             {newPaymentStatus === "Paid" && order.paymentStatus !== "Paid" && (
               <p className="text-xs text-green-600 mt-2">

@@ -77,7 +77,7 @@ export const getOrdersByCustomerEmail = async (email) => {
  * Get all orders with filters (Admin only)
  * @param {Object} params - Query parameters
  * @param {string} params.status - Filter by status (Pending/Contacted/Confirmed/Delivered/Cancelled)
- * @param {string} params.paymentStatus - Filter by payment (Pending/Paid/Refunded)
+ * @param {string} params.paymentStatus - Filter by payment (Pending/Processing/Paid/Failed/Refunded/Cancelled)
  * @param {string} params.search - Search by order number, customer name, email, phone
  * @param {number} params.page - Page number (default: 1)
  * @param {number} params.pageSize - Items per page (default: 20, max: 100)
@@ -135,7 +135,7 @@ export const updateOrderStatus = async (id, status, adminNotes = null) => {
 /**
  * Update payment status (Admin only)
  * @param {number} id - Order ID
- * @param {string} paymentStatus - New payment status (Pending/Paid/Refunded)
+ * @param {string} paymentStatus - New payment status (Pending/Processing/Paid/Failed/Refunded/Cancelled)
  * @param {string} adminNotes - Optional admin notes
  * @returns {Promise} Payment status update result (auto-records paid date)
  */
