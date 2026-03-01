@@ -383,6 +383,12 @@ const DashboardLayout = ({ children }) => {
           permission: "view-courses",
         },
         {
+          name: "Attendance",
+          icon: ClipboardCheck,
+          path: "/staff/attendance",
+          permission: "attendance",
+        },
+        {
           name: "Inquiries",
           icon: FileText,
           path: "/admin/inquiries",
