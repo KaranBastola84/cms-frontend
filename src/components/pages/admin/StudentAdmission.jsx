@@ -24,6 +24,7 @@ import {
   createStudent,
   getAllStudents,
   getRegistrationSummary,
+  getStudentCashPayments,
   getStudentDetails,
   getStudentsByStatus,
   recordCashPayment,
@@ -139,12 +140,14 @@ const StudentAdmission = () => {
   const [activeStudent, setActiveStudent] = useState(null);
   const [registrationSummary, setRegistrationSummary] = useState(null);
   const [studentDocuments, setStudentDocuments] = useState([]);
+  const [cashPayments, setCashPayments] = useState([]);
 
   const [allStudents, setAllStudents] = useState([]);
   const [enrolledStudents, setEnrolledStudents] = useState([]);
   const [selectedStudentDetail, setSelectedStudentDetail] = useState(null);
 
   const [cashAmount, setCashAmount] = useState("");
+  const [cashRemarks, setCashRemarks] = useState("");
   const [stripeAmount, setStripeAmount] = useState("");
   const [stripeInstallmentId, setStripeInstallmentId] = useState("");
   const [stripeCurrency, setStripeCurrency] = useState("usd");
@@ -221,13 +224,15 @@ const StudentAdmission = () => {
       setLoadingSummary(true);
 
       try {
-        const [summary, documents] = await Promise.all([
+        const [summary, documents, cashPaymentRows] = await Promise.all([
           getRegistrationSummary(studentId),
           getStudentDocuments(studentId),
+          getStudentCashPayments(studentId).catch(() => []),
         ]);
 
         setRegistrationSummary(summary || null);
         setStudentDocuments(Array.isArray(documents) ? documents : []);
+        setCashPayments(Array.isArray(cashPaymentRows) ? cashPaymentRows : []);
 
         const remainingFees = Number(
           summary?.feesRemaining ?? summary?.remainingFees ?? 0,
@@ -420,11 +425,12 @@ const StudentAdmission = () => {
 
     setSubmitting(true);
     try {
-      await recordCashPayment(activeStudentId, amount);
+      await recordCashPayment(activeStudentId, amount, cashRemarks);
       await Promise.all([
         loadSummaryAndDocuments(activeStudentId),
         loadStudentLists(),
       ]);
+      setCashRemarks("");
       toast.success(
         "Cash payment recorded. Student should now be Enrolled and email sent.",
       );
@@ -847,6 +853,13 @@ const StudentAdmission = () => {
                   onChange={(e) => setCashAmount(e.target.value)}
                   placeholder="Cash amount"
                   className="w-full px-3 py-2 border rounded-lg border-[#C8A27B]/40"
+                />
+                <textarea
+                  rows={3}
+                  value={cashRemarks}
+                  onChange={(e) => setCashRemarks(e.target.value)}
+                  placeholder="Remarks (optional)"
+                  className="mt-2 w-full px-3 py-2 border rounded-lg border-[#C8A27B]/40"
                 />
                 <button
                   type="button"
@@ -1284,6 +1297,50 @@ const StudentAdmission = () => {
                   <div className="flex items-center gap-2 mt-1">
                     <BadgeCheck className="w-3 h-3" /> Flow ready for payment
                     completion
+                  </div>
+                </div>
+
+                <div className="pt-2 border-t border-[#C8A27B]/20">
+                  <p className="font-semibold text-[#4A2F19]">Cash Payments</p>
+                  <p className="text-[#6B4423]">
+                    {cashPayments.length} recorded
+                  </p>
+                  <div className="space-y-2 mt-2 max-h-48 overflow-y-auto">
+                    {cashPayments.length === 0 ? (
+                      <p className="text-xs text-[#8B6F47]">
+                        No cash payments recorded
+                      </p>
+                    ) : (
+                      cashPayments.map((payment, idx) => {
+                        const rowKey =
+                          payment.cashPaymentId ||
+                          payment.id ||
+                          `${payment.paidAt || "na"}-${idx}`;
+
+                        return (
+                          <div
+                            key={rowKey}
+                            className="p-2 rounded border border-[#C8A27B]/20 bg-white"
+                          >
+                            <p className="text-sm font-semibold text-[#4A2F19]">
+                              {formatMoney(payment.amount)}
+                            </p>
+                            <p className="text-xs text-[#6B4423]">
+                              Processed by: {payment.processedBy || "-"}
+                            </p>
+                            <p className="text-xs text-[#6B4423]">
+                              Paid at:{" "}
+                              {payment.paidAt
+                                ? new Date(payment.paidAt).toLocaleString()
+                                : "-"}
+                            </p>
+                            <p className="text-xs text-[#6B4423]">
+                              Remarks: {payment.remarks || "-"}
+                            </p>
+                          </div>
+                        );
+                      })
+                    )}
                   </div>
                 </div>
               </div>

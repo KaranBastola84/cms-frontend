@@ -63,6 +63,60 @@ const validateDateRange = (startDate, endDate) => {
 // FINANCIAL REPORTS
 // ============================================
 
+const unwrapResult = (response) => response?.data?.result ?? response?.data;
+
+const normalizeFinancialSummary = (payload = {}) => {
+  const totalCashRevenue = Number(payload.totalCashRevenue || 0);
+  const totalStripeRevenue = Number(
+    payload.totalStripeRevenue ?? payload.studentFeesRevenue ?? 0,
+  );
+
+  return {
+    ...payload,
+    totalCashRevenue,
+    totalStripeRevenue,
+    totalCashPayments: Number(payload.totalCashPayments || 0),
+    // Keep existing `studentFeesRevenue` consumers working.
+    studentFeesRevenue:
+      payload.studentFeesRevenue !== undefined
+        ? Number(payload.studentFeesRevenue || 0)
+        : totalStripeRevenue,
+    totalRevenue: Number(
+      payload.totalRevenue ?? totalCashRevenue + totalStripeRevenue,
+    ),
+  };
+};
+
+const normalizeRevenueReport = (payload = {}) => {
+  const cashRevenue = Number(payload.cashRevenue || 0);
+  const stripeRevenue = Number(
+    payload.stripeRevenue ?? payload.studentFeesRevenue ?? 0,
+  );
+
+  const totalRevenue = Number(
+    payload.totalRevenue ?? cashRevenue + stripeRevenue,
+  );
+
+  return {
+    ...payload,
+    cashRevenue,
+    stripeRevenue,
+    cashPaymentCount: Number(payload.cashPaymentCount || 0),
+    // Backward-compatible alias used in older UI.
+    studentFeesRevenue:
+      payload.studentFeesRevenue !== undefined
+        ? Number(payload.studentFeesRevenue || 0)
+        : stripeRevenue,
+    totalRevenue,
+    averageTransactionValue:
+      payload.averageTransactionValue !== undefined
+        ? Number(payload.averageTransactionValue || 0)
+        : Number(payload.totalTransactions || 0) > 0
+          ? totalRevenue / Number(payload.totalTransactions)
+          : 0,
+  };
+};
+
 /**
  * Get financial summary - overall financial health
  * @returns {Promise} {
@@ -73,7 +127,7 @@ const validateDateRange = (startDate, endDate) => {
 export const getFinancialSummary = async () => {
   try {
     const response = await apiInstance.get("/api/FinancialReport/summary");
-    return response.data.result;
+    return normalizeFinancialSummary(unwrapResult(response) || {});
   } catch (error) {
     console.error("Error fetching financial summary:", error);
     throw error.response?.data || error.message;
@@ -89,7 +143,7 @@ export const getOutstandingPayments = async () => {
     const response = await apiInstance.get(
       "/api/FinancialReport/outstanding-payments",
     );
-    return response.data.result;
+    return unwrapResult(response) || [];
   } catch (error) {
     console.error("Error fetching outstanding payments:", error);
     throw error.response?.data || error.message;
@@ -111,7 +165,7 @@ export const getPaymentDefaulters = async (overdueThresholdDays = 7) => {
     const response = await apiInstance.get("/api/FinancialReport/defaulters", {
       params: { overdueThresholdDays },
     });
-    return response.data.result;
+    return unwrapResult(response) || [];
   } catch (error) {
     console.error("Error fetching payment defaulters:", error);
     throw error.response?.data || error.message;
@@ -131,7 +185,7 @@ export const getRevenueReport = async (startDate, endDate) => {
     const response = await apiInstance.get("/api/FinancialReport/revenue", {
       params: { startDate, endDate },
     });
-    return response.data.result;
+    return normalizeRevenueReport(unwrapResult(response) || {});
   } catch (error) {
     console.error("Error fetching revenue report:", error);
     throw error.response?.data || error.message;
@@ -168,7 +222,7 @@ export const getCourseRevenue = async (
         params,
       },
     );
-    return response.data.result;
+    return unwrapResult(response);
   } catch (error) {
     console.error("Error fetching course revenue:", error);
     throw error.response?.data || error.message;

@@ -39,7 +39,8 @@ const normalizeStudentPayload = (studentData = {}) => {
     courseId: parseNumber(studentData.courseId, "Course"),
     batchId: parseNumber(studentData.batchId, "Batch"),
     feesTotal: parseNumber(studentData.feesTotal, "Fees total"),
-    feesPaid: studentData.feesPaid === undefined ? 0 : Number(studentData.feesPaid),
+    feesPaid:
+      studentData.feesPaid === undefined ? 0 : Number(studentData.feesPaid),
   };
 
   if (!payload.name) throw new Error("Student name is required");
@@ -116,7 +117,9 @@ export const getStudentDetails = async (id) => {
     const studentId = validateStudentId(id);
 
     try {
-      const response = await apiInstance.get(`/api/Student/${studentId}/details`);
+      const response = await apiInstance.get(
+        `/api/Student/${studentId}/details`,
+      );
       return response.data.result || response.data;
     } catch {
       return await getStudentById(studentId);
@@ -140,7 +143,7 @@ export const getRegistrationSummary = async (id) => {
   }
 };
 
-export const recordCashPayment = async (id, amount) => {
+export const recordCashPayment = async (id, amount, remarks = "") => {
   try {
     const studentId = validateStudentId(id);
     const paidAmount = Number(amount);
@@ -148,10 +151,14 @@ export const recordCashPayment = async (id, amount) => {
       throw new Error("Cash amount must be greater than 0");
     }
 
+    const normalizedRemarks =
+      remarks === undefined || remarks === null ? "" : String(remarks).trim();
+
     const response = await apiInstance.post(
       `/api/Student/${studentId}/cash-payment`,
       {
         amount: paidAmount,
+        ...(normalizedRemarks ? { remarks: normalizedRemarks } : {}),
       },
     );
 
@@ -159,6 +166,19 @@ export const recordCashPayment = async (id, amount) => {
   } catch (error) {
     console.error("Error recording cash payment:", error);
     throwApiError(error, "Failed to record cash payment");
+  }
+};
+
+export const getStudentCashPayments = async (id) => {
+  try {
+    const studentId = validateStudentId(id);
+    const response = await apiInstance.get(
+      `/api/Student/${studentId}/cash-payments`,
+    );
+    return response.data.result || response.data || [];
+  } catch (error) {
+    console.error("Error fetching student cash payments:", error);
+    throwApiError(error, "Failed to fetch student cash payments");
   }
 };
 
@@ -170,5 +190,6 @@ export default {
   getStudentDetails,
   getRegistrationSummary,
   recordCashPayment,
+  getStudentCashPayments,
   getEntityId,
 };
