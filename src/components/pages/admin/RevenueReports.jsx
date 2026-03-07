@@ -34,6 +34,8 @@ function RevenueReports() {
     new Date().toISOString().split("T")[0],
   );
 
+  const toNumber = (value) => Number(value || 0);
+
   const fetchRevenueReport = async () => {
     setLoading(true);
     try {
@@ -91,11 +93,13 @@ function RevenueReports() {
         `Period: ${startDate} to ${endDate}`,
         "",
         "Metric,Value",
-        `Total Revenue,$${revenueData.totalRevenue.toLocaleString()}`,
-        `Student Fees Revenue,$${revenueData.studentFeesRevenue.toLocaleString()}`,
-        `Product Sales Revenue,$${revenueData.productSalesRevenue.toLocaleString()}`,
-        `Total Transactions,${revenueData.totalTransactions}`,
-        `Average Transaction Value,$${revenueData.averageTransactionValue.toLocaleString()}`,
+        `Total Revenue,$${toNumber(revenueData.totalRevenue).toLocaleString()}`,
+        `Cash Revenue,$${toNumber(revenueData.cashRevenue).toLocaleString()}`,
+        `Stripe Revenue,$${toNumber(revenueData.stripeRevenue).toLocaleString()}`,
+        `Cash Payment Count,${toNumber(revenueData.cashPaymentCount)}`,
+        `Total Transactions,${toNumber(revenueData.totalTransactions)}`,
+        `Average Transaction Value,$${toNumber(revenueData.averageTransactionValue).toLocaleString()}`,
+        `Product Sales Revenue,$${toNumber(revenueData.productSalesRevenue).toLocaleString()}`,
       ].join("\n");
     } else if (reportType === "course" && courseRevenueData) {
       csvContent = [
@@ -313,43 +317,43 @@ function RevenueReports() {
 
             {/* Summary Cards */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
-              <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-lg p-6 border border-green-200">
+              <div className="bg-linear-to-br from-green-50 to-green-100 rounded-lg p-6 border border-green-200">
                 <div className="flex items-center justify-between mb-2">
                   <DollarSign className="w-8 h-8 text-green-600" />
                 </div>
                 <p className="text-sm text-green-700 mb-1">Total Revenue</p>
                 <h3 className="text-3xl font-bold text-green-900">
-                  ${revenueData.totalRevenue.toLocaleString()}
+                  ${toNumber(revenueData.totalRevenue).toLocaleString()}
                 </h3>
               </div>
 
-              <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg p-6 border border-blue-200">
+              <div className="bg-linear-to-br from-blue-50 to-blue-100 rounded-lg p-6 border border-blue-200">
                 <div className="flex items-center justify-between mb-2">
                   <Users className="w-8 h-8 text-blue-600" />
                 </div>
-                <p className="text-sm text-blue-700 mb-1">Student Fees</p>
+                <p className="text-sm text-blue-700 mb-1">Cash Revenue</p>
                 <h3 className="text-3xl font-bold text-blue-900">
-                  ${revenueData.studentFeesRevenue.toLocaleString()}
+                  ${toNumber(revenueData.cashRevenue).toLocaleString()}
                 </h3>
               </div>
 
-              <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-lg p-6 border border-purple-200">
+              <div className="bg-linear-to-br from-purple-50 to-purple-100 rounded-lg p-6 border border-purple-200">
                 <div className="flex items-center justify-between mb-2">
                   <ShoppingCart className="w-8 h-8 text-purple-600" />
                 </div>
-                <p className="text-sm text-purple-700 mb-1">Product Sales</p>
+                <p className="text-sm text-purple-700 mb-1">Stripe Revenue</p>
                 <h3 className="text-3xl font-bold text-purple-900">
-                  ${revenueData.productSalesRevenue.toLocaleString()}
+                  ${toNumber(revenueData.stripeRevenue).toLocaleString()}
                 </h3>
               </div>
 
-              <div className="bg-gradient-to-br from-orange-50 to-orange-100 rounded-lg p-6 border border-orange-200">
+              <div className="bg-linear-to-br from-orange-50 to-orange-100 rounded-lg p-6 border border-orange-200">
                 <div className="flex items-center justify-between mb-2">
                   <BarChart3 className="w-8 h-8 text-orange-600" />
                 </div>
-                <p className="text-sm text-orange-700 mb-1">Avg Transaction</p>
+                <p className="text-sm text-orange-700 mb-1">Cash Payments</p>
                 <h3 className="text-3xl font-bold text-orange-900">
-                  ${revenueData.averageTransactionValue.toLocaleString()}
+                  {toNumber(revenueData.cashPaymentCount).toLocaleString()}
                 </h3>
               </div>
             </div>
@@ -365,22 +369,22 @@ function RevenueReports() {
                     Total Transactions
                   </span>
                   <span className="text-lg font-bold text-[#4A2F19]">
-                    {revenueData.totalTransactions}
+                    {toNumber(revenueData.totalTransactions).toLocaleString()}
                   </span>
                 </div>
 
                 <div className="flex justify-between items-center pb-4 border-b border-[#E8DCC8]">
                   <span className="text-[#3D2817] font-medium">
-                    Student Fees Revenue
+                    Cash Revenue
                   </span>
                   <div className="text-right">
                     <span className="text-lg font-bold text-blue-600">
-                      ${revenueData.studentFeesRevenue.toLocaleString()}
+                      ${toNumber(revenueData.cashRevenue).toLocaleString()}
                     </span>
                     <p className="text-xs text-[#8B6F47]">
                       {(
-                        (revenueData.studentFeesRevenue /
-                          revenueData.totalRevenue) *
+                        (toNumber(revenueData.cashRevenue) /
+                          Math.max(1, toNumber(revenueData.totalRevenue))) *
                         100
                       ).toFixed(1)}
                       % of total
@@ -390,21 +394,33 @@ function RevenueReports() {
 
                 <div className="flex justify-between items-center">
                   <span className="text-[#3D2817] font-medium">
-                    Product Sales Revenue
+                    Stripe Revenue
                   </span>
                   <div className="text-right">
                     <span className="text-lg font-bold text-purple-600">
-                      ${revenueData.productSalesRevenue.toLocaleString()}
+                      ${toNumber(revenueData.stripeRevenue).toLocaleString()}
                     </span>
                     <p className="text-xs text-[#8B6F47]">
                       {(
-                        (revenueData.productSalesRevenue /
-                          revenueData.totalRevenue) *
+                        (toNumber(revenueData.stripeRevenue) /
+                          Math.max(1, toNumber(revenueData.totalRevenue))) *
                         100
                       ).toFixed(1)}
                       % of total
                     </p>
                   </div>
+                </div>
+
+                <div className="flex justify-between items-center pt-4 border-t border-[#E8DCC8]">
+                  <span className="text-[#3D2817] font-medium">
+                    Average Transaction
+                  </span>
+                  <span className="text-lg font-bold text-[#4A2F19]">
+                    $
+                    {toNumber(
+                      revenueData.averageTransactionValue,
+                    ).toLocaleString()}
+                  </span>
                 </div>
               </div>
             </div>
@@ -427,7 +443,7 @@ function RevenueReports() {
 
           {/* Summary Cards */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
-            <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-lg p-6 border border-green-200">
+            <div className="bg-linear-to-br from-green-50 to-green-100 rounded-lg p-6 border border-green-200">
               <DollarSign className="w-8 h-8 text-green-600 mb-2" />
               <p className="text-sm text-green-700 mb-1">Total Revenue</p>
               <h3 className="text-3xl font-bold text-green-900">
@@ -435,7 +451,7 @@ function RevenueReports() {
               </h3>
             </div>
 
-            <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg p-6 border border-blue-200">
+            <div className="bg-linear-to-br from-blue-50 to-blue-100 rounded-lg p-6 border border-blue-200">
               <Users className="w-8 h-8 text-blue-600 mb-2" />
               <p className="text-sm text-blue-700 mb-1">Students Enrolled</p>
               <h3 className="text-3xl font-bold text-blue-900">
@@ -443,7 +459,7 @@ function RevenueReports() {
               </h3>
             </div>
 
-            <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-lg p-6 border border-purple-200">
+            <div className="bg-linear-to-br from-purple-50 to-purple-100 rounded-lg p-6 border border-purple-200">
               <TrendingUp className="w-8 h-8 text-purple-600 mb-2" />
               <p className="text-sm text-purple-700 mb-1">Avg per Student</p>
               <h3 className="text-3xl font-bold text-purple-900">
@@ -451,7 +467,7 @@ function RevenueReports() {
               </h3>
             </div>
 
-            <div className="bg-gradient-to-br from-orange-50 to-orange-100 rounded-lg p-6 border border-orange-200">
+            <div className="bg-linear-to-br from-orange-50 to-orange-100 rounded-lg p-6 border border-orange-200">
               <DollarSign className="w-8 h-8 text-orange-600 mb-2" />
               <p className="text-sm text-orange-700 mb-1">Outstanding</p>
               <h3 className="text-3xl font-bold text-orange-900">

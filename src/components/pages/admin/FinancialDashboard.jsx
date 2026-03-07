@@ -61,10 +61,12 @@ function FinancialDashboard() {
     );
   }
 
+  const toNumber = (value) => Number(value || 0);
+
   const stats = [
     {
       title: "Total Revenue",
-      value: `$${summary?.totalRevenue?.toLocaleString() || "0"}`,
+      value: `$${toNumber(summary?.totalRevenue).toLocaleString()}`,
       icon: DollarSign,
       color: "bg-green-100 text-green-600",
       change: "+12.5%",
@@ -72,25 +74,25 @@ function FinancialDashboard() {
     },
     {
       title: "Outstanding Payments",
-      value: `$${summary?.totalOutstanding?.toLocaleString() || "0"}`,
+      value: `$${toNumber(summary?.totalOutstanding).toLocaleString()}`,
       icon: AlertCircle,
       color: "bg-red-100 text-red-600",
       count: summary?.totalPendingPayments || 0,
       subtitle: `${summary?.totalPendingPayments || 0} pending`,
     },
     {
-      title: "Paid Students",
-      value: summary?.totalPaidStudents || "0",
-      icon: Users,
+      title: "Cash Revenue",
+      value: `$${toNumber(summary?.totalCashRevenue).toLocaleString()}`,
+      icon: DollarSign,
       color: "bg-blue-100 text-blue-600",
-      subtitle: "Active students",
+      subtitle: `${toNumber(summary?.totalCashPayments)} cash payments`,
     },
     {
-      title: "Product Sales",
-      value: `$${summary?.productSalesRevenue?.toLocaleString() || "0"}`,
+      title: "Stripe Revenue",
+      value: `$${toNumber(summary?.totalStripeRevenue).toLocaleString()}`,
       icon: ShoppingCart,
       color: "bg-purple-100 text-purple-600",
-      subtitle: "E-commerce revenue",
+      subtitle: "Online payments",
     },
   ];
 
@@ -150,21 +152,32 @@ function FinancialDashboard() {
             <div className="flex justify-between items-center p-4 bg-[#FFF8F0] rounded-lg">
               <div className="flex items-center">
                 <CreditCard className="w-5 h-5 text-[#4A2F19] mr-3" />
-                <span className="text-[#3D2817] font-medium">Student Fees</span>
+                <span className="text-[#3D2817] font-medium">
+                  Stripe Revenue
+                </span>
               </div>
               <span className="text-lg font-bold text-[#3D2817]">
-                ${summary?.studentFeesRevenue?.toLocaleString() || "0"}
+                ${toNumber(summary?.totalStripeRevenue).toLocaleString()}
               </span>
             </div>
             <div className="flex justify-between items-center p-4 bg-[#FFF8F0] rounded-lg">
               <div className="flex items-center">
-                <ShoppingCart className="w-5 h-5 text-[#4A2F19] mr-3" />
+                <DollarSign className="w-5 h-5 text-[#4A2F19] mr-3" />
+                <span className="text-[#3D2817] font-medium">Cash Revenue</span>
+              </div>
+              <span className="text-lg font-bold text-[#3D2817]">
+                ${toNumber(summary?.totalCashRevenue).toLocaleString()}
+              </span>
+            </div>
+            <div className="flex justify-between items-center p-4 bg-[#FFF8F0] rounded-lg">
+              <div className="flex items-center">
+                <Users className="w-5 h-5 text-[#4A2F19] mr-3" />
                 <span className="text-[#3D2817] font-medium">
-                  Product Sales
+                  Paid Students
                 </span>
               </div>
               <span className="text-lg font-bold text-[#3D2817]">
-                ${summary?.productSalesRevenue?.toLocaleString() || "0"}
+                {toNumber(summary?.totalPaidStudents).toLocaleString()}
               </span>
             </div>
           </div>

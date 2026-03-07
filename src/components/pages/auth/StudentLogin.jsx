@@ -3,45 +3,48 @@ import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import {
   Coffee,
-  User,
+  Mail,
   Lock,
   AlertCircle,
   Loader2,
-  GraduationCap,
+  ArrowLeft,
 } from "lucide-react";
 import { useAuth } from "../../../hooks/useAuth";
 
-const Login = () => {
+const StudentLogin = () => {
   const [formData, setFormData] = useState({
-    username: "",
+    email: "",
     password: "",
   });
   const [loading, setLoading] = useState(false);
   const [validationErrors, setValidationErrors] = useState({});
 
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const { studentLogin } = useAuth();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
+    setFormData((prev) => ({
+      ...prev,
       [name]: value,
-    });
-    // Clear validation error when user starts typing
+    }));
+
     if (validationErrors[name]) {
-      setValidationErrors({
-        ...validationErrors,
+      setValidationErrors((prev) => ({
+        ...prev,
         [name]: null,
-      });
+      }));
     }
   };
 
   const validateForm = () => {
     const errors = {};
+    const email = String(formData.email || "").trim();
 
-    if (!formData.username || formData.username.trim().length < 3) {
-      errors.username = "Username must be at least 3 characters";
+    if (!email) {
+      errors.email = "Email is required";
+    } else if (!/^\S+@\S+\.\S+$/.test(email)) {
+      errors.email = "Enter a valid email address";
     }
 
     if (!formData.password || formData.password.length < 6) {
@@ -56,49 +59,26 @@ const Login = () => {
     setLoading(true);
     setValidationErrors({});
 
-    // Frontend validation
     const errors = validateForm();
     if (Object.keys(errors).length > 0) {
       setValidationErrors(errors);
-      toast.error("Please fix the validation errors", {
-        duration: 4000,
-      });
+      toast.error("Please fix the validation errors", { duration: 4000 });
       setLoading(false);
       return;
     }
 
     try {
-      const result = await login(formData.username, formData.password);
+      const result = await studentLogin(formData.email, formData.password);
 
       if (result.success) {
         toast.success(
-          `Welcome back, ${result.user.name || result.user.username || result.user.email || "User"}!`,
+          `Welcome back, ${result.user.name || result.user.email || "Student"}!`,
         );
-
-        // Navigate to role-specific dashboard
-        const userRole = result.user.role;
-
-        switch (userRole) {
-          case "Admin":
-            navigate("/admin/dashboard", { replace: true });
-            break;
-          case "Staff":
-            navigate("/staff/dashboard", { replace: true });
-            break;
-          case "Trainer":
-            navigate("/trainer/dashboard", { replace: true });
-            break;
-          case "Student":
-            navigate("/student/dashboard", { replace: true });
-            break;
-          default:
-            navigate("/", { replace: true });
-        }
+        navigate("/student/dashboard", { replace: true });
       }
     } catch (err) {
-      // Show error with longer duration for better visibility
-      toast.error(err.message || "Invalid username or password", {
-        duration: 5000, // 5 seconds
+      toast.error(err.message || "Invalid email or password", {
+        duration: 5000,
         style: {
           background: "#FEE2E2",
           color: "#991B1B",
@@ -117,41 +97,41 @@ const Login = () => {
             <Coffee className="w-9 h-9 text-[#EFE7D3]" strokeWidth={2.5} />
           </div>
           <h2 className="text-3xl font-bold text-[#1A1A1A] mb-2">
-            Welcome Back
+            Student Login
           </h2>
           <p className="text-sm text-[#4A2F19] font-medium">
-            Sign in to Coffee School Management System
+            Sign in with your enrolled student account
           </p>
         </div>
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-5">
           <div className="flex flex-col gap-2">
             <label
-              htmlFor="username"
+              htmlFor="email"
               className="text-sm font-bold text-[#1A1A1A] flex items-center gap-2"
             >
-              <User className="w-4 h-4 text-[#4A2F19]" />
-              Username
+              <Mail className="w-4 h-4 text-[#4A2F19]" />
+              Student Email
             </label>
             <input
-              type="text"
-              id="username"
-              name="username"
-              value={formData.username}
+              type="email"
+              id="email"
+              name="email"
+              value={formData.email}
               onChange={handleChange}
               required
               className={`coffee-input ${
-                validationErrors.username
+                validationErrors.email
                   ? "border-red-500 focus:border-red-600 focus:ring-red-200 bg-red-50"
                   : ""
               } disabled:bg-gray-100 disabled:cursor-not-allowed`}
-              placeholder="Enter your username"
+              placeholder="Enter your student email"
               disabled={loading}
             />
-            {validationErrors.username && (
+            {validationErrors.email && (
               <p className="text-red-500 text-xs mt-1 flex items-center gap-1">
                 <AlertCircle className="w-3 h-3" />
-                {validationErrors.username}
+                {validationErrors.email}
               </p>
             )}
           </div>
@@ -200,55 +180,23 @@ const Login = () => {
                 Signing in...
               </>
             ) : (
-              "Sign In"
+              "Sign In as Student"
             )}
           </button>
 
-          <a
-            href="/student-login"
-            className="text-sm text-[#4A2F19] hover:text-[#6B4423] text-center"
+          <button
+            type="button"
+            onClick={() => navigate("/login")}
+            className="text-sm text-[#4A2F19] hover:text-[#6B4423] inline-flex items-center justify-center gap-2"
+            disabled={loading}
           >
-            Student? Use dedicated student login
-          </a>
+            <ArrowLeft className="w-4 h-4" />
+            Back to staff/admin/trainer login
+          </button>
         </form>
-
-        {/* Staff and Trainer Verification Links */}
-        <div className="mt-6 pt-6 border-t border-[#C8A27B]/30">
-          <p className="text-sm text-[#6B4423] mb-3 text-center font-semibold">
-            New Account?
-          </p>
-
-          <div className="grid grid-cols-2 gap-3">
-            {/* Staff Verification */}
-            <a
-              href="/staff-verification"
-              className="flex flex-col items-center gap-2 p-3 bg-[#F8F4EE] hover:bg-[#EFE7D3] border-2 border-[#C8A27B]/30 hover:border-[#4A2F19] rounded-xl transition-all duration-200 group"
-            >
-              <Coffee className="w-5 h-5 text-[#4A2F19] group-hover:scale-110 transition-transform" />
-              <span className="text-xs font-semibold text-[#4A2F19]">
-                Staff Verification
-              </span>
-            </a>
-
-            {/* Trainer Verification */}
-            <a
-              href="/trainer-verification"
-              className="flex flex-col items-center gap-2 p-3 bg-[#F8F4EE] hover:bg-[#EFE7D3] border-2 border-[#C8A27B]/30 hover:border-[#4A2F19] rounded-xl transition-all duration-200 group"
-            >
-              <GraduationCap className="w-5 h-5 text-[#4A2F19] group-hover:scale-110 transition-transform" />
-              <span className="text-xs font-semibold text-[#4A2F19]">
-                Trainer Verification
-              </span>
-            </a>
-          </div>
-
-          <p className="text-xs text-[#6B4423] mt-3 text-center">
-            Check your email for the OTP code
-          </p>
-        </div>
       </div>
     </div>
   );
 };
 
-export default Login;
+export default StudentLogin;

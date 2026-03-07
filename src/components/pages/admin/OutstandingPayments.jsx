@@ -58,19 +58,19 @@ function OutstandingPayments() {
 
   useEffect(() => {
     fetchOutstandingPayments();
-  }, []);
+  }, [fetchOutstandingPayments]);
 
   useEffect(() => {
     if (activeTab === "defaulters") {
       fetchPaymentDefaulters();
     }
-  }, [activeTab, overdueDays]);
+  }, [activeTab, fetchPaymentDefaulters]);
 
   useEffect(() => {
     filterPayments();
   }, [filterPayments]);
 
-  const fetchOutstandingPayments = async () => {
+  const fetchOutstandingPayments = useCallback(async () => {
     setLoading(true);
     try {
       const data = await getOutstandingPayments();
@@ -82,9 +82,9 @@ function OutstandingPayments() {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
-  const fetchPaymentDefaulters = async () => {
+  const fetchPaymentDefaulters = useCallback(async () => {
     setLoading(true);
     try {
       const data = await getPaymentDefaulters(overdueDays);
@@ -95,7 +95,7 @@ function OutstandingPayments() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [overdueDays]);
 
   const exportToCSV = () => {
     const headers = [

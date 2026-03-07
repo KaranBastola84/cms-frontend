@@ -3,6 +3,7 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import Layout from "../components/common/Layout";
 import DashboardLayout from "../components/common/DashboardLayout";
 import Login from "../components/pages/auth/Login";
+import StudentLogin from "../components/pages/auth/StudentLogin";
 import StaffVerification from "../components/pages/auth/StaffVerification";
 import TrainerVerification from "../components/pages/auth/TrainerVerification";
 import InquiryForm from "../components/pages/InquiryForm";
@@ -39,6 +40,9 @@ import RevenueReports from "../components/pages/admin/RevenueReports";
 import CourseManagement from "../components/pages/admin/CourseManagement";
 import BatchManagement from "../components/pages/admin/BatchManagement";
 import AttendanceManagement from "../components/pages/admin/AttendanceManagement";
+import StudentAdmission from "../components/pages/admin/StudentAdmission";
+import StudentManagement from "../components/pages/admin/StudentManagement";
+import PermissionManagement from "../components/pages/admin/PermissionManagement";
 
 const AppRoutes = () => {
   return (
@@ -106,6 +110,17 @@ const AppRoutes = () => {
       />
 
       <Route
+        path="/student-login"
+        element={
+          <PublicRoute>
+            <Layout>
+              <StudentLogin />
+            </Layout>
+          </PublicRoute>
+        }
+      />
+
+      <Route
         path="/staff-verification"
         element={
           <PublicRoute>
@@ -162,6 +177,17 @@ const AppRoutes = () => {
       />
 
       <Route
+        path="/admin/permissions"
+        element={
+          <ProtectedRoute allowedRoles={["Admin"]}>
+            <DashboardLayout>
+              <PermissionManagement />
+            </DashboardLayout>
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
         path="/admin/inquiries"
         element={
           <ProtectedRoute allowedRoles={["Admin", "Staff"]}>
@@ -211,6 +237,28 @@ const AppRoutes = () => {
           <ProtectedRoute allowedRoles={["Admin", "Staff"]}>
             <DashboardLayout>
               <BatchManagement />
+            </DashboardLayout>
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/admin/student-registration"
+        element={
+          <ProtectedRoute allowedRoles={["Admin", "Staff"]}>
+            <DashboardLayout>
+              <StudentAdmission />
+            </DashboardLayout>
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/admin/student-management"
+        element={
+          <ProtectedRoute allowedRoles={["Admin"]}>
+            <DashboardLayout>
+              <StudentManagement />
             </DashboardLayout>
           </ProtectedRoute>
         }
@@ -344,6 +392,17 @@ const AppRoutes = () => {
           <ProtectedRoute allowedRoles={["Staff"]}>
             <DashboardLayout>
               <AttendanceManagement />
+            </DashboardLayout>
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/staff/students"
+        element={
+          <ProtectedRoute allowedRoles={["Staff", "Admin"]}>
+            <DashboardLayout>
+              <StudentAdmission />
             </DashboardLayout>
           </ProtectedRoute>
         }

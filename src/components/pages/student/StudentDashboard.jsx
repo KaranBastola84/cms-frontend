@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   DollarSign,
   CreditCard,
@@ -29,13 +29,7 @@ function StudentDashboard() {
   const [payments, setPayments] = useState([]);
   const [selectedTab, setSelectedTab] = useState("overview"); // overview, plans, receipts, payments
 
-  useEffect(() => {
-    if (user?.userId) {
-      fetchStudentData();
-    }
-  }, [user]);
-
-  const fetchStudentData = async () => {
+  const fetchStudentData = useCallback(async () => {
     setLoading(true);
     try {
       const [plansData, receiptsData, paymentsData] = await Promise.all([
@@ -53,7 +47,13 @@ function StudentDashboard() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [user?.userId]);
+
+  useEffect(() => {
+    if (user?.userId) {
+      fetchStudentData();
+    }
+  }, [fetchStudentData, user?.userId]);
 
   const handleDownloadReceipt = async (receiptId, receiptNumber) => {
     try {

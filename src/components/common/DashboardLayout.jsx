@@ -198,6 +198,11 @@ const DashboardLayout = ({ children }) => {
     const hasPermission = (permissionKey) => {
       // Admin has access to everything
       if (role === "Admin") return true;
+
+      if (Array.isArray(permissionKey)) {
+        return permissionKey.some((key) => userPermissions.includes(key));
+      }
+
       // Other roles need specific permission
       return userPermissions.includes(permissionKey);
     };
@@ -222,13 +227,25 @@ const DashboardLayout = ({ children }) => {
               name: "All Users",
               icon: Users,
               path: "/admin/users",
-              permission: "view-users",
+              permission: ["view-users", "user-management"],
+            },
+            {
+              name: "Student Management",
+              icon: Users,
+              path: "/admin/student-management",
+              permission: ["view-students", "manage-students"],
+            },
+            {
+              name: "Permissions",
+              icon: ShieldCheck,
+              path: "/admin/permissions",
+              permission: ["manage-permissions", "user-management"],
             },
             {
               name: "Student Registration",
               icon: UserPlus,
               path: "/admin/student-registration",
-              permission: "student-registration",
+              permission: ["student-registration", "manage-students"],
             },
             {
               name: "Staff Management",
@@ -327,7 +344,7 @@ const DashboardLayout = ({ children }) => {
               name: "Revenue Reports",
               icon: FileText,
               path: "/admin/finance/revenue-reports",
-              permission: "payment-finance",
+              permission: ["payment-finance", "reports"],
             },
           ],
         },
@@ -368,19 +385,19 @@ const DashboardLayout = ({ children }) => {
           name: "Students",
           icon: Users,
           path: "/staff/students",
-          permission: "view-students",
+          permission: ["view-students", "manage-students"],
         },
         {
           name: "Courses",
           icon: BookOpen,
           path: "/staff/courses",
-          permission: "view-courses",
+          permission: ["view-courses", "courses-batches"],
         },
         {
           name: "Batch & Schedule",
           icon: CalendarClock,
           path: "/staff/batches",
-          permission: "view-courses",
+          permission: ["view-courses", "courses-batches"],
         },
         {
           name: "Attendance",
@@ -392,7 +409,7 @@ const DashboardLayout = ({ children }) => {
           name: "Inquiries",
           icon: FileText,
           path: "/admin/inquiries",
-          permission: "view-inquiries",
+          permission: ["view-inquiries", "inquiries"],
         },
         {
           groupName: "Payment & Finance",
@@ -421,7 +438,7 @@ const DashboardLayout = ({ children }) => {
               name: "Revenue Reports",
               icon: FileText,
               path: "/admin/finance/revenue-reports",
-              permission: "payment-finance",
+              permission: ["payment-finance", "reports"],
             },
           ],
         },
@@ -431,7 +448,7 @@ const DashboardLayout = ({ children }) => {
           name: "My Classes",
           icon: BookOpen,
           path: "/trainer/classes",
-          permission: "view-classes",
+          permission: ["view-classes", "courses-batches"],
         },
         {
           name: "Students",
@@ -443,7 +460,7 @@ const DashboardLayout = ({ children }) => {
           name: "Schedule",
           icon: Calendar,
           path: "/trainer/schedule",
-          permission: "view-schedule",
+          permission: ["view-schedule", "courses-batches"],
         },
       ],
       Student: [

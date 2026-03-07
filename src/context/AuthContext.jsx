@@ -33,6 +33,14 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const studentLogin = async (email, password) => {
+    const response = await authService.studentLogin(email, password);
+    if (response.success) {
+      setUser(response.data.user);
+      return { success: true, user: response.data.user };
+    }
+  };
+
   const logout = async () => {
     await authService.logout();
     setUser(null);
@@ -46,6 +54,7 @@ export const AuthProvider = ({ children }) => {
   const value = {
     user,
     login,
+    studentLogin,
     logout,
     updateUser,
     isAuthenticated: !!user,
