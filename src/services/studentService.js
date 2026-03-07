@@ -112,6 +112,32 @@ export const getStudentById = async (id) => {
   }
 };
 
+export const updateStudent = async (id, studentData) => {
+  try {
+    const studentId = validateStudentId(id);
+    const payload = normalizeStudentPayload(studentData);
+    const response = await apiInstance.put(
+      `/api/Student/${studentId}`,
+      payload,
+    );
+    return response.data.result || response.data;
+  } catch (error) {
+    console.error("Error updating student:", error);
+    throwApiError(error, "Failed to update student");
+  }
+};
+
+export const deleteStudent = async (id) => {
+  try {
+    const studentId = validateStudentId(id);
+    const response = await apiInstance.delete(`/api/Student/${studentId}`);
+    return response.data.result || response.data || { success: true };
+  } catch (error) {
+    console.error("Error deleting student:", error);
+    throwApiError(error, "Failed to delete student");
+  }
+};
+
 export const getStudentDetails = async (id) => {
   try {
     const studentId = validateStudentId(id);
@@ -140,6 +166,44 @@ export const getRegistrationSummary = async (id) => {
   } catch (error) {
     console.error("Error fetching registration summary:", error);
     throwApiError(error, "Failed to fetch registration summary");
+  }
+};
+
+export const getStudentByEmail = async (email) => {
+  try {
+    const normalizedEmail = String(email || "").trim();
+    if (!normalizedEmail) {
+      throw new Error("Email is required");
+    }
+
+    const response = await apiInstance.get(
+      `/api/Student/email/${encodeURIComponent(normalizedEmail)}`,
+    );
+    return response.data.result || response.data;
+  } catch (error) {
+    console.error("Error fetching student by email:", error);
+    throwApiError(error, "Failed to fetch student by email");
+  }
+};
+
+export const updateStudentStatus = async (id, status) => {
+  try {
+    const studentId = validateStudentId(id);
+    const normalizedStatus = String(status || "").trim();
+    if (!normalizedStatus) {
+      throw new Error("Status is required");
+    }
+
+    const response = await apiInstance.patch(
+      `/api/Student/${studentId}/status`,
+      {
+        status: normalizedStatus,
+      },
+    );
+    return response.data.result || response.data;
+  } catch (error) {
+    console.error("Error updating student status:", error);
+    throwApiError(error, "Failed to update student status");
   }
 };
 
@@ -182,14 +246,46 @@ export const getStudentCashPayments = async (id) => {
   }
 };
 
+export const getStudentPayments = async (id) => {
+  try {
+    const studentId = validateStudentId(id);
+    const response = await apiInstance.get(
+      `/api/Student/${studentId}/payments`,
+    );
+    return response.data.result || response.data || [];
+  } catch (error) {
+    console.error("Error fetching student payments:", error);
+    throwApiError(error, "Failed to fetch student payments");
+  }
+};
+
+export const getStudentDocumentsList = async (id) => {
+  try {
+    const studentId = validateStudentId(id);
+    const response = await apiInstance.get(
+      `/api/Student/${studentId}/documents`,
+    );
+    return response.data.result || response.data || [];
+  } catch (error) {
+    console.error("Error fetching student documents:", error);
+    throwApiError(error, "Failed to fetch student documents");
+  }
+};
+
 export default {
   createStudent,
   getAllStudents,
   getStudentsByStatus,
   getStudentById,
+  updateStudent,
+  deleteStudent,
   getStudentDetails,
   getRegistrationSummary,
+  getStudentByEmail,
+  updateStudentStatus,
   recordCashPayment,
+  getStudentPayments,
   getStudentCashPayments,
+  getStudentDocumentsList,
   getEntityId,
 };

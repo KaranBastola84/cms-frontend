@@ -16,6 +16,7 @@ import {
   XCircle,
   AlertTriangle,
 } from "lucide-react";
+import StudentManagementPanel from "./StudentManagementPanel";
 
 const AllUsers = () => {
   const [users, setUsers] = useState([]);
@@ -393,6 +394,8 @@ const AllUsers = () => {
             </table>
           </div>
         </div>
+
+        <StudentManagementPanel />
       </div>
 
       {/* Change Role Modal */}
