@@ -3,6 +3,7 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import Layout from "../components/common/Layout";
 import DashboardLayout from "../components/common/DashboardLayout";
 import Login from "../components/pages/auth/Login";
+import StudentLogin from "../components/pages/auth/StudentLogin";
 import StaffVerification from "../components/pages/auth/StaffVerification";
 import TrainerVerification from "../components/pages/auth/TrainerVerification";
 import InquiryForm from "../components/pages/InquiryForm";
@@ -101,6 +102,17 @@ const AppRoutes = () => {
           <PublicRoute>
             <Layout>
               <Login />
+            </Layout>
+          </PublicRoute>
+        }
+      />
+
+      <Route
+        path="/student-login"
+        element={
+          <PublicRoute>
+            <Layout>
+              <StudentLogin />
             </Layout>
           </PublicRoute>
         }

@@ -48,7 +48,9 @@ apiInstance.interceptors.response.use(
     const originalRequest = error.config;
 
     // Skip token refresh logic for login and public endpoints
-    const isLoginRequest = originalRequest.url?.includes("/api/Auth/login");
+    const isLoginRequest =
+      originalRequest.url?.includes("/api/Auth/login") ||
+      originalRequest.url?.includes("/api/Auth/student-login");
     const isRefreshRequest = originalRequest.url?.includes("/api/Auth/refresh");
 
     // Handle token expiration with refresh (skip for login/refresh endpoints)

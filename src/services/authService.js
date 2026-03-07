@@ -7,13 +7,13 @@ import apiInstance from "../config/api";
  */
 const decodeToken = (token) => {
   try {
-    const base64Url = token.split('.')[1];
-    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    const base64Url = token.split(".")[1];
+    const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
     const jsonPayload = decodeURIComponent(
       atob(base64)
-        .split('')
-        .map((c) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
-        .join('')
+        .split("")
+        .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
+        .join(""),
     );
     return JSON.parse(jsonPayload);
   } catch (error) {
@@ -29,16 +29,104 @@ const decodeToken = (token) => {
  */
 const isTokenExpired = (token) => {
   if (!token) return true;
-  
+
   const decoded = decodeToken(token);
   if (!decoded || !decoded.exp) return true;
-  
+
   // Check if token expires in less than 1 minute
   const expirationTime = decoded.exp * 1000; // Convert to milliseconds
   const currentTime = Date.now();
   const buffer = 60 * 1000; // 1 minute buffer
-  
+
   return expirationTime - currentTime < buffer;
+};
+
+const normalizeErrorMessages = (errorData) => {
+  if (!errorData) return [];
+
+  if (Array.isArray(errorData.errorMessage)) {
+    return errorData.errorMessage.filter(Boolean);
+  }
+
+  if (typeof errorData.errorMessage === "string") {
+    return [errorData.errorMessage];
+  }
+
+  if (typeof errorData.message === "string") {
+    return [errorData.message];
+  }
+
+  if (typeof errorData.title === "string") {
+    return [errorData.title];
+  }
+
+  return [];
+};
+
+const persistAuthResult = (result) => {
+  localStorage.setItem("accessToken", result.access);
+  localStorage.setItem("refreshToken", result.refresh);
+  localStorage.setItem("userData", JSON.stringify(result.user));
+};
+
+const parseApiErrorMessage = (error, fallbackMessage) => {
+  const messages = normalizeErrorMessages(error?.response?.data);
+  if (messages.length > 0) {
+    const merged = messages.join(", ");
+    const lowered = merged.toLowerCase();
+
+    if (lowered.includes("pending payment")) {
+      return "Enrollment is pending payment";
+    }
+    if (
+      lowered.includes("inactive") ||
+      lowered.includes("suspended") ||
+      lowered.includes("dropped")
+    ) {
+      return "Account is inactive";
+    }
+    if (lowered.includes("invalid") && lowered.includes("password")) {
+      return "Invalid email or password";
+    }
+
+    return merged;
+  }
+
+  if (error?.message) {
+    return error.message;
+  }
+
+  return fallbackMessage;
+};
+
+const loginWithStandardEndpoint = async (username, password) => {
+  const response = await apiInstance.post("/api/Auth/login", {
+    username,
+    password,
+  });
+
+  if (!response.data.isSuccess) {
+    throw new Error(
+      normalizeErrorMessages(response.data).join(", ") || "Login failed",
+    );
+  }
+
+  return response.data.result;
+};
+
+const loginWithStudentEndpoint = async (email, password) => {
+  const response = await apiInstance.post("/api/Auth/student-login", {
+    email,
+    password,
+  });
+
+  if (!response.data.isSuccess) {
+    throw new Error(
+      normalizeErrorMessages(response.data).join(", ") || "Login failed",
+    );
+  }
+
+  return response.data.result;
 };
 
 const authService = {
@@ -51,47 +139,46 @@ const authService = {
    */
   login: async (username, password) => {
     try {
-      const response = await apiInstance.post("/api/Auth/login", {
-        username,
-        password,
-      });
+      const identifier = String(username || "").trim();
+      const authResult = await loginWithStandardEndpoint(identifier, password);
 
-      if (response.data.isSuccess) {
-        // Store tokens in localStorage
-        localStorage.setItem("accessToken", response.data.result.access);
-        localStorage.setItem("refreshToken", response.data.result.refresh);
-        
-        // Store user data
-        localStorage.setItem("userData", JSON.stringify(response.data.result.user));
-        
-        return {
-          success: true,
-          data: response.data.result,
-        };
-      } else {
-        throw new Error(response.data.errorMessage?.join(", ") || "Login failed");
-      }
+      persistAuthResult(authResult);
+
+      return {
+        success: true,
+        data: authResult,
+      };
     } catch (error) {
-      // Handle specific error scenarios
-      let errorMessage = "An error occurred during login";
-      
-      if (error.response?.status === 401) {
-        // Check if it's an inactive account
-        const errorMessages = error.response?.data?.errorMessage;
-        if (errorMessages && errorMessages.some(msg => msg.toLowerCase().includes("inactive"))) {
-          errorMessage = "Your account is inactive. Please contact the administrator.";
-        } else {
-          errorMessage = error.response?.data?.errorMessage?.join(", ") || "Invalid username or password";
-        }
-      } else if (error.response?.data?.errorMessage) {
-        errorMessage = error.response.data.errorMessage.join(", ");
-      } else if (error.response?.data?.message) {
-        errorMessage = error.response.data.message;
-      } else if (error.message) {
-        errorMessage = error.message;
-      }
-      
-      throw new Error(errorMessage);
+      throw new Error(
+        parseApiErrorMessage(error, "An error occurred during login"),
+      );
+    }
+  },
+
+  /**
+   * Login student with email and password
+   * @param {string} email - Student email
+   * @param {string} password - Student password
+   * @returns {Promise} Response with user data and tokens
+   */
+  studentLogin: async (email, password) => {
+    try {
+      const normalizedEmail = String(email || "").trim();
+      const authResult = await loginWithStudentEndpoint(
+        normalizedEmail,
+        password,
+      );
+
+      persistAuthResult(authResult);
+
+      return {
+        success: true,
+        data: authResult,
+      };
+    } catch (error) {
+      throw new Error(
+        parseApiErrorMessage(error, "An error occurred during student login"),
+      );
     }
   },
 
@@ -101,7 +188,7 @@ const authService = {
   logout: async () => {
     try {
       const refreshToken = localStorage.getItem("refreshToken");
-      
+
       // Call logout API if refresh token exists
       if (refreshToken) {
         await apiInstance.post("/api/Auth/logout", {
@@ -116,7 +203,7 @@ const authService = {
       localStorage.removeItem("accessToken");
       localStorage.removeItem("refreshToken");
       localStorage.removeItem("userData");
-      
+
       // Redirect to login
       window.location.href = "/login";
     }
@@ -143,7 +230,7 @@ const authService = {
   isAuthenticated: () => {
     const token = localStorage.getItem("accessToken");
     if (!token) return false;
-    
+
     // Check if token is expired
     return !isTokenExpired(token);
   },
