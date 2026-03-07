@@ -225,6 +225,12 @@ const DashboardLayout = ({ children }) => {
               permission: "view-users",
             },
             {
+              name: "Student Management",
+              icon: Users,
+              path: "/admin/student-management",
+              permission: "view-students",
+            },
+            {
               name: "Student Registration",
               icon: UserPlus,
               path: "/admin/student-registration",

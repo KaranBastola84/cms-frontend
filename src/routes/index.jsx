@@ -41,6 +41,7 @@ import CourseManagement from "../components/pages/admin/CourseManagement";
 import BatchManagement from "../components/pages/admin/BatchManagement";
 import AttendanceManagement from "../components/pages/admin/AttendanceManagement";
 import StudentAdmission from "../components/pages/admin/StudentAdmission";
+import StudentManagement from "../components/pages/admin/StudentManagement";
 
 const AppRoutes = () => {
   return (
@@ -235,6 +236,17 @@ const AppRoutes = () => {
           <ProtectedRoute allowedRoles={["Admin", "Staff"]}>
             <DashboardLayout>
               <StudentAdmission />
+            </DashboardLayout>
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/admin/student-management"
+        element={
+          <ProtectedRoute allowedRoles={["Admin"]}>
+            <DashboardLayout>
+              <StudentManagement />
             </DashboardLayout>
           </ProtectedRoute>
         }

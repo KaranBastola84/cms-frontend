@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import {
   Users,
   BookOpen,
@@ -263,6 +264,16 @@ function AdminDashboard() {
             </div>
           );
         })}
+      </div>
+
+      <div className="mb-6">
+        <Link
+          to="/admin/student-management"
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[#4A2F19] text-white hover:bg-[#3D2817] transition-colors font-semibold"
+        >
+          <Users className="w-4 h-4" />
+          Open Student Management
+        </Link>
       </div>
 
       {/* Detailed Overview Breakdown */}
