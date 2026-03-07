@@ -606,7 +606,7 @@ const CourseManagement = () => {
   );
 };
 
-const StatCard = ({ icon: Icon, label, value, iconBg, iconText }) => (
+const StatCard = ({ icon, label, value, iconBg, iconText }) => (
   <div className="bg-white rounded-lg shadow-md p-6 border border-[#E8DCC8]">
     <div className="flex items-center justify-between">
       <div>
@@ -614,7 +614,7 @@ const StatCard = ({ icon: Icon, label, value, iconBg, iconText }) => (
         <h3 className="text-2xl font-bold text-[#3D2817]">{value}</h3>
       </div>
       <div className={`p-3 rounded-full ${iconBg} ${iconText}`}>
-        <Icon className="w-6 h-6" />
+        {React.createElement(icon, { className: "w-6 h-6" })}
       </div>
     </div>
   </div>

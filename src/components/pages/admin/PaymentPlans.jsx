@@ -180,7 +180,7 @@ function PaymentPlans() {
     }
   };
 
-  const handleUpdateStatus = async (planId, newStatus) => {
+  const handleUpdateStatus = async () => {
     try {
       await updatePaymentPlanStatus(
         selectedPlan.paymentPlanId,

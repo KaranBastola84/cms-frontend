@@ -197,7 +197,7 @@ const ProductManagement = () => {
 
       if (editingProduct) {
         // Exclude stockQuantity from update — stock changes go through the dedicated stock endpoint
-        const { stockQuantity, ...updateFields } = formData;
+        const { stockQuantity: _stockQuantity, ...updateFields } = formData;
         productData = {
           ...updateFields,
           price: parseFloat(formData.price),

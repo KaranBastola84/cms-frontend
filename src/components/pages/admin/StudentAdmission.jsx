@@ -1,5 +1,12 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import {
+  Elements,
+  PaymentElement,
+  useElements,
+  useStripe,
+} from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
+import {
   BadgeCheck,
   CreditCard,
   DollarSign,
@@ -29,7 +36,6 @@ import {
   uploadStudentDocument,
 } from "../../../services/studentDocumentService";
 import {
-  confirmPayment,
   createPaymentIntent,
   getPaymentDetails,
 } from "../../../services/stripePaymentService";
@@ -65,6 +71,66 @@ const formatMoney = (value) => {
   });
 };
 
+const stripePublishableKey = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY || "";
+const stripePromise = stripePublishableKey
+  ? loadStripe(stripePublishableKey)
+  : null;
+
+const StripeCheckoutForm = ({
+  disabled,
+  onComplete,
+  onError,
+  setParentSubmitting,
+}) => {
+  const stripe = useStripe();
+  const elements = useElements();
+  const [processing, setProcessing] = useState(false);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!stripe || !elements) {
+      onError("Stripe is still loading. Please wait a moment.");
+      return;
+    }
+
+    setProcessing(true);
+    setParentSubmitting(true);
+
+    try {
+      const { error, paymentIntent } = await stripe.confirmPayment({
+        elements,
+        redirect: "if_required",
+      });
+
+      if (error) {
+        onError(error.message || "Stripe payment failed");
+        return;
+      }
+
+      onComplete(paymentIntent);
+    } catch (error) {
+      onError(error.message || "Stripe payment failed");
+    } finally {
+      setProcessing(false);
+      setParentSubmitting(false);
+    }
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-3">
+      <PaymentElement />
+      <button
+        type="submit"
+        className="w-full px-4 py-2 rounded-lg bg-indigo-700 text-white hover:bg-indigo-800 disabled:opacity-70"
+        disabled={disabled || !stripe || !elements || processing}
+      >
+        {processing ? "Processing..." : "Pay with Card"}
+      </button>
+    </form>
+  );
+};
+
 const StudentAdmission = () => {
   const [formData, setFormData] = useState(initialForm);
   const [courses, setCourses] = useState([]);
@@ -82,6 +148,7 @@ const StudentAdmission = () => {
   const [stripeAmount, setStripeAmount] = useState("");
   const [stripeInstallmentId, setStripeInstallmentId] = useState("");
   const [stripeCurrency, setStripeCurrency] = useState("usd");
+  const [stripeClientSecret, setStripeClientSecret] = useState("");
   const [lastStripePayment, setLastStripePayment] = useState(null);
 
   const [documentType, setDocumentType] = useState(1);
@@ -235,6 +302,7 @@ const StudentAdmission = () => {
       }
 
       setActiveStudent(created);
+      setStripeClientSecret("");
       setLastStripePayment(null);
       await Promise.all([
         loadSummaryAndDocuments(createdStudentId),
@@ -396,19 +464,54 @@ const StudentAdmission = () => {
       });
 
       setLastStripePayment(paymentIntent);
+      setStripeClientSecret(paymentIntent?.clientSecret || "");
 
-      if (paymentIntent?.checkoutUrl) {
-        window.open(paymentIntent.checkoutUrl, "_blank", "noopener,noreferrer");
+      if (!paymentIntent?.clientSecret) {
+        toast.error(
+          "Payment intent created, but no client secret was returned for Stripe Elements.",
+        );
+        return;
       }
 
-      toast.success(
-        "Stripe payment intent created. Complete checkout and refresh status.",
-      );
+      toast.success("Payment intent created. Complete card payment below.");
     } catch (error) {
       toast.error(error.message || "Failed to create Stripe payment intent");
     } finally {
       setSubmitting(false);
     }
+  };
+
+  const handleStripeCheckoutComplete = async (paymentIntent) => {
+    const normalizedStatus = String(paymentIntent?.status || "").toLowerCase();
+
+    if (
+      !["succeeded", "processing", "requires_capture"].includes(
+        normalizedStatus,
+      )
+    ) {
+      toast.error(`Payment status: ${paymentIntent?.status || "unknown"}`);
+      return;
+    }
+
+    toast.success(
+      "Stripe payment submitted successfully. Syncing enrollment...",
+    );
+
+    if (lastStripePayment?.paymentId) {
+      try {
+        const latest = await getPaymentDetails(
+          Number(lastStripePayment.paymentId),
+        );
+        setLastStripePayment(latest);
+      } catch {
+        // Non-blocking: webhook may still complete enrollment.
+      }
+    }
+
+    await Promise.all([
+      loadSummaryAndDocuments(activeStudentId),
+      loadStudentLists(),
+    ]);
   };
 
   const handleRefreshStripeStatus = async () => {
@@ -439,40 +542,12 @@ const StudentAdmission = () => {
     }
   };
 
-  const handleConfirmStripePayment = async () => {
-    if (!lastStripePayment?.paymentId) {
-      toast.error("Create a payment intent first");
-      return;
-    }
-
-    setSubmitting(true);
-    try {
-      await confirmPayment(Number(lastStripePayment.paymentId));
-      const latest = await getPaymentDetails(
-        Number(lastStripePayment.paymentId),
-      );
-      setLastStripePayment(latest);
-
-      await Promise.all([
-        loadSummaryAndDocuments(activeStudentId),
-        loadStudentLists(),
-      ]);
-
-      toast.success(
-        "Stripe payment confirmed. Student should now be Enrolled.",
-      );
-    } catch (error) {
-      toast.error(error.message || "Failed to confirm Stripe payment");
-    } finally {
-      setSubmitting(false);
-    }
-  };
-
   const handleSelectExistingStudent = async (student) => {
     const studentId = getId(student);
     if (!studentId) return;
 
     setActiveStudent(student);
+    setStripeClientSecret("");
     setLastStripePayment(null);
     await loadSummaryAndDocuments(studentId);
   };
@@ -787,6 +862,12 @@ const StudentAdmission = () => {
                 <h3 className="font-semibold text-[#4A2F19]">
                   Option B: Stripe Payment
                 </h3>
+                {!stripePublishableKey && (
+                  <div className="p-2 rounded bg-yellow-100 text-yellow-800 text-xs">
+                    Set `VITE_STRIPE_PUBLISHABLE_KEY` in your `.env` file to use
+                    Stripe Elements checkout.
+                  </div>
+                )}
                 <input
                   type="number"
                   min="0"
@@ -799,7 +880,7 @@ const StudentAdmission = () => {
                 <input
                   value={stripeInstallmentId}
                   onChange={(e) => setStripeInstallmentId(e.target.value)}
-                  placeholder="Installment ID (optional, use 0 if none)"
+                  placeholder="Installment ID (optional)"
                   className="w-full px-3 py-2 border rounded-lg border-[#C8A27B]/40"
                 />
                 <select
@@ -820,11 +901,39 @@ const StudentAdmission = () => {
                   type="button"
                   onClick={handleCreateStripeIntent}
                   className="w-full px-4 py-2 rounded-lg bg-blue-700 text-white hover:bg-blue-800 disabled:opacity-70 inline-flex items-center justify-center gap-2"
-                  disabled={submitting}
+                  disabled={submitting || !stripePublishableKey}
                 >
                   <CreditCard className="w-4 h-4" />
                   Create Payment Intent
                 </button>
+
+                {stripeClientSecret && stripePromise && (
+                  <div className="pt-2 border-t border-[#C8A27B]/20">
+                    <p className="text-xs text-[#6B4423] mb-2">
+                      Secure Stripe Checkout
+                    </p>
+                    <Elements
+                      key={stripeClientSecret}
+                      stripe={stripePromise}
+                      options={{
+                        clientSecret: stripeClientSecret,
+                        appearance: {
+                          theme: "stripe",
+                          variables: {
+                            colorPrimary: "#4A2F19",
+                          },
+                        },
+                      }}
+                    >
+                      <StripeCheckoutForm
+                        disabled={submitting}
+                        setParentSubmitting={setSubmitting}
+                        onComplete={handleStripeCheckoutComplete}
+                        onError={(message) => toast.error(message)}
+                      />
+                    </Elements>
+                  </div>
+                )}
 
                 {lastStripePayment?.paymentId && (
                   <div className="pt-2 space-y-2 text-sm">
@@ -843,14 +952,6 @@ const StudentAdmission = () => {
                         disabled={submitting}
                       >
                         Refresh Status
-                      </button>
-                      <button
-                        type="button"
-                        onClick={handleConfirmStripePayment}
-                        className="px-3 py-2 rounded-lg bg-indigo-700 text-white hover:bg-indigo-800 disabled:opacity-70"
-                        disabled={submitting}
-                      >
-                        Confirm Payment
                       </button>
                     </div>
                   </div>
