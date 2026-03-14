@@ -10,6 +10,8 @@ import InquiryForm from "../components/pages/InquiryForm";
 import Products from "../components/pages/Products";
 import Checkout from "../components/pages/Checkout";
 import OrderConfirmation from "../components/pages/OrderConfirmation";
+import ProductDetail from "../components/pages/ProductDetail";
+import Home from "../components/pages/Home";
 import {
   ProtectedRoute,
   PublicRoute,
@@ -24,6 +26,7 @@ import Inquiries from "../components/pages/admin/Inquiries";
 import StaffManagement from "../components/pages/admin/StaffManagement";
 import TrainerManagement from "../components/pages/admin/TrainerManagement";
 import ProductManagement from "../components/pages/admin/ProductManagement";
+import ProductEdit from "../components/pages/admin/ProductEdit";
 import OrderManagement from "../components/pages/admin/OrderManagement";
 import StaffDashboard from "../components/pages/staff/StaffDashboard";
 import TrainerDashboard from "../components/pages/trainer/TrainerDashboard";
@@ -53,7 +56,7 @@ const AppRoutes = () => {
         element={
           <PublicRoute>
             <Layout>
-              <InquiryForm />
+              <Home />
             </Layout>
           </PublicRoute>
         }
@@ -75,6 +78,14 @@ const AppRoutes = () => {
         element={
           <Layout>
             <Products />
+          </Layout>
+        }
+      />
+      <Route
+        path="/products/:id"
+        element={
+          <Layout>
+            <ProductDetail />
           </Layout>
         }
       />
@@ -281,6 +292,26 @@ const AppRoutes = () => {
           <ProtectedRoute allowedRoles={["Admin"]}>
             <DashboardLayout>
               <ProductManagement />
+            </DashboardLayout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/products/new"
+        element={
+          <ProtectedRoute allowedRoles={["Admin"]}>
+            <DashboardLayout>
+              <ProductEdit />
+            </DashboardLayout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/products/:id/edit"
+        element={
+          <ProtectedRoute allowedRoles={["Admin"]}>
+            <DashboardLayout>
+              <ProductEdit />
             </DashboardLayout>
           </ProtectedRoute>
         }

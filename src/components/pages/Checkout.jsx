@@ -121,22 +121,22 @@ const Checkout = () => {
 
   if (cartItems.length === 0) {
     return (
-      <div className="min-h-screen bg-linear-to-b from-[#EFE7D3] to-white py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center py-16">
-            <ShoppingCart className="w-24 h-24 text-gray-300 mx-auto mb-6" />
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">
+      <div className="min-h-screen bg-[#0F0F0F] py-20 flex items-center justify-center">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+          <div className="text-center py-24 luxury-card bg-[#1A1A1A]">
+            <ShoppingCart className="w-24 h-24 text-[#333333] mx-auto mb-8" strokeWidth={1} />
+            <h2 className="text-3xl font-heading font-normal text-white mb-4 uppercase tracking-widest">
               Your Cart is Empty
             </h2>
-            <p className="text-gray-600 mb-8">
-              Start shopping to add items to your cart
+            <p className="text-[#808080] mb-10 font-light text-lg">
+              Begin your journey to discover our premium programs and equipment.
             </p>
             <button
               onClick={() => navigate("/products")}
-              className="inline-flex items-center gap-2 bg-[#4A2F19] text-white px-8 py-3 rounded-lg hover:bg-[#3A2515] transition-colors"
+              className="btn-gold-primary"
             >
-              <ArrowLeft className="w-5 h-5" />
-              Continue Shopping
+              <ArrowLeft className="w-5 h-5 mr-3" />
+              Return to Catalog
             </button>
           </div>
         </div>
@@ -145,71 +145,71 @@ const Checkout = () => {
   }
 
   return (
-    <div className="min-h-screen bg-linear-to-b from-[#EFE7D3] to-white py-8">
+    <div className="min-h-screen bg-[#0F0F0F] py-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="mb-8">
+        <div className="mb-12">
           <button
             onClick={() => navigate("/products")}
-            className="flex items-center gap-2 text-[#4A2F19] hover:text-[#3A2515] mb-4"
+            className="flex items-center gap-2 text-[#808080] hover:text-[#C6A36A] mb-8 transition-colors text-sm uppercase tracking-widest font-semibold"
           >
-            <ArrowLeft className="w-5 h-5" />
-            Continue Shopping
+            <ArrowLeft className="w-4 h-4" />
+            Return to Store
           </button>
-          <h1 className="text-4xl font-bold text-[#4A2F19]">Checkout</h1>
-          <p className="text-gray-600 mt-2">
+          <h1 className="text-4xl md:text-5xl font-heading text-white uppercase tracking-widest">Secure Checkout</h1>
+          <p className="text-[#E0E0E0] mt-3 font-light text-lg">
             {getItemCount()} items in your cart
           </p>
         </div>
 
-        <div className="grid lg:grid-cols-3 gap-8">
+        <div className="grid lg:grid-cols-3 gap-10">
           {/* Cart Items Section */}
-          <div className="lg:col-span-2 space-y-4">
-            <div className="bg-white rounded-xl shadow-md p-6">
-              <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2">
-                <ShoppingCart className="w-6 h-6" />
+          <div className="lg:col-span-2 space-y-6">
+            <div className="luxury-card p-8 bg-[#1A1A1A]">
+              <h2 className="text-2xl font-heading text-white mb-8 flex items-center gap-3 uppercase tracking-widest border-b border-[#ffffff10] pb-6">
+                <ShoppingCart className="w-6 h-6 text-[#C6A36A]" />
                 Cart Items
               </h2>
 
-              <div className="space-y-4">
+              <div className="space-y-6">
                 {cartItems.map((item) => (
                   <div
                     key={item.id}
-                    className="flex gap-4 p-4 border border-gray-200 rounded-lg hover:border-[#C8A27B] transition-colors"
+                    className="flex flex-col sm:flex-row gap-6 p-6 bg-[#0F0F0F] border border-[#ffffff10] rounded-xl hover:border-[#C6A36A]/50 transition-colors"
                   >
                     {/* Product Image */}
-                    <div className="w-24 h-24 bg-gray-100 rounded-lg overflow-hidden shrink-0">
+                    <div className="w-full sm:w-32 h-32 bg-[#1A1A1A] rounded-lg overflow-hidden shrink-0 border border-[#ffffff05]">
                       {item.imageUrl ? (
                         <img
                           src={getImageUrl(item.imageUrl)}
                           alt={item.name}
-                          className="w-full h-full object-cover"
+                          className="w-full h-full object-cover opacity-90"
                         />
                       ) : (
                         <div className="w-full h-full flex items-center justify-center">
-                          <Package className="w-8 h-8 text-gray-300" />
+                          <Package className="w-10 h-10 text-[#333333]" />
                         </div>
                       )}
                     </div>
 
                     {/* Product Details */}
-                    <div className="flex-1 min-w-0">
-                      <h3 className="font-semibold text-gray-900 truncate">
+                    <div className="flex-1 flex flex-col justify-center">
+                      <h3 className="font-heading text-lg text-white truncate mb-2 group-hover:text-[#C6A36A] transition-colors">
                         {item.name}
                       </h3>
-                      <p className="text-[#C8A27B] font-bold text-lg">
-                        Rs. {item.price.toFixed(2)}
+                      <p className="text-[#C6A36A] font-medium text-lg mb-2">
+                        ${item.price.toFixed(2)}
                       </p>
                       {item.stockQuantity < 10 && (
-                        <p className="text-orange-500 text-sm">
-                          Only {item.stockQuantity} left in stock
+                        <p className="text-[#C6A36A] text-xs uppercase tracking-wider font-semibold opacity-80">
+                          Limited Availability: {item.stockQuantity} remaining
                         </p>
                       )}
                     </div>
 
                     {/* Quantity Controls */}
-                    <div className="flex items-center gap-3">
-                      <div className="flex items-center gap-2 bg-gray-100 rounded-lg p-1">
+                    <div className="flex sm:flex-col items-center sm:items-end justify-between sm:justify-center gap-4 border-t sm:border-t-0 sm:border-l border-[#ffffff10] pt-4 sm:pt-0 sm:pl-6">
+                      <div className="flex items-center gap-2 bg-[#1A1A1A] border border-[#ffffff15] rounded-lg p-1">
                         <button
                           onClick={() =>
                             handleQuantityChange(
@@ -218,12 +218,12 @@ const Checkout = () => {
                               item.stockQuantity,
                             )
                           }
-                          className="p-1 hover:bg-white rounded transition-colors"
+                          className="p-1 hover:bg-[#333333] hover:text-[#C6A36A] text-white rounded transition-colors disabled:opacity-30 disabled:hover:bg-transparent"
                           disabled={item.quantity <= 1}
                         >
                           <Minus className="w-4 h-4" />
                         </button>
-                        <span className="px-3 font-semibold min-w-8 text-center">
+                        <span className="px-3 font-semibold text-white min-w-8 text-center">
                           {item.quantity}
                         </span>
                         <button
@@ -234,27 +234,28 @@ const Checkout = () => {
                               item.stockQuantity,
                             )
                           }
-                          className="p-1 hover:bg-white rounded transition-colors"
+                          className="p-1 hover:bg-[#333333] hover:text-[#C6A36A] text-white rounded transition-colors disabled:opacity-30 disabled:hover:bg-transparent"
                           disabled={item.quantity >= item.stockQuantity}
                         >
                           <Plus className="w-4 h-4" />
                         </button>
                       </div>
 
-                      <button
-                        onClick={() => handleRemoveItem(item.id, item.name)}
-                        className="p-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors"
-                      >
-                        <Trash2 className="w-5 h-5" />
-                      </button>
-                    </div>
-
-                    {/* Item Total */}
-                    <div className="text-right">
-                      <p className="text-sm text-gray-500">Subtotal</p>
-                      <p className="font-bold text-gray-900">
-                        Rs. {(item.price * item.quantity).toFixed(2)}
-                      </p>
+                      <div className="flex items-center gap-6">
+                        <div className="text-right hidden sm:block">
+                          <p className="text-xs text-[#808080] uppercase tracking-widest mb-1">Subtotal</p>
+                          <p className="font-bold text-white">
+                            ${(item.price * item.quantity).toFixed(2)}
+                          </p>
+                        </div>
+                        <button
+                          onClick={() => handleRemoveItem(item.id, item.name)}
+                          className="p-2 text-[#808080] hover:text-[#C62828] hover:bg-[#C62828]/10 rounded-lg transition-colors border border-transparent hover:border-[#C62828]/30"
+                          title="Remove item"
+                        >
+                          <Trash2 className="w-5 h-5" />
+                        </button>
+                      </div>
                     </div>
                   </div>
                 ))}
@@ -262,84 +263,84 @@ const Checkout = () => {
             </div>
 
             {/* Customer Information Form */}
-            <div className="bg-white rounded-xl shadow-md p-6">
-              <h2 className="text-2xl font-bold text-gray-900 mb-6">
-                Customer Information
+            <div className="luxury-card p-8 bg-[#1A1A1A]">
+              <h2 className="text-2xl font-heading text-white mb-8 border-b border-[#ffffff10] pb-6 uppercase tracking-widest">
+                Billing Details
               </h2>
-              <form className="space-y-4">
+              <form className="space-y-6">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Full Name <span className="text-red-500">*</span>
+                  <label className="block text-xs font-bold text-white uppercase tracking-widest mb-3">
+                    Full Name <span className="text-[#C62828]">*</span>
                   </label>
                   <input
                     type="text"
                     name="customerName"
                     value={formData.customerName}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C8A27B] focus:border-transparent"
+                    className="luxury-input"
                     placeholder="John Doe"
                     required
                   />
                 </div>
 
-                <div className="grid md:grid-cols-2 gap-4">
+                <div className="grid md:grid-cols-2 gap-6">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Email <span className="text-red-500">*</span>
+                    <label className="block text-xs font-bold text-white uppercase tracking-widest mb-3">
+                      Email Address <span className="text-[#C62828]">*</span>
                     </label>
                     <input
                       type="email"
                       name="customerEmail"
                       value={formData.customerEmail}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C8A27B] focus:border-transparent"
+                      className="luxury-input"
                       placeholder="john@example.com"
                       required
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Phone <span className="text-red-500">*</span>
+                    <label className="block text-xs font-bold text-white uppercase tracking-widest mb-3">
+                      Phone Number <span className="text-[#C62828]">*</span>
                     </label>
                     <input
                       type="tel"
                       name="customerPhone"
                       value={formData.customerPhone}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C8A27B] focus:border-transparent"
-                      placeholder="+92 300 1234567"
+                      className="luxury-input"
+                      placeholder="+1 (555) 123-4567"
                       required
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Delivery Address <span className="text-red-500">*</span>
+                  <label className="block text-xs font-bold text-white uppercase tracking-widest mb-3">
+                    Delivery Address <span className="text-[#C62828]">*</span>
                   </label>
                   <textarea
                     name="deliveryAddress"
                     value={formData.deliveryAddress}
                     onChange={handleInputChange}
                     rows={3}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C8A27B] focus:border-transparent"
-                    placeholder="123 Main Street, City, Country"
+                    className="luxury-input resize-none"
+                    placeholder="124 Specialty Ave, Coffee District, Portland..."
                     required
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Order Notes (Optional)
+                  <label className="block text-xs font-bold text-white uppercase tracking-widest mb-3">
+                    Order Notes <span className="text-[#808080] font-normal lowercase tracking-normal">(optional)</span>
                   </label>
                   <textarea
                     name="customerNotes"
                     value={formData.customerNotes}
                     onChange={handleInputChange}
                     rows={2}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C8A27B] focus:border-transparent"
-                    placeholder="Special instructions for delivery..."
+                    className="luxury-input resize-none"
+                    placeholder="Special instructions for the courier..."
                   />
                 </div>
               </form>
@@ -348,30 +349,30 @@ const Checkout = () => {
 
           {/* Order Summary Section */}
           <div className="lg:col-span-1">
-            <div className="bg-white rounded-xl shadow-md p-6 sticky top-4">
-              <h2 className="text-2xl font-bold text-gray-900 mb-6">
+            <div className="luxury-card p-8 bg-[#1A1A1A] sticky top-28">
+              <h2 className="text-2xl font-heading text-white mb-8 border-b border-[#ffffff10] pb-6 uppercase tracking-widest">
                 Order Summary
               </h2>
 
               {/* Totals */}
-              <div className="space-y-3 mb-6">
-                <div className="flex justify-between text-gray-600">
+              <div className="space-y-4 mb-8">
+                <div className="flex justify-between text-[#CCCCCC]">
                   <span>Subtotal ({getItemCount()} items)</span>
-                  <span>Rs. {subtotal.toFixed(2)}</span>
+                  <span>${subtotal.toFixed(2)}</span>
                 </div>
-                <div className="flex justify-between text-gray-600">
+                <div className="flex justify-between text-[#CCCCCC]">
                   <span>Tax (10%)</span>
-                  <span>Rs. {tax.toFixed(2)}</span>
+                  <span>${tax.toFixed(2)}</span>
                 </div>
-                <div className="flex justify-between text-gray-600">
+                <div className="flex justify-between text-[#CCCCCC]">
                   <span>Shipping</span>
-                  <span>Rs. {shipping.toFixed(2)}</span>
+                  <span>${shipping.toFixed(2)}</span>
                 </div>
-                <div className="border-t pt-3">
-                  <div className="flex justify-between text-xl font-bold text-gray-900">
+                <div className="border-t border-[#ffffff10] pt-6 mt-6">
+                  <div className="flex justify-between text-2xl font-heading font-bold text-white">
                     <span>Total</span>
-                    <span className="text-[#C8A27B]">
-                      Rs. {total.toFixed(2)}
+                    <span className="text-[#C6A36A]">
+                      ${total.toFixed(2)}
                     </span>
                   </div>
                 </div>
@@ -381,13 +382,13 @@ const Checkout = () => {
               <button
                 onClick={handleSubmitOrder}
                 disabled={isSubmitting}
-                className="w-full bg-[#4A2F19] text-white py-3 rounded-lg font-semibold hover:bg-[#3A2515] transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed"
+                className="btn-gold-primary w-full shadow-[0_4px_20px_rgba(198,163,106,0.15)] disabled:opacity-50 disabled:shadow-none"
               >
-                {isSubmitting ? "Placing Order..." : "Place Order"}
+                {isSubmitting ? "Processing..." : "Complete Purchase"}
               </button>
 
-              <p className="text-xs text-gray-500 text-center mt-4">
-                By placing your order, you agree to our terms and conditions
+              <p className="text-xs text-[#808080] text-center mt-6 uppercase tracking-widest leading-relaxed">
+                By completing your purchase, you agree to our terms and conditions.
               </p>
             </div>
           </div>

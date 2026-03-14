@@ -25,19 +25,16 @@ import {
   uploadProductImage,
   deleteProductImage,
 } from "../../../services/productService";
+import { useNavigate } from "react-router-dom";
 
 const ProductManagement = () => {
+  const navigate = useNavigate();
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
-  const [showModal, setShowModal] = useState(false);
-  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
-  const [editingProduct, setEditingProduct] = useState(null);
   const [deletingProduct, setDeletingProduct] = useState(null);
-  const [imagePreview, setImagePreview] = useState(null);
-  const [imageFile, setImageFile] = useState(null);
 
   // Pagination
   const [currentPage, setCurrentPage] = useState(1);
@@ -140,37 +137,11 @@ const ProductManagement = () => {
   };
 
   const openCreateModal = () => {
-    setEditingProduct(null);
-    setFormData({
-      name: "",
-      description: "",
-      price: "",
-      stockQuantity: "",
-      lowStockThreshold: "",
-      category: "",
-      isActive: true,
-      isFeatured: false,
-    });
-    setImagePreview(null);
-    setImageFile(null);
-    setShowModal(true);
+    navigate("/admin/products/new");
   };
 
   const openEditModal = (product) => {
-    setEditingProduct(product);
-    setFormData({
-      name: product.name,
-      description: product.description,
-      price: product.price,
-      stockQuantity: product.stockQuantity,
-      lowStockThreshold: product.lowStockThreshold,
-      category: product.category,
-      isActive: product.isActive,
-      isFeatured: product.isFeatured,
-    });
-    setImagePreview(product.imageUrl ? getImageUrl(product.imageUrl) : null);
-    setImageFile(null);
-    setShowModal(true);
+    navigate(`/admin/products/${product.id}/edit`);
   };
 
   const handleImageChange = (e) => {
@@ -189,51 +160,9 @@ const ProductManagement = () => {
     }
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    try {
-      let productData;
-      let result;
-
-      if (editingProduct) {
-        // Exclude stockQuantity from update — stock changes go through the dedicated stock endpoint
-        const { stockQuantity: _stockQuantity, ...updateFields } = formData;
-        productData = {
-          ...updateFields,
-          price: parseFloat(formData.price),
-          lowStockThreshold: parseInt(formData.lowStockThreshold),
-        };
-        result = await updateProduct(editingProduct.id, productData);
-        toast.success("Product updated successfully");
-      } else {
-        productData = {
-          ...formData,
-          price: parseFloat(formData.price),
-          stockQuantity: parseInt(formData.stockQuantity),
-          lowStockThreshold: parseInt(formData.lowStockThreshold),
-        };
-        result = await createProduct(productData);
-        toast.success("Product created successfully");
-      }
-
-      // Upload image if provided
-      const productId = result?.id || editingProduct?.id;
-      if (imageFile && productId) {
-        try {
-          await uploadProductImage(productId, imageFile);
-          toast.success("Image uploaded successfully");
-        } catch {
-          toast.error("Product saved but image upload failed");
-        }
-      }
-
-      setShowModal(false);
-      loadProducts();
-      loadStats();
-    } catch (error) {
-      toast.error(error.message || "Failed to save product");
-      console.error(error);
-    }
+    // Handled in dedicated page now
   };
 
   const handleDeleteImage = async (productId) => {
@@ -538,21 +467,6 @@ const ProductManagement = () => {
         )}
       </div>
 
-      {/* Create/Edit Modal */}
-      {showModal && (
-        <ProductModal
-          editingProduct={editingProduct}
-          formData={formData}
-          setFormData={setFormData}
-          imagePreview={imagePreview}
-          categories={categories}
-          onImageChange={handleImageChange}
-          onDeleteImage={handleDeleteImage}
-          onSubmit={handleSubmit}
-          onClose={() => setShowModal(false)}
-        />
-      )}
-
       {/* Delete Confirmation Modal */}
       {showDeleteConfirm && (
         <DeleteConfirmModal
@@ -583,249 +497,6 @@ const StatCard = ({ icon: Icon, label, value, color }) => (
     </div>
   </div>
 );
-
-// Product Modal Component
-const ProductModal = ({
-  editingProduct,
-  formData,
-  setFormData,
-  imagePreview,
-  categories,
-  onImageChange,
-  onDeleteImage,
-  onSubmit,
-  onClose,
-}) => {
-  return (
-    <div className="fixed inset-0 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto">
-        <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
-          <h2 className="text-2xl font-bold text-[#4A2F19]">
-            {editingProduct ? "Edit Product" : "Create New Product"}
-          </h2>
-          <button
-            onClick={onClose}
-            className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
-          >
-            <X className="w-6 h-6" />
-          </button>
-        </div>
-
-        <form onSubmit={onSubmit} className="p-6">
-          {/* Image Upload */}
-          <div className="mb-6">
-            <label className="block text-sm font-semibold text-gray-700 mb-2">
-              Product Image
-            </label>
-            <div className="flex items-center gap-4">
-              <div className="w-32 h-32 bg-gray-100 rounded-lg overflow-hidden flex items-center justify-center">
-                {imagePreview ? (
-                  <img
-                    src={imagePreview}
-                    alt="Preview"
-                    className="w-full h-full object-cover"
-                  />
-                ) : (
-                  <ImageIcon className="w-12 h-12 text-gray-400" />
-                )}
-              </div>
-              <div className="flex-1">
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={onImageChange}
-                  className="hidden"
-                  id="image-upload"
-                />
-                <label
-                  htmlFor="image-upload"
-                  className="inline-flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg cursor-pointer transition-colors"
-                >
-                  <Upload className="w-4 h-4" />
-                  Upload Image
-                </label>
-                {editingProduct?.imageUrl && (
-                  <button
-                    type="button"
-                    onClick={() => onDeleteImage(editingProduct.id)}
-                    className="ml-2 inline-flex items-center gap-2 px-4 py-2 bg-red-100 hover:bg-red-200 text-red-600 rounded-lg transition-colors"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                    Delete Image
-                  </button>
-                )}
-                <p className="text-xs text-gray-500 mt-2">
-                  Maximum file size: 5MB. Supported formats: JPG, PNG, GIF, WebP
-                </p>
-              </div>
-            </div>
-          </div>
-
-          {/* Product Name */}
-          <div className="mb-4">
-            <label className="block text-sm font-semibold text-gray-700 mb-2">
-              Product Name *
-            </label>
-            <input
-              type="text"
-              required
-              value={formData.name}
-              onChange={(e) =>
-                setFormData({ ...formData, name: e.target.value })
-              }
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C8A27B]"
-              placeholder="Enter product name"
-            />
-          </div>
-
-          {/* Description */}
-          <div className="mb-4">
-            <label className="block text-sm font-semibold text-gray-700 mb-2">
-              Description *
-            </label>
-            <textarea
-              required
-              value={formData.description}
-              onChange={(e) =>
-                setFormData({ ...formData, description: e.target.value })
-              }
-              rows={4}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C8A27B]"
-              placeholder="Enter product description"
-            />
-          </div>
-
-          {/* Price and Stock */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
-                Price ($) *
-              </label>
-              <input
-                type="number"
-                step="0.01"
-                min="0"
-                required
-                value={formData.price}
-                onChange={(e) =>
-                  setFormData({ ...formData, price: e.target.value })
-                }
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C8A27B]"
-                placeholder="0.00"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
-                Stock Quantity *
-              </label>
-              <input
-                type="number"
-                min="0"
-                required
-                value={formData.stockQuantity}
-                onChange={(e) =>
-                  setFormData({ ...formData, stockQuantity: e.target.value })
-                }
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C8A27B]"
-                placeholder="0"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
-                Low Stock Alert *
-              </label>
-              <input
-                type="number"
-                min="0"
-                required
-                value={formData.lowStockThreshold}
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    lowStockThreshold: e.target.value,
-                  })
-                }
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C8A27B]"
-                placeholder="10"
-              />
-            </div>
-          </div>
-
-          {/* Category */}
-          <div className="mb-6">
-            <label className="block text-sm font-semibold text-gray-700 mb-2">
-              Category *
-            </label>
-            <input
-              type="text"
-              required
-              value={formData.category}
-              onChange={(e) =>
-                setFormData({ ...formData, category: e.target.value })
-              }
-              list="categories-list"
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C8A27B]"
-              placeholder="Enter or select category"
-            />
-            <datalist id="categories-list">
-              {categories.map((cat) => (
-                <option key={cat} value={cat} />
-              ))}
-            </datalist>
-          </div>
-
-          {/* Toggles */}
-          <div className="flex gap-6 mb-6">
-            <label className="flex items-center gap-2 cursor-pointer">
-              <input
-                type="checkbox"
-                checked={formData.isActive}
-                onChange={(e) =>
-                  setFormData({ ...formData, isActive: e.target.checked })
-                }
-                className="w-5 h-5 text-[#4A2F19] rounded focus:ring-[#C8A27B]"
-              />
-              <span className="text-sm font-semibold text-gray-700">
-                Active Product
-              </span>
-            </label>
-            <label className="flex items-center gap-2 cursor-pointer">
-              <input
-                type="checkbox"
-                checked={formData.isFeatured}
-                onChange={(e) =>
-                  setFormData({ ...formData, isFeatured: e.target.checked })
-                }
-                className="w-5 h-5 text-[#4A2F19] rounded focus:ring-[#C8A27B]"
-              />
-              <span className="text-sm font-semibold text-gray-700">
-                Featured Product
-              </span>
-            </label>
-          </div>
-
-          {/* Actions */}
-          <div className="flex gap-3 justify-end">
-            <button
-              type="button"
-              onClick={onClose}
-              className="px-6 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              className="flex items-center gap-2 px-6 py-2 bg-[#4A2F19] text-white rounded-lg hover:bg-[#C8A27B] transition-colors"
-            >
-              <Save className="w-4 h-4" />
-              {editingProduct ? "Update Product" : "Create Product"}
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
-  );
-};
 
 // Delete Confirmation Modal
 const DeleteConfirmModal = ({ product, onConfirm, onCancel }) => {
