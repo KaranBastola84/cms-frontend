@@ -72,7 +72,9 @@ const formatMoney = (value) => {
   });
 };
 
-const stripePublishableKey = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY || "";
+const rawStripeKey = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY?.trim() || "";
+const isStripePublishableKeyValid = rawStripeKey.startsWith("pk_");
+const stripePublishableKey = isStripePublishableKeyValid ? rawStripeKey : "";
 const stripePromise = stripePublishableKey
   ? loadStripe(stripePublishableKey)
   : null;
@@ -455,11 +457,12 @@ const StudentAdmission = () => {
 
     setSubmitting(true);
     try {
-      const paymentIntent = await createPaymentIntent({
+      const parsedInstallmentId = parseInt(stripeInstallmentId, 10);
+      const hasValidInstallment =
+        !Number.isNaN(parsedInstallmentId) && parsedInstallmentId > 0;
+
+      const paymentPayload = {
         studentId: Number(activeStudentId),
-        installmentId: stripeInstallmentId
-          ? Number(stripeInstallmentId)
-          : undefined,
         amount,
         currency: stripeCurrency,
         description: `Admission payment for student ${activeStudentId}`,
@@ -467,7 +470,10 @@ const StudentAdmission = () => {
           flow: "student-admission",
           studentId: String(activeStudentId),
         },
-      });
+        ...(hasValidInstallment && { installmentId: parsedInstallmentId }),
+      };
+
+      const paymentIntent = await createPaymentIntent(paymentPayload);
 
       setLastStripePayment(paymentIntent);
       setStripeClientSecret(paymentIntent?.clientSecret || "");
@@ -877,8 +883,9 @@ const StudentAdmission = () => {
                 </h3>
                 {!stripePublishableKey && (
                   <div className="p-2 rounded bg-yellow-100 text-yellow-800 text-xs">
-                    Set `VITE_STRIPE_PUBLISHABLE_KEY` in your `.env` file to use
-                    Stripe Elements checkout.
+                    {!rawStripeKey
+                      ? "Set VITE_STRIPE_PUBLISHABLE_KEY in your .env file to use Stripe Elements checkout."
+                      : "VITE_STRIPE_PUBLISHABLE_KEY must start with pk_. Do not use an sk_ secret key in the frontend."}
                   </div>
                 )}
                 <input
