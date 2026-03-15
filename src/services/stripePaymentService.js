@@ -180,6 +180,31 @@ export const confirmPayment = async (paymentId) => {
 };
 
 /**
+ * Confirm payment using Stripe PaymentIntent ID
+ * @param {string} paymentIntentId - Stripe PaymentIntent ID (pi_...)
+ * @returns {Promise} Confirmation result
+ */
+export const confirmPaymentByIntent = async (paymentIntentId) => {
+  try {
+    if (
+      !paymentIntentId ||
+      typeof paymentIntentId !== "string" ||
+      !paymentIntentId.trim()
+    ) {
+      throw new Error("PaymentIntent ID is required");
+    }
+
+    const response = await apiInstance.post(
+      `/api/StripePayment/confirm-by-intent/${encodeURIComponent(paymentIntentId.trim())}`,
+    );
+    return response.data.result;
+  } catch (error) {
+    console.error("Error confirming payment by intent:", error);
+    throw error.response?.data || error.message;
+  }
+};
+
+/**
  * Cancel a payment intent (Admin/Staff)
  * @param {number} paymentId - Payment ID
  * @param {string} reason - Cancellation reason (optional)

@@ -37,6 +37,7 @@ import {
   uploadStudentDocument,
 } from "../../../services/studentDocumentService";
 import {
+  confirmPaymentByIntent,
   createPaymentIntent,
   getPaymentDetails,
 } from "../../../services/stripePaymentService";
@@ -508,6 +509,22 @@ const StudentAdmission = () => {
     toast.success(
       "Stripe payment submitted successfully. Syncing enrollment...",
     );
+
+    const paymentIntentId = paymentIntent?.id;
+    if (paymentIntentId) {
+      try {
+        const confirmed = await confirmPaymentByIntent(paymentIntentId);
+        if (confirmed) {
+          setLastStripePayment(confirmed);
+        }
+      } catch (error) {
+        const errorMessage =
+          error?.errorMessage?.[0] ||
+          error?.message ||
+          "Payment succeeded, but confirmation sync failed. Please refresh status.";
+        toast.error(errorMessage);
+      }
+    }
 
     if (lastStripePayment?.paymentId) {
       try {
