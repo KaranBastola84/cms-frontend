@@ -1,4 +1,9 @@
 import apiInstance from "../config/api";
+import { extractApiErrorMessage } from "../utils/helpers";
+
+const throwApiError = (error, fallbackMessage) => {
+  throw new Error(extractApiErrorMessage(error, fallbackMessage));
+};
 
 /**
  * Stripe Payment Service
@@ -120,7 +125,7 @@ export const createPaymentIntent = async (paymentData) => {
     return response.data.result;
   } catch (error) {
     console.error("Error creating payment intent:", error);
-    throw error.response?.data || error.message;
+    throwApiError(error, "Failed to create payment intent");
   }
 };
 
@@ -137,7 +142,7 @@ export const getPaymentDetails = async (paymentId) => {
     return response.data.result;
   } catch (error) {
     console.error("Error fetching payment details:", error);
-    throw error.response?.data || error.message;
+    throwApiError(error, "Failed to fetch payment details");
   }
 };
 
@@ -200,7 +205,7 @@ export const confirmPaymentByIntent = async (paymentIntentId) => {
     return response.data.result;
   } catch (error) {
     console.error("Error confirming payment by intent:", error);
-    throw error.response?.data || error.message;
+    throwApiError(error, "Failed to confirm payment");
   }
 };
 

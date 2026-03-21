@@ -1,4 +1,5 @@
 import apiInstance from "../config/api";
+import { extractApiErrorMessage } from "../utils/helpers";
 
 const parseNumber = (value, fieldName) => {
   const numeric = Number(value);
@@ -22,12 +23,7 @@ const getEntityId = (entity) => {
 };
 
 const throwApiError = (error, fallbackMessage) => {
-  const message =
-    error?.response?.data?.message ||
-    error?.response?.data?.error ||
-    error?.response?.data?.title ||
-    error?.message ||
-    fallbackMessage;
+  const message = extractApiErrorMessage(error, fallbackMessage);
   throw new Error(message);
 };
 

@@ -18,6 +18,7 @@ import {
   Users,
 } from "lucide-react";
 import toast from "react-hot-toast";
+import { extractApiErrorMessage } from "../../../utils/helpers";
 import { getAllCourses } from "../../../services/courseService";
 import { getAllBatches } from "../../../services/batchService";
 import {
@@ -518,10 +519,10 @@ const StudentAdmission = () => {
           setLastStripePayment(confirmed);
         }
       } catch (error) {
-        const errorMessage =
-          error?.errorMessage?.[0] ||
-          error?.message ||
-          "Payment succeeded, but confirmation sync failed. Please refresh status.";
+        const errorMessage = extractApiErrorMessage(
+          error,
+          "Payment succeeded, but confirmation sync failed. Please refresh status.",
+        );
         toast.error(errorMessage);
       }
     }

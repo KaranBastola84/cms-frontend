@@ -1,4 +1,5 @@
 import apiInstance from "../config/api";
+import { extractApiErrorMessage } from "../utils/helpers";
 
 const validateId = (id, label = "ID") => {
   const numericId = Number(id);
@@ -9,12 +10,7 @@ const validateId = (id, label = "ID") => {
 };
 
 const throwApiError = (error, fallbackMessage) => {
-  const message =
-    error?.response?.data?.message ||
-    error?.response?.data?.error ||
-    error?.response?.data?.title ||
-    error?.message ||
-    fallbackMessage;
+  const message = extractApiErrorMessage(error, fallbackMessage);
   throw new Error(message);
 };
 
