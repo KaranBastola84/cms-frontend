@@ -363,7 +363,7 @@ const ProductCard = ({ product, onViewDetails, onAddToCart, featured }) => {
           </div>
         )}
         {isOutOfStock && (
-          <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+          <div className="absolute inset-0 backdrop-blur-md bg-opacity-50 flex items-center justify-center">
             <span className="bg-red-500 text-white px-4 py-2 rounded-lg font-bold">
               OUT OF STOCK
             </span>

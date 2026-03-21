@@ -516,7 +516,7 @@ const Inquiries = () => {
 
       {/* Details Modal */}
       {showDetailsModal && selectedInquiry && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 overflow-y-auto">
+        <div className="fixed inset-0 backdrop-blur-md fbackdrop-blur-mdlex items-center justify-center z-50 p-4 overflow-y-auto">
           <div className="bg-white rounded-xl shadow-2xl max-w-3xl w-full p-6 my-8">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-xl font-bold text-[#1A1A1A]">
@@ -661,7 +661,7 @@ const Inquiries = () => {
 
       {/* Status Update Modal */}
       {showStatusModal && selectedInquiry && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+        <div className="fixed inset-0 backdrop-blur-md bg-opacity-50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-xl shadow-2xl max-w-md w-full p-6">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-xl font-bold text-[#1A1A1A]">
@@ -748,7 +748,7 @@ const Inquiries = () => {
 
       {/* Assign Modal */}
       {showAssignModal && selectedInquiry && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+        <div className="fixed inset-0 backdrop-blur-md bg-opacity-50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-xl shadow-2xl max-w-md w-full p-6">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-xl font-bold text-[#1A1A1A]">
@@ -813,7 +813,7 @@ const Inquiries = () => {
 
       {/* Delete Modal */}
       {showDeleteModal && selectedInquiry && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+        <div className="fixed inset-0 backdrop-blur-md  bg-opacity-50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-xl shadow-2xl max-w-md w-full p-6">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-xl font-bold text-[#1A1A1A]">

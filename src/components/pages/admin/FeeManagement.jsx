@@ -363,7 +363,7 @@ function FeeManagement() {
 
       {/* Create Fee Modal */}
       {showCreateModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div className="fixed inset-0 backdrop-blur-md bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg shadow-xl max-w-md w-full mx-4">
             <div className="p-6 border-b border-[#E8DCC8]">
               <h2 className="text-2xl font-bold text-[#3D2817]">
@@ -478,7 +478,7 @@ function FeeManagement() {
 
       {/* Edit Fee Modal */}
       {showEditModal && editingFee && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div className="fixed inset-0 backdrop-blur-md bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg shadow-xl max-w-md w-full mx-4">
             <div className="p-6 border-b border-[#E8DCC8]">
               <h2 className="text-2xl font-bold text-[#3D2817]">
@@ -584,7 +584,7 @@ function FeeManagement() {
 
       {/* Course Details Modal */}
       {showCourseDetailsModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div className="fixed inset-0 backdrop-blur-md bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
             <div className="p-6 border-b border-[#E8DCC8] sticky top-0 bg-white">
               <div className="flex justify-between items-start">
