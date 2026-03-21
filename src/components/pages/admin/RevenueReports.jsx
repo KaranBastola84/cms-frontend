@@ -43,7 +43,7 @@ function RevenueReports() {
       setRevenueData(data);
       toast.success("Revenue report generated");
     } catch (error) {
-      toast.error("Failed to generate revenue report");
+      toast.error(error.message || "Failed to generate revenue report");
       console.error("Error fetching revenue report:", error);
       setRevenueData(null);
     } finally {
@@ -63,7 +63,7 @@ function RevenueReports() {
       setCourseRevenueData(data);
       toast.success("Course revenue report generated");
     } catch (error) {
-      toast.error("Failed to generate course revenue report");
+      toast.error(error.message || "Failed to generate course revenue report");
       console.error("Error fetching course revenue:", error);
       setCourseRevenueData(null);
     } finally {

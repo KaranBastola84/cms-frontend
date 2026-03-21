@@ -88,7 +88,7 @@ const ProductManagement = () => {
         setTotalItems(0);
       }
     } catch (error) {
-      toast.error("Failed to load products");
+      toast.error(error.message || "Failed to load products");
       console.error(error);
       setProducts([]);
       setTotalPages(1);
@@ -242,7 +242,7 @@ const ProductManagement = () => {
       toast.success("Image deleted successfully");
       loadProducts();
     } catch (error) {
-      toast.error("Failed to delete image");
+      toast.error(error.message || "Failed to delete image");
       console.error(error);
     }
   };
@@ -278,7 +278,7 @@ const ProductManagement = () => {
         loadProducts();
         loadStats();
       } catch (error) {
-        toast.error("Failed to update stock");
+        toast.error(error.message || "Failed to update stock");
         console.error(error);
       }
     }

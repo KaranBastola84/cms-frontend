@@ -65,7 +65,7 @@ const Products = () => {
         setTotalItems(0);
       }
     } catch (error) {
-      toast.error("Failed to load products");
+      toast.error(error.message || "Failed to load products");
       console.error(error);
       setProducts([]); // Set empty array on error
       setTotalPages(1);
@@ -85,7 +85,7 @@ const Products = () => {
       setFeaturedProducts(Array.isArray(featuredData) ? featuredData : []);
       setCategories(Array.isArray(categoriesData) ? categoriesData : []);
     } catch (error) {
-      toast.error("Failed to load initial data");
+      toast.error(error.message || "Failed to load initial data");
       console.error(error);
       setFeaturedProducts([]);
       setCategories([]);
@@ -127,7 +127,7 @@ const Products = () => {
       const fullProduct = await getProductById(product.id);
       setSelectedProduct(fullProduct); // Replace with full detail
     } catch (error) {
-      toast.error("Failed to load product details");
+      toast.error(error.message || "Failed to load product details");
       console.error(error);
     }
   };

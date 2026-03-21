@@ -77,7 +77,7 @@ function OutstandingPayments() {
       setOutstandingPayments(data || []);
       setFilteredPayments(data || []);
     } catch (error) {
-      toast.error("Failed to load outstanding payments");
+      toast.error(error.message || "Failed to load outstanding payments");
       console.error("Error fetching outstanding payments:", error);
     } finally {
       setLoading(false);
@@ -90,7 +90,7 @@ function OutstandingPayments() {
       const data = await getPaymentDefaulters(overdueDays);
       setDefaulters(data || []);
     } catch (error) {
-      toast.error("Failed to load payment defaulters");
+      toast.error(error.message || "Failed to load payment defaulters");
       console.error("Error fetching payment defaulters:", error);
     } finally {
       setLoading(false);

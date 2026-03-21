@@ -82,7 +82,7 @@ function AdminDashboard() {
       setAttendance(attendanceData);
     } catch (error) {
       setError(true);
-      toast.error("Failed to load dashboard data");
+      toast.error(error.message || "Failed to load dashboard data");
       console.error("Dashboard data fetch error:", error);
     } finally {
       setLoading(false);

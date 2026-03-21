@@ -74,7 +74,7 @@ function FeeManagement() {
       setFeeStructures(data || []);
       setFilteredFees(data || []);
     } catch (error) {
-      toast.error("Failed to load fee structures");
+      toast.error(error.message || "Failed to load fee structures");
       console.error("Error fetching fee structures:", error);
       setFeeStructures([]);
       setFilteredFees([]);
@@ -98,7 +98,7 @@ function FeeManagement() {
       });
       fetchFeeStructures();
     } catch (error) {
-      toast.error("Failed to create fee structure");
+      toast.error(error.message || "Failed to create fee structure");
       console.error("Error creating fee structure:", error);
     }
   };
@@ -112,7 +112,7 @@ function FeeManagement() {
       setEditingFee(null);
       fetchFeeStructures();
     } catch (error) {
-      toast.error("Failed to update fee structure");
+      toast.error(error.message || "Failed to update fee structure");
       console.error("Error updating fee structure:", error);
     }
   };
@@ -129,7 +129,7 @@ function FeeManagement() {
       toast.success("Fee structure deleted successfully");
       fetchFeeStructures();
     } catch (error) {
-      toast.error("Failed to delete fee structure");
+      toast.error(error.message || "Failed to delete fee structure");
       console.error("Error deleting fee structure:", error);
     }
   };
@@ -149,7 +149,7 @@ function FeeManagement() {
       ]);
       setCourseDetails({ ...totalFeeData, fees: courseFees });
     } catch (error) {
-      toast.error("Failed to load course details");
+      toast.error(error.message || "Failed to load course details");
       console.error(error);
       setShowCourseDetailsModal(false);
     } finally {

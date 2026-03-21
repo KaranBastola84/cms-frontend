@@ -22,8 +22,8 @@ const ProductReview = ({ productId }) => {
     try {
       const data = await productReviewService.getReviewsByProduct(productId);
       setReviews(Array.isArray(data) ? data : []);
-    } catch {
-      toast.error("Failed to load reviews");
+    } catch (error) {
+      toast.error(error.message || "Failed to load reviews");
     } finally {
       setLoading(false);
     }
@@ -48,8 +48,8 @@ const ProductReview = ({ productId }) => {
         reviewText: "",
       });
       fetchReviews();
-    } catch {
-      toast.error("Failed to submit review");
+    } catch (error) {
+      toast.error(error.message || "Failed to submit review");
     }
   };
 

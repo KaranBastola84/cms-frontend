@@ -43,7 +43,7 @@ function StudentDashboard() {
       setPayments(paymentsData || []);
     } catch (error) {
       console.error("Error fetching student data:", error);
-      toast.error("Failed to load some data");
+      toast.error(error.message || "Failed to load some data");
     } finally {
       setLoading(false);
     }
@@ -60,7 +60,7 @@ function StudentDashboard() {
       await downloadReceipt(receiptId, `${receiptNumber}.pdf`);
       toast.success("Receipt downloaded successfully");
     } catch (error) {
-      toast.error("Failed to download receipt");
+      toast.error(error.message || "Failed to download receipt");
       console.error(error);
     }
   };

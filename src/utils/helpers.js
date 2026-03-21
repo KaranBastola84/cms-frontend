@@ -50,3 +50,42 @@ export const getImageUrl = (relativePath) => {
 
   return `${APP_CONFIG.baseURL}/${cleanPath}`;
 };
+
+/**
+ * Extract a user-friendly message from the API error shape.
+ * Supports backend responses like: { errorMessage: ["..."] }.
+ * @param {unknown} error - Error object/string from axios or service layer
+ * @param {string} fallback - Message used if no API error can be resolved
+ * @returns {string}
+ */
+export const extractApiErrorMessage = (
+  error,
+  fallback = "Something went wrong. Please try again.",
+) => {
+  if (!error) return fallback;
+
+  if (typeof error === "string") {
+    return error;
+  }
+
+  if (Array.isArray(error)) {
+    return error.filter(Boolean).join(" ") || fallback;
+  }
+
+  const responseData = error?.response?.data;
+  const candidate = responseData || error;
+
+  if (Array.isArray(candidate?.errorMessage)) {
+    return candidate.errorMessage.filter(Boolean).join(" ") || fallback;
+  }
+
+  if (typeof candidate?.errorMessage === "string" && candidate.errorMessage) {
+    return candidate.errorMessage;
+  }
+
+  if (typeof candidate?.message === "string" && candidate.message) {
+    return candidate.message;
+  }
+
+  return fallback;
+};

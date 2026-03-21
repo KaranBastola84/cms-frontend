@@ -125,7 +125,7 @@ function AuditLogs() {
       setLogs(data || []);
     } catch (error) {
       console.error("Error fetching audit logs:", error);
-      toast.error("Failed to fetch audit logs");
+      toast.error(error.message || "Failed to fetch audit logs");
     } finally {
       setLoading(false);
     }

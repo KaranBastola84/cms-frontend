@@ -119,7 +119,7 @@ const Inquiries = () => {
         (u) => (u.role === "Admin" || u.role === "Staff") && u.isActive,
       );
       setStaff(staffList);
-    } catch {
+    } catch (error) {
       // Silent fail - staff filter will just be empty
     }
   };
@@ -128,8 +128,8 @@ const Inquiries = () => {
     try {
       const data = await inquiryService.getFollowUps(inquiryId);
       setFollowUps(data || []);
-    } catch {
-      toast.error("Failed to fetch follow-ups");
+    } catch (error) {
+      toast.error(error.message || "Failed to fetch follow-ups");
     }
   };
 

@@ -101,7 +101,7 @@ function PaymentPlans() {
       setFilteredPlans([]);
       toast.success("Payment plan created. Use filters to view plans.");
     } catch (error) {
-      toast.error("Failed to create payment plan");
+      toast.error(error.message || "Failed to create payment plan");
       console.error("Error creating payment plan:", error);
     }
   };
@@ -112,7 +112,7 @@ function PaymentPlans() {
       setSelectedPlan(details);
       setShowDetailsModal(true);
     } catch (error) {
-      toast.error("Failed to load plan details");
+      toast.error(error.message || "Failed to load plan details");
       console.error("Error fetching plan details:", error);
     }
   };
@@ -137,7 +137,7 @@ function PaymentPlans() {
         viewPlanDetails(selectedPlan.paymentPlanId);
       }
     } catch (error) {
-      toast.error("Failed to process payment");
+      toast.error(error.message || "Failed to process payment");
       console.error("Error paying installment:", error);
     }
   };
@@ -154,7 +154,7 @@ function PaymentPlans() {
       setFilteredPlans(plans || []);
       toast.success(`Showing plans for student ID ${filterByStudent}`);
     } catch (error) {
-      toast.error("Failed to fetch student plans");
+      toast.error(error.message || "Failed to fetch student plans");
       console.error(error);
     } finally {
       setLoading(false);
@@ -173,7 +173,7 @@ function PaymentPlans() {
       setFilteredPlans(plans || []);
       toast.success(`Showing plans for course ID ${filterByCourse}`);
     } catch (error) {
-      toast.error("Failed to fetch course plans");
+      toast.error(error.message || "Failed to fetch course plans");
       console.error(error);
     } finally {
       setLoading(false);
@@ -197,7 +197,7 @@ function PaymentPlans() {
       }
       setSelectedPlan(null);
     } catch (error) {
-      toast.error("Failed to update status");
+      toast.error(error.message || "Failed to update status");
       console.error(error);
     }
   };
