@@ -31,6 +31,7 @@ import {
   CheckCircle,
   RefreshCw,
   ShieldCheck,
+  Loader2,
 } from "lucide-react";
 import { useAuth } from "../../hooks/useAuth";
 import dashboardService from "../../services/dashboardService";
@@ -44,7 +45,14 @@ const DashboardLayout = ({ children }) => {
   const [unreadCount, setUnreadCount] = useState(0);
   const [showNotifications, setShowNotifications] = useState(false);
   const [loadingNotifications, setLoadingNotifications] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [debouncedSearchQuery, setDebouncedSearchQuery] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
+  const [searchLoading, setSearchLoading] = useState(false);
+  const [showSearchDropdown, setShowSearchDropdown] = useState(false);
+  const [searchError, setSearchError] = useState(false);
   const notificationRef = useRef(null);
+  const searchRef = useRef(null);
 
   const fetchNotifications = async () => {
     setLoadingNotifications(true);
@@ -156,6 +164,46 @@ const DashboardLayout = ({ children }) => {
     fetchNotifications();
   }, []);
 
+  // Debounce global search input
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearchQuery(searchQuery.trim());
+    }, 300);
+
+    return () => clearTimeout(timer);
+  }, [searchQuery]);
+
+  // Fetch global search results
+  useEffect(() => {
+    const runSearch = async () => {
+      if (debouncedSearchQuery.length < 1) {
+        setSearchResults([]);
+        setSearchLoading(false);
+        setSearchError(false);
+        return;
+      }
+
+      setSearchLoading(true);
+      setSearchError(false);
+      try {
+        const data = await dashboardService.globalSearch(
+          debouncedSearchQuery,
+          15,
+        );
+        setSearchResults(Array.isArray(data?.results) ? data.results : []);
+      } catch (error) {
+        console.error("Error searching dashboard:", error);
+        setSearchResults([]);
+        setSearchError(true);
+        setShowSearchDropdown(true);
+      } finally {
+        setSearchLoading(false);
+      }
+    };
+
+    runSearch();
+  }, [debouncedSearchQuery]);
+
   // Close notification panel when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -175,6 +223,47 @@ const DashboardLayout = ({ children }) => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [showNotifications]);
+
+  // Close search dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (searchRef.current && !searchRef.current.contains(event.target)) {
+        setShowSearchDropdown(false);
+      }
+    };
+
+    if (showSearchDropdown) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [showSearchDropdown]);
+
+  const groupedSearchResults = searchResults.reduce((acc, item) => {
+    const groupKey = item?.type || "Other";
+    if (!acc[groupKey]) acc[groupKey] = [];
+    acc[groupKey].push(item);
+    return acc;
+  }, {});
+
+  const searchTypeIconMap = {
+    Student: Users,
+    Course: BookOpen,
+    Batch: CalendarClock,
+    Inquiry: MessageSquare,
+  };
+
+  const handleSearchResultClick = (result) => {
+    if (!result?.navigateTo) return;
+    navigate(result.navigateTo);
+    setShowSearchDropdown(false);
+    setSearchQuery("");
+    setDebouncedSearchQuery("");
+    setSearchResults([]);
+    setSearchError(false);
+  };
 
   const toggleDropdown = (groupName) => {
     setOpenDropdowns((prev) => ({
@@ -657,13 +746,83 @@ const DashboardLayout = ({ children }) => {
         <header className="bg-[#fffcf5] shadow-coffee-sm border-b border-[#C8A27B]/20 px-6 py-4">
           <div className="flex items-center justify-between gap-6">
             {/* Search Bar */}
-            <div className="flex-1 max-w-2xl relative">
+            <div className="flex-1 max-w-2xl relative" ref={searchRef}>
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-[#6B4423]" />
               <input
                 type="text"
                 placeholder="Search courses, students, schedules..."
+                value={searchQuery}
+                onChange={(e) => {
+                  setSearchQuery(e.target.value);
+                  setSearchError(false);
+                  setShowSearchDropdown(true);
+                }}
+                onFocus={() => setShowSearchDropdown(true)}
                 className="w-full pl-10 pr-4 py-2 rounded-xl border border-[#C8A27B]/30 bg-[#F5EFE6]/50 focus:outline-none focus:border-[#4A2F19] focus:ring-2 focus:ring-[#4A2F19]/20 transition-all text-[#1A1A1A] placeholder-[#6B4423]/60"
               />
+
+              {showSearchDropdown && (
+                <div className="absolute z-50 mt-2 w-full bg-white border border-[#C8A27B]/30 rounded-xl shadow-coffee-lg overflow-hidden">
+                  {searchLoading ? (
+                    <div className="p-4 flex items-center justify-center gap-2 text-sm text-[#6B4423]">
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                      Searching...
+                    </div>
+                  ) : !debouncedSearchQuery ? (
+                    <div className="p-4 text-sm text-[#6B4423]">
+                      Start typing to search students, courses, batches, and
+                      inquiries.
+                    </div>
+                  ) : searchResults.length === 0 ? (
+                    <div className="p-4 text-sm text-[#6B4423]">
+                      No results
+                      {searchError ? "" : ` for "${debouncedSearchQuery}".`}
+                    </div>
+                  ) : (
+                    <div className="max-h-96 overflow-y-auto">
+                      {Object.entries(groupedSearchResults).map(
+                        ([type, items]) => {
+                          const TypeIcon =
+                            searchTypeIconMap[type] || FileSearch;
+                          return (
+                            <div
+                              key={type}
+                              className="border-b border-[#EFE7D3] last:border-b-0"
+                            >
+                              <div className="px-3 py-2 bg-[#F5EFE6]/60 text-xs font-bold text-[#6B4423] uppercase tracking-wide flex items-center gap-2">
+                                <TypeIcon className="w-3.5 h-3.5" />
+                                {type}
+                              </div>
+                              {items.map((result) => (
+                                <button
+                                  key={`${type}-${result.id}`}
+                                  type="button"
+                                  onClick={() =>
+                                    handleSearchResultClick(result)
+                                  }
+                                  className="w-full text-left px-3 py-2.5 hover:bg-[#EFE7D3]/60 transition-colors"
+                                >
+                                  <p className="m-0 text-sm font-semibold text-[#1A1A1A]">
+                                    {result.title}
+                                  </p>
+                                  <p className="m-0 text-xs text-[#6B4423]">
+                                    {result.subtitle || "-"}
+                                  </p>
+                                  {result.status && (
+                                    <span className="inline-block mt-1 text-[11px] px-2 py-0.5 rounded-full bg-[#EFE7D3] text-[#4A2F19] font-semibold">
+                                      {result.status}
+                                    </span>
+                                  )}
+                                </button>
+                              ))}
+                            </div>
+                          );
+                        },
+                      )}
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
 
             {/* Right Section: Notifications & Profile */}
