@@ -120,10 +120,12 @@ function AdminDashboard() {
 
   if (loading) {
     return (
-      <div className="min-h-105 rounded-3xl bg-linear-to-br from-slate-900 via-slate-800 to-amber-900/70 p-8 flex items-center justify-center">
-        <div className="text-center text-white">
-          <Loader2 className="w-10 h-10 text-amber-200 animate-spin mx-auto mb-3" />
-          <p className="text-amber-100 text-sm tracking-wide">
+      <div className="min-h-105 mb-6 caramel-cream-gradient text-[#4A2F19] p-8 rounded-2xl border border-[#C8A27B]/50 shadow-coffee-lg flex items-center justify-center">
+        <div className="text-center">
+          <div className="bg-white/65 p-4 rounded-2xl border border-[#4A2F19]/15 inline-flex mb-3">
+            <Loader2 className="w-8 h-8 text-[#6B4423] animate-spin" />
+          </div>
+          <p className="text-[#6B4423] text-sm tracking-wide font-semibold">
             Loading dashboard data...
           </p>
         </div>
@@ -249,7 +251,7 @@ function AdminDashboard() {
             </div>
             <div>
               <h2 className="text-3xl md:text-4xl font-black tracking-tight m-0">
-                Admin Command Center
+                Admin Dashboard
               </h2>
               <p className="m-0 mt-2 text-[#6B4423] max-w-2xl">
                 A sharper view of students, finances, inquiries, and operations
