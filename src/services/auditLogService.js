@@ -42,6 +42,29 @@ const auditLogService = {
       throw error;
     }
   },
+
+  // Export audit logs PDF
+  exportPdf: async () => {
+    try {
+      const response = await api.get('/api/AuditLog/export/pdf', {
+        responseType: 'blob',
+      });
+
+      const disposition = response.headers?.['content-disposition'] || '';
+      const filenameMatch = disposition.match(/filename\*?=(?:UTF-8''|"?)([^";]+)/i);
+      const filename = filenameMatch
+        ? decodeURIComponent(filenameMatch[1].replace(/"/g, ''))
+        : `audit-logs-${new Date().toISOString().slice(0, 10)}.pdf`;
+
+      return {
+        blob: response.data,
+        filename,
+      };
+    } catch (error) {
+      console.error('Error exporting audit logs PDF:', error);
+      throw error;
+    }
+  },
 };
 
 export default auditLogService;

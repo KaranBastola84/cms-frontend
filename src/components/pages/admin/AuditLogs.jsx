@@ -4,6 +4,7 @@ import {
   Filter,
   Search,
   RefreshCw,
+  Download,
   LogIn,
   UserPlus,
   Edit,
@@ -30,6 +31,7 @@ function AuditLogs() {
   const [filterModule, setFilterModule] = useState("All");
   const [filterAction, setFilterAction] = useState("All");
   const [expandedLog, setExpandedLog] = useState(null);
+  const [exporting, setExporting] = useState(false);
 
   const actionTypes = {
     0: {
@@ -128,6 +130,27 @@ function AuditLogs() {
       toast.error(error.message || "Failed to fetch audit logs");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleExportPdf = async () => {
+    setExporting(true);
+    try {
+      const { blob, filename } = await auditLogService.exportPdf();
+      const downloadUrl = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = downloadUrl;
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.URL.revokeObjectURL(downloadUrl);
+      toast.success("Audit logs PDF exported successfully");
+    } catch (error) {
+      console.error("Error exporting audit logs PDF:", error);
+      toast.error(error.message || "Failed to export audit logs PDF");
+    } finally {
+      setExporting(false);
     }
   };
 
@@ -251,6 +274,19 @@ function AuditLogs() {
           >
             <RefreshCw className="w-4 h-4" />
             Refresh
+          </button>
+
+          <button
+            onClick={handleExportPdf}
+            disabled={exporting}
+            className="px-4 py-2 bg-[#6B4423] text-white rounded-lg hover:bg-[#8B5E34] transition-all flex items-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
+          >
+            {exporting ? (
+              <Loader2 className="w-4 h-4 animate-spin" />
+            ) : (
+              <Download className="w-4 h-4" />
+            )}
+            {exporting ? "Exporting..." : "Export PDF"}
           </button>
         </div>
 
