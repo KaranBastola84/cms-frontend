@@ -32,7 +32,7 @@ import {
 } from "../../../services/studentService";
 import {
   deleteStudentDocument,
-  getDocumentDownloadUrl,
+  downloadStudentDocument,
   getStudentDocuments,
   uploadMultipleStudentDocuments,
   uploadStudentDocument,
@@ -164,6 +164,7 @@ const StudentAdmission = () => {
   const [multiDocumentFiles, setMultiDocumentFiles] = useState([]);
 
   const [submitting, setSubmitting] = useState(false);
+  const [downloadingDocumentId, setDownloadingDocumentId] = useState(null);
   const [loadingRefs, setLoadingRefs] = useState(true);
   const [loadingSummary, setLoadingSummary] = useState(false);
   const [loadingLists, setLoadingLists] = useState(true);
@@ -412,6 +413,26 @@ const StudentAdmission = () => {
       toast.error(error.message || "Failed to delete document");
     } finally {
       setSubmitting(false);
+    }
+  };
+
+  const handleDownloadDocument = async (documentId, fileName) => {
+    setDownloadingDocumentId(documentId);
+    try {
+      const { blob, filename } = await downloadStudentDocument(documentId);
+      const objectUrl = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = objectUrl;
+      link.download = filename || fileName || `document-${documentId}`;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.URL.revokeObjectURL(objectUrl);
+      toast.success("Document downloaded");
+    } catch (error) {
+      toast.error(error.message || "Failed to download document");
+    } finally {
+      setDownloadingDocumentId(null);
     }
   };
 
@@ -1291,14 +1312,18 @@ const StudentAdmission = () => {
                               {doc.documentTypeName || doc.documentType || "-"}
                             </p>
                             <div className="flex gap-2 mt-1">
-                              <a
-                                className="px-2 py-1 rounded bg-blue-700 text-white"
-                                href={getDocumentDownloadUrl(documentId)}
-                                target="_blank"
-                                rel="noreferrer"
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  handleDownloadDocument(documentId, fileName)
+                                }
+                                disabled={downloadingDocumentId === documentId}
+                                className="px-2 py-1 rounded bg-blue-700 text-white disabled:opacity-60 disabled:cursor-not-allowed"
                               >
-                                Download
-                              </a>
+                                {downloadingDocumentId === documentId
+                                  ? "Downloading..."
+                                  : "Download"}
+                              </button>
                               <button
                                 type="button"
                                 onClick={() => handleDeleteDocument(documentId)}
