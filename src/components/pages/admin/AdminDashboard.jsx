@@ -34,29 +34,6 @@ function AdminDashboard() {
 
   const formatCurrency = (value) => `$${(value || 0).toLocaleString()}`;
 
-  const quickActions = [
-    {
-      title: "Student Management",
-      description: "Handle enrollment, status, and records",
-      to: "/admin/student-management",
-    },
-    {
-      title: "Inquiries",
-      description: "Respond to pending inquiries fast",
-      to: "/admin/inquiries",
-    },
-    {
-      title: "Financial Dashboard",
-      description: "Track revenue and payment health",
-      to: "/admin/financial-dashboard",
-    },
-    {
-      title: "Outstanding Payments",
-      description: "Review overdue balances",
-      to: "/admin/outstanding-payments",
-    },
-  ];
-
   const fetchDashboardData = async () => {
     setLoading(true);
     setError(false);
@@ -303,38 +280,6 @@ function AdminDashboard() {
             </div>
           );
         })}
-      </div>
-
-      <div className="grid grid-cols-1 gap-4">
-        <div className="rounded-2xl bg-white border border-slate-200 shadow-sm p-5">
-          <div className="flex items-center gap-2 mb-4">
-            <Sparkles className="w-5 h-5 text-amber-700" />
-            <h3 className="text-lg font-bold text-slate-900 m-0">
-              Quick Actions
-            </h3>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            {quickActions.map((action, index) => (
-              <Link
-                key={index}
-                to={action.to}
-                className="group rounded-xl border border-slate-200 bg-slate-50/70 p-4 hover:bg-white hover:border-amber-300 hover:shadow-md transition-all h-full block"
-              >
-                <div className="flex items-start justify-between gap-2">
-                  <div>
-                    <p className="text-sm font-bold text-slate-900 m-0">
-                      {action.title}
-                    </p>
-                    <p className="text-xs text-slate-600 m-0 mt-1">
-                      {action.description}
-                    </p>
-                  </div>
-                  <ArrowUpRight className="w-4 h-4 text-slate-400 group-hover:text-amber-700" />
-                </div>
-              </Link>
-            ))}
-          </div>
-        </div>
       </div>
 
       {overview && (
