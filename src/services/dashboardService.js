@@ -1,16 +1,29 @@
 import api from "../config/api";
 
+const getErrorMessage = (responseData, fallbackMessage) => {
+  return responseData?.errorMessage?.join(", ") || fallbackMessage;
+};
+
+const ensureSuccess = (response, fallbackMessage) => {
+  if (response.data.isSuccess) {
+    return response.data.result;
+  }
+
+  throw new Error(getErrorMessage(response.data, fallbackMessage));
+};
+
+const clampLimit = (limit, min, max, fallback) => {
+  const numericLimit = Number(limit);
+  if (!Number.isFinite(numericLimit)) return fallback;
+  return Math.min(Math.max(Math.trunc(numericLimit), min), max);
+};
+
 const dashboardService = {
   // Get dashboard overview data
   getOverview: async () => {
     try {
       const response = await api.get("/api/Dashboard/overview");
-      if (response.data.isSuccess) {
-        return response.data.result;
-      }
-      throw new Error(
-        response.data.errorMessage?.join(", ") || "Failed to fetch overview",
-      );
+      return ensureSuccess(response, "Failed to fetch overview");
     } catch (error) {
       console.error("Error fetching dashboard overview:", error);
       throw error;
@@ -21,13 +34,7 @@ const dashboardService = {
   getFinancial: async () => {
     try {
       const response = await api.get("/api/Dashboard/financial");
-      if (response.data.isSuccess) {
-        return response.data.result;
-      }
-      throw new Error(
-        response.data.errorMessage?.join(", ") ||
-          "Failed to fetch financial data",
-      );
+      return ensureSuccess(response, "Failed to fetch financial data");
     } catch (error) {
       console.error("Error fetching financial data:", error);
       throw error;
@@ -38,12 +45,7 @@ const dashboardService = {
   getActivities: async () => {
     try {
       const response = await api.get("/api/Dashboard/activities");
-      if (response.data.isSuccess) {
-        return response.data.result;
-      }
-      throw new Error(
-        response.data.errorMessage?.join(", ") || "Failed to fetch activities",
-      );
+      return ensureSuccess(response, "Failed to fetch activities");
     } catch (error) {
       console.error("Error fetching activities:", error);
       throw error;
@@ -54,12 +56,7 @@ const dashboardService = {
   getAlerts: async () => {
     try {
       const response = await api.get("/api/Dashboard/alerts");
-      if (response.data.isSuccess) {
-        return response.data.result;
-      }
-      throw new Error(
-        response.data.errorMessage?.join(", ") || "Failed to fetch alerts",
-      );
+      return ensureSuccess(response, "Failed to fetch alerts");
     } catch (error) {
       console.error("Error fetching alerts:", error);
       throw error;
@@ -70,12 +67,7 @@ const dashboardService = {
   getCharts: async () => {
     try {
       const response = await api.get("/api/Dashboard/charts");
-      if (response.data.isSuccess) {
-        return response.data.result;
-      }
-      throw new Error(
-        response.data.errorMessage?.join(", ") || "Failed to fetch charts data",
-      );
+      return ensureSuccess(response, "Failed to fetch charts data");
     } catch (error) {
       console.error("Error fetching charts data:", error);
       throw error;
@@ -86,13 +78,7 @@ const dashboardService = {
   getAttendance: async () => {
     try {
       const response = await api.get("/api/Dashboard/attendance");
-      if (response.data.isSuccess) {
-        return response.data.result;
-      }
-      throw new Error(
-        response.data.errorMessage?.join(", ") ||
-          "Failed to fetch attendance data",
-      );
+      return ensureSuccess(response, "Failed to fetch attendance data");
     } catch (error) {
       console.error("Error fetching attendance data:", error);
       throw error;
@@ -102,16 +88,11 @@ const dashboardService = {
   // Get notifications
   getNotifications: async (limit = 50) => {
     try {
+      const safeLimit = clampLimit(limit, 1, 100, 50);
       const response = await api.get(
-        `/api/Dashboard/notifications?limit=${limit}`,
+        `/api/Dashboard/notifications?limit=${safeLimit}`,
       );
-      if (response.data.isSuccess) {
-        return response.data.result;
-      }
-      throw new Error(
-        response.data.errorMessage?.join(", ") ||
-          "Failed to fetch notifications",
-      );
+      return ensureSuccess(response, "Failed to fetch notifications");
     } catch (error) {
       console.error("Error fetching notifications:", error);
       throw error;
@@ -176,23 +157,56 @@ const dashboardService = {
   // Global admin dashboard search
   globalSearch: async (query, limit = 15) => {
     try {
+      const safeLimit = clampLimit(limit, 1, 100, 15);
       const response = await api.get("/api/dashboard/search", {
         params: {
           q: query,
-          limit,
+          limit: safeLimit,
         },
       });
 
-      if (response.data.isSuccess) {
-        return response.data.result;
-      }
-
-      throw new Error(
-        response.data.errorMessage?.join(", ") ||
-          "Failed to search dashboard data",
-      );
+      return ensureSuccess(response, "Failed to search dashboard data");
     } catch (error) {
       console.error("Error searching dashboard data:", error);
+      throw error;
+    }
+  },
+
+  // Get staff dashboard overview with operational sections
+  getStaffOverview: async (limit = 5) => {
+    try {
+      const safeLimit = clampLimit(limit, 1, 20, 5);
+      const response = await api.get("/api/Dashboard/staff/overview", {
+        params: { limit: safeLimit },
+      });
+      return ensureSuccess(response, "Failed to fetch staff overview");
+    } catch (error) {
+      console.error("Error fetching staff overview:", error);
+      throw error;
+    }
+  },
+
+  // Get staff quick-action counters
+  getStaffQuickActions: async () => {
+    try {
+      const response = await api.get("/api/Dashboard/staff/quick-actions");
+      return ensureSuccess(response, "Failed to fetch staff quick actions");
+    } catch (error) {
+      console.error("Error fetching staff quick actions:", error);
+      throw error;
+    }
+  },
+
+  // Get staff operational timeline
+  getStaffTimeline: async (limit = 20) => {
+    try {
+      const safeLimit = clampLimit(limit, 1, 100, 20);
+      const response = await api.get("/api/Dashboard/staff/timeline", {
+        params: { limit: safeLimit },
+      });
+      return ensureSuccess(response, "Failed to fetch staff timeline");
+    } catch (error) {
+      console.error("Error fetching staff timeline:", error);
       throw error;
     }
   },
