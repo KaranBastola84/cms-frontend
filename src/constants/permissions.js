@@ -46,6 +46,7 @@ export const ROLE_DEFAULT_PERMISSIONS = {
     "reports",
   ],
   Student: ["dashboard"],
+  EnrolledStudent: ["dashboard"],
 };
 
 export const CANONICAL_PERMISSION_CATALOG = [

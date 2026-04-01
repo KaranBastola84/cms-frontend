@@ -40,6 +40,13 @@ import {
   normalizePermissionList,
 } from "../../constants/permissions";
 
+const getDashboardPathByRole = (role) => {
+  if (role === "EnrolledStudent") {
+    return "/student/dashboard";
+  }
+  return `/${String(role || "").toLowerCase()}/dashboard`;
+};
+
 const DashboardLayout = ({ children }) => {
   const { user, logout } = useAuth();
   const location = useLocation();
@@ -306,7 +313,7 @@ const DashboardLayout = ({ children }) => {
       {
         name: "Dashboard",
         icon: LayoutDashboard,
-        path: `/${role?.toLowerCase()}/dashboard`,
+        path: getDashboardPathByRole(role),
         permission: "dashboard", // Everyone has dashboard access
       },
     ];
@@ -608,6 +615,7 @@ const DashboardLayout = ({ children }) => {
         },
       ],
       Student: [],
+      EnrolledStudent: [],
     };
 
     // Filter navigation items based on permissions
@@ -650,7 +658,7 @@ const DashboardLayout = ({ children }) => {
         {/* Logo */}
         <div className="p-4 flex items-center border-b border-[#5A3F2E] text-white">
           <Link
-            to={`/${user?.role?.toLowerCase()}/dashboard`}
+            to={getDashboardPathByRole(user?.role)}
             className="flex items-center gap-3 no-underline group"
           >
             <div className="coffee-gradient p-2 rounded-xl group-hover:opacity-90 transition-all shadow-sm">

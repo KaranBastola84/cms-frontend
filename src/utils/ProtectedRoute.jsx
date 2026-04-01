@@ -2,6 +2,9 @@ import React from "react";
 import { Navigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 
+const isStudentRole = (role) =>
+  role === "Student" || role === "EnrolledStudent";
+
 // Protect routes that require authentication
 export const ProtectedRoute = ({ children, allowedRoles = [] }) => {
   const { isAuthenticated, user } = useAuth();
@@ -19,7 +22,7 @@ export const ProtectedRoute = ({ children, allowedRoles = [] }) => {
       return <Navigate to="/staff/dashboard" replace />;
     } else if (user?.role === "Trainer") {
       return <Navigate to="/trainer/dashboard" replace />;
-    } else if (user?.role === "Student") {
+    } else if (isStudentRole(user?.role)) {
       return <Navigate to="/student/dashboard" replace />;
     }
     return <Navigate to="/" replace />;
@@ -40,7 +43,7 @@ export const PublicRoute = ({ children }) => {
       return <Navigate to="/staff/dashboard" replace />;
     } else if (user?.role === "Trainer") {
       return <Navigate to="/trainer/dashboard" replace />;
-    } else if (user?.role === "Student") {
+    } else if (isStudentRole(user?.role)) {
       return <Navigate to="/student/dashboard" replace />;
     }
   }
@@ -60,7 +63,7 @@ export const HomeRedirect = () => {
       return <Navigate to="/staff/dashboard" replace />;
     } else if (user?.role === "Trainer") {
       return <Navigate to="/trainer/dashboard" replace />;
-    } else if (user?.role === "Student") {
+    } else if (isStudentRole(user?.role)) {
       return <Navigate to="/student/dashboard" replace />;
     }
   }

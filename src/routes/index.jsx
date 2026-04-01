@@ -421,7 +421,7 @@ const AppRoutes = () => {
       <Route
         path="/student/dashboard"
         element={
-          <ProtectedRoute allowedRoles={["Student"]}>
+          <ProtectedRoute allowedRoles={["Student", "EnrolledStudent"]}>
             <DashboardLayout>
               <StudentDashboard />
             </DashboardLayout>
@@ -434,7 +434,13 @@ const AppRoutes = () => {
         path="/admin/settings"
         element={
           <ProtectedRoute
-            allowedRoles={["Admin", "Staff", "Trainer", "Student"]}
+            allowedRoles={[
+              "Admin",
+              "Staff",
+              "Trainer",
+              "Student",
+              "EnrolledStudent",
+            ]}
           >
             <DashboardLayout>
               <Settings />

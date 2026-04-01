@@ -83,7 +83,7 @@ export const AuthProvider = ({ children }) => {
     isAdmin: user?.role === "Admin",
     isStaff: user?.role === "Staff",
     isTrainer: user?.role === "Trainer",
-    isStudent: user?.role === "Student",
+    isStudent: user?.role === "Student" || user?.role === "EnrolledStudent",
   };
 
   if (loading) {

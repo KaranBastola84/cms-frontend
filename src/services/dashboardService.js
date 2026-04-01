@@ -249,6 +249,45 @@ const dashboardService = {
       throw error;
     }
   },
+
+  // Get student dashboard overview
+  getStudentOverview: async (limit = 5) => {
+    try {
+      const safeLimit = clampLimit(limit, 1, 20, 5);
+      const response = await api.get("/api/Dashboard/student/overview", {
+        params: { limit: safeLimit },
+      });
+      return ensureSuccess(response, "Failed to fetch student overview");
+    } catch (error) {
+      console.error("Error fetching student overview:", error);
+      throw error;
+    }
+  },
+
+  // Get student quick-action counters
+  getStudentQuickActions: async () => {
+    try {
+      const response = await api.get("/api/Dashboard/student/quick-actions");
+      return ensureSuccess(response, "Failed to fetch student quick actions");
+    } catch (error) {
+      console.error("Error fetching student quick actions:", error);
+      throw error;
+    }
+  },
+
+  // Get student timeline feed
+  getStudentTimeline: async (limit = 20) => {
+    try {
+      const safeLimit = clampLimit(limit, 1, 100, 20);
+      const response = await api.get("/api/Dashboard/student/timeline", {
+        params: { limit: safeLimit },
+      });
+      return ensureSuccess(response, "Failed to fetch student timeline");
+    } catch (error) {
+      console.error("Error fetching student timeline:", error);
+      throw error;
+    }
+  },
 };
 
 export default dashboardService;
