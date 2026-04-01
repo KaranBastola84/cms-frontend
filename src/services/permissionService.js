@@ -1,4 +1,10 @@
 import apiInstance from "../config/api";
+import {
+  CANONICAL_PERMISSION_CATALOG,
+  getDefaultPermissionsForRole,
+  normalizePermissionKey,
+  normalizePermissionList,
+} from "../constants/permissions";
 
 const normalizeList = (value) => {
   if (!value) return [];
@@ -28,15 +34,17 @@ const normalizeMessages = (error) => {
 const mapPermissionItem = (item) => {
   if (typeof item === "string") {
     return {
-      key: item,
+      key: normalizePermissionKey(item),
       name: item,
       description: "",
       category: "General",
     };
   }
 
+  const rawKey = item.key || item.permissionKey || item.name || "";
+
   return {
-    key: item.key || item.permissionKey || item.name || "",
+    key: normalizePermissionKey(rawKey),
     name: item.label || item.name || item.key || item.permissionKey || "",
     description: item.description || "",
     category: item.category || item.group || "General",
@@ -44,6 +52,39 @@ const mapPermissionItem = (item) => {
 };
 
 const unwrap = (response) => response?.data?.result ?? response?.data;
+
+const CATALOG_BY_KEY = CANONICAL_PERMISSION_CATALOG.reduce((acc, item) => {
+  acc[item.key] = item;
+  return acc;
+}, {});
+
+const toCanonicalPermissionItems = (items) => {
+  const map = new Map();
+
+  items.forEach((item) => {
+    const mapped = mapPermissionItem(item);
+    const key = mapped.key;
+    const canonicalMeta = CATALOG_BY_KEY[key];
+
+    if (!canonicalMeta) return;
+
+    map.set(key, {
+      key,
+      name:
+        mapped.name && mapped.name !== key ? mapped.name : canonicalMeta.name,
+      description: mapped.description || canonicalMeta.description,
+      category: canonicalMeta.category,
+    });
+  });
+
+  CANONICAL_PERMISSION_CATALOG.forEach((item) => {
+    if (!map.has(item.key)) {
+      map.set(item.key, item);
+    }
+  });
+
+  return Array.from(map.values());
+};
 
 const permissionService = {
   getAllPermissions: async () => {
@@ -61,7 +102,7 @@ const permissionService = {
         }));
       });
 
-      return flattened.map(mapPermissionItem).filter((x) => x.key);
+      return toCanonicalPermissionItems(flattened);
     } catch (error) {
       throw new Error(
         normalizeMessages(error) || "Failed to fetch permissions",
@@ -73,9 +114,15 @@ const permissionService = {
     try {
       const response = await apiInstance.get(`/api/permissions/roles/${role}`);
       const payload = unwrap(response);
-      return normalizeList(payload)
-        .map((x) => (typeof x === "string" ? x : x.key || x.permissionKey))
-        .filter(Boolean);
+
+      const rawPermissions = normalizeList(payload).map((x) =>
+        typeof x === "string" ? x : x.key || x.permissionKey,
+      );
+      const normalized = normalizePermissionList(rawPermissions);
+
+      return normalized.length > 0
+        ? normalized
+        : getDefaultPermissionsForRole(role);
     } catch (error) {
       throw new Error(
         normalizeMessages(error) ||
@@ -86,8 +133,9 @@ const permissionService = {
 
   updateRolePermissions: async (role, permissions) => {
     try {
+      const normalizedPermissions = normalizePermissionList(permissions);
       const response = await apiInstance.put(`/api/permissions/roles/${role}`, {
-        permissions,
+        permissions: normalizedPermissions,
       });
       return unwrap(response);
     } catch (error) {
@@ -108,7 +156,7 @@ const permissionService = {
       if (Array.isArray(payload)) {
         return {
           role: null,
-          effectivePermissions: payload,
+          effectivePermissions: normalizePermissionList(payload),
           overrides: [],
         };
       }
@@ -117,10 +165,10 @@ const permissionService = {
         userId: payload?.userId || null,
         username: payload?.username || "",
         role: payload?.role || payload?.userRole || null,
-        rolePermissions: normalizeList(payload?.rolePermissions),
-        grantedOverrides: normalizeList(payload?.grantedOverrides),
-        revokedOverrides: normalizeList(payload?.revokedOverrides),
-        effectivePermissions: normalizeList(
+        rolePermissions: normalizePermissionList(payload?.rolePermissions),
+        grantedOverrides: normalizePermissionList(payload?.grantedOverrides),
+        revokedOverrides: normalizePermissionList(payload?.revokedOverrides),
+        effectivePermissions: normalizePermissionList(
           payload?.effectivePermissions || payload?.permissions || payload,
         ),
       };
@@ -134,11 +182,14 @@ const permissionService = {
 
   updateUserPermissions: async (userId, grant = [], revoke = []) => {
     try {
+      const normalizedGrant = normalizePermissionList(grant);
+      const normalizedRevoke = normalizePermissionList(revoke);
+
       const response = await apiInstance.put(
         `/api/permissions/users/${userId}`,
         {
-          grant,
-          revoke,
+          grant: normalizedGrant,
+          revoke: normalizedRevoke,
         },
       );
       const payload = unwrap(response);
@@ -146,10 +197,12 @@ const permissionService = {
         userId: payload?.userId || null,
         username: payload?.username || "",
         role: payload?.role || payload?.userRole || null,
-        rolePermissions: normalizeList(payload?.rolePermissions),
-        grantedOverrides: normalizeList(payload?.grantedOverrides),
-        revokedOverrides: normalizeList(payload?.revokedOverrides),
-        effectivePermissions: normalizeList(payload?.effectivePermissions),
+        rolePermissions: normalizePermissionList(payload?.rolePermissions),
+        grantedOverrides: normalizePermissionList(payload?.grantedOverrides),
+        revokedOverrides: normalizePermissionList(payload?.revokedOverrides),
+        effectivePermissions: normalizePermissionList(
+          payload?.effectivePermissions,
+        ),
       };
     } catch (error) {
       throw new Error(

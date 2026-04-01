@@ -1,6 +1,25 @@
 import React, { useState, useEffect } from "react";
 import { AuthContext } from "../contexts/AuthContext";
 import authService from "../services/authService";
+import {
+  getDefaultPermissionsForRole,
+  normalizePermissionList,
+} from "../constants/permissions";
+
+const normalizeUserPermissions = (userData) => {
+  if (!userData) return null;
+
+  const normalizedPermissions = normalizePermissionList(userData.permissions);
+  const fallbackPermissions = getDefaultPermissionsForRole(userData.role);
+
+  return {
+    ...userData,
+    permissions:
+      normalizedPermissions.length > 0
+        ? normalizedPermissions
+        : fallbackPermissions,
+  };
+};
 
 // Auth Provider Component
 export const AuthProvider = ({ children }) => {
@@ -14,7 +33,7 @@ export const AuthProvider = ({ children }) => {
       const isAuthenticated = authService.isAuthenticated();
 
       if (isAuthenticated && userData) {
-        setUser(userData);
+        setUser(normalizeUserPermissions(userData));
       } else if (userData) {
         // User data exists but token is expired, clear it
         authService.logout();
@@ -28,16 +47,18 @@ export const AuthProvider = ({ children }) => {
   const login = async (username, password) => {
     const response = await authService.login(username, password);
     if (response.success) {
-      setUser(response.data.user);
-      return { success: true, user: response.data.user };
+      const normalizedUser = normalizeUserPermissions(response.data.user);
+      setUser(normalizedUser);
+      return { success: true, user: normalizedUser };
     }
   };
 
   const studentLogin = async (email, password) => {
     const response = await authService.studentLogin(email, password);
     if (response.success) {
-      setUser(response.data.user);
-      return { success: true, user: response.data.user };
+      const normalizedUser = normalizeUserPermissions(response.data.user);
+      setUser(normalizedUser);
+      return { success: true, user: normalizedUser };
     }
   };
 
@@ -47,8 +68,9 @@ export const AuthProvider = ({ children }) => {
   };
 
   const updateUser = (userData) => {
-    setUser(userData);
-    authService.updateUser(userData);
+    const normalizedUser = normalizeUserPermissions(userData);
+    setUser(normalizedUser);
+    authService.updateUser(normalizedUser);
   };
 
   const value = {

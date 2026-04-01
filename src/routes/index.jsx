@@ -189,7 +189,7 @@ const AppRoutes = () => {
       <Route
         path="/admin/inquiries"
         element={
-          <ProtectedRoute allowedRoles={["Admin", "Staff"]}>
+          <ProtectedRoute allowedRoles={["Admin", "Staff", "Trainer"]}>
             <DashboardLayout>
               <Inquiries />
             </DashboardLayout>
@@ -222,7 +222,7 @@ const AppRoutes = () => {
       <Route
         path="/admin/course-management"
         element={
-          <ProtectedRoute allowedRoles={["Admin", "Staff"]}>
+          <ProtectedRoute allowedRoles={["Admin", "Staff", "Trainer"]}>
             <DashboardLayout>
               <CourseManagement />
             </DashboardLayout>
@@ -233,7 +233,7 @@ const AppRoutes = () => {
       <Route
         path="/admin/batch-schedule"
         element={
-          <ProtectedRoute allowedRoles={["Admin", "Staff"]}>
+          <ProtectedRoute allowedRoles={["Admin", "Staff", "Trainer"]}>
             <DashboardLayout>
               <BatchManagement />
             </DashboardLayout>
@@ -244,7 +244,7 @@ const AppRoutes = () => {
       <Route
         path="/admin/student-registration"
         element={
-          <ProtectedRoute allowedRoles={["Admin", "Staff"]}>
+          <ProtectedRoute allowedRoles={["Admin", "Staff", "Trainer"]}>
             <DashboardLayout>
               <StudentAdmission />
             </DashboardLayout>
@@ -266,7 +266,7 @@ const AppRoutes = () => {
       <Route
         path="/admin/attendance"
         element={
-          <ProtectedRoute allowedRoles={["Admin", "Staff"]}>
+          <ProtectedRoute allowedRoles={["Admin", "Staff", "Trainer"]}>
             <DashboardLayout>
               <AttendanceManagement />
             </DashboardLayout>
@@ -300,7 +300,7 @@ const AppRoutes = () => {
       <Route
         path="/admin/finance/dashboard"
         element={
-          <ProtectedRoute allowedRoles={["Admin", "Staff"]}>
+          <ProtectedRoute allowedRoles={["Admin", "Staff", "Trainer"]}>
             <DashboardLayout>
               <FinancialDashboard />
             </DashboardLayout>
@@ -311,7 +311,7 @@ const AppRoutes = () => {
       <Route
         path="/admin/finance/outstanding-payments"
         element={
-          <ProtectedRoute allowedRoles={["Admin", "Staff"]}>
+          <ProtectedRoute allowedRoles={["Admin", "Staff", "Trainer"]}>
             <DashboardLayout>
               <OutstandingPayments />
             </DashboardLayout>
@@ -322,7 +322,7 @@ const AppRoutes = () => {
       <Route
         path="/admin/finance/payment-plans"
         element={
-          <ProtectedRoute allowedRoles={["Admin", "Staff"]}>
+          <ProtectedRoute allowedRoles={["Admin", "Staff", "Trainer"]}>
             <DashboardLayout>
               <PaymentPlans />
             </DashboardLayout>
@@ -344,7 +344,7 @@ const AppRoutes = () => {
       <Route
         path="/admin/finance/revenue-reports"
         element={
-          <ProtectedRoute allowedRoles={["Admin", "Staff"]}>
+          <ProtectedRoute allowedRoles={["Admin", "Staff", "Trainer"]}>
             <DashboardLayout>
               <RevenueReports />
             </DashboardLayout>
@@ -399,7 +399,7 @@ const AppRoutes = () => {
       <Route
         path="/staff/students"
         element={
-          <ProtectedRoute allowedRoles={["Staff", "Admin"]}>
+          <ProtectedRoute allowedRoles={["Staff", "Admin", "Trainer"]}>
             <DashboardLayout>
               <StudentAdmission />
             </DashboardLayout>

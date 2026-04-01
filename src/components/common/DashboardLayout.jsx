@@ -35,6 +35,10 @@ import {
 } from "lucide-react";
 import { useAuth } from "../../hooks/useAuth";
 import dashboardService from "../../services/dashboardService";
+import {
+  normalizePermissionKey,
+  normalizePermissionList,
+} from "../../constants/permissions";
 
 const DashboardLayout = ({ children }) => {
   const { user, logout } = useAuth();
@@ -280,19 +284,22 @@ const DashboardLayout = ({ children }) => {
   // Navigation items based on role
   const getNavItems = () => {
     const role = user?.role;
-    const userPermissions = user?.permissions || [];
+    const userPermissions = normalizePermissionList(user?.permissions || []);
 
     // Helper function to check if user has permission
     const hasPermission = (permissionKey) => {
       // Admin has access to everything
       if (role === "Admin") return true;
 
+      if (!permissionKey) return true;
+
       if (Array.isArray(permissionKey)) {
-        return permissionKey.some((key) => userPermissions.includes(key));
+        return permissionKey.some((key) => hasPermission(key));
       }
 
       // Other roles need specific permission
-      return userPermissions.includes(permissionKey);
+      const normalizedKey = normalizePermissionKey(permissionKey);
+      return userPermissions.includes(normalizedKey);
     };
 
     const commonItems = [
@@ -309,13 +316,13 @@ const DashboardLayout = ({ children }) => {
         {
           groupName: "User Management",
           icon: Users,
-          permission: "user-management",
+          permission: "dashboard",
           items: [
             {
               name: "All Users",
               icon: Users,
               path: "/admin/users",
-              permission: ["view-users", "user-management"],
+              permission: "dashboard",
             },
             {
               name: "Student Management",
@@ -327,44 +334,44 @@ const DashboardLayout = ({ children }) => {
               name: "Permissions",
               icon: ShieldCheck,
               path: "/admin/permissions",
-              permission: ["manage-permissions", "user-management"],
+              permission: "dashboard",
             },
             {
               name: "Student Registration",
               icon: UserPlus,
               path: "/admin/student-registration",
-              permission: ["student-registration", "manage-students"],
+              permission: "manage-students",
             },
             {
               name: "Staff Management",
               icon: UserCog,
               path: "/admin/staff-management",
-              permission: "staff-management",
+              permission: "dashboard",
             },
             {
               name: "Trainer Management",
               icon: GraduationCap,
               path: "/admin/trainer-management",
-              permission: "trainer-management",
+              permission: "dashboard",
             },
           ],
         },
         {
           groupName: "Academic",
           icon: BookOpen,
-          permission: "academic",
+          permission: "courses-batches",
           items: [
             {
               name: "Course Management",
               icon: BookOpen,
               path: "/admin/course-management",
-              permission: "course-management",
+              permission: "courses-batches",
             },
             {
               name: "Batch & Schedule",
               icon: CalendarClock,
               path: "/admin/batch-schedule",
-              permission: "batch-schedule",
+              permission: "courses-batches",
             },
             {
               name: "Attendance",
@@ -377,19 +384,19 @@ const DashboardLayout = ({ children }) => {
         {
           groupName: "Business",
           icon: DollarSign,
-          permission: "business",
+          permission: "dashboard",
           items: [
             {
               name: "Products",
               icon: Package,
               path: "/admin/products",
-              permission: "inventory",
+              permission: "dashboard",
             },
             {
               name: "Orders",
               icon: ShoppingCart,
               path: "/admin/orders",
-              permission: "sales",
+              permission: "dashboard",
             },
           ],
         },
@@ -433,7 +440,7 @@ const DashboardLayout = ({ children }) => {
         {
           groupName: "System",
           icon: Settings,
-          permission: "system",
+          permission: "dashboard",
           items: [
             {
               name: "Inquiries & Follow-ups",
@@ -445,13 +452,13 @@ const DashboardLayout = ({ children }) => {
               name: "Audit Logs",
               icon: FileSearch,
               path: "/admin/audit-logs",
-              permission: "audit-logs",
+              permission: "reports",
             },
             {
               name: "Settings",
               icon: Settings,
               path: "/admin/settings",
-              permission: "settings",
+              permission: "dashboard",
             },
           ],
         },
@@ -459,7 +466,7 @@ const DashboardLayout = ({ children }) => {
           name: "Review Moderation",
           icon: ShieldCheck,
           path: "/admin/product-reviews",
-          permission: "review-moderation",
+          permission: "dashboard",
         },
       ],
       Staff: [
@@ -473,13 +480,13 @@ const DashboardLayout = ({ children }) => {
           name: "Courses",
           icon: BookOpen,
           path: "/staff/courses",
-          permission: ["view-courses", "courses-batches"],
+          permission: "courses-batches",
         },
         {
           name: "Batch & Schedule",
           icon: CalendarClock,
           path: "/staff/batches",
-          permission: ["view-courses", "courses-batches"],
+          permission: "courses-batches",
         },
         {
           name: "Attendance",
@@ -491,7 +498,7 @@ const DashboardLayout = ({ children }) => {
           name: "Inquiries",
           icon: FileText,
           path: "/admin/inquiries",
-          permission: ["view-inquiries", "inquiries"],
+          permission: "inquiries",
         },
         {
           groupName: "Payment & Finance",
@@ -524,47 +531,83 @@ const DashboardLayout = ({ children }) => {
             },
           ],
         },
+        {
+          name: "Settings",
+          icon: Settings,
+          path: "/admin/settings",
+          permission: "dashboard",
+        },
       ],
       Trainer: [
         {
-          name: "My Classes",
-          icon: BookOpen,
-          path: "/trainer/classes",
-          permission: ["view-classes", "courses-batches"],
-        },
-        {
           name: "Students",
           icon: Users,
-          path: "/trainer/students",
-          permission: "view-students",
+          path: "/staff/students",
+          permission: ["view-students", "manage-students"],
         },
         {
-          name: "Schedule",
-          icon: Calendar,
-          path: "/trainer/schedule",
-          permission: ["view-schedule", "courses-batches"],
-        },
-      ],
-      Student: [
-        {
-          name: "My Courses",
+          name: "Courses",
           icon: BookOpen,
-          path: "/student/courses",
-          permission: "view-my-courses",
+          path: "/admin/course-management",
+          permission: "courses-batches",
         },
         {
-          name: "Schedule",
-          icon: Calendar,
-          path: "/student/schedule",
-          permission: "view-my-schedule",
+          name: "Batch & Schedule",
+          icon: CalendarClock,
+          path: "/admin/batch-schedule",
+          permission: "courses-batches",
         },
         {
-          name: "Progress",
-          icon: FileText,
-          path: "/student/progress",
-          permission: "view-my-progress",
+          name: "Attendance",
+          icon: ClipboardCheck,
+          path: "/admin/attendance",
+          permission: "attendance",
+        },
+        {
+          name: "Inquiries",
+          icon: MessageSquare,
+          path: "/admin/inquiries",
+          permission: "inquiries",
+        },
+        {
+          groupName: "Payment & Finance",
+          icon: DollarSign,
+          permission: "payment-finance",
+          items: [
+            {
+              name: "Financial Dashboard",
+              icon: LayoutDashboard,
+              path: "/admin/finance/dashboard",
+              permission: "payment-finance",
+            },
+            {
+              name: "Outstanding Payments",
+              icon: AlertCircle,
+              path: "/admin/finance/outstanding-payments",
+              permission: "payment-finance",
+            },
+            {
+              name: "Payment Plans",
+              icon: Calendar,
+              path: "/admin/finance/payment-plans",
+              permission: "payment-finance",
+            },
+            {
+              name: "Revenue Reports",
+              icon: FileText,
+              path: "/admin/finance/revenue-reports",
+              permission: ["payment-finance", "reports"],
+            },
+          ],
+        },
+        {
+          name: "Settings",
+          icon: Settings,
+          path: "/admin/settings",
+          permission: "dashboard",
         },
       ],
+      Student: [],
     };
 
     // Filter navigation items based on permissions
