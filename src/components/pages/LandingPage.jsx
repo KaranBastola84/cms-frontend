@@ -152,7 +152,7 @@ const LandingPage = () => {
         </div>
 
         {/* Hero Content */}
-        <div className="relative z-10 max-w-5xl mx-auto mt-20 px-6 py-10 md:px-10 md:py-12 rounded-[2rem] bg-[#2C1C14]/45 border border-[#FFE7CC]/35 backdrop-blur-md shadow-[0_24px_70px_rgba(28,18,12,0.48)]">
+        <div className="relative z-10 max-w-5xl mx-auto mt-20 px-6 py-10 md:px-10 md:py-12 rounded-4xl bg-[#2C1C14]/45 border border-[#FFE7CC]/35 backdrop-blur-md shadow-[0_24px_70px_rgba(28,18,12,0.48)]">
           <span className="inline-block py-1.5 px-4 rounded-full bg-[#F7DDB9]/20 border border-[#F7DDB9]/55 text-[#FFF8EF] text-xs sm:text-sm font-semibold tracking-[0.18em] uppercase mb-6">
             WELCOME TO EXCELLENCE
           </span>
@@ -201,7 +201,7 @@ const LandingPage = () => {
               </div>
               <div className="text-left">
                 <h3 className="text-3xl font-bold text-white mb-1">5,000+</h3>
-                <p className="text-[#FFEED8] text-sm font-semibold uppercase tracking-[0.1em]">
+                <p className="text-[#FFEED8] text-sm font-semibold uppercase tracking-widest">
                   Trained Baristas
                 </p>
               </div>
@@ -213,7 +213,7 @@ const LandingPage = () => {
               </div>
               <div className="text-left">
                 <h3 className="text-3xl font-bold text-white mb-1">20+</h3>
-                <p className="text-[#FFEED8] text-sm font-semibold uppercase tracking-[0.1em]">
+                <p className="text-[#FFEED8] text-sm font-semibold uppercase tracking-widest">
                   Expert Courses
                 </p>
               </div>
@@ -225,7 +225,7 @@ const LandingPage = () => {
               </div>
               <div className="text-left">
                 <h3 className="text-3xl font-bold text-white mb-1">99%</h3>
-                <p className="text-[#FFEED8] text-sm font-semibold uppercase tracking-[0.1em]">
+                <p className="text-[#FFEED8] text-sm font-semibold uppercase tracking-widest">
                   Job Placement
                 </p>
               </div>
@@ -335,7 +335,7 @@ const LandingPage = () => {
 
       {/* Full-width CTA */}
       <section className="px-6 py-20 bg-[#F6EFE4]">
-        <div className="max-w-7xl mx-auto rounded-[2rem] border border-[#E7C9A5]/45 bg-linear-to-r from-[#2C1C14] via-[#3A271D] to-[#2C1C14] px-8 py-12 md:px-12 md:py-14 shadow-[0_20px_44px_rgba(38,24,16,0.32)]">
+        <div className="max-w-7xl mx-auto rounded-4xl border border-[#E7C9A5]/45 bg-linear-to-r from-[#2C1C14] via-[#3A271D] to-[#2C1C14] px-8 py-12 md:px-12 md:py-14 shadow-[0_20px_44px_rgba(38,24,16,0.32)]">
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8">
             <div className="max-w-3xl">
               <p className="text-[#F2C892] text-xs sm:text-sm font-semibold tracking-[0.16em] uppercase">
