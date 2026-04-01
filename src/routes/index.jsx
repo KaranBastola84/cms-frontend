@@ -7,6 +7,7 @@ import StudentLogin from "../components/pages/auth/StudentLogin";
 import StaffVerification from "../components/pages/auth/StaffVerification";
 import TrainerVerification from "../components/pages/auth/TrainerVerification";
 import InquiryForm from "../components/pages/InquiryForm";
+import LandingPage from "../components/pages/LandingPage";
 import Products from "../components/pages/Products";
 import Checkout from "../components/pages/Checkout";
 import OrderConfirmation from "../components/pages/OrderConfirmation";
@@ -52,9 +53,7 @@ const AppRoutes = () => {
         path="/"
         element={
           <PublicRoute>
-            <Layout>
-              <InquiryForm />
-            </Layout>
+            <LandingPage />
           </PublicRoute>
         }
       />
