@@ -56,20 +56,6 @@ function OutstandingPayments() {
     setFilteredPayments(filtered);
   }, [searchTerm, filterType, outstandingPayments]);
 
-  useEffect(() => {
-    fetchOutstandingPayments();
-  }, [fetchOutstandingPayments]);
-
-  useEffect(() => {
-    if (activeTab === "defaulters") {
-      fetchPaymentDefaulters();
-    }
-  }, [activeTab, fetchPaymentDefaulters]);
-
-  useEffect(() => {
-    filterPayments();
-  }, [filterPayments]);
-
   const fetchOutstandingPayments = useCallback(async () => {
     setLoading(true);
     try {
@@ -96,6 +82,20 @@ function OutstandingPayments() {
       setLoading(false);
     }
   }, [overdueDays]);
+
+  useEffect(() => {
+    fetchOutstandingPayments();
+  }, [fetchOutstandingPayments]);
+
+  useEffect(() => {
+    if (activeTab === "defaulters") {
+      fetchPaymentDefaulters();
+    }
+  }, [activeTab, fetchPaymentDefaulters]);
+
+  useEffect(() => {
+    filterPayments();
+  }, [filterPayments]);
 
   const exportToCSV = () => {
     const headers = [
