@@ -210,6 +210,45 @@ const dashboardService = {
       throw error;
     }
   },
+
+  // Get trainer dashboard overview with operational sections
+  getTrainerOverview: async (limit = 5) => {
+    try {
+      const safeLimit = clampLimit(limit, 1, 20, 5);
+      const response = await api.get("/api/Dashboard/trainer/overview", {
+        params: { limit: safeLimit },
+      });
+      return ensureSuccess(response, "Failed to fetch trainer overview");
+    } catch (error) {
+      console.error("Error fetching trainer overview:", error);
+      throw error;
+    }
+  },
+
+  // Get trainer quick-action counters
+  getTrainerQuickActions: async () => {
+    try {
+      const response = await api.get("/api/Dashboard/trainer/quick-actions");
+      return ensureSuccess(response, "Failed to fetch trainer quick actions");
+    } catch (error) {
+      console.error("Error fetching trainer quick actions:", error);
+      throw error;
+    }
+  },
+
+  // Get trainer timeline feed
+  getTrainerTimeline: async (limit = 20) => {
+    try {
+      const safeLimit = clampLimit(limit, 1, 100, 20);
+      const response = await api.get("/api/Dashboard/trainer/timeline", {
+        params: { limit: safeLimit },
+      });
+      return ensureSuccess(response, "Failed to fetch trainer timeline");
+    } catch (error) {
+      console.error("Error fetching trainer timeline:", error);
+      throw error;
+    }
+  },
 };
 
 export default dashboardService;
