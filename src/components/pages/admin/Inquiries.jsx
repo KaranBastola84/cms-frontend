@@ -119,7 +119,7 @@ const Inquiries = () => {
         (u) => (u.role === "Admin" || u.role === "Staff") && u.isActive,
       );
       setStaff(staffList);
-    } catch (error) {
+    } catch {
       // Silent fail - staff filter will just be empty
     }
   };

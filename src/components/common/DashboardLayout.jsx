@@ -31,6 +31,7 @@ import {
   CheckCircle,
   RefreshCw,
   ShieldCheck,
+  BadgeCheck,
   Loader2,
 } from "lucide-react";
 import { useAuth } from "../../hooks/useAuth";
@@ -386,6 +387,12 @@ const DashboardLayout = ({ children }) => {
               path: "/admin/attendance",
               permission: "attendance",
             },
+            {
+              name: "Certificates",
+              icon: BadgeCheck,
+              path: "/admin/certificates",
+              permission: ["view-students", "manage-students"],
+            },
           ],
         },
         {
@@ -508,6 +515,12 @@ const DashboardLayout = ({ children }) => {
           permission: "inquiries",
         },
         {
+          name: "Certificates",
+          icon: BadgeCheck,
+          path: "/staff/certificates",
+          permission: "view-students",
+        },
+        {
           groupName: "Payment & Finance",
           icon: DollarSign,
           permission: "payment-finance",
@@ -577,6 +590,12 @@ const DashboardLayout = ({ children }) => {
           permission: "inquiries",
         },
         {
+          name: "Certificates",
+          icon: BadgeCheck,
+          path: "/trainer/certificates",
+          permission: ["view-students", "manage-students"],
+        },
+        {
           groupName: "Payment & Finance",
           icon: DollarSign,
           permission: "payment-finance",
@@ -614,8 +633,22 @@ const DashboardLayout = ({ children }) => {
           permission: "dashboard",
         },
       ],
-      Student: [],
-      EnrolledStudent: [],
+      Student: [
+        {
+          name: "My Certificates",
+          icon: BadgeCheck,
+          path: "/student/certificates",
+          permission: "dashboard",
+        },
+      ],
+      EnrolledStudent: [
+        {
+          name: "My Certificates",
+          icon: BadgeCheck,
+          path: "/student/certificates",
+          permission: "dashboard",
+        },
+      ],
     };
 
     // Filter navigation items based on permissions

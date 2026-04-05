@@ -10,6 +10,7 @@ const PUBLIC_ENDPOINT_PATTERNS = [
   /^\/api\/Order$/i, // POST create order
   /^\/api\/Order\/\d+$/i, // GET order by ID (order confirmation)
   /^\/api\/Inquiry/i,
+  /^\/api\/Certificate\/verify\//i,
 ];
 
 /**

@@ -1,5 +1,5 @@
 import React from "react";
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import Layout from "../components/common/Layout";
 import DashboardLayout from "../components/common/DashboardLayout";
 import Login from "../components/pages/auth/Login";
@@ -11,6 +11,7 @@ import LandingPage from "../components/pages/LandingPage";
 import Products from "../components/pages/Products";
 import Checkout from "../components/pages/Checkout";
 import OrderConfirmation from "../components/pages/OrderConfirmation";
+import CertificateVerification from "../components/pages/CertificateVerification";
 import {
   ProtectedRoute,
   PublicRoute,
@@ -29,8 +30,12 @@ import OrderManagement from "../components/pages/admin/OrderManagement";
 import StaffDashboard from "../components/pages/staff/StaffDashboard";
 import TrainerDashboard from "../components/pages/trainer/TrainerDashboard";
 import StudentDashboard from "../components/pages/student/StudentDashboard";
+import StudentCertificates from "../components/pages/student/StudentCertificates";
+import CertificateRecords from "../components/pages/staff/CertificateRecords";
 import Settings from "../components/pages/Settings";
 import ProductReviewModeration from "../components/pages/admin/ProductReviewModeration";
+import CertificateManagement from "../components/pages/admin/CertificateManagement";
+import CertificateRecommendations from "../components/pages/trainer/CertificateRecommendations";
 
 // Import Payment & Finance pages
 import FinancialDashboard from "../components/pages/admin/FinancialDashboard";
@@ -92,6 +97,24 @@ const AppRoutes = () => {
         element={
           <Layout>
             <OrderConfirmation />
+          </Layout>
+        }
+      />
+
+      <Route
+        path="/certificate/verify"
+        element={
+          <Layout>
+            <CertificateVerification />
+          </Layout>
+        }
+      />
+
+      <Route
+        path="/certificate/verify/:certificateNumber"
+        element={
+          <Layout>
+            <CertificateVerification />
           </Layout>
         }
       />
@@ -275,6 +298,17 @@ const AppRoutes = () => {
       />
 
       <Route
+        path="/admin/certificates"
+        element={
+          <ProtectedRoute allowedRoles={["Admin"]}>
+            <DashboardLayout>
+              <CertificateManagement />
+            </DashboardLayout>
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
         path="/admin/products"
         element={
           <ProtectedRoute allowedRoles={["Admin"]}>
@@ -408,6 +442,17 @@ const AppRoutes = () => {
       />
 
       <Route
+        path="/staff/certificates"
+        element={
+          <ProtectedRoute allowedRoles={["Staff", "Admin", "Trainer"]}>
+            <DashboardLayout>
+              <CertificateRecords />
+            </DashboardLayout>
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
         path="/trainer/dashboard"
         element={
           <ProtectedRoute allowedRoles={["Trainer"]}>
@@ -419,11 +464,33 @@ const AppRoutes = () => {
       />
 
       <Route
+        path="/trainer/certificates"
+        element={
+          <ProtectedRoute allowedRoles={["Trainer"]}>
+            <DashboardLayout>
+              <CertificateRecommendations />
+            </DashboardLayout>
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
         path="/student/dashboard"
         element={
           <ProtectedRoute allowedRoles={["Student", "EnrolledStudent"]}>
             <DashboardLayout>
               <StudentDashboard />
+            </DashboardLayout>
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/student/certificates"
+        element={
+          <ProtectedRoute allowedRoles={["Student", "EnrolledStudent"]}>
+            <DashboardLayout>
+              <StudentCertificates />
             </DashboardLayout>
           </ProtectedRoute>
         }
