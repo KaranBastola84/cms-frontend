@@ -84,7 +84,7 @@ function StaffDashboard() {
     timeline: true,
   });
 
-  const summary = overview?.summary || {};
+  const summary = useMemo(() => overview?.summary || {}, [overview]);
   const attendanceToday = overview?.attendanceToday || {};
   const upcomingBatches = overview?.upcomingBatches || [];
   const pendingInquiries = overview?.pendingInquiries || [];

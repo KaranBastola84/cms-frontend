@@ -94,7 +94,7 @@ function TrainerDashboard() {
     timeline: true,
   });
 
-  const summary = overview?.summary || {};
+  const summary = useMemo(() => overview?.summary || {}, [overview]);
   const attendanceToday = overview?.attendanceToday || {};
   const activeBatches = overview?.activeBatches || [];
   const upcomingBatches = overview?.upcomingBatches || [];
