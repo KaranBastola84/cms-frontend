@@ -1,6 +1,5 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
-import toast from "react-hot-toast";
 import {
   Users,
   UserCheck,
@@ -15,27 +14,16 @@ import {
   ArrowUpRight,
   ClipboardCheck,
 } from "lucide-react";
+import {
+  OVERVIEW_LIMIT_OPTIONS,
+  TIMELINE_LIMIT_OPTIONS,
+  formatDateTime,
+} from "../../../utils/dashboardHelpers";
+import useRoleDashboard from "../../../hooks/useRoleDashboard";
 import dashboardService from "../../../services/dashboardService";
-
-const OVERVIEW_LIMIT_OPTIONS = [5, 10, 15, 20];
-const TIMELINE_LIMIT_OPTIONS = [10, 20, 50, 100];
 
 const formatCurrency = (value) => {
   return `$${Number(value || 0).toLocaleString()}`;
-};
-
-const formatDateTime = (value) => {
-  if (!value) return "-";
-  const date = new Date(value);
-  if (Number.isNaN(date.getTime())) return "-";
-  return date.toLocaleString();
-};
-
-const getReadableError = (error, fallbackMessage) => {
-  if (error instanceof Error && error.message) {
-    return error.message;
-  }
-  return fallbackMessage;
 };
 
 const normalizeTimelineActionUrl = (actionUrl) => {
@@ -68,20 +56,26 @@ const getTimelineBadgeClass = (eventType) => {
 };
 
 function StaffDashboard() {
-  const [loading, setLoading] = useState(true);
-  const [refreshing, setRefreshing] = useState(false);
-  const [error, setError] = useState("");
-  const [lastUpdated, setLastUpdated] = useState(null);
-  const [pollingPaused, setPollingPaused] = useState(false);
   const [overviewLimit, setOverviewLimit] = useState(5);
   const [timelineLimit, setTimelineLimit] = useState(20);
-  const [overview, setOverview] = useState(null);
-  const [quickActions, setQuickActions] = useState(null);
-  const [timeline, setTimeline] = useState([]);
-  const [sectionLoading, setSectionLoading] = useState({
-    overview: true,
-    quickActions: true,
-    timeline: true,
+  const {
+    loading,
+    refreshing,
+    error,
+    lastUpdated,
+    pollingPaused,
+    overview,
+    quickActions,
+    timeline,
+    sectionLoading,
+    fetchDashboard,
+  } = useRoleDashboard({
+    overviewLimit,
+    timelineLimit,
+    getOverview: dashboardService.getStaffOverview,
+    getQuickActions: dashboardService.getStaffQuickActions,
+    getTimeline: dashboardService.getStaffTimeline,
+    loadErrorMessage: "Failed to load staff dashboard",
   });
 
   const summary = useMemo(() => overview?.summary || {}, [overview]);
@@ -165,246 +159,6 @@ function StaffDashboard() {
     ],
     [quickActions],
   );
-
-  const fetchDashboard = useCallback(
-    async ({
-      silent = false,
-      pollOnly = false,
-      suppressToast = false,
-    } = {}) => {
-      if (silent) {
-        setRefreshing(true);
-      }
-
-      if (!pollOnly && !silent) {
-        setLoading(true);
-      }
-
-      if (pollOnly) {
-        setSectionLoading((prev) => ({
-          ...prev,
-          quickActions: true,
-          timeline: true,
-        }));
-      } else {
-        setError("");
-        setSectionLoading({
-          overview: true,
-          quickActions: true,
-          timeline: true,
-        });
-      }
-
-      try {
-        if (pollOnly) {
-          const [quickActionsResult, timelineResult] = await Promise.allSettled(
-            [
-              dashboardService.getStaffQuickActions(),
-              dashboardService.getStaffTimeline(timelineLimit),
-            ],
-          );
-
-          const errors = [];
-          let hasSuccess = false;
-
-          if (quickActionsResult.status === "fulfilled") {
-            setQuickActions(quickActionsResult.value || null);
-            hasSuccess = true;
-          } else {
-            errors.push(
-              getReadableError(
-                quickActionsResult.reason,
-                "Failed to refresh quick actions",
-              ),
-            );
-          }
-
-          if (timelineResult.status === "fulfilled") {
-            setTimeline(
-              Array.isArray(timelineResult.value) ? timelineResult.value : [],
-            );
-            hasSuccess = true;
-          } else {
-            errors.push(
-              getReadableError(
-                timelineResult.reason,
-                "Failed to refresh timeline",
-              ),
-            );
-          }
-
-          if (hasSuccess) {
-            setLastUpdated(new Date());
-          }
-
-          setSectionLoading((prev) => ({
-            ...prev,
-            quickActions: false,
-            timeline: false,
-          }));
-
-          if (errors.length > 0 && !suppressToast) {
-            toast.error(errors[0]);
-          }
-
-          return;
-        }
-
-        const [overviewResult, quickActionsResult, timelineResult] =
-          await Promise.allSettled([
-            dashboardService.getStaffOverview(overviewLimit),
-            dashboardService.getStaffQuickActions(),
-            dashboardService.getStaffTimeline(timelineLimit),
-          ]);
-
-        const errors = [];
-        let hasSuccess = false;
-
-        if (overviewResult.status === "fulfilled") {
-          setOverview(overviewResult.value || null);
-          hasSuccess = true;
-        } else {
-          errors.push(
-            getReadableError(
-              overviewResult.reason,
-              "Failed to load overview data",
-            ),
-          );
-        }
-
-        if (quickActionsResult.status === "fulfilled") {
-          setQuickActions(quickActionsResult.value || null);
-          hasSuccess = true;
-        } else {
-          errors.push(
-            getReadableError(
-              quickActionsResult.reason,
-              "Failed to load quick actions",
-            ),
-          );
-        }
-
-        if (timelineResult.status === "fulfilled") {
-          setTimeline(
-            Array.isArray(timelineResult.value) ? timelineResult.value : [],
-          );
-          hasSuccess = true;
-        } else {
-          errors.push(
-            getReadableError(timelineResult.reason, "Failed to load timeline"),
-          );
-        }
-
-        if (hasSuccess) {
-          setError("");
-          setLastUpdated(new Date());
-        }
-
-        if (errors.length > 0) {
-          const firstError = errors[0];
-          setError(firstError);
-          if (!suppressToast) {
-            toast.error(firstError);
-          }
-        }
-
-        setSectionLoading({
-          overview: false,
-          quickActions: false,
-          timeline: false,
-        });
-      } catch (err) {
-        const message = getReadableError(err, "Failed to load staff dashboard");
-        if (!pollOnly) {
-          setError(message);
-        }
-        if (!suppressToast) {
-          toast.error(message);
-        }
-      } finally {
-        if (!pollOnly && !silent) {
-          setLoading(false);
-        }
-        if (silent) {
-          setRefreshing(false);
-        }
-        if (!pollOnly) {
-          setSectionLoading({
-            overview: false,
-            quickActions: false,
-            timeline: false,
-          });
-        }
-      }
-    },
-    [overviewLimit, timelineLimit],
-  );
-
-  useEffect(() => {
-    fetchDashboard();
-  }, [fetchDashboard]);
-
-  useEffect(() => {
-    if (typeof window === "undefined" || typeof document === "undefined") {
-      return undefined;
-    }
-
-    let intervalId = null;
-
-    const clearPolling = () => {
-      if (intervalId !== null) {
-        window.clearInterval(intervalId);
-        intervalId = null;
-      }
-    };
-
-    const startPolling = () => {
-      if (intervalId !== null) return;
-
-      intervalId = window.setInterval(() => {
-        if (document.visibilityState === "visible") {
-          fetchDashboard({ pollOnly: true, suppressToast: true });
-        }
-      }, 60000);
-    };
-
-    const handleVisibilityChange = () => {
-      const isVisible = document.visibilityState === "visible";
-      setPollingPaused(!isVisible);
-
-      if (isVisible) {
-        fetchDashboard({ pollOnly: true, suppressToast: true });
-        startPolling();
-      } else {
-        clearPolling();
-      }
-    };
-
-    const handleWindowFocus = () => {
-      if (document.visibilityState === "visible") {
-        setPollingPaused(false);
-        fetchDashboard({ pollOnly: true, suppressToast: true });
-        startPolling();
-      }
-    };
-
-    if (document.visibilityState === "visible") {
-      setPollingPaused(false);
-      startPolling();
-    } else {
-      setPollingPaused(true);
-      clearPolling();
-    }
-
-    document.addEventListener("visibilitychange", handleVisibilityChange);
-    window.addEventListener("focus", handleWindowFocus);
-
-    return () => {
-      clearPolling();
-      document.removeEventListener("visibilitychange", handleVisibilityChange);
-      window.removeEventListener("focus", handleWindowFocus);
-    };
-  }, [fetchDashboard]);
 
   if (
     !loading &&

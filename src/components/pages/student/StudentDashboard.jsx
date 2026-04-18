@@ -1,6 +1,5 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
-import toast from "react-hot-toast";
 import {
   AlertTriangle,
   ArrowUpRight,
@@ -14,10 +13,14 @@ import {
   User,
 } from "lucide-react";
 import { useAuth } from "../../../hooks/useAuth";
+import {
+  OVERVIEW_LIMIT_OPTIONS,
+  TIMELINE_LIMIT_OPTIONS,
+  formatDateTime,
+  isDisplayPrimitive,
+} from "../../../utils/dashboardHelpers";
+import useRoleDashboard from "../../../hooks/useRoleDashboard";
 import dashboardService from "../../../services/dashboardService";
-
-const OVERVIEW_LIMIT_OPTIONS = [5, 10, 15, 20];
-const TIMELINE_LIMIT_OPTIONS = [10, 20, 50, 100];
 
 const TITLE_KEYS = [
   "title",
@@ -40,13 +43,9 @@ const TIMESTAMP_KEYS = [
 ];
 
 const STATUS_KEYS = ["status", "state", "paymentStatus"];
-
-const formatDateTime = (value) => {
-  if (!value) return "-";
-  const date = new Date(value);
-  if (Number.isNaN(date.getTime())) return "-";
-  return date.toLocaleString();
-};
+const TITLE_KEY_SET = new Set(TITLE_KEYS);
+const TIMESTAMP_KEY_SET = new Set(TIMESTAMP_KEYS);
+const STATUS_KEY_SET = new Set(STATUS_KEYS);
 
 const toLabel = (value) => {
   return String(value || "")
@@ -62,13 +61,6 @@ const formatValue = (value) => {
   if (typeof value === "boolean") return value ? "Yes" : "No";
   if (typeof value === "number") return value.toLocaleString();
   return String(value);
-};
-
-const getReadableError = (error, fallbackMessage) => {
-  if (error instanceof Error && error.message) {
-    return error.message;
-  }
-  return fallbackMessage;
 };
 
 const getFirstValueByKeys = (source, keys) => {
@@ -117,340 +109,98 @@ const getTimelineBadgeClass = (eventType) => {
 
 function StudentDashboard() {
   const { user } = useAuth();
-  const [loading, setLoading] = useState(true);
-  const [refreshing, setRefreshing] = useState(false);
-  const [error, setError] = useState("");
-  const [lastUpdated, setLastUpdated] = useState(null);
-  const [pollingPaused, setPollingPaused] = useState(false);
   const [overviewLimit, setOverviewLimit] = useState(5);
   const [timelineLimit, setTimelineLimit] = useState(20);
-  const [overview, setOverview] = useState(null);
-  const [quickActions, setQuickActions] = useState(null);
-  const [timeline, setTimeline] = useState([]);
-  const [sectionLoading, setSectionLoading] = useState({
-    overview: true,
-    quickActions: true,
-    timeline: true,
+  const {
+    loading,
+    refreshing,
+    error,
+    lastUpdated,
+    pollingPaused,
+    overview,
+    quickActions,
+    timeline,
+    sectionLoading,
+    fetchDashboard,
+  } = useRoleDashboard({
+    overviewLimit,
+    timelineLimit,
+    getOverview: dashboardService.getStudentOverview,
+    getQuickActions: dashboardService.getStudentQuickActions,
+    getTimeline: dashboardService.getStudentTimeline,
+    loadErrorMessage: "Failed to load student dashboard",
   });
 
-  const summaryCards = useMemo(() => {
-    if (!overview || typeof overview !== "object") return [];
+  const { summaryCards, detailItems, listSections } = useMemo(() => {
+    if (!overview || typeof overview !== "object") {
+      return {
+        summaryCards: [],
+        detailItems: [],
+        listSections: [],
+      };
+    }
 
     const source =
       overview.summary && typeof overview.summary === "object"
         ? overview.summary
         : overview;
 
-    return Object.entries(source)
-      .filter(([, value]) => {
-        return (
-          !Array.isArray(value) &&
-          (typeof value === "number" ||
-            typeof value === "string" ||
-            typeof value === "boolean")
-        );
-      })
-      .slice(0, 8)
-      .map(([key, value]) => ({
+    const summaryCards = [];
+    for (const [key, value] of Object.entries(source)) {
+      if (!isDisplayPrimitive(value)) continue;
+      summaryCards.push({
         key,
         label: toLabel(key),
         value: formatValue(value),
-      }));
+      });
+
+      if (summaryCards.length === 8) {
+        break;
+      }
+    }
+
+    const detailItems = [];
+    const listSections = [];
+
+    for (const [key, value] of Object.entries(overview)) {
+      if (key === "summary") continue;
+
+      if (Array.isArray(value)) {
+        listSections.push({
+          key,
+          label: toLabel(key),
+          items: value,
+        });
+        continue;
+      }
+
+      if (isDisplayPrimitive(value)) {
+        detailItems.push({
+          key,
+          label: toLabel(key),
+          value: formatValue(value),
+        });
+      }
+    }
+
+    return {
+      summaryCards,
+      detailItems,
+      listSections,
+    };
   }, [overview]);
 
   const quickActionItems = useMemo(() => {
     if (!quickActions || typeof quickActions !== "object") return [];
 
     return Object.entries(quickActions)
-      .filter(([, value]) => {
-        return (
-          !Array.isArray(value) &&
-          (typeof value === "number" ||
-            typeof value === "string" ||
-            typeof value === "boolean")
-        );
-      })
+      .filter(([, value]) => isDisplayPrimitive(value))
       .map(([key, value]) => ({
         key,
         label: toLabel(key),
         value: formatValue(value),
       }));
   }, [quickActions]);
-
-  const detailItems = useMemo(() => {
-    if (!overview || typeof overview !== "object") return [];
-
-    return Object.entries(overview)
-      .filter(([key, value]) => {
-        if (key === "summary") return false;
-        return (
-          !Array.isArray(value) &&
-          (typeof value === "number" ||
-            typeof value === "string" ||
-            typeof value === "boolean")
-        );
-      })
-      .map(([key, value]) => ({
-        key,
-        label: toLabel(key),
-        value: formatValue(value),
-      }));
-  }, [overview]);
-
-  const listSections = useMemo(() => {
-    if (!overview || typeof overview !== "object") return [];
-
-    return Object.entries(overview)
-      .filter(([, value]) => Array.isArray(value))
-      .map(([key, value]) => ({
-        key,
-        label: toLabel(key),
-        items: Array.isArray(value) ? value : [],
-      }));
-  }, [overview]);
-
-  const fetchDashboard = useCallback(
-    async ({
-      silent = false,
-      pollOnly = false,
-      suppressToast = false,
-    } = {}) => {
-      if (silent) {
-        setRefreshing(true);
-      }
-
-      if (!pollOnly && !silent) {
-        setLoading(true);
-      }
-
-      if (pollOnly) {
-        setSectionLoading((prev) => ({
-          ...prev,
-          quickActions: true,
-          timeline: true,
-        }));
-      } else {
-        setError("");
-        setSectionLoading({
-          overview: true,
-          quickActions: true,
-          timeline: true,
-        });
-      }
-
-      try {
-        if (pollOnly) {
-          const [quickActionsResult, timelineResult] = await Promise.allSettled(
-            [
-              dashboardService.getStudentQuickActions(),
-              dashboardService.getStudentTimeline(timelineLimit),
-            ],
-          );
-
-          const errors = [];
-          let hasSuccess = false;
-
-          if (quickActionsResult.status === "fulfilled") {
-            setQuickActions(quickActionsResult.value || null);
-            hasSuccess = true;
-          } else {
-            errors.push(
-              getReadableError(
-                quickActionsResult.reason,
-                "Failed to refresh quick actions",
-              ),
-            );
-          }
-
-          if (timelineResult.status === "fulfilled") {
-            setTimeline(
-              Array.isArray(timelineResult.value) ? timelineResult.value : [],
-            );
-            hasSuccess = true;
-          } else {
-            errors.push(
-              getReadableError(
-                timelineResult.reason,
-                "Failed to refresh timeline",
-              ),
-            );
-          }
-
-          if (hasSuccess) {
-            setLastUpdated(new Date());
-          }
-
-          setSectionLoading((prev) => ({
-            ...prev,
-            quickActions: false,
-            timeline: false,
-          }));
-
-          if (errors.length > 0 && !suppressToast) {
-            toast.error(errors[0]);
-          }
-
-          return;
-        }
-
-        const [overviewResult, quickActionsResult, timelineResult] =
-          await Promise.allSettled([
-            dashboardService.getStudentOverview(overviewLimit),
-            dashboardService.getStudentQuickActions(),
-            dashboardService.getStudentTimeline(timelineLimit),
-          ]);
-
-        const errors = [];
-        let hasSuccess = false;
-
-        if (overviewResult.status === "fulfilled") {
-          setOverview(overviewResult.value || null);
-          hasSuccess = true;
-        } else {
-          errors.push(
-            getReadableError(
-              overviewResult.reason,
-              "Failed to load overview data",
-            ),
-          );
-        }
-
-        if (quickActionsResult.status === "fulfilled") {
-          setQuickActions(quickActionsResult.value || null);
-          hasSuccess = true;
-        } else {
-          errors.push(
-            getReadableError(
-              quickActionsResult.reason,
-              "Failed to load quick actions",
-            ),
-          );
-        }
-
-        if (timelineResult.status === "fulfilled") {
-          setTimeline(
-            Array.isArray(timelineResult.value) ? timelineResult.value : [],
-          );
-          hasSuccess = true;
-        } else {
-          errors.push(
-            getReadableError(timelineResult.reason, "Failed to load timeline"),
-          );
-        }
-
-        if (hasSuccess) {
-          setError("");
-          setLastUpdated(new Date());
-        }
-
-        if (errors.length > 0) {
-          const firstError = errors[0];
-          setError(firstError);
-          if (!suppressToast) {
-            toast.error(firstError);
-          }
-        }
-      } catch (err) {
-        const message = getReadableError(
-          err,
-          "Failed to load student dashboard",
-        );
-        if (!pollOnly) {
-          setError(message);
-        }
-        if (!suppressToast) {
-          toast.error(message);
-        }
-      } finally {
-        if (!pollOnly && !silent) {
-          setLoading(false);
-        }
-        if (silent) {
-          setRefreshing(false);
-        }
-        if (pollOnly) {
-          setSectionLoading((prev) => ({
-            ...prev,
-            quickActions: false,
-            timeline: false,
-          }));
-        } else {
-          setSectionLoading({
-            overview: false,
-            quickActions: false,
-            timeline: false,
-          });
-        }
-      }
-    },
-    [overviewLimit, timelineLimit],
-  );
-
-  useEffect(() => {
-    fetchDashboard();
-  }, [fetchDashboard]);
-
-  useEffect(() => {
-    if (typeof window === "undefined" || typeof document === "undefined") {
-      return undefined;
-    }
-
-    let intervalId = null;
-
-    const clearPolling = () => {
-      if (intervalId !== null) {
-        window.clearInterval(intervalId);
-        intervalId = null;
-      }
-    };
-
-    const startPolling = () => {
-      if (intervalId !== null) return;
-
-      intervalId = window.setInterval(() => {
-        if (document.visibilityState === "visible") {
-          fetchDashboard({ pollOnly: true, suppressToast: true });
-        }
-      }, 60000);
-    };
-
-    const handleVisibilityChange = () => {
-      const isVisible = document.visibilityState === "visible";
-      setPollingPaused(!isVisible);
-
-      if (isVisible) {
-        fetchDashboard({ pollOnly: true, suppressToast: true });
-        startPolling();
-      } else {
-        clearPolling();
-      }
-    };
-
-    const handleWindowFocus = () => {
-      if (document.visibilityState === "visible") {
-        setPollingPaused(false);
-        fetchDashboard({ pollOnly: true, suppressToast: true });
-        startPolling();
-      }
-    };
-
-    if (document.visibilityState === "visible") {
-      setPollingPaused(false);
-      startPolling();
-    } else {
-      setPollingPaused(true);
-      clearPolling();
-    }
-
-    document.addEventListener("visibilitychange", handleVisibilityChange);
-    window.addEventListener("focus", handleWindowFocus);
-
-    return () => {
-      clearPolling();
-      document.removeEventListener("visibilitychange", handleVisibilityChange);
-      window.removeEventListener("focus", handleWindowFocus);
-    };
-  }, [fetchDashboard]);
 
   if (
     !loading &&
@@ -785,17 +535,10 @@ function StudentDashboard() {
 
                       const extraFields = Object.entries(safeItem)
                         .filter(([key, value]) => {
-                          if (TITLE_KEYS.includes(key)) return false;
-                          if (TIMESTAMP_KEYS.includes(key)) return false;
-                          if (STATUS_KEYS.includes(key)) return false;
-                          return (
-                            !Array.isArray(value) &&
-                            value !== null &&
-                            typeof value !== "undefined" &&
-                            (typeof value === "string" ||
-                              typeof value === "number" ||
-                              typeof value === "boolean")
-                          );
+                          if (TITLE_KEY_SET.has(key)) return false;
+                          if (TIMESTAMP_KEY_SET.has(key)) return false;
+                          if (STATUS_KEY_SET.has(key)) return false;
+                          return isDisplayPrimitive(value);
                         })
                         .slice(0, 3);
 
