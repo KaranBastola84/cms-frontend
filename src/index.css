@@ -4,33 +4,23 @@
 /* Luxury Modern Monochrome Theme */
 
 :root {
-  /* Core Monochrome Palette */
-  --bg-dark: #0F0F0F;
-  --surface-dark: #1A1A1A;
-  --surface-light: #262626;
-  --surface-hover: #333333;
-  
-  /* Text - Significantly brightened for contrast */
-  --text-primary: #FFFFFF;
-  --text-secondary: #E0E0E0;
-  --text-muted: #A0A0A0;
-  
-  /* Luxury Gold Accents */
-  --gold-accent: #C6A36A;
-  --gold-light: #D4B785;
-  --gold-dark: #A3824D;
-  --gold-muted: rgba(198, 163, 106, 0.15);
-  
-  /* Border & Divider */
-  --border-subtle: rgba(255, 255, 255, 0.08);
-  --border-strong: rgba(255, 255, 255, 0.15);
-  --border-gold: rgba(198, 163, 106, 0.3);
-  
-  /* Semantic Colors - Muted for dark theme */
-  --success-green: #2E7D32;
-  --error-red: #C62828;
-  --warning-amber: #F57F17;
-  --info-blue: #1565C0;
+  /* Warm Coffee-Inspired Palette */
+  --dark-coffee: #4A2F19;
+  --light-cream: #C8A27B;
+  --soft-beige: #EFE7D3;
+  --dark-text: #1A1A1A;
+
+  /* Supporting Colors */
+  --coffee-medium: #6B4423;
+  --coffee-light: #8B5E34;
+  --cream-light: #F5EFE6;
+  --beige-dark: #D4C4B0;
+
+  /* Semantic Colors */
+  --success-green: #4caf50;
+  --error-red: #ef4444;
+  --warning-amber: #f59e0b;
+  --info-blue: #3b82f6;
 }
 
 /* Base Styles */

@@ -1,372 +1,270 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import {
-  Users,
-  Star,
-  ArrowRight,
-  BookOpen,
-  PlayCircle,
-  Award,
+  BookOpenCheck,
+  ChevronRight,
   Clock3,
-  Sparkles,
-  CheckCircle2,
+  MapPin,
+  PhoneCall,
+  ShieldCheck,
 } from "lucide-react";
 
-const signatureCourses = [
-  {
-    title: "Barista Foundations",
-    duration: "4 Weeks",
-    level: "Beginner",
-    description:
-      "Build a rock-solid base in espresso, milk texturing, and service flow with hands-on practice every session.",
-  },
-  {
-    title: "Latte Art Mastery",
-    duration: "3 Weeks",
-    level: "Intermediate",
-    description:
-      "From hearts to tulips and rosettas, master pouring mechanics with live coaching and precision drills.",
-  },
-  {
-    title: "Brew Methods Lab",
-    duration: "5 Weeks",
-    level: "All Levels",
-    description:
-      "Dial in V60, AeroPress, Chemex, and batch brew recipes using extraction theory and taste mapping.",
-  },
-  {
-    title: "Cafe Leadership Track",
-    duration: "6 Weeks",
-    level: "Advanced",
-    description:
-      "Learn workflow design, team management, inventory controls, and profit-friendly service operations.",
-  },
+const navLinks = [
+  { to: "/products", label: "Products" },
+  { to: "/checkout", label: "Add to cart" },
+  { to: "/login", label: "Login" },
+  { to: "/inquiry", label: "Inquiry" },
 ];
 
-const learningHighlights = [
+const publicInfoCards = [
   {
-    icon: Users,
-    title: "Small Cohorts",
+    icon: BookOpenCheck,
+    title: "Structured Programs",
     description:
-      "Personal mentorship with focused feedback in every practical session.",
+      "Public catalog access for all training products, with clear outcomes and transparent pricing.",
   },
   {
-    icon: Award,
-    title: "Industry-Certified",
+    icon: ShieldCheck,
+    title: "Verified Standards",
     description:
-      "Graduate with credentials recognized by specialty cafes and training partners.",
+      "Curriculum and assessments are aligned to practical cafe operations and professional workflows.",
   },
   {
     icon: Clock3,
-    title: "Flexible Timings",
+    title: "Flexible Schedule",
     description:
-      "Weekday and weekend batches tailored for students, staff, and working professionals.",
+      "Weekday and weekend options are available for students and working professionals.",
   },
 ];
 
 const LandingPage = () => {
   const [scrolled, setScrolled] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY > 50) {
-        setScrolled(true);
-      } else {
-        setScrolled(false);
-      }
-    };
+    const onScroll = () => setScrolled(window.scrollY > 12);
 
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  useEffect(() => {
+    const frame = requestAnimationFrame(() => setIsReady(true));
+    return () => cancelAnimationFrame(frame);
+  }, []);
+
+  const closeMenu = () => setMenuOpen(false);
+
   return (
-    <div className="min-h-screen bg-[#F6EFE4] font-sans overflow-x-hidden w-full text-[#2B1C14]">
-      {/* Sticky Navbar */}
-      <nav
-        className={`fixed w-full z-50 transition-all duration-300 ${
+    <div className="relative min-h-screen overflow-x-hidden bg-[radial-gradient(circle_at_18%_15%,rgba(0,0,0,0.07),transparent_45%),radial-gradient(circle_at_85%_20%,rgba(0,0,0,0.04),transparent_40%),linear-gradient(165deg,#ffffff_0%,#fafafa_52%,#f3f3f3_100%)] font-[Manrope,Segoe_UI,sans-serif] text-zinc-900">
+      <div
+        className="pointer-events-none absolute -left-24 -top-32 h-96 w-96 rounded-full bg-black/10 blur-3xl"
+        aria-hidden="true"
+      />
+      <div
+        className="pointer-events-none absolute -right-24 top-24 h-96 w-96 rounded-full bg-black/10 blur-3xl"
+        aria-hidden="true"
+      />
+
+      <header
+        className={`sticky top-0 z-60 border-b transition-all duration-300 ${
           scrolled
-            ? "bg-[#2C1C14]/88 backdrop-blur-md shadow-lg py-4 border-b border-[#E6C9A5]/25"
-            : "bg-transparent py-6"
+            ? "border-black/10 bg-white/85 backdrop-blur-md"
+            : "border-transparent bg-transparent"
         }`}
       >
-        <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
-          {/* Logo - Left */}
-          <Link to="/" className="flex items-center gap-3 group">
-            <img
-              src="/logo.png"
-              alt="Brewista Coffee School Logo"
-              className="h-10 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
+        <div className="relative z-10 mx-auto flex min-h-20 w-[min(1120px,92vw)] items-center justify-between gap-4">
+          <Link
+            to="/"
+            className="inline-flex items-center gap-3"
+            onClick={closeMenu}
+          >
+            <span
+              className="h-[1.15rem] w-[1.15rem] rounded-full border border-black/25 bg-linear-to-br from-white to-zinc-400"
+              aria-hidden="true"
             />
+            <span className="text-[0.94rem] font-semibold uppercase tracking-[0.08em]">
+              Brewista Coffee School
+            </span>
           </Link>
 
-          {/* Nav Links - Center */}
-          <div className="hidden md:flex items-center gap-8">
-            <Link
-              to="/products"
-              className="text-[#FFF5E8]/90 hover:text-white font-semibold transition-colors duration-200 text-sm tracking-[0.08em] uppercase"
-            >
-              Products
-            </Link>
-            <Link
-              to="/about"
-              className="text-[#FFF5E8]/90 hover:text-white font-semibold transition-colors duration-200 text-sm tracking-[0.08em] uppercase"
-            >
-              About
-            </Link>
-            <Link
-              to="/courses"
-              className="text-[#FFF5E8]/90 hover:text-white font-semibold transition-colors duration-200 text-sm tracking-[0.08em] uppercase"
-            >
-              Courses
-            </Link>
-          </div>
+          <button
+            type="button"
+            className="inline-flex items-center justify-center rounded-full border border-black/20 bg-white px-4 py-2 text-[0.79rem] font-semibold uppercase tracking-[0.08em] text-zinc-800 md:hidden"
+            onClick={() => setMenuOpen((previous) => !previous)}
+            aria-expanded={menuOpen}
+            aria-label="Toggle menu"
+          >
+            {menuOpen ? "Close" : "Menu"}
+          </button>
 
-          {/* CTA - Right */}
-          <div className="flex items-center gap-4">
-            <Link
-              to="/login"
-              className={`px-6 py-2.5 rounded-full font-bold text-sm transition-all duration-300 shadow-md flex items-center gap-2 hover:scale-105 ${
-                scrolled
-                  ? "bg-[#E8B57A] text-[#2C1C14] hover:bg-[#F2C892]"
-                  : "bg-[#E8B57A]/95 text-[#2C1C14] hover:bg-[#F2C892]"
+          <nav
+            className={`absolute left-[4vw] right-[4vw] top-[calc(100%-0.25rem)] flex flex-col gap-1 rounded-2xl border border-black/10 bg-white/95 p-2 backdrop-blur-md transition-all duration-200 md:static md:left-auto md:right-auto md:top-auto md:flex md:w-auto md:flex-row md:items-center md:gap-1 md:rounded-none md:border-0 md:bg-transparent md:p-0 md:backdrop-blur-none ${
+              menuOpen
+                ? "pointer-events-auto translate-y-0 opacity-100"
+                : "pointer-events-none -translate-y-3 opacity-0 md:pointer-events-auto md:translate-y-0 md:opacity-100"
+            }`}
+          >
+            {navLinks.map((link) => (
+              <Link
+                key={link.to}
+                to={link.to}
+                className="rounded-xl border border-transparent px-4 py-3 text-sm font-medium text-zinc-700 transition-all duration-200 hover:border-black/15 hover:bg-black/5 hover:text-zinc-900 md:rounded-full md:px-3 md:py-2"
+                onClick={closeMenu}
+              >
+                {link.label}
+              </Link>
+            ))}
+          </nav>
+        </div>
+      </header>
+
+      <main>
+        <section className="pb-10 pt-8 md:pt-14">
+          <div className="relative z-10 mx-auto grid w-[min(1120px,92vw)] gap-5 lg:grid-cols-[1.2fr_0.9fr]">
+            <div
+              className={`rounded-3xl border border-black/10 bg-white/80 p-6 shadow-[0_20px_40px_rgba(0,0,0,0.12)] backdrop-blur-md transition-all duration-700 md:p-9 ${
+                isReady
+                  ? "translate-y-0 opacity-100"
+                  : "translate-y-6 opacity-0"
               }`}
             >
-              Login
-            </Link>
-          </div>
-        </div>
-      </nav>
+              <p className="text-[0.73rem] font-bold uppercase tracking-[0.16em] text-zinc-500">
+                Public Information
+              </p>
+              <h1 className="mt-3 text-[clamp(2rem,4.8vw,3.65rem)] leading-[1.03] font-[Cormorant_Garamond,Georgia,serif] text-zinc-900">
+                Professional coffee education with clear outcomes.
+              </h1>
+              <p className="mt-4 max-w-[40ch] text-[0.99rem] leading-7 text-zinc-700">
+                Brewista offers hands-on training for learners and cafe teams.
+                Browse programs, add products to cart, sign in securely, or send
+                an inquiry in minutes.
+              </p>
 
-      {/* Hero Section */}
-      <section className="relative min-h-screen flex flex-col justify-center items-center text-center px-4 w-full">
-        {/* Background Image with Overlay */}
-        <div className="absolute inset-0 z-0">
-          <img
-            src="/hero-bg.png"
-            alt="Barista making coffee"
-            className="w-full h-full object-cover brightness-[0.72] contrast-105 saturate-105"
-          />
-          <div className="absolute inset-0 bg-linear-to-b from-[#2C1C14]/58 via-[#2C1C14]/46 to-[#2C1C14]/72"></div>
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_28%,rgba(255,245,232,0.22),rgba(44,28,20,0.45)_55%,rgba(44,28,20,0.72)_100%)]"></div>
-        </div>
-
-        {/* Hero Content */}
-        <div className="relative z-10 max-w-5xl mx-auto mt-20 px-6 py-10 md:px-10 md:py-12 rounded-4xl bg-[#2C1C14]/45 border border-[#FFE7CC]/35 backdrop-blur-md shadow-[0_24px_70px_rgba(28,18,12,0.48)]">
-          <span className="inline-block py-1.5 px-4 rounded-full bg-[#F7DDB9]/20 border border-[#F7DDB9]/55 text-[#FFF8EF] text-xs sm:text-sm font-semibold tracking-[0.18em] uppercase mb-6">
-            WELCOME TO EXCELLENCE
-          </span>
-          <h1 className="font-serif text-5xl md:text-7xl font-bold text-white mb-6 leading-[1.05] tracking-tight">
-            <span className="text-[#FFF7ED] [text-shadow:0_10px_22px_rgba(28,18,12,0.85)]">
-              Master the Art of
-            </span>
-            <br />
-            <span className="text-transparent bg-clip-text bg-linear-to-r from-[#FFFDF9] via-[#FCECD3] to-[#E8B57A]">
-              Coffee Crafting
-            </span>
-          </h1>
-          <p className="text-base sm:text-lg md:text-xl text-[#FFF4E6] mb-10 max-w-3xl mx-auto leading-relaxed font-medium [text-shadow:0_4px_12px_rgba(28,18,12,0.68)]">
-            Elevate your barista skills with industry-leading experts. From bean
-            to cup, discover the secrets of perfect extraction and latte art in
-            our state-of-the-art academy.
-          </p>
-
-          <div
-            className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-in-up"
-            style={{ animationDelay: "0.2s" }}
-          >
-            <Link
-              to="/products"
-              className="w-full sm:w-auto px-8 py-4 bg-[#E8B57A] hover:bg-[#F2C892] text-[#2C1C14] rounded-full font-extrabold transition-all duration-300 hover:shadow-xl flex items-center justify-center gap-2 hover:-translate-y-1 transform shadow-[0_10px_22px_rgba(31,18,10,0.35)]"
-            >
-              Explore Courses
-              <ArrowRight className="w-5 h-5" />
-            </Link>
-            <Link
-              to="/about"
-              className="w-full sm:w-auto px-8 py-4 bg-[#FFFFFF]/8 border-2 border-[#FDE8CF]/60 hover:bg-[#FFFFFF]/16 text-[#FFF8F1] rounded-full font-extrabold transition-all duration-300 flex items-center justify-center gap-2 hover:-translate-y-1 transform"
-            >
-              <PlayCircle className="w-5 h-5 transition-colors" />
-              Watch Story
-            </Link>
-          </div>
-        </div>
-
-        {/* Floating Stat Badges */}
-        <div className="absolute bottom-8 left-0 right-0 z-20 px-6">
-          <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="bg-[#2C1C14]/42 backdrop-blur-lg border border-[#F5DEC3]/30 p-6 rounded-2xl flex items-center gap-4 transform hover:-translate-y-1.5 transition-transform duration-300 shadow-[0_10px_24px_rgba(28,18,12,0.4)]">
-              <div className="bg-[#E8B57A]/20 p-3 rounded-xl border border-[#F6D8B2]/40">
-                <Users className="w-8 h-8 text-[#FFF2E0]" />
-              </div>
-              <div className="text-left">
-                <h3 className="text-3xl font-bold text-white mb-1">5,000+</h3>
-                <p className="text-[#FFEED8] text-sm font-semibold uppercase tracking-widest">
-                  Trained Baristas
-                </p>
-              </div>
-            </div>
-
-            <div className="bg-[#2C1C14]/42 backdrop-blur-lg border border-[#F5DEC3]/30 p-6 rounded-2xl flex items-center gap-4 transform hover:-translate-y-1.5 transition-transform duration-300 shadow-[0_10px_24px_rgba(28,18,12,0.4)]">
-              <div className="bg-[#E8B57A]/20 p-3 rounded-xl border border-[#F6D8B2]/40">
-                <BookOpen className="w-8 h-8 text-[#FFF2E0]" />
-              </div>
-              <div className="text-left">
-                <h3 className="text-3xl font-bold text-white mb-1">20+</h3>
-                <p className="text-[#FFEED8] text-sm font-semibold uppercase tracking-widest">
-                  Expert Courses
-                </p>
-              </div>
-            </div>
-
-            <div className="bg-[#2C1C14]/42 backdrop-blur-lg border border-[#F5DEC3]/30 p-6 rounded-2xl flex items-center gap-4 transform hover:-translate-y-1.5 transition-transform duration-300 shadow-[0_10px_24px_rgba(28,18,12,0.4)]">
-              <div className="bg-[#E8B57A]/20 p-3 rounded-xl border border-[#F6D8B2]/40">
-                <Star className="w-8 h-8 text-[#FFF2E0]" />
-              </div>
-              <div className="text-left">
-                <h3 className="text-3xl font-bold text-white mb-1">99%</h3>
-                <p className="text-[#FFEED8] text-sm font-semibold uppercase tracking-widest">
-                  Job Placement
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="absolute bottom-0 left-0 right-0 h-24 bg-linear-to-t from-[#F6EFE4] to-transparent"></div>
-      </section>
-
-      {/* Signature Courses */}
-      <section className="py-24 px-6 bg-[#F6EFE4]">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-14">
-            <p className="text-[#8D5B33] text-sm font-semibold tracking-[0.16em] uppercase">
-              Signature Programs
-            </p>
-            <h2 className="mt-3 font-serif text-4xl md:text-5xl font-bold text-[#2C1C14]">
-              Curated Learning Paths
-            </h2>
-            <div className="mt-5 flex items-center justify-center gap-3 text-[#B7824E]">
-              <span className="h-px w-14 bg-linear-to-r from-transparent to-[#B7824E]/80"></span>
-              <Sparkles className="w-4 h-4" />
-              <span className="h-px w-14 bg-linear-to-r from-[#B7824E]/80 to-transparent"></span>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-7">
-            {signatureCourses.map((course, index) => (
-              <article
-                key={course.title}
-                className="group relative overflow-hidden rounded-3xl border border-[#E7D7C3] bg-[#FFF9F0] p-7 shadow-[0_12px_32px_rgba(86,54,31,0.09)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_20px_38px_rgba(86,54,31,0.17)]"
-              >
-                <span className="absolute -top-2 right-4 font-serif text-6xl leading-none text-[#D8B790]/35">
-                  {String(index + 1).padStart(2, "0")}
-                </span>
-
-                <p className="text-xs uppercase tracking-[0.14em] text-[#A46E40] font-semibold">
-                  {course.level}
-                </p>
-                <h3 className="mt-3 font-serif text-3xl text-[#2C1C14] leading-tight">
-                  {course.title}
-                </h3>
-                <p className="mt-4 text-[#5A3A28] leading-relaxed">
-                  {course.description}
-                </p>
-
-                <div className="mt-6 flex items-center gap-2 text-[#8D5B33] font-semibold text-sm">
-                  <Clock3 className="w-4 h-4" />
-                  <span>{course.duration}</span>
-                </div>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Highlights */}
-      <section className="py-24 px-6 bg-[#2C1C14] text-[#FFF5E8]">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-14">
-            <p className="text-[#E8B57A] text-sm font-semibold tracking-[0.16em] uppercase">
-              Why Brewista
-            </p>
-            <h2 className="mt-3 font-serif text-4xl md:text-5xl font-bold text-white">
-              Built for Real-World Coffee Careers
-            </h2>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {learningHighlights.map((item) => {
-              const Icon = item.icon;
-
-              return (
-                <article
-                  key={item.title}
-                  className="rounded-2xl border border-[#F4D8B7]/25 bg-[#3A271D]/68 p-6 shadow-[0_12px_28px_rgba(22,12,8,0.35)] transition-all duration-300 hover:-translate-y-1"
+              <div className="mt-6 flex flex-wrap gap-3 max-[620px]:flex-col">
+                <Link
+                  to="/products"
+                  className="inline-flex items-center justify-center gap-1 rounded-full border border-black/20 bg-white px-5 py-3 text-sm font-semibold text-zinc-900 transition-all duration-200 hover:-translate-y-0.5 hover:border-black/40 hover:bg-zinc-50"
                 >
-                  <div className="inline-flex p-3 rounded-xl bg-[#E8B57A]/20 border border-[#F4D8B7]/35">
-                    <Icon className="w-6 h-6 text-[#FFF2E0]" />
-                  </div>
-                  <h3 className="mt-4 text-2xl font-serif text-white">
-                    {item.title}
-                  </h3>
-                  <p className="mt-3 text-[#FBECDC]/90 leading-relaxed">
-                    {item.description}
-                  </p>
-                </article>
-              );
-            })}
-          </div>
+                  View products
+                  <ChevronRight className="h-4 w-4" />
+                </Link>
+                <Link
+                  to="/inquiry"
+                  className="inline-flex items-center justify-center rounded-full border border-black/20 bg-white px-5 py-3 text-sm font-semibold text-zinc-800 transition-all duration-200 hover:-translate-y-0.5 hover:border-black/40 hover:bg-zinc-50"
+                >
+                  Talk to admissions
+                </Link>
+              </div>
 
-          <div className="mt-12 grid grid-cols-1 md:grid-cols-2 gap-4 text-[#FBECDC]">
-            <div className="flex items-center gap-3 rounded-xl bg-[#3A271D]/58 border border-[#F4D8B7]/25 px-5 py-4">
-              <CheckCircle2 className="w-5 h-5 text-[#E8B57A]" />
-              <span>
-                Live cafe simulation with real service-pressure scenarios
-              </span>
+              
             </div>
-            <div className="flex items-center gap-3 rounded-xl bg-[#3A271D]/58 border border-[#F4D8B7]/25 px-5 py-4">
-              <CheckCircle2 className="w-5 h-5 text-[#E8B57A]" />
-              <span>Portfolio and interview prep for job-ready confidence</span>
-            </div>
-          </div>
-        </div>
-      </section>
 
-      {/* Full-width CTA */}
-      <section className="px-6 py-20 bg-[#F6EFE4]">
-        <div className="max-w-7xl mx-auto rounded-4xl border border-[#E7C9A5]/45 bg-linear-to-r from-[#2C1C14] via-[#3A271D] to-[#2C1C14] px-8 py-12 md:px-12 md:py-14 shadow-[0_20px_44px_rgba(38,24,16,0.32)]">
-          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8">
-            <div className="max-w-3xl">
-              <p className="text-[#F2C892] text-xs sm:text-sm font-semibold tracking-[0.16em] uppercase">
-                Enrollment Open Now
+            <aside
+              className={`flex rounded-3xl border border-black/10 bg-white/80 p-6 shadow-[0_20px_40px_rgba(0,0,0,0.11)] backdrop-blur-md transition-all duration-700 md:p-8 ${
+                isReady
+                  ? "translate-y-0 opacity-100"
+                  : "translate-y-8 opacity-0"
+              }`}
+              style={{ transitionDelay: "120ms" }}
+            >
+              <div className="flex w-full flex-col">
+                <p className="text-[0.72rem] font-bold uppercase tracking-[0.13em] text-zinc-500">
+                  Admission Snapshot
+                </p>
+                <h2 className="mt-3 text-[clamp(1.55rem,2.8vw,2.2rem)] leading-[1.1] font-[Cormorant_Garamond,Georgia,serif] text-zinc-900">
+                  Built for disciplined learning and real service standards.
+                </h2>
+
+                <div className="mt-5 grid grid-cols-2 gap-3 max-[620px]:grid-cols-1">
+                  <article className="rounded-xl border border-white/15 bg-black/30 px-4 py-3">
+                    <strong className="block text-xl leading-none text-white">
+                      06
+                    </strong>
+                    <span className="mt-1 block text-xs tracking-[0.04em] text-zinc-300">
+                      Core programs
+                    </span>
+                  </article>
+                  <article className="rounded-xl border border-white/15 bg-black/30 px-4 py-3">
+                    <strong className="block text-xl leading-none text-white">
+                      12
+                    </strong>
+                    <span className="mt-1 block text-xs tracking-[0.04em] text-zinc-300">
+                      Seats per batch
+                    </span>
+                  </article>
+                  <article className="rounded-xl border border-white/15 bg-black/30 px-4 py-3">
+                    <strong className="block text-xl leading-none text-white">
+                      24h
+                    </strong>
+                    <span className="mt-1 block text-xs tracking-[0.04em] text-zinc-300">
+                      Inquiry response
+                    </span>
+                  </article>
+                  <article className="rounded-xl border border-white/15 bg-black/30 px-4 py-3">
+                    <strong className="block text-xl leading-none text-white">
+                      100%
+                    </strong>
+                    <span className="mt-1 block text-xs tracking-[0.04em] text-zinc-300">
+                      Practical sessions
+                    </span>
+                  </article>
+                </div>
+
+                <Link
+                  to="/login"
+                  className="mt-6 inline-flex w-fit items-center gap-1 border-b border-black/30 pb-1 text-sm font-semibold text-zinc-900 transition-colors duration-200 hover:border-black"
+                >
+                  Continue to login
+                  <ChevronRight className="h-4 w-4" />
+                </Link>
+              </div>
+            </aside>
+          </div>
+        </section>
+
+        <section className="py-6 md:py-10">
+          <div className="relative z-10 mx-auto w-[min(1120px,92vw)]">
+            <div>
+              <p className="text-[0.74rem] font-bold uppercase tracking-[0.14em] text-zinc-500">
+                Why this public page is useful
               </p>
-              <h2 className="mt-3 font-serif text-3xl sm:text-4xl md:text-5xl text-white leading-tight">
-                Turn Passion Into Profession.
+              <h2 className="mt-3 max-w-[22ch] text-[clamp(1.7rem,4vw,2.55rem)] leading-[1.08] font-[Cormorant_Garamond,Georgia,serif] text-zinc-900">
+                Everything important is accessible from one place.
               </h2>
-              <p className="mt-4 text-[#FFEFD9]/90 text-base sm:text-lg leading-relaxed">
-                Join the next batch and train with expert mentors in a studio
-                built for craft, confidence, and career growth.
-              </p>
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-4 lg:justify-end">
-              <Link
-                to="/login"
-                className="px-8 py-4 rounded-full bg-[#E8B57A] hover:bg-[#F2C892] text-[#2C1C14] font-bold text-center transition-colors duration-300"
-              >
-                Start Your Journey
-              </Link>
-              <Link
-                to="/products"
-                className="px-8 py-4 rounded-full border border-[#FFE7CC]/60 text-[#FFF8EF] hover:bg-white/10 font-bold text-center transition-colors duration-300"
-              >
-                Browse Courses
-              </Link>
+            <div className="mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-3">
+              {publicInfoCards.map((item, index) => {
+                const Icon = item.icon;
+
+                return (
+                  <article
+                    key={item.title}
+                    className={`rounded-2xl border border-black/10 bg-white/80 p-5 shadow-[0_14px_26px_rgba(0,0,0,0.1)] transition-all duration-700 hover:-translate-y-1 ${
+                      isReady
+                        ? "translate-y-0 opacity-100"
+                        : "translate-y-6 opacity-0"
+                    }`}
+                    style={{ transitionDelay: `${220 + index * 90}ms` }}
+                  >
+                    <div className="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-black/10 bg-zinc-900">
+                      <Icon className="h-4 w-4 text-white" />
+                    </div>
+                    <h3 className="mt-3 text-[1.03rem] font-semibold text-zinc-900">
+                      {item.title}
+                    </h3>
+                    <p className="mt-2 text-sm leading-6 text-zinc-700">
+                      {item.description}
+                    </p>
+                  </article>
+                );
+              })}
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      </main>
     </div>
   );
 };
