@@ -1,7 +1,7 @@
 import axios from "axios";
 import toast from "react-hot-toast";
 import APP_CONFIG from "./appConfig";
-import { isPublicEndpoint } from "../utils/helpers";
+import { extractApiErrorMessage, isPublicEndpoint } from "../utils/helpers";
 
 // Create axios instance with base configuration
 const apiInstance = axios.create({
@@ -26,18 +26,13 @@ const processQueue = (error, token = null) => {
 };
 
 // Request interceptor to add auth token
-apiInstance.interceptors.request.use(
-  (config) => {
-    const token = localStorage.getItem("accessToken");
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-    return config;
-  },
-  (error) => {
-    return Promise.reject(error);
-  },
-);
+apiInstance.interceptors.request.use((config) => {
+  const token = localStorage.getItem("accessToken");
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+}, undefined);
 
 // Response interceptor to handle common errors and token refresh
 apiInstance.interceptors.response.use(
@@ -45,7 +40,17 @@ apiInstance.interceptors.response.use(
     return response;
   },
   async (error) => {
-    const originalRequest = error.config;
+    const originalRequest = error.config || {};
+    const resolvedErrorMessage = extractApiErrorMessage(
+      error,
+      error?.message || "Request failed. Please try again.",
+    );
+
+    // Normalize errors so callers that throw/read response.data still get a usable message.
+    if (error.response?.data && typeof error.response.data === "object") {
+      error.response.data.message = resolvedErrorMessage;
+    }
+    error.message = resolvedErrorMessage;
 
     // Skip token refresh logic for login and public endpoints
     const isLoginRequest =
@@ -63,7 +68,9 @@ apiInstance.interceptors.response.use(
       // For public endpoints, retry without auth instead of session-expired redirect
       if (isPublicEndpoint(originalRequest.url)) {
         originalRequest._retry = true;
-        delete originalRequest.headers["Authorization"];
+        if (originalRequest.headers) {
+          delete originalRequest.headers["Authorization"];
+        }
         return apiInstance(originalRequest);
       }
       if (isRefreshing) {
@@ -72,12 +79,11 @@ apiInstance.interceptors.response.use(
           failedQueue.push({ resolve, reject });
         })
           .then((token) => {
+            originalRequest.headers = originalRequest.headers || {};
             originalRequest.headers["Authorization"] = "Bearer " + token;
             return apiInstance(originalRequest);
           })
-          .catch((err) => {
-            return Promise.reject(err);
-          });
+          .catch((err) => Promise.reject(err));
       }
 
       originalRequest._retry = true;
@@ -114,6 +120,7 @@ apiInstance.interceptors.response.use(
           // Update default header
           apiInstance.defaults.headers.common["Authorization"] =
             "Bearer " + access;
+          originalRequest.headers = originalRequest.headers || {};
           originalRequest.headers["Authorization"] = "Bearer " + access;
 
           processQueue(null, access);
@@ -135,9 +142,9 @@ apiInstance.interceptors.response.use(
         return Promise.reject(refreshError);
       }
     } else if (error.response?.status === 403) {
-      toast.error("You do not have permission to perform this action");
+      toast.error(resolvedErrorMessage);
     } else if (error.response?.status >= 500) {
-      toast.error("Server error. Please try again later");
+      toast.error(resolvedErrorMessage);
     } else if (!error.response) {
       toast.error("Network error. Please check your connection");
     }

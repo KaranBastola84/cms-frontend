@@ -101,7 +101,7 @@ function PaymentPlans() {
       setFilteredPlans([]);
       toast.success("Payment plan created. Use filters to view plans.");
     } catch (error) {
-      toast.error("Failed to create payment plan");
+      toast.error(error.message || "Failed to create payment plan");
       console.error("Error creating payment plan:", error);
     }
   };
@@ -112,7 +112,7 @@ function PaymentPlans() {
       setSelectedPlan(details);
       setShowDetailsModal(true);
     } catch (error) {
-      toast.error("Failed to load plan details");
+      toast.error(error.message || "Failed to load plan details");
       console.error("Error fetching plan details:", error);
     }
   };
@@ -137,7 +137,7 @@ function PaymentPlans() {
         viewPlanDetails(selectedPlan.paymentPlanId);
       }
     } catch (error) {
-      toast.error("Failed to process payment");
+      toast.error(error.message || "Failed to process payment");
       console.error("Error paying installment:", error);
     }
   };
@@ -154,7 +154,7 @@ function PaymentPlans() {
       setFilteredPlans(plans || []);
       toast.success(`Showing plans for student ID ${filterByStudent}`);
     } catch (error) {
-      toast.error("Failed to fetch student plans");
+      toast.error(error.message || "Failed to fetch student plans");
       console.error(error);
     } finally {
       setLoading(false);
@@ -173,7 +173,7 @@ function PaymentPlans() {
       setFilteredPlans(plans || []);
       toast.success(`Showing plans for course ID ${filterByCourse}`);
     } catch (error) {
-      toast.error("Failed to fetch course plans");
+      toast.error(error.message || "Failed to fetch course plans");
       console.error(error);
     } finally {
       setLoading(false);
@@ -197,7 +197,7 @@ function PaymentPlans() {
       }
       setSelectedPlan(null);
     } catch (error) {
-      toast.error("Failed to update status");
+      toast.error(error.message || "Failed to update status");
       console.error(error);
     }
   };
@@ -491,7 +491,7 @@ function PaymentPlans() {
 
       {/* Create Plan Modal */}
       {showCreateModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div className="fixed inset-0 backdrop-blur-md bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
             <div className="p-6 border-b border-[#E8DCC8]">
               <h2 className="text-2xl font-bold text-[#3D2817]">
@@ -640,7 +640,7 @@ function PaymentPlans() {
 
       {/* Plan Details Modal */}
       {showDetailsModal && selectedPlan && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div className="fixed inset-0 backdrop-blur-md bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg shadow-xl max-w-4xl w-full mx-4 max-h-[90vh] overflow-y-auto">
             <div className="p-6 border-b border-[#E8DCC8]">
               <h2 className="text-2xl font-bold text-[#3D2817]">
@@ -757,7 +757,7 @@ function PaymentPlans() {
 
       {/* Pay Installment Modal */}
       {showPayModal && selectedInstallment && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div className="fixed inset-0 backdrop-blur-md bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg shadow-xl max-w-md w-full mx-4">
             <div className="p-6 border-b border-[#E8DCC8]">
               <h2 className="text-2xl font-bold text-[#3D2817]">
@@ -799,7 +799,7 @@ function PaymentPlans() {
 
       {/* Status Update Modal */}
       {showStatusModal && selectedPlan && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div className="fixed inset-0 backdrop-blur-md bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg shadow-xl max-w-md w-full mx-4">
             <div className="p-6 border-b border-[#E8DCC8]">
               <h2 className="text-2xl font-bold text-[#3D2817]">

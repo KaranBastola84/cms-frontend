@@ -87,10 +87,10 @@ const BatchManagement = () => {
 
       setCourses(Array.isArray(courseData) ? courseData : []);
       setTrainers(Array.isArray(trainerData) ? trainerData : []);
-    } catch {
+    } catch (error) {
       setCourses([]);
       setTrainers([]);
-      toast.error("Failed to load course/trainer options");
+      toast.error(error.message || "Failed to load course/trainer options");
     }
   }, []);
 

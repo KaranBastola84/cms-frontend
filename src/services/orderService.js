@@ -1,4 +1,5 @@
 import apiInstance from "../config/api";
+import { extractApiErrorMessage } from "../utils/helpers";
 import {
   ORDER_STATUS_ENUM_VALUES,
   PAYMENT_STATUS_ENUM_VALUES,
@@ -39,7 +40,9 @@ export const createOrder = async (orderData) => {
     return response.data.result; // API returns { result, isSuccess, statusCode, errorMessage }
   } catch (error) {
     console.error("Error creating order:", error);
-    throw error.response?.data || error.message;
+    throw new Error(
+      extractApiErrorMessage(error, "Failed to place order. Please try again."),
+    );
   }
 };
 

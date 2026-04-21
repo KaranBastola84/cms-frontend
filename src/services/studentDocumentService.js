@@ -1,4 +1,5 @@
 import apiInstance from "../config/api";
+import { extractApiErrorMessage } from "../utils/helpers";
 
 const validateId = (id, label = "ID") => {
   const numericId = Number(id);
@@ -9,12 +10,7 @@ const validateId = (id, label = "ID") => {
 };
 
 const throwApiError = (error, fallbackMessage) => {
-  const message =
-    error?.response?.data?.message ||
-    error?.response?.data?.error ||
-    error?.response?.data?.title ||
-    error?.message ||
-    fallbackMessage;
+  const message = extractApiErrorMessage(error, fallbackMessage);
   throw new Error(message);
 };
 
@@ -121,6 +117,34 @@ export const deleteStudentDocument = async (documentId) => {
   }
 };
 
+export const downloadStudentDocument = async (documentId) => {
+  try {
+    const resolvedDocumentId = validateId(documentId, "document ID");
+    const response = await apiInstance.get(
+      `/api/StudentDocument/${resolvedDocumentId}/download`,
+      {
+        responseType: "blob",
+      },
+    );
+
+    const disposition = response.headers?.["content-disposition"] || "";
+    const filenameMatch = disposition.match(
+      /filename\*?=(?:UTF-8''|"?)([^";]+)/i,
+    );
+    const filename = filenameMatch
+      ? decodeURIComponent(filenameMatch[1].replace(/"/g, ""))
+      : `student-document-${resolvedDocumentId}`;
+
+    return {
+      blob: response.data,
+      filename,
+    };
+  } catch (error) {
+    console.error("Error downloading student document:", error);
+    throwApiError(error, "Failed to download document");
+  }
+};
+
 export const getDocumentDownloadUrl = (documentId) => {
   const resolvedDocumentId = validateId(documentId, "document ID");
   const baseURL = apiInstance.defaults.baseURL || "";
@@ -132,5 +156,6 @@ export default {
   uploadMultipleStudentDocuments,
   getStudentDocuments,
   deleteStudentDocument,
+  downloadStudentDocument,
   getDocumentDownloadUrl,
 };

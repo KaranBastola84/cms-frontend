@@ -16,8 +16,8 @@ const ProductReviewModeration = () => {
     try {
       const data = await productReviewService.getPendingReviews();
       setPendingReviews(data || []);
-    } catch {
-      toast.error("Failed to load pending reviews");
+    } catch (error) {
+      toast.error(error.message || "Failed to load pending reviews");
     } finally {
       setLoading(false);
     }
@@ -28,8 +28,8 @@ const ProductReviewModeration = () => {
       await productReviewService.approveReview(id);
       toast.success("Review approved");
       fetchPendingReviews();
-    } catch {
-      toast.error("Failed to approve review");
+    } catch (error) {
+      toast.error(error.message || "Failed to approve review");
     }
   };
 
@@ -38,8 +38,8 @@ const ProductReviewModeration = () => {
       await productReviewService.rejectReview(id);
       toast.success("Review rejected");
       fetchPendingReviews();
-    } catch {
-      toast.error("Failed to reject review");
+    } catch (error) {
+      toast.error(error.message || "Failed to reject review");
     }
   };
 
@@ -48,8 +48,8 @@ const ProductReviewModeration = () => {
       await productReviewService.deleteReview(id);
       toast.success("Review deleted");
       fetchPendingReviews();
-    } catch {
-      toast.error("Failed to delete review");
+    } catch (error) {
+      toast.error(error.message || "Failed to delete review");
     }
   };
 

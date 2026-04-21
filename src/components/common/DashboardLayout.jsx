@@ -24,7 +24,6 @@ import {
   Package,
   ShoppingCart,
   ClipboardCheck,
-  Award,
   FileSearch,
   X,
   Mail,
@@ -32,9 +31,22 @@ import {
   CheckCircle,
   RefreshCw,
   ShieldCheck,
+  BadgeCheck,
+  Loader2,
 } from "lucide-react";
 import { useAuth } from "../../hooks/useAuth";
 import dashboardService from "../../services/dashboardService";
+import {
+  normalizePermissionKey,
+  normalizePermissionList,
+} from "../../constants/permissions";
+
+const getDashboardPathByRole = (role) => {
+  if (role === "EnrolledStudent") {
+    return "/student/dashboard";
+  }
+  return `/${String(role || "").toLowerCase()}/dashboard`;
+};
 
 const DashboardLayout = ({ children }) => {
   const { user, logout } = useAuth();
@@ -45,7 +57,14 @@ const DashboardLayout = ({ children }) => {
   const [unreadCount, setUnreadCount] = useState(0);
   const [showNotifications, setShowNotifications] = useState(false);
   const [loadingNotifications, setLoadingNotifications] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [debouncedSearchQuery, setDebouncedSearchQuery] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
+  const [searchLoading, setSearchLoading] = useState(false);
+  const [showSearchDropdown, setShowSearchDropdown] = useState(false);
+  const [searchError, setSearchError] = useState(false);
   const notificationRef = useRef(null);
+  const searchRef = useRef(null);
 
   const fetchNotifications = async () => {
     setLoadingNotifications(true);
@@ -135,7 +154,7 @@ const DashboardLayout = ({ children }) => {
       toast.success("Notification marked as read");
     } catch (error) {
       console.error("Error marking notification as read:", error);
-      toast.error("Failed to mark notification as read");
+      toast.error(error.message || "Failed to mark notification as read");
     }
   };
 
@@ -148,7 +167,7 @@ const DashboardLayout = ({ children }) => {
       toast.success(result.message || "All notifications marked as read");
     } catch (error) {
       console.error("Error marking all notifications as read:", error);
-      toast.error("Failed to mark all notifications as read");
+      toast.error(error.message || "Failed to mark all notifications as read");
     }
   };
 
@@ -156,6 +175,46 @@ const DashboardLayout = ({ children }) => {
   useEffect(() => {
     fetchNotifications();
   }, []);
+
+  // Debounce global search input
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearchQuery(searchQuery.trim());
+    }, 300);
+
+    return () => clearTimeout(timer);
+  }, [searchQuery]);
+
+  // Fetch global search results
+  useEffect(() => {
+    const runSearch = async () => {
+      if (debouncedSearchQuery.length < 1) {
+        setSearchResults([]);
+        setSearchLoading(false);
+        setSearchError(false);
+        return;
+      }
+
+      setSearchLoading(true);
+      setSearchError(false);
+      try {
+        const data = await dashboardService.globalSearch(
+          debouncedSearchQuery,
+          15,
+        );
+        setSearchResults(Array.isArray(data?.results) ? data.results : []);
+      } catch (error) {
+        console.error("Error searching dashboard:", error);
+        setSearchResults([]);
+        setSearchError(true);
+        setShowSearchDropdown(true);
+      } finally {
+        setSearchLoading(false);
+      }
+    };
+
+    runSearch();
+  }, [debouncedSearchQuery]);
 
   // Close notification panel when clicking outside
   useEffect(() => {
@@ -177,6 +236,47 @@ const DashboardLayout = ({ children }) => {
     };
   }, [showNotifications]);
 
+  // Close search dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (searchRef.current && !searchRef.current.contains(event.target)) {
+        setShowSearchDropdown(false);
+      }
+    };
+
+    if (showSearchDropdown) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [showSearchDropdown]);
+
+  const groupedSearchResults = searchResults.reduce((acc, item) => {
+    const groupKey = item?.type || "Other";
+    if (!acc[groupKey]) acc[groupKey] = [];
+    acc[groupKey].push(item);
+    return acc;
+  }, {});
+
+  const searchTypeIconMap = {
+    Student: Users,
+    Course: BookOpen,
+    Batch: CalendarClock,
+    Inquiry: MessageSquare,
+  };
+
+  const handleSearchResultClick = (result) => {
+    if (!result?.navigateTo) return;
+    navigate(result.navigateTo);
+    setShowSearchDropdown(false);
+    setSearchQuery("");
+    setDebouncedSearchQuery("");
+    setSearchResults([]);
+    setSearchError(false);
+  };
+
   const toggleDropdown = (groupName) => {
     setOpenDropdowns((prev) => ({
       ...prev,
@@ -192,26 +292,29 @@ const DashboardLayout = ({ children }) => {
   // Navigation items based on role
   const getNavItems = () => {
     const role = user?.role;
-    const userPermissions = user?.permissions || [];
+    const userPermissions = normalizePermissionList(user?.permissions || []);
 
     // Helper function to check if user has permission
     const hasPermission = (permissionKey) => {
       // Admin has access to everything
       if (role === "Admin") return true;
 
+      if (!permissionKey) return true;
+
       if (Array.isArray(permissionKey)) {
-        return permissionKey.some((key) => userPermissions.includes(key));
+        return permissionKey.some((key) => hasPermission(key));
       }
 
       // Other roles need specific permission
-      return userPermissions.includes(permissionKey);
+      const normalizedKey = normalizePermissionKey(permissionKey);
+      return userPermissions.includes(normalizedKey);
     };
 
     const commonItems = [
       {
         name: "Dashboard",
         icon: LayoutDashboard,
-        path: `/${role?.toLowerCase()}/dashboard`,
+        path: getDashboardPathByRole(role),
         permission: "dashboard", // Everyone has dashboard access
       },
     ];
@@ -221,13 +324,13 @@ const DashboardLayout = ({ children }) => {
         {
           groupName: "User Management",
           icon: Users,
-          permission: "user-management",
+          permission: "dashboard",
           items: [
             {
               name: "All Users",
               icon: Users,
               path: "/admin/users",
-              permission: ["view-users", "user-management"],
+              permission: "dashboard",
             },
             {
               name: "Student Management",
@@ -239,44 +342,44 @@ const DashboardLayout = ({ children }) => {
               name: "Permissions",
               icon: ShieldCheck,
               path: "/admin/permissions",
-              permission: ["manage-permissions", "user-management"],
+              permission: "dashboard",
             },
             {
               name: "Student Registration",
               icon: UserPlus,
               path: "/admin/student-registration",
-              permission: ["student-registration", "manage-students"],
+              permission: "manage-students",
             },
             {
               name: "Staff Management",
               icon: UserCog,
               path: "/admin/staff-management",
-              permission: "staff-management",
+              permission: "dashboard",
             },
             {
               name: "Trainer Management",
               icon: GraduationCap,
               path: "/admin/trainer-management",
-              permission: "trainer-management",
+              permission: "dashboard",
             },
           ],
         },
         {
           groupName: "Academic",
           icon: BookOpen,
-          permission: "academic",
+          permission: "courses-batches",
           items: [
             {
               name: "Course Management",
               icon: BookOpen,
               path: "/admin/course-management",
-              permission: "course-management",
+              permission: "courses-batches",
             },
             {
               name: "Batch & Schedule",
               icon: CalendarClock,
               path: "/admin/batch-schedule",
-              permission: "batch-schedule",
+              permission: "courses-batches",
             },
             {
               name: "Attendance",
@@ -286,28 +389,28 @@ const DashboardLayout = ({ children }) => {
             },
             {
               name: "Certificates",
-              icon: Award,
+              icon: BadgeCheck,
               path: "/admin/certificates",
-              permission: "certificates",
+              permission: ["view-students", "manage-students"],
             },
           ],
         },
         {
           groupName: "Business",
           icon: DollarSign,
-          permission: "business",
+          permission: "dashboard",
           items: [
             {
               name: "Products",
               icon: Package,
               path: "/admin/products",
-              permission: "inventory",
+              permission: "dashboard",
             },
             {
               name: "Orders",
               icon: ShoppingCart,
               path: "/admin/orders",
-              permission: "sales",
+              permission: "dashboard",
             },
           ],
         },
@@ -351,7 +454,7 @@ const DashboardLayout = ({ children }) => {
         {
           groupName: "System",
           icon: Settings,
-          permission: "system",
+          permission: "dashboard",
           items: [
             {
               name: "Inquiries & Follow-ups",
@@ -363,13 +466,13 @@ const DashboardLayout = ({ children }) => {
               name: "Audit Logs",
               icon: FileSearch,
               path: "/admin/audit-logs",
-              permission: "audit-logs",
+              permission: "reports",
             },
             {
               name: "Settings",
               icon: Settings,
               path: "/admin/settings",
-              permission: "settings",
+              permission: "dashboard",
             },
           ],
         },
@@ -377,7 +480,7 @@ const DashboardLayout = ({ children }) => {
           name: "Review Moderation",
           icon: ShieldCheck,
           path: "/admin/product-reviews",
-          permission: "review-moderation",
+          permission: "dashboard",
         },
       ],
       Staff: [
@@ -391,13 +494,13 @@ const DashboardLayout = ({ children }) => {
           name: "Courses",
           icon: BookOpen,
           path: "/staff/courses",
-          permission: ["view-courses", "courses-batches"],
+          permission: "courses-batches",
         },
         {
           name: "Batch & Schedule",
           icon: CalendarClock,
           path: "/staff/batches",
-          permission: ["view-courses", "courses-batches"],
+          permission: "courses-batches",
         },
         {
           name: "Attendance",
@@ -409,7 +512,13 @@ const DashboardLayout = ({ children }) => {
           name: "Inquiries",
           icon: FileText,
           path: "/admin/inquiries",
-          permission: ["view-inquiries", "inquiries"],
+          permission: "inquiries",
+        },
+        {
+          name: "Certificates",
+          icon: BadgeCheck,
+          path: "/staff/certificates",
+          permission: "view-students",
         },
         {
           groupName: "Payment & Finance",
@@ -442,45 +551,102 @@ const DashboardLayout = ({ children }) => {
             },
           ],
         },
+        {
+          name: "Settings",
+          icon: Settings,
+          path: "/admin/settings",
+          permission: "dashboard",
+        },
       ],
       Trainer: [
         {
-          name: "My Classes",
-          icon: BookOpen,
-          path: "/trainer/classes",
-          permission: ["view-classes", "courses-batches"],
-        },
-        {
           name: "Students",
           icon: Users,
-          path: "/trainer/students",
-          permission: "view-students",
+          path: "/staff/students",
+          permission: ["view-students", "manage-students"],
         },
         {
-          name: "Schedule",
-          icon: Calendar,
-          path: "/trainer/schedule",
-          permission: ["view-schedule", "courses-batches"],
+          name: "Courses",
+          icon: BookOpen,
+          path: "/admin/course-management",
+          permission: "courses-batches",
+        },
+        {
+          name: "Batch & Schedule",
+          icon: CalendarClock,
+          path: "/admin/batch-schedule",
+          permission: "courses-batches",
+        },
+        {
+          name: "Attendance",
+          icon: ClipboardCheck,
+          path: "/admin/attendance",
+          permission: "attendance",
+        },
+        {
+          name: "Inquiries",
+          icon: MessageSquare,
+          path: "/admin/inquiries",
+          permission: "inquiries",
+        },
+        {
+          name: "Certificates",
+          icon: BadgeCheck,
+          path: "/trainer/certificates",
+          permission: ["view-students", "manage-students"],
+        },
+        {
+          groupName: "Payment & Finance",
+          icon: DollarSign,
+          permission: "payment-finance",
+          items: [
+            {
+              name: "Financial Dashboard",
+              icon: LayoutDashboard,
+              path: "/admin/finance/dashboard",
+              permission: "payment-finance",
+            },
+            {
+              name: "Outstanding Payments",
+              icon: AlertCircle,
+              path: "/admin/finance/outstanding-payments",
+              permission: "payment-finance",
+            },
+            {
+              name: "Payment Plans",
+              icon: Calendar,
+              path: "/admin/finance/payment-plans",
+              permission: "payment-finance",
+            },
+            {
+              name: "Revenue Reports",
+              icon: FileText,
+              path: "/admin/finance/revenue-reports",
+              permission: ["payment-finance", "reports"],
+            },
+          ],
+        },
+        {
+          name: "Settings",
+          icon: Settings,
+          path: "/admin/settings",
+          permission: "dashboard",
         },
       ],
       Student: [
         {
-          name: "My Courses",
-          icon: BookOpen,
-          path: "/student/courses",
-          permission: "view-my-courses",
+          name: "My Certificates",
+          icon: BadgeCheck,
+          path: "/student/certificates",
+          permission: "dashboard",
         },
+      ],
+      EnrolledStudent: [
         {
-          name: "Schedule",
-          icon: Calendar,
-          path: "/student/schedule",
-          permission: "view-my-schedule",
-        },
-        {
-          name: "Progress",
-          icon: FileText,
-          path: "/student/progress",
-          permission: "view-my-progress",
+          name: "My Certificates",
+          icon: BadgeCheck,
+          path: "/student/certificates",
+          permission: "dashboard",
         },
       ],
     };
@@ -525,7 +691,7 @@ const DashboardLayout = ({ children }) => {
         {/* Logo */}
         <div className="p-4 flex items-center border-b border-[#5A3F2E] text-white">
           <Link
-            to={`/${user?.role?.toLowerCase()}/dashboard`}
+            to={getDashboardPathByRole(user?.role)}
             className="flex items-center gap-3 no-underline group"
           >
             <div className="coffee-gradient p-2 rounded-xl group-hover:opacity-90 transition-all shadow-sm">
@@ -664,13 +830,83 @@ const DashboardLayout = ({ children }) => {
         <header className="bg-[#fffcf5] shadow-coffee-sm border-b border-[#C8A27B]/20 px-6 py-4">
           <div className="flex items-center justify-between gap-6">
             {/* Search Bar */}
-            <div className="flex-1 max-w-2xl relative">
+            <div className="flex-1 max-w-2xl relative" ref={searchRef}>
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-[#6B4423]" />
               <input
                 type="text"
                 placeholder="Search courses, students, schedules..."
+                value={searchQuery}
+                onChange={(e) => {
+                  setSearchQuery(e.target.value);
+                  setSearchError(false);
+                  setShowSearchDropdown(true);
+                }}
+                onFocus={() => setShowSearchDropdown(true)}
                 className="w-full pl-10 pr-4 py-2 rounded-xl border border-[#C8A27B]/30 bg-[#F5EFE6]/50 focus:outline-none focus:border-[#4A2F19] focus:ring-2 focus:ring-[#4A2F19]/20 transition-all text-[#1A1A1A] placeholder-[#6B4423]/60"
               />
+
+              {showSearchDropdown && (
+                <div className="absolute z-50 mt-2 w-full bg-white border border-[#C8A27B]/30 rounded-xl shadow-coffee-lg overflow-hidden">
+                  {searchLoading ? (
+                    <div className="p-4 flex items-center justify-center gap-2 text-sm text-[#6B4423]">
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                      Searching...
+                    </div>
+                  ) : !debouncedSearchQuery ? (
+                    <div className="p-4 text-sm text-[#6B4423]">
+                      Start typing to search students, courses, batches, and
+                      inquiries.
+                    </div>
+                  ) : searchResults.length === 0 ? (
+                    <div className="p-4 text-sm text-[#6B4423]">
+                      No results
+                      {searchError ? "" : ` for "${debouncedSearchQuery}".`}
+                    </div>
+                  ) : (
+                    <div className="max-h-96 overflow-y-auto">
+                      {Object.entries(groupedSearchResults).map(
+                        ([type, items]) => {
+                          const TypeIcon =
+                            searchTypeIconMap[type] || FileSearch;
+                          return (
+                            <div
+                              key={type}
+                              className="border-b border-[#EFE7D3] last:border-b-0"
+                            >
+                              <div className="px-3 py-2 bg-[#F5EFE6]/60 text-xs font-bold text-[#6B4423] uppercase tracking-wide flex items-center gap-2">
+                                <TypeIcon className="w-3.5 h-3.5" />
+                                {type}
+                              </div>
+                              {items.map((result) => (
+                                <button
+                                  key={`${type}-${result.id}`}
+                                  type="button"
+                                  onClick={() =>
+                                    handleSearchResultClick(result)
+                                  }
+                                  className="w-full text-left px-3 py-2.5 hover:bg-[#EFE7D3]/60 transition-colors"
+                                >
+                                  <p className="m-0 text-sm font-semibold text-[#1A1A1A]">
+                                    {result.title}
+                                  </p>
+                                  <p className="m-0 text-xs text-[#6B4423]">
+                                    {result.subtitle || "-"}
+                                  </p>
+                                  {result.status && (
+                                    <span className="inline-block mt-1 text-[11px] px-2 py-0.5 rounded-full bg-[#EFE7D3] text-[#4A2F19] font-semibold">
+                                      {result.status}
+                                    </span>
+                                  )}
+                                </button>
+                              ))}
+                            </div>
+                          );
+                        },
+                      )}
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
 
             {/* Right Section: Notifications & Profile */}

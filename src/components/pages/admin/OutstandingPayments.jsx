@@ -56,6 +56,33 @@ function OutstandingPayments() {
     setFilteredPayments(filtered);
   }, [searchTerm, filterType, outstandingPayments]);
 
+  const fetchOutstandingPayments = useCallback(async () => {
+    setLoading(true);
+    try {
+      const data = await getOutstandingPayments();
+      setOutstandingPayments(data || []);
+      setFilteredPayments(data || []);
+    } catch (error) {
+      toast.error(error.message || "Failed to load outstanding payments");
+      console.error("Error fetching outstanding payments:", error);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  const fetchPaymentDefaulters = useCallback(async () => {
+    setLoading(true);
+    try {
+      const data = await getPaymentDefaulters(overdueDays);
+      setDefaulters(data || []);
+    } catch (error) {
+      toast.error(error.message || "Failed to load payment defaulters");
+      console.error("Error fetching payment defaulters:", error);
+    } finally {
+      setLoading(false);
+    }
+  }, [overdueDays]);
+
   useEffect(() => {
     fetchOutstandingPayments();
   }, [fetchOutstandingPayments]);
@@ -69,33 +96,6 @@ function OutstandingPayments() {
   useEffect(() => {
     filterPayments();
   }, [filterPayments]);
-
-  const fetchOutstandingPayments = useCallback(async () => {
-    setLoading(true);
-    try {
-      const data = await getOutstandingPayments();
-      setOutstandingPayments(data || []);
-      setFilteredPayments(data || []);
-    } catch (error) {
-      toast.error("Failed to load outstanding payments");
-      console.error("Error fetching outstanding payments:", error);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
-  const fetchPaymentDefaulters = useCallback(async () => {
-    setLoading(true);
-    try {
-      const data = await getPaymentDefaulters(overdueDays);
-      setDefaulters(data || []);
-    } catch (error) {
-      toast.error("Failed to load payment defaulters");
-      console.error("Error fetching payment defaulters:", error);
-    } finally {
-      setLoading(false);
-    }
-  }, [overdueDays]);
 
   const exportToCSV = () => {
     const headers = [

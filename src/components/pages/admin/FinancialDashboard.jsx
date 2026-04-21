@@ -41,7 +41,7 @@ function FinancialDashboard() {
       setOverdueInstallments(overdueData || []);
       setUpcomingInstallments(upcomingData || []);
     } catch (error) {
-      toast.error("Failed to load financial dashboard");
+      toast.error(error.message || "Failed to load financial dashboard");
       console.error("Error fetching dashboard data:", error);
     } finally {
       setLoading(false);

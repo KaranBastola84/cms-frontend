@@ -74,7 +74,7 @@ function FeeManagement() {
       setFeeStructures(data || []);
       setFilteredFees(data || []);
     } catch (error) {
-      toast.error("Failed to load fee structures");
+      toast.error(error.message || "Failed to load fee structures");
       console.error("Error fetching fee structures:", error);
       setFeeStructures([]);
       setFilteredFees([]);
@@ -98,7 +98,7 @@ function FeeManagement() {
       });
       fetchFeeStructures();
     } catch (error) {
-      toast.error("Failed to create fee structure");
+      toast.error(error.message || "Failed to create fee structure");
       console.error("Error creating fee structure:", error);
     }
   };
@@ -112,7 +112,7 @@ function FeeManagement() {
       setEditingFee(null);
       fetchFeeStructures();
     } catch (error) {
-      toast.error("Failed to update fee structure");
+      toast.error(error.message || "Failed to update fee structure");
       console.error("Error updating fee structure:", error);
     }
   };
@@ -129,7 +129,7 @@ function FeeManagement() {
       toast.success("Fee structure deleted successfully");
       fetchFeeStructures();
     } catch (error) {
-      toast.error("Failed to delete fee structure");
+      toast.error(error.message || "Failed to delete fee structure");
       console.error("Error deleting fee structure:", error);
     }
   };
@@ -149,7 +149,7 @@ function FeeManagement() {
       ]);
       setCourseDetails({ ...totalFeeData, fees: courseFees });
     } catch (error) {
-      toast.error("Failed to load course details");
+      toast.error(error.message || "Failed to load course details");
       console.error(error);
       setShowCourseDetailsModal(false);
     } finally {
@@ -363,7 +363,7 @@ function FeeManagement() {
 
       {/* Create Fee Modal */}
       {showCreateModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div className="fixed inset-0 backdrop-blur-md bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg shadow-xl max-w-md w-full mx-4">
             <div className="p-6 border-b border-[#E8DCC8]">
               <h2 className="text-2xl font-bold text-[#3D2817]">
@@ -478,7 +478,7 @@ function FeeManagement() {
 
       {/* Edit Fee Modal */}
       {showEditModal && editingFee && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div className="fixed inset-0 backdrop-blur-md bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg shadow-xl max-w-md w-full mx-4">
             <div className="p-6 border-b border-[#E8DCC8]">
               <h2 className="text-2xl font-bold text-[#3D2817]">
@@ -584,7 +584,7 @@ function FeeManagement() {
 
       {/* Course Details Modal */}
       {showCourseDetailsModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div className="fixed inset-0 backdrop-blur-md bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
             <div className="p-6 border-b border-[#E8DCC8] sticky top-0 bg-white">
               <div className="flex justify-between items-start">

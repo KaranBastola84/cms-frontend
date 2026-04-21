@@ -91,6 +91,9 @@ const Login = () => {
           case "Student":
             navigate("/student/dashboard", { replace: true });
             break;
+          case "EnrolledStudent":
+            navigate("/student/dashboard", { replace: true });
+            break;
           default:
             navigate("/", { replace: true });
         }

@@ -1,5 +1,5 @@
 import React from "react";
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import Layout from "../components/common/Layout";
 import DashboardLayout from "../components/common/DashboardLayout";
 import Login from "../components/pages/auth/Login";
@@ -7,11 +7,11 @@ import StudentLogin from "../components/pages/auth/StudentLogin";
 import StaffVerification from "../components/pages/auth/StaffVerification";
 import TrainerVerification from "../components/pages/auth/TrainerVerification";
 import InquiryForm from "../components/pages/InquiryForm";
+import LandingPage from "../components/pages/LandingPage";
 import Products from "../components/pages/Products";
 import Checkout from "../components/pages/Checkout";
 import OrderConfirmation from "../components/pages/OrderConfirmation";
-import ProductDetail from "../components/pages/ProductDetail";
-import Home from "../components/pages/Home";
+import CertificateVerification from "../components/pages/CertificateVerification";
 import {
   ProtectedRoute,
   PublicRoute,
@@ -31,8 +31,12 @@ import OrderManagement from "../components/pages/admin/OrderManagement";
 import StaffDashboard from "../components/pages/staff/StaffDashboard";
 import TrainerDashboard from "../components/pages/trainer/TrainerDashboard";
 import StudentDashboard from "../components/pages/student/StudentDashboard";
+import StudentCertificates from "../components/pages/student/StudentCertificates";
+import CertificateRecords from "../components/pages/staff/CertificateRecords";
 import Settings from "../components/pages/Settings";
 import ProductReviewModeration from "../components/pages/admin/ProductReviewModeration";
+import CertificateManagement from "../components/pages/admin/CertificateManagement";
+import CertificateRecommendations from "../components/pages/trainer/CertificateRecommendations";
 
 // Import Payment & Finance pages
 import FinancialDashboard from "../components/pages/admin/FinancialDashboard";
@@ -55,9 +59,7 @@ const AppRoutes = () => {
         path="/"
         element={
           <PublicRoute>
-            <Layout>
-              <Home />
-            </Layout>
+            <LandingPage />
           </PublicRoute>
         }
       />
@@ -104,6 +106,24 @@ const AppRoutes = () => {
         element={
           <Layout>
             <OrderConfirmation />
+          </Layout>
+        }
+      />
+
+      <Route
+        path="/certificate/verify"
+        element={
+          <Layout>
+            <CertificateVerification />
+          </Layout>
+        }
+      />
+
+      <Route
+        path="/certificate/verify/:certificateNumber"
+        element={
+          <Layout>
+            <CertificateVerification />
           </Layout>
         }
       />
@@ -201,7 +221,7 @@ const AppRoutes = () => {
       <Route
         path="/admin/inquiries"
         element={
-          <ProtectedRoute allowedRoles={["Admin", "Staff"]}>
+          <ProtectedRoute allowedRoles={["Admin", "Staff", "Trainer"]}>
             <DashboardLayout>
               <Inquiries />
             </DashboardLayout>
@@ -234,7 +254,7 @@ const AppRoutes = () => {
       <Route
         path="/admin/course-management"
         element={
-          <ProtectedRoute allowedRoles={["Admin", "Staff"]}>
+          <ProtectedRoute allowedRoles={["Admin", "Staff", "Trainer"]}>
             <DashboardLayout>
               <CourseManagement />
             </DashboardLayout>
@@ -245,7 +265,7 @@ const AppRoutes = () => {
       <Route
         path="/admin/batch-schedule"
         element={
-          <ProtectedRoute allowedRoles={["Admin", "Staff"]}>
+          <ProtectedRoute allowedRoles={["Admin", "Staff", "Trainer"]}>
             <DashboardLayout>
               <BatchManagement />
             </DashboardLayout>
@@ -256,7 +276,7 @@ const AppRoutes = () => {
       <Route
         path="/admin/student-registration"
         element={
-          <ProtectedRoute allowedRoles={["Admin", "Staff"]}>
+          <ProtectedRoute allowedRoles={["Admin", "Staff", "Trainer"]}>
             <DashboardLayout>
               <StudentAdmission />
             </DashboardLayout>
@@ -278,9 +298,20 @@ const AppRoutes = () => {
       <Route
         path="/admin/attendance"
         element={
-          <ProtectedRoute allowedRoles={["Admin", "Staff"]}>
+          <ProtectedRoute allowedRoles={["Admin", "Staff", "Trainer"]}>
             <DashboardLayout>
               <AttendanceManagement />
+            </DashboardLayout>
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/admin/certificates"
+        element={
+          <ProtectedRoute allowedRoles={["Admin"]}>
+            <DashboardLayout>
+              <CertificateManagement />
             </DashboardLayout>
           </ProtectedRoute>
         }
@@ -332,7 +363,7 @@ const AppRoutes = () => {
       <Route
         path="/admin/finance/dashboard"
         element={
-          <ProtectedRoute allowedRoles={["Admin", "Staff"]}>
+          <ProtectedRoute allowedRoles={["Admin", "Staff", "Trainer"]}>
             <DashboardLayout>
               <FinancialDashboard />
             </DashboardLayout>
@@ -343,7 +374,7 @@ const AppRoutes = () => {
       <Route
         path="/admin/finance/outstanding-payments"
         element={
-          <ProtectedRoute allowedRoles={["Admin", "Staff"]}>
+          <ProtectedRoute allowedRoles={["Admin", "Staff", "Trainer"]}>
             <DashboardLayout>
               <OutstandingPayments />
             </DashboardLayout>
@@ -354,7 +385,7 @@ const AppRoutes = () => {
       <Route
         path="/admin/finance/payment-plans"
         element={
-          <ProtectedRoute allowedRoles={["Admin", "Staff"]}>
+          <ProtectedRoute allowedRoles={["Admin", "Staff", "Trainer"]}>
             <DashboardLayout>
               <PaymentPlans />
             </DashboardLayout>
@@ -376,7 +407,7 @@ const AppRoutes = () => {
       <Route
         path="/admin/finance/revenue-reports"
         element={
-          <ProtectedRoute allowedRoles={["Admin", "Staff"]}>
+          <ProtectedRoute allowedRoles={["Admin", "Staff", "Trainer"]}>
             <DashboardLayout>
               <RevenueReports />
             </DashboardLayout>
@@ -431,9 +462,20 @@ const AppRoutes = () => {
       <Route
         path="/staff/students"
         element={
-          <ProtectedRoute allowedRoles={["Staff", "Admin"]}>
+          <ProtectedRoute allowedRoles={["Staff", "Admin", "Trainer"]}>
             <DashboardLayout>
               <StudentAdmission />
+            </DashboardLayout>
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/staff/certificates"
+        element={
+          <ProtectedRoute allowedRoles={["Staff", "Admin", "Trainer"]}>
+            <DashboardLayout>
+              <CertificateRecords />
             </DashboardLayout>
           </ProtectedRoute>
         }
@@ -451,11 +493,33 @@ const AppRoutes = () => {
       />
 
       <Route
+        path="/trainer/certificates"
+        element={
+          <ProtectedRoute allowedRoles={["Trainer"]}>
+            <DashboardLayout>
+              <CertificateRecommendations />
+            </DashboardLayout>
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
         path="/student/dashboard"
         element={
-          <ProtectedRoute allowedRoles={["Student"]}>
+          <ProtectedRoute allowedRoles={["Student", "EnrolledStudent"]}>
             <DashboardLayout>
               <StudentDashboard />
+            </DashboardLayout>
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/student/certificates"
+        element={
+          <ProtectedRoute allowedRoles={["Student", "EnrolledStudent"]}>
+            <DashboardLayout>
+              <StudentCertificates />
             </DashboardLayout>
           </ProtectedRoute>
         }
@@ -466,7 +530,13 @@ const AppRoutes = () => {
         path="/admin/settings"
         element={
           <ProtectedRoute
-            allowedRoles={["Admin", "Staff", "Trainer", "Student"]}
+            allowedRoles={[
+              "Admin",
+              "Staff",
+              "Trainer",
+              "Student",
+              "EnrolledStudent",
+            ]}
           >
             <DashboardLayout>
               <Settings />

@@ -30,7 +30,7 @@ const OrderConfirmation = () => {
       const data = await getOrderById(orderId);
       setOrder(data);
     } catch (error) {
-      toast.error("Failed to load order details");
+      toast.error(error.message || "Failed to load order details");
       console.error(error);
     } finally {
       setLoading(false);

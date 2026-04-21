@@ -66,7 +66,7 @@ const Products = () => {
         setTotalItems(0);
       }
     } catch (error) {
-      toast.error("Failed to load products");
+      toast.error(error.message || "Failed to load products");
       console.error(error);
       setProducts([]); // Set empty array on error
       setTotalPages(1);
@@ -86,7 +86,7 @@ const Products = () => {
       setFeaturedProducts(Array.isArray(featuredData) ? featuredData : []);
       setCategories(Array.isArray(categoriesData) ? categoriesData : []);
     } catch (error) {
-      toast.error("Failed to load initial data");
+      toast.error(error.message || "Failed to load initial data");
       console.error(error);
       setFeaturedProducts([]);
       setCategories([]);
@@ -122,8 +122,15 @@ const Products = () => {
     setCurrentPage(1);
   };
 
-  const handleViewDetails = (product) => {
-    navigate(`/products/${product.id}`);
+  const handleViewDetails = async (product) => {
+    try {
+      setSelectedProduct(product); // Show modal immediately with list data
+      const fullProduct = await getProductById(product.id);
+      setSelectedProduct(fullProduct); // Replace with full detail
+    } catch (error) {
+      toast.error(error.message || "Failed to load product details");
+      console.error(error);
+    }
   };
 
   const addToCart = (product) => {
@@ -363,9 +370,9 @@ const ProductCard = ({ product, onViewDetails, onAddToCart, featured }) => {
           </div>
         )}
         {isOutOfStock && (
-          <div className="absolute inset-0 bg-[#0F0F0F]/80 backdrop-blur-sm flex items-center justify-center z-30">
-            <span className="bg-[#C62828] text-white px-5 py-2 text-xs font-bold tracking-widest uppercase">
-              Out of Stock
+          <div className="absolute inset-0 backdrop-blur-md bg-opacity-50 flex items-center justify-center">
+            <span className="bg-red-500 text-white px-4 py-2 rounded-lg font-bold">
+              OUT OF STOCK
             </span>
           </div>
         )}

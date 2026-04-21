@@ -81,7 +81,7 @@ const OrderManagement = () => {
         setTotalItems(0);
       }
     } catch (error) {
-      toast.error("Failed to load orders");
+      toast.error(error.message || "Failed to load orders");
       console.error(error);
       setOrders([]);
     } finally {
@@ -125,7 +125,7 @@ const OrderManagement = () => {
       setSelectedOrder(data);
       setShowOrderModal(true);
     } catch (error) {
-      toast.error("Failed to load order details");
+      toast.error(error.message || "Failed to load order details");
       console.error(error);
     }
   };
