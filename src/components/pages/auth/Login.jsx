@@ -113,27 +113,27 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-[calc(100vh-200px)] flex items-center justify-center p-6 cream-gradient">
-      <div className="bg-white rounded-2xl shadow-coffee-lg p-8 w-full max-w-md border border-[#C8A27B]/30 fade-in hover-lift">
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center p-4 coffee-gradient rounded-2xl mb-4 shadow-coffee-md">
-            <Coffee className="w-9 h-9 text-[#EFE7D3]" strokeWidth={2.5} />
+    <div className="min-h-[calc(100vh-200px)] flex items-center justify-center p-6 bg-[#0F0F0F]">
+      <div className="luxury-card p-10 w-full max-w-md bg-[#1A1A1A] border-[#ffffff15] fade-in transform transition-transform duration-500 hover:scale-[1.01]">
+        <div className="text-center mb-10">
+          <div className="inline-flex items-center justify-center p-5 bg-[#0F0F0F] rounded-2xl mb-6 shadow-[0_4px_20px_rgba(0,0,0,0.5)] border border-[#ffffff10]">
+            <Coffee className="w-10 h-10 text-[#C6A36A]" strokeWidth={2} />
           </div>
-          <h2 className="text-3xl font-bold text-[#1A1A1A] mb-2">
+          <h2 className="text-3xl font-heading font-normal text-white mb-3 uppercase tracking-widest">
             Welcome Back
           </h2>
-          <p className="text-sm text-[#4A2F19] font-medium">
+          <p className="text-sm text-[#E0E0E0] font-light tracking-wide">
             Sign in to Coffee School Management System
           </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-          <div className="flex flex-col gap-2">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-6">
+          <div className="flex flex-col gap-3">
             <label
               htmlFor="username"
-              className="text-sm font-bold text-[#1A1A1A] flex items-center gap-2"
+              className="text-xs font-bold text-white flex items-center gap-2 uppercase tracking-widest"
             >
-              <User className="w-4 h-4 text-[#4A2F19]" />
+              <User className="w-4 h-4 text-[#C6A36A]" />
               Username
             </label>
             <input
@@ -143,11 +143,11 @@ const Login = () => {
               value={formData.username}
               onChange={handleChange}
               required
-              className={`coffee-input ${
+              className={`luxury-input ${
                 validationErrors.username
-                  ? "border-red-500 focus:border-red-600 focus:ring-red-200 bg-red-50"
+                  ? "border-[#C62828] focus:border-[#C62828] bg-[#C62828]/5"
                   : ""
-              } disabled:bg-gray-100 disabled:cursor-not-allowed`}
+              } disabled:opacity-50 disabled:cursor-not-allowed`}
               placeholder="Enter your username"
               disabled={loading}
             />
@@ -159,12 +159,12 @@ const Login = () => {
             )}
           </div>
 
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-3">
             <label
               htmlFor="password"
-              className="text-sm font-bold text-[#1A1A1A] flex items-center gap-2"
+              className="text-xs font-bold text-white flex items-center gap-2 uppercase tracking-widest"
             >
-              <Lock className="w-4 h-4 text-[#4A2F19]" />
+              <Lock className="w-4 h-4 text-[#C6A36A]" />
               Password
             </label>
             <input
@@ -174,11 +174,11 @@ const Login = () => {
               value={formData.password}
               onChange={handleChange}
               required
-              className={`coffee-input ${
+              className={`luxury-input ${
                 validationErrors.password
-                  ? "border-red-500 focus:border-red-600 focus:ring-red-200 bg-red-50"
+                  ? "border-[#C62828] focus:border-[#C62828] bg-[#C62828]/5"
                   : ""
-              } disabled:bg-gray-100 disabled:cursor-not-allowed`}
+              } disabled:opacity-50 disabled:cursor-not-allowed`}
               placeholder="Enter your password"
               disabled={loading}
             />
@@ -192,61 +192,61 @@ const Login = () => {
 
           <button
             type="submit"
-            className={`btn-coffee-primary text-sm mt-2 flex items-center justify-center gap-2 ${
-              loading ? "opacity-60 cursor-not-allowed" : ""
+            className={`btn-gold-primary text-sm mt-4 flex items-center justify-center gap-2 ${
+              loading ? "opacity-60 cursor-not-allowed shadow-none" : "shadow-[0_4px_20px_rgba(198,163,106,0.15)]"
             }`}
             disabled={loading}
           >
             {loading ? (
               <>
-                <Loader2 className="w-4 h-4 animate-spin" />
-                Signing in...
+                <Loader2 className="w-4 h-4 animate-spin text-[#1A1A1A]" />
+                Authenticating...
               </>
             ) : (
-              "Sign In"
+              "Sign In to Portal"
             )}
           </button>
 
           <a
             href="/student-login"
-            className="text-sm text-[#4A2F19] hover:text-[#6B4423] text-center"
+            className="text-xs text-[#808080] hover:text-[#C6A36A] text-center uppercase tracking-widest transition-colors mt-2"
           >
-            Student? Use dedicated student login
+            Student? Access Student Portal
           </a>
         </form>
 
         {/* Staff and Trainer Verification Links */}
-        <div className="mt-6 pt-6 border-t border-[#C8A27B]/30">
-          <p className="text-sm text-[#6B4423] mb-3 text-center font-semibold">
-            New Account?
+        <div className="mt-8 pt-8 border-t border-[#ffffff10]">
+          <p className="text-xs text-[#CCCCCC] mb-4 text-center font-heading uppercase tracking-widest">
+            First Time Authentication?
           </p>
 
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-2 gap-4">
             {/* Staff Verification */}
             <a
               href="/staff-verification"
-              className="flex flex-col items-center gap-2 p-3 bg-[#F8F4EE] hover:bg-[#EFE7D3] border-2 border-[#C8A27B]/30 hover:border-[#4A2F19] rounded-xl transition-all duration-200 group"
+              className="flex flex-col items-center gap-3 p-4 bg-[#0F0F0F] hover:bg-[#222222] border border-[#ffffff15] hover:border-[#C6A36A]/50 rounded-xl transition-all duration-300 group"
             >
-              <Coffee className="w-5 h-5 text-[#4A2F19] group-hover:scale-110 transition-transform" />
-              <span className="text-xs font-semibold text-[#4A2F19]">
-                Staff Verification
+              <Coffee className="w-5 h-5 text-[#808080] group-hover:text-[#C6A36A] transition-colors" />
+              <span className="text-[10px] font-bold text-[#E0E0E0] uppercase tracking-wider text-center">
+                Staff<br/>Verify
               </span>
             </a>
 
             {/* Trainer Verification */}
             <a
               href="/trainer-verification"
-              className="flex flex-col items-center gap-2 p-3 bg-[#F8F4EE] hover:bg-[#EFE7D3] border-2 border-[#C8A27B]/30 hover:border-[#4A2F19] rounded-xl transition-all duration-200 group"
+              className="flex flex-col items-center gap-3 p-4 bg-[#0F0F0F] hover:bg-[#222222] border border-[#ffffff15] hover:border-[#C6A36A]/50 rounded-xl transition-all duration-300 group"
             >
-              <GraduationCap className="w-5 h-5 text-[#4A2F19] group-hover:scale-110 transition-transform" />
-              <span className="text-xs font-semibold text-[#4A2F19]">
-                Trainer Verification
+              <GraduationCap className="w-5 h-5 text-[#808080] group-hover:text-[#C6A36A] transition-colors" />
+              <span className="text-[10px] font-bold text-[#E0E0E0] uppercase tracking-wider text-center">
+                Trainer<br/>Verify
               </span>
             </a>
           </div>
 
-          <p className="text-xs text-[#6B4423] mt-3 text-center">
-            Check your email for the OTP code
+          <p className="text-[10px] text-[#808080] mt-5 text-center uppercase tracking-widest">
+            Check your email for the authentication code
           </p>
         </div>
       </div>
