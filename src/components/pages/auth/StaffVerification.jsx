@@ -122,43 +122,43 @@ const StaffVerification = () => {
   };
 
   return (
-    <div className="min-h-[calc(100vh-200px)] flex items-center justify-center p-6 cream-gradient">
-      <div className="bg-white rounded-2xl shadow-coffee-lg p-8 w-full max-w-md border border-[#C8A27B]/30 fade-in hover-lift">
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center p-4 coffee-gradient rounded-2xl mb-4 shadow-coffee-md">
-            <ShieldCheck className="w-9 h-9 text-[#EFE7D3]" strokeWidth={2.5} />
+    <div className="min-h-[calc(100vh-200px)] flex items-center justify-center p-6 bg-[#0F0F0F]">
+      <div className="luxury-card p-10 w-full max-w-md bg-[#1A1A1A] border-[#ffffff15] fade-in transform transition-transform duration-500 hover:scale-[1.01]">
+        <div className="text-center mb-10">
+          <div className="inline-flex items-center justify-center p-5 bg-[#0F0F0F] rounded-2xl mb-6 shadow-[0_4px_20px_rgba(0,0,0,0.5)] border border-[#ffffff10]">
+            <ShieldCheck className="w-10 h-10 text-[#C6A36A]" strokeWidth={2} />
           </div>
-          <h2 className="text-3xl font-bold text-[#1A1A1A] mb-2">
+          <h2 className="text-3xl font-heading font-normal text-white mb-3 uppercase tracking-widest">
             Staff Verification
           </h2>
-          <p className="text-sm text-[#4A2F19] font-medium">
+          <p className="text-sm text-[#E0E0E0] font-light tracking-wide">
             Verify your OTP and set your password
           </p>
         </div>
 
         {/* Info Banner */}
-        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+        <div className="bg-[#0F0F0F] border border-[#ffffff10] rounded-lg p-4 mb-8">
           <div className="flex gap-3">
-            <AlertCircle className="w-5 h-5 text-blue-600 shrink-0 mt-0.5" />
-            <div className="text-sm text-blue-800">
-              <p className="font-semibold mb-1">Important:</p>
-              <ul className="list-disc list-inside space-y-1">
-                <li>Check your email for the 6-digit OTP</li>
-                <li>OTP is valid for 15 minutes</li>
-                <li>After verification, wait for admin activation</li>
+            <AlertCircle className="w-5 h-5 text-[#C6A36A] shrink-0 mt-0.5" />
+            <div className="text-sm text-[#CCCCCC]">
+              <p className="font-heading uppercase tracking-widest text-[#E0E0E0] mb-2 text-xs">Important:</p>
+              <ul className="list-disc list-inside space-y-1 font-light text-[13px] leading-relaxed">
+                <li>Check your email for the 6-digit verification code</li>
+                <li>Code remains valid for 15 minutes</li>
+                <li>Following approval, pending admin activation</li>
               </ul>
             </div>
           </div>
         </div>
 
-        <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-6">
           {/* Email Field */}
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-3">
             <label
               htmlFor="email"
-              className="text-sm font-bold text-[#1A1A1A] flex items-center gap-2"
+              className="text-xs font-bold text-white flex items-center gap-2 uppercase tracking-widest"
             >
-              <Mail className="w-4 h-4 text-[#4A2F19]" />
+              <Mail className="w-4 h-4 text-[#C6A36A]" />
               Email Address
             </label>
             <input
@@ -168,16 +168,16 @@ const StaffVerification = () => {
               value={formData.email}
               onChange={handleChange}
               required
-              className={`coffee-input ${
+              className={`luxury-input ${
                 validationErrors.email
-                  ? "border-red-500 focus:border-red-600 focus:ring-red-200 bg-red-50"
+                  ? "border-[#C62828] focus:border-[#C62828] bg-[#C62828]/5"
                   : ""
-              } disabled:bg-gray-100 disabled:cursor-not-allowed`}
+              } disabled:opacity-50 disabled:cursor-not-allowed`}
               placeholder="Enter your email"
               disabled={loading}
             />
             {validationErrors.email && (
-              <p className="text-red-500 text-xs mt-1 flex items-center gap-1">
+              <p className="text-[#C62828] text-xs mt-1 flex items-center gap-1 font-medium">
                 <AlertCircle className="w-3 h-3" />
                 {validationErrors.email}
               </p>
@@ -185,13 +185,13 @@ const StaffVerification = () => {
           </div>
 
           {/* OTP Field */}
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-3">
             <label
               htmlFor="otp"
-              className="text-sm font-bold text-[#1A1A1A] flex items-center gap-2"
+              className="text-xs font-bold text-white flex items-center gap-2 uppercase tracking-widest"
             >
-              <KeyRound className="w-4 h-4 text-[#4A2F19]" />
-              6-Digit OTP
+              <KeyRound className="w-4 h-4 text-[#C6A36A]" />
+              6-Digit Code
             </label>
             <input
               type="text"
@@ -202,16 +202,16 @@ const StaffVerification = () => {
               required
               maxLength={6}
               pattern="\d{6}"
-              className={`coffee-input ${
+              className={`luxury-input text-center text-2xl tracking-[0.5em] font-heading ${
                 validationErrors.otp
-                  ? "border-red-500 focus:border-red-600 focus:ring-red-200 bg-red-50"
+                  ? "border-[#C62828] focus:border-[#C62828] bg-[#C62828]/5"
                   : ""
-              } disabled:bg-gray-100 disabled:cursor-not-allowed tracking-widest text-center text-xl font-semibold`}
+              } disabled:opacity-50 disabled:cursor-not-allowed`}
               placeholder="000000"
               disabled={loading}
             />
             {validationErrors.otp && (
-              <p className="text-red-500 text-xs mt-1 flex items-center gap-1">
+              <p className="text-[#C62828] text-xs mt-1 flex items-center gap-1 font-medium">
                 <AlertCircle className="w-3 h-3" />
                 {validationErrors.otp}
               </p>
@@ -219,12 +219,12 @@ const StaffVerification = () => {
           </div>
 
           {/* Password Field */}
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-3">
             <label
               htmlFor="password"
-              className="text-sm font-bold text-[#1A1A1A] flex items-center gap-2"
+              className="text-xs font-bold text-white flex items-center gap-2 uppercase tracking-widest"
             >
-              <Lock className="w-4 h-4 text-[#4A2F19]" />
+              <Lock className="w-4 h-4 text-[#C6A36A]" />
               New Password
             </label>
             <input
@@ -234,16 +234,16 @@ const StaffVerification = () => {
               value={formData.password}
               onChange={handleChange}
               required
-              className={`coffee-input ${
+              className={`luxury-input ${
                 validationErrors.password
-                  ? "border-red-500 focus:border-red-600 focus:ring-red-200 bg-red-50"
+                  ? "border-[#C62828] focus:border-[#C62828] bg-[#C62828]/5"
                   : ""
-              } disabled:bg-gray-100 disabled:cursor-not-allowed`}
+              } disabled:opacity-50 disabled:cursor-not-allowed`}
               placeholder="Enter your password (min 6 characters)"
               disabled={loading}
             />
             {validationErrors.password && (
-              <p className="text-red-500 text-xs mt-1 flex items-center gap-1">
+              <p className="text-[#C62828] text-xs mt-1 flex items-center gap-1 font-medium">
                 <AlertCircle className="w-3 h-3" />
                 {validationErrors.password}
               </p>
@@ -251,12 +251,12 @@ const StaffVerification = () => {
           </div>
 
           {/* Confirm Password Field */}
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-3">
             <label
               htmlFor="confirmPassword"
-              className="text-sm font-bold text-[#1A1A1A] flex items-center gap-2"
+              className="text-xs font-bold text-white flex items-center gap-2 uppercase tracking-widest"
             >
-              <CheckCircle className="w-4 h-4 text-[#4A2F19]" />
+              <CheckCircle className="w-4 h-4 text-[#C6A36A]" />
               Confirm Password
             </label>
             <input
@@ -266,16 +266,16 @@ const StaffVerification = () => {
               value={formData.confirmPassword}
               onChange={handleChange}
               required
-              className={`coffee-input ${
+              className={`luxury-input ${
                 validationErrors.confirmPassword
-                  ? "border-red-500 focus:border-red-600 focus:ring-red-200 bg-red-50"
+                  ? "border-[#C62828] focus:border-[#C62828] bg-[#C62828]/5"
                   : ""
-              } disabled:bg-gray-100 disabled:cursor-not-allowed`}
+              } disabled:opacity-50 disabled:cursor-not-allowed`}
               placeholder="Re-enter your password"
               disabled={loading}
             />
             {validationErrors.confirmPassword && (
-              <p className="text-red-500 text-xs mt-1 flex items-center gap-1">
+              <p className="text-[#C62828] text-xs mt-1 flex items-center gap-1 font-medium">
                 <AlertCircle className="w-3 h-3" />
                 {validationErrors.confirmPassword}
               </p>
@@ -286,37 +286,37 @@ const StaffVerification = () => {
           <button
             type="submit"
             disabled={loading}
-            className="coffee-button group relative overflow-hidden disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:shadow-coffee-md"
+            className={`btn-gold-primary text-sm mt-4 flex items-center justify-center gap-2 ${
+              loading ? "opacity-60 cursor-not-allowed shadow-none" : "shadow-[0_4px_20px_rgba(198,163,106,0.15)]"
+            }`}
           >
-            <span className="relative z-10 flex items-center justify-center gap-2 font-bold">
-              {loading ? (
-                <>
-                  <Loader2 className="w-5 h-5 animate-spin" />
-                  Verifying...
-                </>
-              ) : (
-                <>
-                  <ShieldCheck className="w-5 h-5" />
-                  Verify & Set Password
-                </>
-              )}
-            </span>
+            {loading ? (
+              <>
+                <Loader2 className="w-4 h-4 animate-spin text-[#1A1A1A]" />
+                Verifying...
+              </>
+            ) : (
+              <>
+                <ShieldCheck className="w-4 h-4" />
+                Verify & Set Password
+              </>
+            )}
           </button>
         </form>
 
         {/* Additional Info */}
-        <div className="mt-6 pt-6 border-t border-[#C8A27B]/30 text-center">
-          <p className="text-sm text-[#6B4423]">
-            Already verified?{" "}
+        <div className="mt-8 pt-8 border-t border-[#ffffff10] text-center">
+          <p className="text-[10px] text-[#808080] uppercase tracking-widest mb-3">
+            Already authenticated?{" "}
             <a
               href="/login"
-              className="text-[#4A2F19] font-semibold hover:text-[#6B4423] transition-colors"
+              className="text-[#E0E0E0] font-bold hover:text-[#C6A36A] transition-colors ml-1"
             >
-              Sign in here
+              Sign In
             </a>
           </p>
-          <p className="text-xs text-[#6B4423] mt-3">
-            Didn't receive OTP? Contact your administrator.
+          <p className="text-[10px] text-[#808080] uppercase tracking-widest">
+            Missing access code? Contact your supervisor.
           </p>
         </div>
       </div>
