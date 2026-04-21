@@ -90,27 +90,27 @@ const StudentLogin = () => {
   };
 
   return (
-    <div className="min-h-[calc(100vh-200px)] flex items-center justify-center p-6 cream-gradient">
-      <div className="bg-white rounded-2xl shadow-coffee-lg p-8 w-full max-w-md border border-[#C8A27B]/30 fade-in hover-lift">
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center p-4 coffee-gradient rounded-2xl mb-4 shadow-coffee-md">
-            <Coffee className="w-9 h-9 text-[#EFE7D3]" strokeWidth={2.5} />
+    <div className="min-h-[calc(100vh-200px)] flex items-center justify-center p-6 bg-[#0F0F0F]">
+      <div className="luxury-card p-10 w-full max-w-md bg-[#1A1A1A] border-[#ffffff15] fade-in transform transition-transform duration-500 hover:scale-[1.01]">
+        <div className="text-center mb-10">
+          <div className="inline-flex items-center justify-center p-5 bg-[#0F0F0F] rounded-2xl mb-6 shadow-[0_4px_20px_rgba(0,0,0,0.5)] border border-[#ffffff10]">
+            <Coffee className="w-10 h-10 text-[#C6A36A]" strokeWidth={2} />
           </div>
-          <h2 className="text-3xl font-bold text-[#1A1A1A] mb-2">
+          <h2 className="text-3xl font-heading font-normal text-white mb-3 uppercase tracking-widest">
             Student Login
           </h2>
-          <p className="text-sm text-[#4A2F19] font-medium">
+          <p className="text-sm text-[#E0E0E0] font-light tracking-wide">
             Sign in with your enrolled student account
           </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-          <div className="flex flex-col gap-2">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-6">
+          <div className="flex flex-col gap-3">
             <label
               htmlFor="email"
-              className="text-sm font-bold text-[#1A1A1A] flex items-center gap-2"
+              className="text-xs font-bold text-white flex items-center gap-2 uppercase tracking-widest"
             >
-              <Mail className="w-4 h-4 text-[#4A2F19]" />
+              <Mail className="w-4 h-4 text-[#C6A36A]" />
               Student Email
             </label>
             <input
@@ -120,28 +120,28 @@ const StudentLogin = () => {
               value={formData.email}
               onChange={handleChange}
               required
-              className={`coffee-input ${
+              className={`luxury-input ${
                 validationErrors.email
-                  ? "border-red-500 focus:border-red-600 focus:ring-red-200 bg-red-50"
+                  ? "border-[#C62828] focus:border-[#C62828] bg-[#C62828]/5"
                   : ""
-              } disabled:bg-gray-100 disabled:cursor-not-allowed`}
+              } disabled:opacity-50 disabled:cursor-not-allowed`}
               placeholder="Enter your student email"
               disabled={loading}
             />
             {validationErrors.email && (
-              <p className="text-red-500 text-xs mt-1 flex items-center gap-1">
+              <p className="text-[#C62828] text-xs mt-1 flex items-center gap-1 font-medium">
                 <AlertCircle className="w-3 h-3" />
                 {validationErrors.email}
               </p>
             )}
           </div>
 
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-3">
             <label
               htmlFor="password"
-              className="text-sm font-bold text-[#1A1A1A] flex items-center gap-2"
+              className="text-xs font-bold text-white flex items-center gap-2 uppercase tracking-widest"
             >
-              <Lock className="w-4 h-4 text-[#4A2F19]" />
+              <Lock className="w-4 h-4 text-[#C6A36A]" />
               Password
             </label>
             <input
@@ -151,16 +151,16 @@ const StudentLogin = () => {
               value={formData.password}
               onChange={handleChange}
               required
-              className={`coffee-input ${
+              className={`luxury-input ${
                 validationErrors.password
-                  ? "border-red-500 focus:border-red-600 focus:ring-red-200 bg-red-50"
+                  ? "border-[#C62828] focus:border-[#C62828] bg-[#C62828]/5"
                   : ""
-              } disabled:bg-gray-100 disabled:cursor-not-allowed`}
+              } disabled:opacity-50 disabled:cursor-not-allowed`}
               placeholder="Enter your password"
               disabled={loading}
             />
             {validationErrors.password && (
-              <p className="text-red-500 text-xs mt-1 flex items-center gap-1">
+              <p className="text-[#C62828] text-xs mt-1 flex items-center gap-1 font-medium">
                 <AlertCircle className="w-3 h-3" />
                 {validationErrors.password}
               </p>
@@ -169,29 +169,29 @@ const StudentLogin = () => {
 
           <button
             type="submit"
-            className={`btn-coffee-primary text-sm mt-2 flex items-center justify-center gap-2 ${
-              loading ? "opacity-60 cursor-not-allowed" : ""
+            className={`btn-gold-primary text-sm mt-4 flex items-center justify-center gap-2 ${
+              loading ? "opacity-60 cursor-not-allowed shadow-none" : "shadow-[0_4px_20px_rgba(198,163,106,0.15)]"
             }`}
             disabled={loading}
           >
             {loading ? (
               <>
-                <Loader2 className="w-4 h-4 animate-spin" />
-                Signing in...
+                <Loader2 className="w-4 h-4 animate-spin text-[#1A1A1A]" />
+                Authenticating...
               </>
             ) : (
-              "Sign In as Student"
+              "Sign In to Campus"
             )}
           </button>
 
           <button
             type="button"
             onClick={() => navigate("/login")}
-            className="text-sm text-[#4A2F19] hover:text-[#6B4423] inline-flex items-center justify-center gap-2"
+            className="text-xs text-[#808080] hover:text-[#C6A36A] uppercase tracking-widest inline-flex items-center justify-center gap-2 mt-2 transition-colors"
             disabled={loading}
           >
-            <ArrowLeft className="w-4 h-4" />
-            Back to staff/admin/trainer login
+            <ArrowLeft className="w-3 h-3" />
+            Return to Faculty Portal
           </button>
         </form>
       </div>

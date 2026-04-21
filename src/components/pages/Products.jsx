@@ -8,19 +8,20 @@ import {
   X,
   ChevronLeft,
   ChevronRight,
+  Link,
 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { getImageUrl } from "../../utils/helpers";
 import { useCart } from "../../hooks/useCart";
 import {
   getAllProducts,
-  getProductById,
   getFeaturedProducts,
   getCategories,
 } from "../../services/productService";
-import ProductReview from "./ProductReview";
 
 const Products = () => {
+  const navigate = useNavigate();
   const { addToCart: addToCartContext } = useCart();
   const [products, setProducts] = useState([]);
   const [featuredProducts, setFeaturedProducts] = useState([]);
@@ -121,15 +122,8 @@ const Products = () => {
     setCurrentPage(1);
   };
 
-  const handleViewDetails = async (product) => {
-    try {
-      setSelectedProduct(product); // Show modal immediately with list data
-      const fullProduct = await getProductById(product.id);
-      setSelectedProduct(fullProduct); // Replace with full detail
-    } catch (error) {
-      toast.error("Failed to load product details");
-      console.error(error);
-    }
+  const handleViewDetails = (product) => {
+    navigate(`/products/${product.id}`);
   };
 
   const addToCart = (product) => {
@@ -146,15 +140,29 @@ const Products = () => {
   };
 
   return (
-    <div className="min-h-screen bg-linear-to-b from-[#FFF9F0] to-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div className="min-h-screen bg-[#0F0F0F] pt-28">
+      {/* Page Header */}
+      <div className="bg-[#1A1A1A] border-y border-[#ffffff05] py-16 mb-12 relative overflow-hidden">
+        {/* Background glow and styling */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60%] h-[100%] bg-[#C6A36A]/5 blur-[100px] rounded-full pointer-events-none" />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+          <h1 className="text-4xl md:text-5xl font-heading font-normal text-white uppercase tracking-widest mb-4">
+            Curriculum <span className="text-[#C6A36A] italic lowercase font-serif">&</span> Programs
+          </h1>
+          <p className="text-[#E0E0E0] max-w-2xl mx-auto font-light tracking-wide">
+            Explore our world-class specialty coffee courses. Elevate your craft with certified professional training.
+          </p>
+        </div>
+      </div>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
         {/* Featured Products Section */}
         {featuredProducts.length > 0 && (
-          <div className="mb-12">
-            <div className="flex items-center gap-2 mb-6">
-              <Star className="w-6 h-6 text-[#C8A27B] fill-current" />
-              <h2 className="text-2xl font-bold text-[#4A2F19]">
-                Featured Products
+          <div className="mb-16">
+            <div className="flex items-center gap-3 mb-8">
+              <Star className="w-8 h-8 text-[#C6A36A] fill-current" />
+              <h2 className="text-3xl font-heading font-bold text-white uppercase tracking-widest">
+                Featured Programs
               </h2>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -172,18 +180,18 @@ const Products = () => {
         )}
 
         {/* Search and Filters */}
-        <div className="latte-gradient rounded-xl shadow-sm p-6 mb-8">
+        <div className="bg-[#1A1A1A] border border-[#ffffff10] rounded-2xl p-8 mb-12 shadow-2xl">
           <div className="flex flex-col md:flex-row gap-4">
             {/* Search Bar */}
             <form onSubmit={handleSearch} className="flex-1">
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-[#CCCCCC] w-5 h-5" />
                 <input
                   type="text"
-                  placeholder="Search products..."
+                  placeholder="Search programs..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C8A27B] focus:border-transparent"
+                  className="w-full pl-12 pr-4 py-4 bg-[#0F0F0F] border border-[#ffffff15] rounded-xl text-white placeholder-[#CCCCCC] focus:outline-none focus:border-[#C6A36A] transition-colors"
                 />
               </div>
             </form>
@@ -191,22 +199,22 @@ const Products = () => {
             {/* Filter Toggle */}
             <button
               onClick={() => setShowFilters(!showFilters)}
-              className="flex items-center gap-2 px-6 py-3 bg-[#4A2F19] text-white rounded-lg hover:bg-[#C8A27B] transition-colors"
+              className="flex items-center gap-2 px-8 py-4 bg-[#1A1A1A] border border-[#ffffff15] text-white rounded-xl hover:border-[#C6A36A] transition-colors uppercase tracking-widest text-sm font-bold"
             >
-              <Filter className="w-5 h-5" />
+              <Filter className="w-5 h-5 text-[#C6A36A]" />
               Filters
             </button>
           </div>
 
           {/* Category Filters */}
           {showFilters && (
-            <div className="mt-6 pt-6 border-t border-gray-200">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="font-semibold text-[#4A2F19]">Categories</h3>
+            <div className="mt-8 pt-8 border-t border-[#ffffff10]">
+              <div className="flex items-center justify-between mb-6">
+                <h3 className="font-heading font-semibold text-white uppercase tracking-widest text-sm">Categories</h3>
                 {(selectedCategory || searchQuery) && (
                   <button
                     onClick={clearFilters}
-                    className="text-sm text-[#C8A27B] hover:text-[#4A2F19] flex items-center gap-1"
+                    className="text-sm text-[#CCCCCC] hover:text-[#C6A36A] flex items-center gap-1 transition-colors uppercase tracking-wider font-semibold"
                   >
                     <X className="w-4 h-4" />
                     Clear Filters
@@ -218,10 +226,10 @@ const Products = () => {
                   <button
                     key={category}
                     onClick={() => handleCategoryFilter(category)}
-                    className={`px-4 py-2 rounded-lg border-2 transition-colors ${
+                    className={`px-5 py-2.5 rounded-full border transition-all text-sm uppercase tracking-wider font-semibold ${
                       selectedCategory === category
-                        ? "bg-[#4A2F19] text-white border-[#4A2F19]"
-                        : "bg-white text-[#4A2F19] border-gray-300 hover:border-[#C8A27B]"
+                        ? "bg-[#C6A36A] text-[#0F0F0F] border-[#C6A36A]"
+                        : "bg-transparent text-[#E0E0E0] border-[#ffffff20] hover:border-[#C6A36A] hover:text-white"
                     }`}
                   >
                     {category}
@@ -233,26 +241,26 @@ const Products = () => {
         </div>
 
         {/* Products Grid */}
-        <div className="mb-8">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl font-bold text-[#4A2F19]">All Products</h2>
-            <p className="text-gray-600">
-              {totalItems} {totalItems === 1 ? "product" : "products"} found
+        <div className="mb-16">
+          <div className="flex items-center justify-between mb-10">
+            <h2 className="text-3xl font-heading font-bold text-white uppercase tracking-widest">All Programs</h2>
+            <p className="text-[#E0E0E0] text-sm uppercase tracking-wider font-semibold">
+              {totalItems} {totalItems === 1 ? "program" : "programs"} found
             </p>
           </div>
 
           {loading ? (
-            <div className="flex items-center justify-center py-20">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#4A2F19]"></div>
+            <div className="flex items-center justify-center py-32">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#C6A36A]"></div>
             </div>
           ) : products.length === 0 ? (
-            <div className="text-center py-20">
-              <Package className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-              <p className="text-xl text-gray-600">No products found</p>
-              <p className="text-gray-500 mt-2">Try adjusting your filters</p>
+            <div className="text-center py-32 border border-[#ffffff05] bg-[#1A1A1A] rounded-2xl">
+              <Package className="w-20 h-20 text-[#666666] mx-auto mb-6" />
+              <p className="text-2xl font-heading text-white">No programs found</p>
+              <p className="text-[#CCCCCC] mt-3 font-light">Try adjusting your filters</p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
               {products.map((product) => (
                 <ProductCard
                   key={product.id}
@@ -271,7 +279,7 @@ const Products = () => {
             <button
               onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
               disabled={currentPage === 1}
-              className="p-2 rounded-lg border border-gray-300 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="p-3 rounded-lg border border-[#ffffff15] bg-[#1A1A1A] text-white hover:border-[#C6A36A] disabled:opacity-30 disabled:cursor-not-allowed transition-all"
             >
               <ChevronLeft className="w-5 h-5" />
             </button>
@@ -287,10 +295,10 @@ const Products = () => {
                   <button
                     key={page}
                     onClick={() => setCurrentPage(page)}
-                    className={`px-4 py-2 rounded-lg ${
+                    className={`w-12 h-12 rounded-lg flex items-center justify-center font-bold text-sm transition-all ${
                       currentPage === page
-                        ? "bg-[#4A2F19] text-white"
-                        : "border border-gray-300 hover:bg-gray-50"
+                        ? "bg-[#C6A36A] text-[#0F0F0F]"
+                        : "border border-[#ffffff15] bg-[#1A1A1A] text-white hover:border-[#C6A36A]"
                     }`}
                   >
                     {page}
@@ -298,7 +306,7 @@ const Products = () => {
                 );
               } else if (page === currentPage - 2 || page === currentPage + 2) {
                 return (
-                  <span key={page} className="px-2">
+                  <span key={page} className="px-3 text-[#CCCCCC]">
                     ...
                   </span>
                 );
@@ -311,7 +319,7 @@ const Products = () => {
                 setCurrentPage((prev) => Math.min(totalPages, prev + 1))
               }
               disabled={currentPage === totalPages}
-              className="p-2 rounded-lg border border-gray-300 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="p-3 rounded-lg border border-[#ffffff15] bg-[#1A1A1A] text-white hover:border-[#C6A36A] disabled:opacity-30 disabled:cursor-not-allowed transition-all"
             >
               <ChevronRight className="w-5 h-5" />
             </button>
@@ -319,14 +327,6 @@ const Products = () => {
         )}
       </div>
 
-      {/* Product Detail Modal */}
-      {selectedProduct && (
-        <ProductDetailModal
-          product={selectedProduct}
-          onClose={() => setSelectedProduct(null)}
-          onAddToCart={addToCart}
-        />
-      )}
     </div>
   );
 };
@@ -338,11 +338,11 @@ const ProductCard = ({ product, onViewDetails, onAddToCart, featured }) => {
 
   return (
     <div
-      className={`bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-shadow ${featured ? "border-2 border-[#C8A27B]" : ""}`}
+      className={`luxury-card flex flex-col group ${featured ? "border-[#C6A36A] shadow-[0_0_20px_rgba(198,163,106,0.1)]" : "border-[#ffffff10]"}`}
     >
       {/* Product Image */}
       <div
-        className="relative h-48 bg-gray-100 overflow-hidden group cursor-pointer"
+        className="relative h-64 bg-[#0F0F0F] overflow-hidden cursor-pointer"
         onClick={() => onViewDetails(product)}
       >
         {product.imageUrl ? (
@@ -357,162 +357,72 @@ const ProductCard = ({ product, onViewDetails, onAddToCart, featured }) => {
           </div>
         )}
         {featured && (
-          <div className="absolute top-2 left-2 bg-[#C8A27B] text-white px-3 py-1 rounded-full text-sm font-semibold flex items-center gap-1">
-            <Star className="w-4 h-4 fill-current" />
+          <div className="absolute top-4 right-4 bg-[#0F0F0F]/80 backdrop-blur-sm border border-[#ffffff10] text-white px-3 py-1 text-[10px] tracking-widest font-semibold uppercase flex items-center gap-1.5 z-20">
+            <Star className="w-3 h-3 text-[#C6A36A] fill-current" />
             Featured
           </div>
         )}
         {isOutOfStock && (
-          <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-            <span className="bg-red-500 text-white px-4 py-2 rounded-lg font-bold">
-              OUT OF STOCK
+          <div className="absolute inset-0 bg-[#0F0F0F]/80 backdrop-blur-sm flex items-center justify-center z-30">
+            <span className="bg-[#C62828] text-white px-5 py-2 text-xs font-bold tracking-widest uppercase">
+              Out of Stock
             </span>
           </div>
         )}
         {isLowStock && !isOutOfStock && (
-          <div className="absolute top-2 right-2 bg-orange-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
+          <div className="absolute top-4 left-4 bg-[#C6A36A] text-[#0F0F0F] px-3 py-1 text-[10px] font-bold tracking-widest uppercase z-20">
             Low Stock
           </div>
         )}
       </div>
 
       {/* Product Info */}
-      <div className="p-4">
-        <div className="mb-2">
-          <span className="text-xs font-semibold text-[#C8A27B] uppercase">
+      <div className="p-6 flex-1 flex flex-col relative bg-[#1A1A1A]">
+        <div className="flex items-center justify-between mb-4">
+          <span className="text-[10px] font-semibold text-[#C6A36A] tracking-[0.2em] uppercase">
             {product.category}
           </span>
+          <div className="flex text-[#C6A36A]">
+            <Star className="w-3 h-3 fill-current mx-0.5" />
+            <Star className="w-3 h-3 fill-current mx-0.5" />
+            <Star className="w-3 h-3 fill-current mx-0.5" />
+            <Star className="w-3 h-3 fill-current mx-0.5" />
+            <Star className="w-3 h-3 fill-current mx-0.5" />
+          </div>
         </div>
-        <h3 className="text-lg font-bold text-[#4A2F19] mb-2 line-clamp-2">
+        <h3 className="text-xl font-heading font-bold text-white mb-3 line-clamp-2 group-hover:text-[#C6A36A] transition-colors">
           {product.name}
         </h3>
-        <p className="text-gray-600 text-sm mb-4 line-clamp-2">
+        <p className="text-[#E0E0E0] text-sm mb-6 line-clamp-3 font-light leading-relaxed flex-1">
           {product.description}
         </p>
 
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between border-t border-[#ffffff10] pt-6 mt-auto">
           <div>
-            <p className="text-2xl font-bold text-[#4A2F19]">
+            <p className="text-2xl font-bold text-white mb-1">
               ${product.price.toFixed(2)}
             </p>
-            <p className="text-xs text-gray-500">
+            <p className="text-[10px] text-[#E0E0E0] uppercase tracking-wider font-medium">
               {product.stockQuantity} in stock
             </p>
           </div>
-          <div className="flex gap-2">
+          <div className="flex gap-3">
             <button
               onClick={() => onViewDetails(product)}
-              className="px-4 py-2 border-2 border-[#4A2F19] text-[#4A2F19] rounded-lg hover:bg-[#4A2F19] hover:text-white transition-colors"
+              className="w-10 h-10 rounded-full border border-[#ffffff15] text-[#E0E0E0] hover:text-[#C6A36A] hover:border-[#C6A36A] flex items-center justify-center transition-all bg-[#0F0F0F]"
+              title="View Details"
             >
-              View
+              <Search className="w-4 h-4" />
             </button>
             <button
               onClick={() => onAddToCart(product)}
               disabled={isOutOfStock}
-              className="px-4 py-2 bg-[#C8A27B] text-white rounded-lg hover:bg-[#4A2F19] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+              className="w-10 h-10 rounded-full bg-[#C6A36A] text-[#0F0F0F] hover:bg-[#D4B785] flex items-center justify-center transition-all disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-105"
+              title="Add to Cart"
             >
               <ShoppingCart className="w-4 h-4" />
-              Add
             </button>
           </div>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-// Product Detail Modal Component
-const ProductDetailModal = ({ product, onClose, onAddToCart }) => {
-  const isLowStock = product.stockQuantity <= product.lowStockThreshold;
-  const isOutOfStock = product.stockQuantity === 0;
-
-  return (
-    <div
-      className="fixed inset-0 backdrop-blur-md bg-opacity-50 flex items-center justify-center z-50 p-4"
-      onClick={onClose}
-    >
-      <div
-        className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto"
-        onClick={(e) => e.stopPropagation()}
-      >
-        <div className="grid md:grid-cols-2 gap-6">
-          {/* Product Image */}
-          <div className="relative h-96 bg-gray-100">
-            {product.imageUrl ? (
-              <img
-                src={getImageUrl(product.imageUrl)}
-                alt={product.name}
-                className="w-full h-full object-cover"
-              />
-            ) : (
-              <div className="w-full h-full flex items-center justify-center">
-                <Package className="w-24 h-24 text-gray-300" />
-              </div>
-            )}
-            <button
-              onClick={onClose}
-              className="absolute top-4 right-4 p-2 bg-white rounded-full shadow-lg hover:bg-gray-100"
-            >
-              <X className="w-6 h-6" />
-            </button>
-          </div>
-
-          {/* Product Details */}
-          <div className="p-8">
-            <div className="mb-4">
-              <span className="text-sm font-semibold text-[#C8A27B] uppercase">
-                {product.category}
-              </span>
-            </div>
-            <h2 className="text-3xl font-bold text-[#4A2F19] mb-4">
-              {product.name}
-            </h2>
-            <p className="text-gray-600 mb-6">{product.description}</p>
-
-            <div className="mb-6">
-              <p className="text-4xl font-bold text-[#4A2F19] mb-2">
-                ${product.price.toFixed(2)}
-              </p>
-              <div className="flex items-center gap-2">
-                <p
-                  className={`text-sm font-semibold ${isOutOfStock ? "text-red-500" : isLowStock ? "text-orange-500" : "text-green-600"}`}
-                >
-                  {isOutOfStock
-                    ? "Out of Stock"
-                    : `${product.stockQuantity} Available`}
-                </p>
-                {isLowStock && !isOutOfStock && (
-                  <span className="text-xs bg-orange-100 text-orange-600 px-2 py-1 rounded">
-                    Limited Stock
-                  </span>
-                )}
-              </div>
-            </div>
-
-            {product.isFeatured && (
-              <div className="flex items-center gap-2 mb-6 text-[#C8A27B]">
-                <Star className="w-5 h-5 fill-current" />
-                <span className="font-semibold">Featured Product</span>
-              </div>
-            )}
-
-            <button
-              onClick={() => {
-                onAddToCart(product);
-                onClose();
-              }}
-              disabled={isOutOfStock}
-              className="w-full py-4 bg-[#C8A27B] text-white rounded-lg hover:bg-[#4A2F19] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 font-semibold text-lg"
-            >
-              <ShoppingCart className="w-6 h-6" />
-              {isOutOfStock ? "Out of Stock" : "Add to Cart"}
-            </button>
-          </div>
-        </div>
-        {/* Product Reviews Section */}
-        <div className="mt-8">
-          <hr className="my-6" />
-          <ProductReview productId={product.id} />
         </div>
       </div>
     </div>
