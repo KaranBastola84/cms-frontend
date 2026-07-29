@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import gsap from "gsap";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import {
@@ -65,6 +66,27 @@ const DashboardLayout = ({ children }) => {
   const [searchError, setSearchError] = useState(false);
   const notificationRef = useRef(null);
   const searchRef = useRef(null);
+  const layoutRef = useRef(null);
+
+  // GSAP Entry Animation
+  useEffect(() => {
+    if (!layoutRef.current) return;
+    const ctx = gsap.context(() => {
+      // Sidebar Links stagger in
+      gsap.fromTo(
+        ".sidebar-link",
+        { x: -20, opacity: 0 },
+        { x: 0, opacity: 1, duration: 0.5, stagger: 0.05, ease: "power2.out", delay: 0.1 }
+      );
+      // Main Content fades up
+      gsap.fromTo(
+        ".dashboard-content",
+        { y: 20, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.6, ease: "power3.out", delay: 0.2 }
+      );
+    }, layoutRef);
+    return () => ctx.revert();
+  }, []);
 
   const fetchNotifications = async () => {
     setLoadingNotifications(true);
@@ -685,26 +707,26 @@ const DashboardLayout = ({ children }) => {
   const { commonItems, roleSpecificItems } = getNavItems();
 
   return (
-    <div className="flex h-screen bg-[#F5EFE6]">
+    <div ref={layoutRef} className="flex h-screen bg-[var(--bg-page)] text-[var(--text-primary)]">
       {/* Sidebar */}
-      <aside className="w-72 bg-[#4b301d] border-r border-[#2A1810] flex flex-col shadow-coffee-lg">
+      <aside className="w-72 bg-[var(--bg-sidebar)] border-r border-[var(--bg-sidebar-hover)] flex flex-col shadow-xl z-20">
         {/* Logo */}
-        <div className="p-4 flex items-center border-b border-[#5A3F2E] text-white">
+        <div className="p-5 flex items-center border-b border-[#ffffff10] text-white">
           <Link
             to={getDashboardPathByRole(user?.role)}
-            className="flex items-center gap-3 no-underline group"
+            className="flex items-center gap-3 no-underline group w-full"
           >
-            <div className="coffee-gradient p-2 rounded-xl group-hover:opacity-90 transition-all shadow-sm">
+            <div className="bg-[var(--brand-primary)] p-2 rounded-xl group-hover:scale-105 transition-transform shadow-md">
               <Coffee
-                className="w-7 h-7 text-white opacity-85"
-                strokeWidth={2.5}
+                className="w-6 h-6 text-white"
+                strokeWidth={2}
               />
             </div>
-            <div>
-              <h2 className="text-lg font-bold m-0 text-white! opacity-85">
-                Coffee School
+            <div className="flex flex-col">
+              <h2 className="text-lg font-bold m-0 text-white tracking-wide font-heading uppercase">
+                Brewista
               </h2>
-              <p className="text-xs text-white! opacity-75 m-0 font-semibold">
+              <p className="text-[10px] text-[var(--brand-accent)] m-0 font-semibold uppercase tracking-widest">
                 {user?.role} Portal
               </p>
             </div>
@@ -712,7 +734,7 @@ const DashboardLayout = ({ children }) => {
         </div>
 
         {/* Navigation */}
-        <nav className="flex-1 p-3 space-y-1 overflow-y-auto">
+        <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
           {/* Common Items (Dashboard) */}
           {commonItems.map((item) => {
             const Icon = item.icon;
@@ -721,10 +743,10 @@ const DashboardLayout = ({ children }) => {
               <Link
                 key={item.path}
                 to={item.path}
-                className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all no-underline ${
+                className={`sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg transition-all no-underline text-sm font-medium ${
                   isActive
-                    ? "bg-[#6B4423] text-white opacity-100 shadow-coffee-sm scale-[1.02] font-bold"
-                    : "text-white opacity-80 hover:opacity-100 hover:bg-[#5A3F2E] font-semibold"
+                    ? "bg-[var(--brand-secondary)] text-white shadow-md"
+                    : "text-[var(--text-on-dark-muted)] hover:text-white hover:bg-[var(--bg-sidebar-hover)]"
                 }`}
               >
                 <Icon className="w-5 h-5 shrink-0" />
@@ -744,30 +766,12 @@ const DashboardLayout = ({ children }) => {
               );
 
               return (
-                <div key={index}>
-                  {/* Dropdown Header */}
-                  <button
-                    onClick={() => toggleDropdown(item.groupName)}
-                    className={`w-full flex items-center justify-between gap-3 px-4 py-3 rounded-xl transition-all no-underline ${
-                      hasActiveChild || isOpen
-                        ? "bg-[#5A3F2E] text-white opacity-100"
-                        : "text-white opacity-80 hover:opacity-100 hover:bg-[#5A3F2E]"
-                    } font-semibold`}
-                  >
-                    <div className="flex items-center gap-3">
-                      <GroupIcon className="w-5 h-5 shrink-0" />
-                      <span>{item.groupName}</span>
-                    </div>
-                    {isOpen ? (
-                      <ChevronDown className="w-4 h-4" />
-                    ) : (
-                      <ChevronRight className="w-4 h-4" />
-                    )}
-                  </button>
-
-                  {/* Dropdown Items */}
-                  {isOpen && (
-                    <div className="ml-4 mt-1 space-y-1">
+                <div key={index} className="mt-2">
+                  <div className="px-4 py-2 text-xs font-semibold text-[#ffffff50] uppercase tracking-wider">
+                    {item.groupName}
+                  </div>
+                  {/* Dropdown Items directly rendered for SaaS flat structure, or keep accordion if preferred. Let's keep accordion but styling it cleaner. */}
+                  <div className="space-y-1">
                       {item.items.map((subItem) => {
                         const SubIcon = subItem.icon;
                         const isActive = location.pathname === subItem.path;
@@ -775,19 +779,18 @@ const DashboardLayout = ({ children }) => {
                           <Link
                             key={subItem.path}
                             to={subItem.path}
-                            className={`flex items-center gap-3 px-4 py-2.5 rounded-xl transition-all no-underline ${
+                            className={`sidebar-link flex items-center gap-3 px-4 py-2.5 rounded-lg transition-all no-underline text-sm font-medium ${
                               isActive
-                                ? "bg-[#6B4423] text-white opacity-100 shadow-coffee-sm font-bold"
-                                : "text-white opacity-75 hover:opacity-100 hover:bg-[#5A3F2E] font-medium"
+                                ? "bg-[var(--brand-secondary)] text-white shadow-md"
+                                : "text-[var(--text-on-dark-muted)] hover:text-white hover:bg-[var(--bg-sidebar-hover)]"
                             }`}
                           >
                             <SubIcon className="w-4 h-4 shrink-0" />
-                            <span className="text-sm">{subItem.name}</span>
+                            <span>{subItem.name}</span>
                           </Link>
                         );
                       })}
-                    </div>
-                  )}
+                  </div>
                 </div>
               );
             } else {
@@ -798,10 +801,10 @@ const DashboardLayout = ({ children }) => {
                 <Link
                   key={item.path}
                   to={item.path}
-                  className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all no-underline ${
+                  className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all no-underline text-sm font-medium ${
                     isActive
-                      ? "bg-[#6B4423] text-white opacity-100 shadow-coffee-sm scale-[1.02] font-bold"
-                      : "text-white opacity-80 hover:opacity-100 hover:bg-[#5A3F2E] font-semibold"
+                      ? "bg-[var(--brand-secondary)] text-white shadow-md"
+                      : "text-[var(--text-on-dark-muted)] hover:text-white hover:bg-[var(--bg-sidebar-hover)]"
                   }`}
                 >
                   <Icon className="w-5 h-5 shrink-0" />
@@ -813,12 +816,12 @@ const DashboardLayout = ({ children }) => {
         </nav>
 
         {/* User Section */}
-        <div className="p-4 border-t border-[#5A3F2E]">
+        <div className="p-4 border-t border-[var(--bg-sidebar-hover)]">
           <button
             onClick={handleLogout}
-            className="w-full flex items-center justify-center gap-3 px-4 py-3 rounded-xl bg-[#ef4444] hover:bg-[#dc2626] transition-all text-white shadow-sm hover:shadow-md font-bold hover:scale-105"
+            className="w-full flex items-center justify-center gap-3 px-4 py-3 rounded-lg bg-[var(--status-error)] hover:bg-[var(--status-error-text)] transition-all text-white font-semibold"
           >
-            <LogOut className="w-5 h-5" />
+            <LogOut className="w-4 h-4" />
             <span>Logout</span>
           </button>
         </div>
@@ -827,11 +830,11 @@ const DashboardLayout = ({ children }) => {
       {/* Main Content */}
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* Top Bar */}
-        <header className="bg-[#fffcf5] shadow-coffee-sm border-b border-[#C8A27B]/20 px-6 py-4">
+        <header className="bg-[var(--bg-surface)] shadow-sm border-b border-[var(--border-subtle)] px-6 py-4 z-10 dashboard-content">
           <div className="flex items-center justify-between gap-6">
             {/* Search Bar */}
             <div className="flex-1 max-w-2xl relative" ref={searchRef}>
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-[#6B4423]" />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-[var(--text-muted)]" />
               <input
                 type="text"
                 placeholder="Search courses, students, schedules..."
@@ -842,23 +845,23 @@ const DashboardLayout = ({ children }) => {
                   setShowSearchDropdown(true);
                 }}
                 onFocus={() => setShowSearchDropdown(true)}
-                className="w-full pl-10 pr-4 py-2 rounded-xl border border-[#C8A27B]/30 bg-[#F5EFE6]/50 focus:outline-none focus:border-[#4A2F19] focus:ring-2 focus:ring-[#4A2F19]/20 transition-all text-[#1A1A1A] placeholder-[#6B4423]/60"
+                className="w-full pl-10 pr-4 py-2 rounded-lg border border-[var(--border-default)] bg-[var(--bg-surface-alt)] focus:outline-none focus:border-[var(--brand-primary)] focus:bg-[var(--bg-surface)] transition-all text-[var(--text-primary)] placeholder-[var(--text-muted)]"
               />
 
               {showSearchDropdown && (
-                <div className="absolute z-50 mt-2 w-full bg-white border border-[#C8A27B]/30 rounded-xl shadow-coffee-lg overflow-hidden">
+                <div className="absolute z-50 mt-2 w-full bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-lg shadow-lg overflow-hidden">
                   {searchLoading ? (
-                    <div className="p-4 flex items-center justify-center gap-2 text-sm text-[#6B4423]">
-                      <Loader2 className="w-4 h-4 animate-spin" />
+                    <div className="p-4 flex items-center justify-center gap-2 text-sm text-[var(--text-secondary)]">
+                      <Loader2 className="w-4 h-4 animate-spin text-[var(--brand-primary)]" />
                       Searching...
                     </div>
                   ) : !debouncedSearchQuery ? (
-                    <div className="p-4 text-sm text-[#6B4423]">
+                    <div className="p-4 text-sm text-[var(--text-secondary)]">
                       Start typing to search students, courses, batches, and
                       inquiries.
                     </div>
                   ) : searchResults.length === 0 ? (
-                    <div className="p-4 text-sm text-[#6B4423]">
+                    <div className="p-4 text-sm text-[var(--text-secondary)]">
                       No results
                       {searchError ? "" : ` for "${debouncedSearchQuery}".`}
                     </div>
@@ -1049,7 +1052,7 @@ const DashboardLayout = ({ children }) => {
         </header>
 
         {/* Page Content */}
-        <main className="flex-1 overflow-y-auto p-6 bg-[#EFE7D3]/40">
+        <main className="flex-1 overflow-y-auto bg-[var(--bg-page)] p-6 dashboard-content">
           <div className="max-w-7xl mx-auto">{children}</div>
         </main>
       </div>
