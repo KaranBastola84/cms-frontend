@@ -204,7 +204,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 /* Global Glassmorphism Nav override for luxury feel */
 .nav-glass {
   background-color: rgba(15, 15, 15, 0.85);
-  backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--border-subtle);
 }
