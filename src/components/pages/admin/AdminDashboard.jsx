@@ -97,12 +97,12 @@ function AdminDashboard() {
 
   if (loading) {
     return (
-      <div className="min-h-105 mb-6 caramel-cream-gradient text-[#4A2F19] p-8 rounded-2xl border border-[#C8A27B]/50 shadow-coffee-lg flex items-center justify-center">
+      <div className="min-h-105 mb-6 caramel-cream-gradient text-[var(--brand-primary)] p-8 rounded-2xl border border-[var(--brand-accent)]/50 shadow-coffee-lg flex items-center justify-center">
         <div className="text-center">
           <div className="bg-white/65 p-4 rounded-2xl border border-[#4A2F19]/15 inline-flex mb-3">
-            <Loader2 className="w-8 h-8 text-[#6B4423] animate-spin" />
+            <Loader2 className="w-8 h-8 text-[var(--text-primary)] animate-spin" />
           </div>
-          <p className="text-[#6B4423] text-sm tracking-wide font-semibold">
+          <p className="text-[var(--text-primary)] text-sm tracking-wide font-semibold">
             Loading dashboard data...
           </p>
         </div>
@@ -220,7 +220,7 @@ function AdminDashboard() {
 
   return (
     <div className="fade-in space-y-6 pb-4">
-      <div className="mb-6 caramel-cream-gradient text-[#4A2F19] hover-lift p-6 md:p-8 rounded-2xl border border-[#C8A27B]/50 shadow-coffee-lg">
+      <div className="mb-6 caramel-cream-gradient text-[var(--brand-primary)] hover-lift p-6 md:p-8 rounded-2xl border border-[var(--brand-accent)]/50 shadow-coffee-lg">
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-5">
           <div className="flex items-start gap-4">
             <div className="bg-white/65 p-4 rounded-2xl border border-[#4A2F19]/15">
@@ -230,7 +230,7 @@ function AdminDashboard() {
               <h2 className="text-3xl md:text-4xl font-black tracking-tight m-0">
                 Admin Dashboard
               </h2>
-              <p className="m-0 mt-2 text-[#6B4423] max-w-2xl">
+              <p className="m-0 mt-2 text-[var(--text-primary)] max-w-2xl">
                 A sharper view of students, finances, inquiries, and operations
                 in one place.
               </p>
@@ -239,7 +239,7 @@ function AdminDashboard() {
 
           <button
             onClick={fetchDashboardData}
-            className="inline-flex items-center justify-center gap-2 rounded-xl bg-white/75 text-[#4A2F19] px-4 py-2 text-sm font-semibold border border-[#4A2F19]/20 hover:bg-white"
+            className="inline-flex items-center justify-center gap-2 rounded-xl bg-white/75 text-[var(--brand-primary)] px-4 py-2 text-sm font-semibold border border-[var(--border-default)] hover:bg-white"
           >
             <RefreshCw className="w-4 h-4" />
             Refresh Data

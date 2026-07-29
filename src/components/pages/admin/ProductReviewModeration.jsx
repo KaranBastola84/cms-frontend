@@ -69,30 +69,30 @@ const ProductReviewModeration = () => {
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#C6A36A]"></div>
         </div>
       ) : pendingReviews.length === 0 ? (
-        <div className="text-center py-20 bg-[#1A1A1A] rounded-2xl border border-[#ffffff05] border-dashed">
+        <div className="text-center py-20 bg-[#1A1A1A] rounded-2xl border border-[var(--border-subtle)] border-dashed">
           <p className="text-[#A0A0A0] font-light tracking-widest uppercase text-xs">No pending reviews require attention.</p>
         </div>
       ) : (
         <div className="grid gap-6">
           {pendingReviews.map((review) => (
-            <div key={review.id} className="bg-[#1A1A1A] border border-[#ffffff05] rounded-2xl p-6 md:p-8 shadow-xl hover:border-[#C6A36A]/20 transition-all group">
+            <div key={review.id} className="bg-[#1A1A1A] border border-[var(--border-subtle)] rounded-2xl p-6 md:p-8 shadow-xl hover:border-[#C6A36A]/20 transition-all group">
               <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
                 <div className="flex-1">
                   <div className="flex items-center gap-4 mb-4">
-                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#1A1A1A] to-[#333333] border border-[#ffffff10] flex items-center justify-center text-white font-bold uppercase">
+                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#1A1A1A] to-[#333333] border border-[var(--border-subtle)] flex items-center justify-center text-white font-bold uppercase">
                       {review.customerName.charAt(0)}
                     </div>
                     <div>
                       <span className="block font-bold text-white text-lg tracking-wide">{review.customerName}</span>
-                      <span className="text-[10px] text-[#C6A36A] uppercase tracking-widest font-bold">{review.customerEmail}</span>
+                      <span className="text-[10px] text-[var(--brand-accent)] uppercase tracking-widest font-bold">{review.customerEmail}</span>
                     </div>
-                    <div className="flex text-[#C6A36A] ml-auto md:ml-4">
+                    <div className="flex text-[var(--brand-accent)] ml-auto md:ml-4">
                       {[...Array(review.rating)].map((_, i) => (
                         <Star key={i} className="w-4 h-4 fill-current" />
                       ))}
                     </div>
                   </div>
-                  <p className="text-[#E0E0E0] text-sm leading-relaxed font-light italic pl-6 border-l-2 border-[#C6A36A]/30 mb-2">
+                  <p className="text-[var(--text-secondary)] text-sm leading-relaxed font-light italic pl-6 border-l-2 border-[#C6A36A]/30 mb-2">
                     "{review.reviewText}"
                   </p>
                 </div>
@@ -112,7 +112,7 @@ const ProductReviewModeration = () => {
                   </button>
                   <button
                     onClick={() => handleDelete(review.id)}
-                    className="flex-1 md:w-32 py-2.5 bg-transparent border border-[#ffffff10] text-[#A0A0A0] text-[10px] font-black uppercase tracking-[0.2em] rounded-lg hover:bg-[#ffffff05] transition-all"
+                    className="flex-1 md:w-32 py-2.5 bg-transparent border border-[var(--border-subtle)] text-[#A0A0A0] text-[10px] font-black uppercase tracking-[0.2em] rounded-lg hover:bg-[#ffffff05] transition-all"
                   >
                     Delete
                   </button>

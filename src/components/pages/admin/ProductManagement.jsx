@@ -217,7 +217,7 @@ const ProductManagement = () => {
     <div className="p-6">
       {/* Header */}
       <div className="mb-6">
-        <h1 className="text-3xl font-bold text-[#4A2F19] mb-2">
+        <h1 className="text-3xl font-bold text-[var(--brand-primary)] mb-2">
           Product Management
         </h1>
         <p className="text-gray-600">
@@ -290,7 +290,7 @@ const ProductManagement = () => {
           {/* Add Product Button */}
           <button
             onClick={openCreateModal}
-            className="flex items-center gap-2 px-6 py-2 bg-[#4A2F19] text-white rounded-lg hover:bg-[#C8A27B] transition-colors whitespace-nowrap"
+            className="flex items-center gap-2 px-6 py-2 bg-[var(--brand-primary)] text-white rounded-lg hover:bg-[#C8A27B] transition-colors whitespace-nowrap"
           >
             <Plus className="w-5 h-5" />
             Add Product

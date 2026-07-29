@@ -138,8 +138,8 @@ function OutstandingPayments() {
     return (
       <div className="flex items-center justify-center h-96">
         <div className="text-center">
-          <Loader2 className="w-8 h-8 text-[#4A2F19] animate-spin mx-auto mb-2" />
-          <p className="text-[#6B4423] text-sm">
+          <Loader2 className="w-8 h-8 text-[var(--brand-primary)] animate-spin mx-auto mb-2" />
+          <p className="text-[var(--text-primary)] text-sm">
             Loading outstanding payments...
           </p>
         </div>
@@ -169,7 +169,7 @@ function OutstandingPayments() {
         </div>
         <button
           onClick={exportToCSV}
-          className="px-4 py-2 bg-[#4A2F19] text-white rounded-lg hover:bg-[#3D2817] transition-colors flex items-center"
+          className="px-4 py-2 bg-[var(--brand-primary)] text-white rounded-lg hover:bg-[#3D2817] transition-colors flex items-center"
         >
           <Download className="w-4 h-4 mr-2" />
           Export CSV
@@ -183,7 +183,7 @@ function OutstandingPayments() {
             onClick={() => setActiveTab("outstanding")}
             className={`flex-1 px-6 py-3 font-medium transition-colors ${
               activeTab === "outstanding"
-                ? "bg-[#4A2F19] text-white"
+                ? "bg-[var(--brand-primary)] text-white"
                 : "bg-white text-[#8B6F47] hover:bg-[#FFF8F0]"
             }`}
           >
@@ -193,7 +193,7 @@ function OutstandingPayments() {
             onClick={() => setActiveTab("defaulters")}
             className={`flex-1 px-6 py-3 font-medium transition-colors ${
               activeTab === "defaulters"
-                ? "bg-[#4A2F19] text-white"
+                ? "bg-[var(--brand-primary)] text-white"
                 : "bg-white text-[#8B6F47] hover:bg-[#FFF8F0]"
             }`}
           >
@@ -421,7 +421,7 @@ function OutstandingPayments() {
                         <td className="px-6 py-4">
                           <div className="flex gap-2">
                             <button
-                              className="px-3 py-1 text-xs bg-[#4A2F19] text-white rounded hover:bg-[#3D2817] transition-colors"
+                              className="px-3 py-1 text-xs bg-[var(--brand-primary)] text-white rounded hover:bg-[#3D2817] transition-colors"
                               onClick={() =>
                                 toast("View details feature coming soon")
                               }
@@ -466,7 +466,7 @@ function OutstandingPayments() {
               />
               <button
                 onClick={fetchPaymentDefaulters}
-                className="px-4 py-2 bg-[#4A2F19] text-white rounded-lg hover:bg-[#3D2817] transition-colors"
+                className="px-4 py-2 bg-[var(--brand-primary)] text-white rounded-lg hover:bg-[#3D2817] transition-colors"
               >
                 Refresh
               </button>
@@ -629,7 +629,7 @@ function OutstandingPayments() {
                         <td className="px-6 py-4">
                           <div className="flex gap-2">
                             <button
-                              className="px-3 py-1 text-xs bg-[#4A2F19] text-white rounded hover:bg-[#3D2817] transition-colors"
+                              className="px-3 py-1 text-xs bg-[var(--brand-primary)] text-white rounded hover:bg-[#3D2817] transition-colors"
                               onClick={() =>
                                 toast("View details feature coming soon")
                               }

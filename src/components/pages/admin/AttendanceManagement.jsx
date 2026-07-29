@@ -399,8 +399,8 @@ const AttendanceManagement = () => {
     return (
       <div className="flex items-center justify-center h-96">
         <div className="text-center">
-          <Loader2 className="w-8 h-8 text-[#4A2F19] animate-spin mx-auto mb-2" />
-          <p className="text-[#6B4423] text-sm">Loading attendance module...</p>
+          <Loader2 className="w-8 h-8 text-[var(--brand-primary)] animate-spin mx-auto mb-2" />
+          <p className="text-[var(--text-primary)] text-sm">Loading attendance module...</p>
         </div>
       </div>
     );
@@ -472,7 +472,7 @@ const AttendanceManagement = () => {
           <button
             onClick={fetchBatchAttendance}
             disabled={saving}
-            className="px-4 py-2 bg-[#4A2F19] text-white rounded-lg hover:bg-[#3D2817] transition-colors flex items-center justify-center disabled:opacity-60"
+            className="px-4 py-2 bg-[var(--brand-primary)] text-white rounded-lg hover:bg-[#3D2817] transition-colors flex items-center justify-center disabled:opacity-60"
           >
             {saving ? (
               <Loader2 className="w-4 h-4 animate-spin" />
@@ -560,22 +560,22 @@ const AttendanceManagement = () => {
           <table className="min-w-full">
             <thead className="bg-[#FFF8F0] border-b border-[#E8DCC8]">
               <tr>
-                <th className="px-4 py-2 text-left text-xs font-semibold text-[#6B4423] uppercase">
+                <th className="px-4 py-2 text-left text-xs font-semibold text-[var(--text-primary)] uppercase">
                   Student
                 </th>
-                <th className="px-4 py-2 text-left text-xs font-semibold text-[#6B4423] uppercase">
+                <th className="px-4 py-2 text-left text-xs font-semibold text-[var(--text-primary)] uppercase">
                   Status
                 </th>
-                <th className="px-4 py-2 text-left text-xs font-semibold text-[#6B4423] uppercase">
+                <th className="px-4 py-2 text-left text-xs font-semibold text-[var(--text-primary)] uppercase">
                   Check In
                 </th>
-                <th className="px-4 py-2 text-left text-xs font-semibold text-[#6B4423] uppercase">
+                <th className="px-4 py-2 text-left text-xs font-semibold text-[var(--text-primary)] uppercase">
                   Check Out
                 </th>
-                <th className="px-4 py-2 text-left text-xs font-semibold text-[#6B4423] uppercase">
+                <th className="px-4 py-2 text-left text-xs font-semibold text-[var(--text-primary)] uppercase">
                   Remarks
                 </th>
-                <th className="px-4 py-2 text-right text-xs font-semibold text-[#6B4423] uppercase">
+                <th className="px-4 py-2 text-right text-xs font-semibold text-[var(--text-primary)] uppercase">
                   Actions
                 </th>
               </tr>
@@ -812,7 +812,7 @@ const AttendanceManagement = () => {
             <button
               type="submit"
               disabled={saving}
-              className="px-4 py-2 bg-[#4A2F19] text-white rounded-lg hover:bg-[#3D2817] flex items-center disabled:opacity-60"
+              className="px-4 py-2 bg-[var(--brand-primary)] text-white rounded-lg hover:bg-[#3D2817] flex items-center disabled:opacity-60"
             >
               {saving ? (
                 <Loader2 className="w-4 h-4 mr-2 animate-spin" />
@@ -875,14 +875,14 @@ const AttendanceManagement = () => {
             <button
               onClick={loadStudentReport}
               disabled={saving}
-              className="px-3 py-2 bg-[#4A2F19] text-white rounded-lg hover:bg-[#3D2817] text-sm disabled:opacity-60"
+              className="px-3 py-2 bg-[var(--brand-primary)] text-white rounded-lg hover:bg-[#3D2817] text-sm disabled:opacity-60"
             >
               Student Report
             </button>
             <button
               onClick={loadBatchReport}
               disabled={saving}
-              className="px-3 py-2 bg-[#6B4423] text-white rounded-lg hover:bg-[#5A3A1E] text-sm disabled:opacity-60"
+              className="px-3 py-2 bg-[var(--brand-primary-hover)] text-white rounded-lg hover:bg-[#5A3A1E] text-sm disabled:opacity-60"
             >
               Batch Report
             </button>
@@ -924,7 +924,7 @@ const AttendanceManagement = () => {
             </div>
 
             <form onSubmit={handleUpdateRecord} className="p-6 space-y-3">
-              <p className="text-sm text-[#6B4423]">
+              <p className="text-sm text-[var(--text-primary)]">
                 Student ID: {editingRow.studentId}
               </p>
 
@@ -983,14 +983,14 @@ const AttendanceManagement = () => {
                 <button
                   type="button"
                   onClick={() => setShowEditModal(false)}
-                  className="px-4 py-2 border border-[#E8DCC8] rounded-lg text-[#6B4423] hover:bg-gray-50"
+                  className="px-4 py-2 border border-[#E8DCC8] rounded-lg text-[var(--text-primary)] hover:bg-gray-50"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={saving}
-                  className="px-4 py-2 bg-[#4A2F19] text-white rounded-lg hover:bg-[#3D2817] disabled:opacity-60"
+                  className="px-4 py-2 bg-[var(--brand-primary)] text-white rounded-lg hover:bg-[#3D2817] disabled:opacity-60"
                 >
                   {saving ? "Saving..." : "Save Changes"}
                 </button>
@@ -1009,7 +1009,7 @@ const ReportCard = ({ title, data }) => (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-1 text-sm">
       {Object.entries(data || {}).map(([key, value]) => (
         <div key={key} className="flex justify-between gap-2">
-          <span className="text-[#6B4423] capitalize">{key}</span>
+          <span className="text-[var(--text-primary)] capitalize">{key}</span>
           <span className="text-[#3D2817] font-medium">{String(value)}</span>
         </div>
       ))}
@@ -1019,13 +1019,13 @@ const ReportCard = ({ title, data }) => (
 
 const SummaryBadge = ({ label, value, tone }) => {
   const toneStyles = {
-    neutral: "bg-[#EFE7D3] text-[#3D2817]",
+    neutral: "bg-[var(--bg-surface-alt)] text-[#3D2817]",
     green: "bg-green-100 text-green-700",
     red: "bg-red-100 text-red-700",
     amber: "bg-amber-100 text-amber-700",
     blue: "bg-blue-100 text-blue-700",
     gray: "bg-gray-200 text-gray-700",
-    brown: "bg-[#E8DCC8] text-[#4A2F19]",
+    brown: "bg-[#E8DCC8] text-[var(--brand-primary)]",
   };
 
   return (

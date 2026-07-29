@@ -711,7 +711,7 @@ const DashboardLayout = ({ children }) => {
       {/* Sidebar */}
       <aside className="w-72 bg-[var(--bg-sidebar)] border-r border-[var(--bg-sidebar-hover)] flex flex-col shadow-xl z-20">
         {/* Logo */}
-        <div className="p-5 flex items-center border-b border-[#ffffff10] text-white">
+        <div className="p-5 flex items-center border-b border-[var(--border-subtle)] text-white">
           <Link
             to={getDashboardPathByRole(user?.role)}
             className="flex items-center gap-3 no-underline group w-full"
@@ -874,9 +874,9 @@ const DashboardLayout = ({ children }) => {
                           return (
                             <div
                               key={type}
-                              className="border-b border-[#EFE7D3] last:border-b-0"
+                              className="border-b border-[var(--border-subtle)] last:border-b-0"
                             >
-                              <div className="px-3 py-2 bg-[#F5EFE6]/60 text-xs font-bold text-[#6B4423] uppercase tracking-wide flex items-center gap-2">
+                              <div className="px-3 py-2 bg-[var(--bg-page)] text-xs font-bold text-[var(--text-primary)] uppercase tracking-wide flex items-center gap-2">
                                 <TypeIcon className="w-3.5 h-3.5" />
                                 {type}
                               </div>
@@ -887,16 +887,16 @@ const DashboardLayout = ({ children }) => {
                                   onClick={() =>
                                     handleSearchResultClick(result)
                                   }
-                                  className="w-full text-left px-3 py-2.5 hover:bg-[#EFE7D3]/60 transition-colors"
+                                  className="w-full text-left px-3 py-2.5 hover:bg-[var(--bg-surface-alt)] transition-colors"
                                 >
-                                  <p className="m-0 text-sm font-semibold text-[#1A1A1A]">
+                                  <p className="m-0 text-sm font-semibold text-[var(--text-primary)]">
                                     {result.title}
                                   </p>
-                                  <p className="m-0 text-xs text-[#6B4423]">
+                                  <p className="m-0 text-xs text-[var(--text-primary)]">
                                     {result.subtitle || "-"}
                                   </p>
                                   {result.status && (
-                                    <span className="inline-block mt-1 text-[11px] px-2 py-0.5 rounded-full bg-[#EFE7D3] text-[#4A2F19] font-semibold">
+                                    <span className="inline-block mt-1 text-[11px] px-2 py-0.5 rounded-full bg-[var(--bg-surface-alt)] text-[var(--brand-primary)] font-semibold">
                                       {result.status}
                                     </span>
                                   )}
@@ -918,9 +918,9 @@ const DashboardLayout = ({ children }) => {
               <div className="relative" ref={notificationRef}>
                 <button
                   onClick={() => setShowNotifications(!showNotifications)}
-                  className="relative p-2 rounded-xl hover:bg-[#EFE7D3]/50 transition-all group"
+                  className="relative p-2 rounded-xl hover:bg-[var(--bg-surface-alt)] transition-all group"
                 >
-                  <Bell className="w-6 h-6 text-[#4A2F19] group-hover:text-[#1A1A1A]" />
+                  <Bell className="w-6 h-6 text-[var(--brand-primary)] group-hover:text-[var(--text-primary)]" />
                   {unreadCount > 0 && (
                     <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center animate-pulse">
                       {unreadCount > 99 ? "99+" : unreadCount}
@@ -930,8 +930,8 @@ const DashboardLayout = ({ children }) => {
 
                 {/* Notification Dropdown */}
                 {showNotifications && (
-                  <div className="absolute right-0 mt-2 w-96 max-h-150 bg-white rounded-lg shadow-2xl overflow-hidden z-50 border-2 border-[#4A2F19]/10">
-                    <div className="bg-[#4A2F19] text-white p-4 flex items-center justify-between">
+                  <div className="absolute right-0 mt-2 w-96 max-h-150 bg-white rounded-lg shadow-2xl overflow-hidden z-50 border-2 border-[var(--border-subtle)]">
+                    <div className="bg-[var(--brand-primary)] text-white p-4 flex items-center justify-between">
                       <div>
                         <h3 className="font-bold text-lg m-0">Notifications</h3>
                         <p className="text-sm text-[#EFE7D3] m-0">
@@ -961,21 +961,21 @@ const DashboardLayout = ({ children }) => {
 
                     <div className="overflow-y-auto max-h-125">
                       {loadingNotifications ? (
-                        <div className="p-8 text-center text-[#6B4423]">
-                          <RefreshCw className="w-8 h-8 mx-auto mb-3 animate-spin text-[#4A2F19]" />
+                        <div className="p-8 text-center text-[var(--text-primary)]">
+                          <RefreshCw className="w-8 h-8 mx-auto mb-3 animate-spin text-[var(--brand-primary)]" />
                           <p className="m-0 text-sm">
                             Loading notifications...
                           </p>
                         </div>
                       ) : notifications.length === 0 ? (
                         <div className="p-12 text-center">
-                          <div className="bg-[#EFE7D3]/50 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4">
-                            <Bell className="w-10 h-10 text-[#6B4423] opacity-40" />
+                          <div className="bg-[var(--bg-surface-alt)] w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <Bell className="w-10 h-10 text-[var(--text-primary)] opacity-40" />
                           </div>
-                          <p className="text-[#4A2F19] font-semibold m-0 mb-1">
+                          <p className="text-[var(--brand-primary)] font-semibold m-0 mb-1">
                             All caught up!
                           </p>
-                          <p className="text-sm text-[#6B4423] m-0">
+                          <p className="text-sm text-[var(--text-primary)] m-0">
                             No new notifications
                           </p>
                         </div>
@@ -1001,17 +1001,17 @@ const DashboardLayout = ({ children }) => {
                                 </div>
                                 <div className="flex-1 min-w-0">
                                   <div className="flex items-start justify-between gap-2 mb-1">
-                                    <p className="text-sm font-bold text-[#1A1A1A] m-0">
+                                    <p className="text-sm font-bold text-[var(--text-primary)] m-0">
                                       {notification.title}
                                     </p>
                                     {!notification.isRead && (
                                       <span className="w-2 h-2 bg-blue-500 rounded-full shrink-0 mt-1"></span>
                                     )}
                                   </div>
-                                  <p className="text-sm text-[#4A2F19] m-0 mb-2">
+                                  <p className="text-sm text-[var(--brand-primary)] m-0 mb-2">
                                     {notification.message}
                                   </p>
-                                  <p className="text-xs text-[#6B4423] m-0">
+                                  <p className="text-xs text-[var(--text-primary)] m-0">
                                     {formatTimestamp(notification.timestamp)}
                                   </p>
                                 </div>
@@ -1023,12 +1023,12 @@ const DashboardLayout = ({ children }) => {
                     </div>
 
                     {notifications.length > 0 && !loadingNotifications && (
-                      <div className="p-3 bg-[#EFE7D3] border-t-2 border-[#4A2F19]/20 sticky bottom-0">
+                      <div className="p-3 bg-[var(--bg-surface-alt)] border-t-2 border-[var(--border-default)] sticky bottom-0">
                         <button
                           onClick={() => {
                             markAllAsRead();
                           }}
-                          className="w-full text-center text-sm text-white bg-[#4A2F19] hover:bg-[#6B4423] transition-colors py-2.5 px-4 rounded-lg font-semibold shadow-sm hover:shadow-md"
+                          className="w-full text-center text-sm text-white bg-[var(--brand-primary)] hover:bg-[var(--brand-primary-hover)] transition-colors py-2.5 px-4 rounded-lg font-semibold shadow-sm hover:shadow-md"
                         >
                           Mark All as Read{" "}
                           {unreadCount > 0 && `(${unreadCount})`}
@@ -1042,10 +1042,10 @@ const DashboardLayout = ({ children }) => {
               {/* Profile */}
               <div
                 onClick={() => navigate("/admin/settings")}
-                className="flex items-center gap-2 px-3 py-2 rounded-xl hover:bg-[#EFE7D3]/50 transition-all cursor-pointer group"
+                className="flex items-center gap-2 px-3 py-2 rounded-xl hover:bg-[var(--bg-surface-alt)] transition-all cursor-pointer group"
                 title="Settings"
               >
-                <UserCircle className="w-8 h-8 text-[#4A2F19] group-hover:text-[#1A1A1A]" />
+                <UserCircle className="w-8 h-8 text-[var(--brand-primary)] group-hover:text-[var(--text-primary)]" />
               </div>
             </div>
           </div>

@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import gsap from "gsap";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import {
@@ -18,6 +19,24 @@ const Login = () => {
   });
   const [loading, setLoading] = useState(false);
   const [validationErrors, setValidationErrors] = useState({});
+  const containerRef = useRef(null);
+
+  useEffect(() => {
+    if (!containerRef.current) return;
+    const ctx = gsap.context(() => {
+      gsap.fromTo(
+        ".auth-card",
+        { y: 30, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.8, ease: "power3.out" }
+      );
+      gsap.fromTo(
+        ".auth-element",
+        { y: 15, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.5, stagger: 0.1, ease: "power2.out", delay: 0.2 }
+      );
+    }, containerRef);
+    return () => ctx.revert();
+  }, []);
 
   const navigate = useNavigate();
   const { login } = useAuth();
@@ -113,27 +132,27 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-[calc(100vh-200px)] flex items-center justify-center p-6 bg-[#0F0F0F]">
-      <div className="luxury-card p-10 w-full max-w-md bg-[#1A1A1A] border-[#ffffff15] fade-in transform transition-transform duration-500 hover:scale-[1.01]">
-        <div className="text-center mb-10">
-          <div className="inline-flex items-center justify-center p-5 bg-[#0F0F0F] rounded-2xl mb-6 shadow-[0_4px_20px_rgba(0,0,0,0.5)] border border-[#ffffff10]">
-            <Coffee className="w-10 h-10 text-[#C6A36A]" strokeWidth={2} />
+    <div ref={containerRef} className="min-h-[calc(100vh-68px)] flex items-center justify-center p-6 bg-[var(--bg-page)] mt-[68px]">
+      <div className="auth-card p-10 w-full max-w-md bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-2xl shadow-xl">
+        <div className="text-center mb-10 auth-element">
+          <div className="inline-flex items-center justify-center p-4 bg-[var(--brand-primary)] rounded-xl mb-6 shadow-md">
+            <Coffee className="w-8 h-8 text-white" strokeWidth={2} />
           </div>
-          <h2 className="text-3xl font-heading font-normal text-white mb-3 uppercase tracking-widest">
+          <h2 className="text-2xl font-heading font-bold text-[var(--text-primary)] mb-2 uppercase tracking-wide">
             Welcome Back
           </h2>
-          <p className="text-sm text-[#E0E0E0] font-light tracking-wide">
-            Sign in to Coffee School Management System
+          <p className="text-sm text-[var(--text-secondary)]">
+            Sign in to your Brewista portal
           </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="flex flex-col gap-6">
-          <div className="flex flex-col gap-3">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+          <div className="flex flex-col gap-2 auth-element">
             <label
               htmlFor="username"
-              className="text-xs font-bold text-white flex items-center gap-2 uppercase tracking-widest"
+              className="text-xs font-semibold text-[var(--text-primary)] flex items-center gap-2 uppercase tracking-wide"
             >
-              <User className="w-4 h-4 text-[#C6A36A]" />
+              <User className="w-3.5 h-3.5 text-[var(--brand-primary)]" />
               Username
             </label>
             <input
@@ -159,12 +178,12 @@ const Login = () => {
             )}
           </div>
 
-          <div className="flex flex-col gap-3">
+          <div className="flex flex-col gap-2 auth-element">
             <label
               htmlFor="password"
-              className="text-xs font-bold text-white flex items-center gap-2 uppercase tracking-widest"
+              className="text-xs font-semibold text-[var(--text-primary)] flex items-center gap-2 uppercase tracking-wide"
             >
-              <Lock className="w-4 h-4 text-[#C6A36A]" />
+              <Lock className="w-3.5 h-3.5 text-[var(--brand-primary)]" />
               Password
             </label>
             <input
@@ -190,34 +209,34 @@ const Login = () => {
             )}
           </div>
 
-          <button
-            type="submit"
-            className={`btn-gold-primary text-sm mt-4 flex items-center justify-center gap-2 ${
-              loading ? "opacity-60 cursor-not-allowed shadow-none" : "shadow-[0_4px_20px_rgba(198,163,106,0.15)]"
-            }`}
-            disabled={loading}
-          >
-            {loading ? (
-              <>
-                <Loader2 className="w-4 h-4 animate-spin text-[#1A1A1A]" />
-                Authenticating...
-              </>
-            ) : (
-              "Sign In to Portal"
-            )}
-          </button>
+          <div className="auth-element pt-2">
+            <button
+              type="submit"
+              className={`btn-primary w-full ${loading ? "opacity-70 cursor-not-allowed" : ""}`}
+              disabled={loading}
+            >
+              {loading ? (
+                <>
+                  <Loader2 className="w-4 h-4 animate-spin text-white" />
+                  Authenticating...
+                </>
+              ) : (
+                "Sign In"
+              )}
+            </button>
+          </div>
 
           <a
             href="/student-login"
-            className="text-xs text-[#808080] hover:text-[#C6A36A] text-center uppercase tracking-widest transition-colors mt-2"
+            className="auth-element text-xs text-[var(--text-secondary)] hover:text-[var(--brand-primary)] text-center transition-colors mt-2 font-medium"
           >
             Student? Access Student Portal
           </a>
         </form>
 
         {/* Staff and Trainer Verification Links */}
-        <div className="mt-8 pt-8 border-t border-[#ffffff10]">
-          <p className="text-xs text-[#CCCCCC] mb-4 text-center font-heading uppercase tracking-widest">
+        <div className="mt-8 pt-8 border-t border-[var(--border-subtle)] auth-element">
+          <p className="text-xs text-[var(--text-secondary)] mb-4 text-center font-heading uppercase tracking-wider">
             First Time Authentication?
           </p>
 
@@ -225,29 +244,25 @@ const Login = () => {
             {/* Staff Verification */}
             <a
               href="/staff-verification"
-              className="flex flex-col items-center gap-3 p-4 bg-[#0F0F0F] hover:bg-[#222222] border border-[#ffffff15] hover:border-[#C6A36A]/50 rounded-xl transition-all duration-300 group"
+              className="flex flex-col items-center gap-2 p-4 bg-[var(--bg-surface-alt)] hover:bg-[var(--brand-primary-bg)] border border-[var(--border-default)] hover:border-[var(--brand-primary)] rounded-xl transition-all duration-200 group"
             >
-              <Coffee className="w-5 h-5 text-[#808080] group-hover:text-[#C6A36A] transition-colors" />
-              <span className="text-[10px] font-bold text-[#E0E0E0] uppercase tracking-wider text-center">
-                Staff<br/>Verify
+              <Coffee className="w-5 h-5 text-[var(--text-muted)] group-hover:text-[var(--brand-primary)] transition-colors" />
+              <span className="text-[10px] font-bold text-[var(--text-secondary)] group-hover:text-[var(--brand-primary)] uppercase tracking-wider text-center transition-colors">
+                Staff Verify
               </span>
             </a>
 
             {/* Trainer Verification */}
             <a
               href="/trainer-verification"
-              className="flex flex-col items-center gap-3 p-4 bg-[#0F0F0F] hover:bg-[#222222] border border-[#ffffff15] hover:border-[#C6A36A]/50 rounded-xl transition-all duration-300 group"
+              className="flex flex-col items-center gap-2 p-4 bg-[var(--bg-surface-alt)] hover:bg-[var(--brand-primary-bg)] border border-[var(--border-default)] hover:border-[var(--brand-primary)] rounded-xl transition-all duration-200 group"
             >
-              <GraduationCap className="w-5 h-5 text-[#808080] group-hover:text-[#C6A36A] transition-colors" />
-              <span className="text-[10px] font-bold text-[#E0E0E0] uppercase tracking-wider text-center">
-                Trainer<br/>Verify
+              <GraduationCap className="w-5 h-5 text-[var(--text-muted)] group-hover:text-[var(--brand-primary)] transition-colors" />
+              <span className="text-[10px] font-bold text-[var(--text-secondary)] group-hover:text-[var(--brand-primary)] uppercase tracking-wider text-center transition-colors">
+                Trainer Verify
               </span>
             </a>
           </div>
-
-          <p className="text-[10px] text-[#808080] mt-5 text-center uppercase tracking-widest">
-            Check your email for the authentication code
-          </p>
         </div>
       </div>
     </div>

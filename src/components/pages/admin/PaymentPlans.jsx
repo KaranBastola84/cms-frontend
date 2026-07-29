@@ -224,8 +224,8 @@ function PaymentPlans() {
     return (
       <div className="flex items-center justify-center h-96">
         <div className="text-center">
-          <Loader2 className="w-8 h-8 text-[#4A2F19] animate-spin mx-auto mb-2" />
-          <p className="text-[#6B4423] text-sm">Loading payment plans...</p>
+          <Loader2 className="w-8 h-8 text-[var(--brand-primary)] animate-spin mx-auto mb-2" />
+          <p className="text-[var(--text-primary)] text-sm">Loading payment plans...</p>
         </div>
       </div>
     );
@@ -243,7 +243,7 @@ function PaymentPlans() {
         </div>
         <button
           onClick={() => setShowCreateModal(true)}
-          className="px-4 py-2 bg-[#4A2F19] text-white rounded-lg hover:bg-[#3D2817] transition-colors flex items-center"
+          className="px-4 py-2 bg-[var(--brand-primary)] text-white rounded-lg hover:bg-[#3D2817] transition-colors flex items-center"
         >
           <Plus className="w-4 h-4 mr-2" />
           Create Plan
@@ -446,7 +446,7 @@ function PaymentPlans() {
                 </div>
                 <div className="w-full bg-[#F5E6D3] rounded-full h-2">
                   <div
-                    className="bg-[#4A2F19] h-2 rounded-full transition-all"
+                    className="bg-[var(--brand-primary)] h-2 rounded-full transition-all"
                     style={{
                       width: `${(plan.paidInstallments / plan.numberOfInstallments) * 100}%`,
                     }}
@@ -457,7 +457,7 @@ function PaymentPlans() {
               <div className="flex gap-2 pt-3">
                 <button
                   onClick={() => viewPlanDetails(plan.paymentPlanId)}
-                  className="flex-1 px-4 py-2 bg-[#4A2F19] text-white rounded-lg hover:bg-[#3D2817] transition-colors flex items-center justify-center"
+                  className="flex-1 px-4 py-2 bg-[var(--brand-primary)] text-white rounded-lg hover:bg-[#3D2817] transition-colors flex items-center justify-center"
                 >
                   <Eye className="w-4 h-4 mr-2" />
                   View Details
@@ -621,7 +621,7 @@ function PaymentPlans() {
               <div className="flex gap-4 pt-4">
                 <button
                   type="submit"
-                  className="flex-1 px-4 py-2 bg-[#4A2F19] text-white rounded-lg hover:bg-[#3D2817] transition-colors"
+                  className="flex-1 px-4 py-2 bg-[var(--brand-primary)] text-white rounded-lg hover:bg-[#3D2817] transition-colors"
                 >
                   Create Plan
                 </button>
@@ -731,7 +731,7 @@ function PaymentPlans() {
                               setSelectedInstallment(installment);
                               setShowPayModal(true);
                             }}
-                            className="px-3 py-1 bg-[#4A2F19] text-white rounded hover:bg-[#3D2817] transition-colors text-sm"
+                            className="px-3 py-1 bg-[var(--brand-primary)] text-white rounded hover:bg-[#3D2817] transition-colors text-sm"
                           >
                             Mark Paid
                           </button>
@@ -777,7 +777,7 @@ function PaymentPlans() {
               <div className="flex gap-4">
                 <button
                   type="submit"
-                  className="flex-1 px-4 py-2 bg-[#4A2F19] text-white rounded-lg hover:bg-[#3D2817] transition-colors"
+                  className="flex-1 px-4 py-2 bg-[var(--brand-primary)] text-white rounded-lg hover:bg-[#3D2817] transition-colors"
                 >
                   Confirm Payment
                 </button>
@@ -855,7 +855,7 @@ function PaymentPlans() {
               <div className="flex gap-4 pt-4">
                 <button
                   onClick={handleUpdateStatus}
-                  className="flex-1 px-4 py-2 bg-[#4A2F19] text-white rounded-lg hover:bg-[#3D2817] transition-colors"
+                  className="flex-1 px-4 py-2 bg-[var(--brand-primary)] text-white rounded-lg hover:bg-[#3D2817] transition-colors"
                 >
                   Update Status
                 </button>

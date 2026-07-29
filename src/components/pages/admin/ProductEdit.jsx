@@ -150,7 +150,7 @@ const ProductEdit = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#0F0F0F] flex items-center justify-center">
+      <div className="min-h-screen bg-[var(--bg-sidebar)] flex items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#C6A36A]"></div>
       </div>
     );
@@ -163,7 +163,7 @@ const ProductEdit = () => {
         <div>
           <button
             onClick={() => navigate("/admin/products")}
-            className="flex items-center gap-2 text-[#A0A0A0] hover:text-[#C6A36A] transition-colors mb-2 uppercase tracking-widest text-[10px] font-bold"
+            className="flex items-center gap-2 text-[#A0A0A0] hover:text-[var(--brand-accent)] transition-colors mb-2 uppercase tracking-widest text-[10px] font-bold"
           >
             <ChevronLeft className="w-3 h-3" />
             Back to Inventory
@@ -175,7 +175,7 @@ const ProductEdit = () => {
         <div className="flex gap-3">
           <button
             onClick={() => navigate("/admin/products")}
-            className="px-6 py-2.5 bg-transparent border border-[#ffffff10] text-[#E0E0E0] hover:bg-[#ffffff05] rounded-lg transition-all text-xs font-bold uppercase tracking-widest"
+            className="px-6 py-2.5 bg-transparent border border-[var(--border-subtle)] text-[var(--text-secondary)] hover:bg-[#ffffff05] rounded-lg transition-all text-xs font-bold uppercase tracking-widest"
           >
             Cancel
           </button>
@@ -198,9 +198,9 @@ const ProductEdit = () => {
         {/* Sidebar - Image & Status */}
         <div className="space-y-8">
           {/* Image Upload */}
-          <div className="bg-[#1A1A1A] border border-[#ffffff05] rounded-2xl p-6 shadow-xl">
+          <div className="bg-[#1A1A1A] border border-[var(--border-subtle)] rounded-2xl p-6 shadow-xl">
             <h3 className="text-sm font-bold text-white uppercase tracking-widest mb-6">Product Media</h3>
-            <div className="relative aspect-square rounded-xl overflow-hidden bg-[#0F0F0F] border border-[#ffffff10] group mb-4">
+            <div className="relative aspect-square rounded-xl overflow-hidden bg-[var(--bg-sidebar)] border border-[var(--border-subtle)] group mb-4">
               {imagePreview ? (
                 <>
                   <img
@@ -243,10 +243,10 @@ const ProductEdit = () => {
           </div>
 
           {/* Visibility & Attributes */}
-          <div className="bg-[#1A1A1A] border border-[#ffffff05] rounded-2xl p-6 shadow-xl space-y-6">
+          <div className="bg-[#1A1A1A] border border-[var(--border-subtle)] rounded-2xl p-6 shadow-xl space-y-6">
             <h3 className="text-sm font-bold text-white uppercase tracking-widest mb-6">Attributes</h3>
             
-            <div className="flex items-center justify-between p-4 bg-[#0F0F0F] rounded-xl border border-[#ffffff05]">
+            <div className="flex items-center justify-between p-4 bg-[var(--bg-sidebar)] rounded-xl border border-[var(--border-subtle)]">
               <div className="flex flex-col">
                 <span className="text-xs font-bold text-white uppercase tracking-wider">Active</span>
                 <span className="text-[10px] text-[#A0A0A0]">Visible to guests</span>
@@ -262,7 +262,7 @@ const ProductEdit = () => {
               </label>
             </div>
 
-            <div className="flex items-center justify-between p-4 bg-[#0F0F0F] rounded-xl border border-[#ffffff05]">
+            <div className="flex items-center justify-between p-4 bg-[var(--bg-sidebar)] rounded-xl border border-[var(--border-subtle)]">
               <div className="flex flex-col">
                 <span className="text-xs font-bold text-white uppercase tracking-wider">Featured</span>
                 <span className="text-[10px] text-[#A0A0A0]">Highlight on store</span>
@@ -283,40 +283,40 @@ const ProductEdit = () => {
         {/* Main Form Section */}
         <div className="lg:col-span-2 space-y-8">
           {/* General Information */}
-          <div className="bg-[#1A1A1A] border border-[#ffffff05] rounded-2xl p-8 shadow-xl">
+          <div className="bg-[#1A1A1A] border border-[var(--border-subtle)] rounded-2xl p-8 shadow-xl">
             <h3 className="text-sm font-bold text-white uppercase tracking-widest mb-8 flex items-center gap-3">
-              <Package className="w-4 h-4 text-[#C6A36A]" />
+              <Package className="w-4 h-4 text-[var(--brand-accent)]" />
               General Information
             </h3>
             
             <form onSubmit={handleSubmit} className="space-y-8">
               <div className="space-y-2">
-                <label className="text-[10px] font-bold text-[#C6A36A] uppercase tracking-[0.2em] ml-2">Product Name</label>
+                <label className="text-[10px] font-bold text-[var(--brand-accent)] uppercase tracking-[0.2em] ml-2">Product Name</label>
                 <input
                   type="text"
                   required
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   placeholder="Enter product title..."
-                  className="luxury-input !bg-[#0F0F0F] !border-[#ffffff10] !py-4"
+                  className="luxury-input !bg-[var(--bg-sidebar)] !border-[var(--border-subtle)] !py-4"
                 />
               </div>
 
               <div className="space-y-2">
-                <label className="text-[10px] font-bold text-[#C6A36A] uppercase tracking-[0.2em] ml-2">Description</label>
+                <label className="text-[10px] font-bold text-[var(--brand-accent)] uppercase tracking-[0.2em] ml-2">Description</label>
                 <textarea
                   required
                   rows={6}
                   value={formData.description}
                   onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                   placeholder="Describe the unique qualities and origin..."
-                  className="luxury-input !bg-[#0F0F0F] !border-[#ffffff10] !py-4 resize-none"
+                  className="luxury-input !bg-[var(--bg-sidebar)] !border-[var(--border-subtle)] !py-4 resize-none"
                 />
               </div>
 
               <div className="grid md:grid-cols-2 gap-8">
                 <div className="space-y-2">
-                  <label className="text-[10px] font-bold text-[#C6A36A] uppercase tracking-[0.2em] ml-2">Category</label>
+                  <label className="text-[10px] font-bold text-[var(--brand-accent)] uppercase tracking-[0.2em] ml-2">Category</label>
                   <div className="relative">
                     <input
                       type="text"
@@ -325,7 +325,7 @@ const ProductEdit = () => {
                       onChange={(e) => setFormData({ ...formData, category: e.target.value })}
                       list="categories-list"
                       placeholder="Select or enter new..."
-                      className="luxury-input !bg-[#0F0F0F] !border-[#ffffff10] !py-4"
+                      className="luxury-input !bg-[var(--bg-sidebar)] !border-[var(--border-subtle)] !py-4"
                     />
                     <datalist id="categories-list">
                       {categories.map((cat) => (
@@ -336,9 +336,9 @@ const ProductEdit = () => {
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-[10px] font-bold text-[#C6A36A] uppercase tracking-[0.2em] ml-2">Price (USD)</label>
+                  <label className="text-[10px] font-bold text-[var(--brand-accent)] uppercase tracking-[0.2em] ml-2">Price (USD)</label>
                   <div className="relative">
-                    <span className="absolute left-5 top-1/2 -translate-y-1/2 text-[#CCCCCC] font-bold">$</span>
+                    <span className="absolute left-5 top-1/2 -translate-y-1/2 text-[var(--text-secondary)] font-bold">$</span>
                     <input
                       type="number"
                       step="0.01"
@@ -347,7 +347,7 @@ const ProductEdit = () => {
                       value={formData.price}
                       onChange={(e) => setFormData({ ...formData, price: e.target.value })}
                       placeholder="0.00"
-                      className="luxury-input !bg-[#0F0F0F] !border-[#ffffff10] !py-4 !pl-10"
+                      className="luxury-input !bg-[var(--bg-sidebar)] !border-[var(--border-subtle)] !py-4 !pl-10"
                     />
                   </div>
                 </div>
@@ -356,15 +356,15 @@ const ProductEdit = () => {
           </div>
 
           {/* Inventory Management */}
-          <div className="bg-[#1A1A1A] border border-[#ffffff05] rounded-2xl p-8 shadow-xl">
+          <div className="bg-[#1A1A1A] border border-[var(--border-subtle)] rounded-2xl p-8 shadow-xl">
             <h3 className="text-sm font-bold text-white uppercase tracking-widest mb-8 flex items-center gap-3">
-              <Package className="w-4 h-4 text-[#C6A36A]" />
+              <Package className="w-4 h-4 text-[var(--brand-accent)]" />
               Inventory & Fulfillment
             </h3>
             
             <div className="grid md:grid-cols-2 gap-8">
               <div className="space-y-2">
-                <label className="text-[10px] font-bold text-[#C6A36A] uppercase tracking-[0.2em] ml-2">Starting Stock</label>
+                <label className="text-[10px] font-bold text-[var(--brand-accent)] uppercase tracking-[0.2em] ml-2">Starting Stock</label>
                 <input
                   type="number"
                   min="0"
@@ -372,12 +372,12 @@ const ProductEdit = () => {
                   value={formData.stockQuantity}
                   onChange={(e) => setFormData({ ...formData, stockQuantity: e.target.value })}
                   placeholder="Amount in units"
-                  className="luxury-input !bg-[#0F0F0F] !border-[#ffffff10] !py-4"
+                  className="luxury-input !bg-[var(--bg-sidebar)] !border-[var(--border-subtle)] !py-4"
                 />
               </div>
 
               <div className="space-y-2">
-                <label className="text-[10px] font-bold text-[#C6A36A] uppercase tracking-[0.2em] ml-2">Low Stock Threshold</label>
+                <label className="text-[10px] font-bold text-[var(--brand-accent)] uppercase tracking-[0.2em] ml-2">Low Stock Threshold</label>
                 <input
                   type="number"
                   min="0"
@@ -385,7 +385,7 @@ const ProductEdit = () => {
                   value={formData.lowStockThreshold}
                   onChange={(e) => setFormData({ ...formData, lowStockThreshold: e.target.value })}
                   placeholder="Notify when below..."
-                  className="luxury-input !bg-[#0F0F0F] !border-[#ffffff10] !py-4"
+                  className="luxury-input !bg-[var(--bg-sidebar)] !border-[var(--border-subtle)] !py-4"
                 />
               </div>
             </div>

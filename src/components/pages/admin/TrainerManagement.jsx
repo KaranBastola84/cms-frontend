@@ -244,8 +244,8 @@ const TrainerManagement = () => {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="flex flex-col items-center gap-4">
-          <RefreshCw className="w-8 h-8 text-[#4A2F19] animate-spin" />
-          <p className="text-[#4A2F19] font-semibold">Loading trainers...</p>
+          <RefreshCw className="w-8 h-8 text-[var(--brand-primary)] animate-spin" />
+          <p className="text-[var(--brand-primary)] font-semibold">Loading trainers...</p>
         </div>
       </div>
     );
@@ -258,10 +258,10 @@ const TrainerManagement = () => {
         <div className="mb-6">
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h1 className="text-3xl font-bold text-[#1A1A1A] mb-2">
+              <h1 className="text-3xl font-bold text-[var(--text-primary)] mb-2">
                 Trainer Management
               </h1>
-              <p className="text-[#6B4423]">
+              <p className="text-[var(--text-primary)]">
                 Manage trainer accounts and permissions (
                 {filteredTrainers.length} trainers)
               </p>
@@ -288,27 +288,27 @@ const TrainerManagement = () => {
           </div>
 
           {/* Filters */}
-          <div className="bg-white rounded-xl shadow-coffee-md p-4 border border-[#C8A27B]/30">
+          <div className="bg-white rounded-xl shadow-coffee-md p-4 border border-[var(--border-default)]">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {/* Search */}
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#6B4423]" />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--text-primary)]" />
                 <input
                   type="text"
                   placeholder="Search by name, email, phone, or role..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 border-2 border-[#C8A27B]/40 rounded-lg bg-[#F8F4EE] focus:outline-none focus:border-[#4A2F19] transition-colors"
+                  className="w-full pl-10 pr-4 py-2 border-2 border-[var(--brand-accent)]/40 rounded-lg bg-[#F8F4EE] focus:outline-none focus:border-[#4A2F19] transition-colors"
                 />
               </div>
 
               {/* Verification Filter */}
               <div className="relative">
-                <Filter className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#6B4423]" />
+                <Filter className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--text-primary)]" />
                 <select
                   value={verificationFilter}
                   onChange={(e) => setVerificationFilter(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 border-2 border-[#C8A27B]/40 rounded-lg bg-[#F8F4EE] focus:outline-none focus:border-[#4A2F19] transition-colors appearance-none cursor-pointer"
+                  className="w-full pl-10 pr-4 py-2 border-2 border-[var(--brand-accent)]/40 rounded-lg bg-[#F8F4EE] focus:outline-none focus:border-[#4A2F19] transition-colors appearance-none cursor-pointer"
                 >
                   <option value="All">All Verification Status</option>
                   <option value="Verified">Verified</option>
@@ -318,11 +318,11 @@ const TrainerManagement = () => {
 
               {/* Active Filter */}
               <div className="relative">
-                <Filter className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#6B4423]" />
+                <Filter className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--text-primary)]" />
                 <select
                   value={activeFilter}
                   onChange={(e) => setActiveFilter(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 border-2 border-[#C8A27B]/40 rounded-lg bg-[#F8F4EE] focus:outline-none focus:border-[#4A2F19] transition-colors appearance-none cursor-pointer"
+                  className="w-full pl-10 pr-4 py-2 border-2 border-[var(--brand-accent)]/40 rounded-lg bg-[#F8F4EE] focus:outline-none focus:border-[#4A2F19] transition-colors appearance-none cursor-pointer"
                 >
                   <option value="All">All Active Status</option>
                   <option value="Active">Active</option>
@@ -334,27 +334,27 @@ const TrainerManagement = () => {
         </div>
 
         {/* Trainers Table */}
-        <div className="bg-white rounded-xl shadow-coffee-md border border-[#C8A27B]/30 overflow-hidden">
+        <div className="bg-white rounded-xl shadow-coffee-md border border-[var(--border-default)] overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-[#EFE7D3] border-b-2 border-[#C8A27B]">
+              <thead className="bg-[var(--bg-surface-alt)] border-b-2 border-[var(--brand-accent)]">
                 <tr>
-                  <th className="px-6 py-4 text-left text-sm font-bold text-[#1A1A1A]">
+                  <th className="px-6 py-4 text-left text-sm font-bold text-[var(--text-primary)]">
                     Trainer
                   </th>
-                  <th className="px-6 py-4 text-left text-sm font-bold text-[#1A1A1A]">
+                  <th className="px-6 py-4 text-left text-sm font-bold text-[var(--text-primary)]">
                     Contact
                   </th>
-                  <th className="px-6 py-4 text-left text-sm font-bold text-[#1A1A1A]">
+                  <th className="px-6 py-4 text-left text-sm font-bold text-[var(--text-primary)]">
                     Role
                   </th>
-                  <th className="px-6 py-4 text-left text-sm font-bold text-[#1A1A1A]">
+                  <th className="px-6 py-4 text-left text-sm font-bold text-[var(--text-primary)]">
                     Status
                   </th>
-                  <th className="px-6 py-4 text-left text-sm font-bold text-[#1A1A1A]">
+                  <th className="px-6 py-4 text-left text-sm font-bold text-[var(--text-primary)]">
                     Created
                   </th>
-                  <th className="px-6 py-4 text-left text-sm font-bold text-[#1A1A1A]">
+                  <th className="px-6 py-4 text-left text-sm font-bold text-[var(--text-primary)]">
                     Actions
                   </th>
                 </tr>
@@ -364,9 +364,9 @@ const TrainerManagement = () => {
                   <tr>
                     <td
                       colSpan="6"
-                      className="px-6 py-12 text-center text-[#6B4423]"
+                      className="px-6 py-12 text-center text-[var(--text-primary)]"
                     >
-                      <Users className="w-12 h-12 mx-auto mb-4 text-[#C8A27B]" />
+                      <Users className="w-12 h-12 mx-auto mb-4 text-[var(--brand-accent)]" />
                       <p className="text-lg font-semibold">No trainers found</p>
                       <p className="text-sm">
                         Create a new trainer account to get started
@@ -381,15 +381,15 @@ const TrainerManagement = () => {
                     >
                       <td className="px-6 py-4">
                         <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 rounded-full bg-[#4A2F19] text-white flex items-center justify-center font-semibold">
+                          <div className="w-10 h-10 rounded-full bg-[var(--brand-primary)] text-white flex items-center justify-center font-semibold">
                             {member.firstName?.[0]}
                             {member.lastName?.[0]}
                           </div>
                           <div>
-                            <p className="font-semibold text-[#1A1A1A]">
+                            <p className="font-semibold text-[var(--text-primary)]">
                               {member.firstName} {member.lastName}
                             </p>
-                            <p className="text-xs text-[#6B4423]">
+                            <p className="text-xs text-[var(--text-primary)]">
                               ID: {member.id}
                             </p>
                           </div>
@@ -397,11 +397,11 @@ const TrainerManagement = () => {
                       </td>
                       <td className="px-6 py-4">
                         <div className="space-y-1">
-                          <div className="flex items-center gap-2 text-sm text-[#4A2F19]">
+                          <div className="flex items-center gap-2 text-sm text-[var(--brand-primary)]">
                             <Mail className="w-3 h-3" />
                             {member.email}
                           </div>
-                          <div className="flex items-center gap-2 text-sm text-[#4A2F19]">
+                          <div className="flex items-center gap-2 text-sm text-[var(--brand-primary)]">
                             <Phone className="w-3 h-3" />
                             {member.phoneNumber}
                           </div>
@@ -409,15 +409,15 @@ const TrainerManagement = () => {
                       </td>
                       <td className="px-6 py-4">
                         <div className="flex items-center gap-2">
-                          <Briefcase className="w-4 h-4 text-[#6B4423]" />
-                          <span className="text-sm font-medium text-[#4A2F19]">
+                          <Briefcase className="w-4 h-4 text-[var(--text-primary)]" />
+                          <span className="text-sm font-medium text-[var(--brand-primary)]">
                             {member.trainerRole}
                           </span>
                         </div>
                       </td>
                       <td className="px-6 py-4">{getStatusBadge(member)}</td>
                       <td className="px-6 py-4">
-                        <p className="text-sm text-[#4A2F19]">
+                        <p className="text-sm text-[var(--brand-primary)]">
                           {formatDate(member.createdAt)}
                         </p>
                       </td>
@@ -490,7 +490,7 @@ const TrainerManagement = () => {
         <div className="fixed inset-0 backdrop-blur-md bg-opacity-50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-xl shadow-2xl max-w-2xl w-full p-6">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-xl font-bold text-[#1A1A1A]">
+              <h3 className="text-xl font-bold text-[var(--text-primary)]">
                 Create New Trainer
               </h3>
               <button
@@ -504,7 +504,7 @@ const TrainerManagement = () => {
                     trainerRole: "",
                   });
                 }}
-                className="text-[#6B4423] hover:text-[#1A1A1A]"
+                className="text-[var(--text-primary)] hover:text-[var(--text-primary)]"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -513,7 +513,7 @@ const TrainerManagement = () => {
             <form onSubmit={handleCreateTrainer} className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-semibold text-[#4A2F19] mb-2">
+                  <label className="block text-sm font-semibold text-[var(--brand-primary)] mb-2">
                     First Name <span className="text-red-500">*</span>
                   </label>
                   <input
@@ -525,12 +525,12 @@ const TrainerManagement = () => {
                         firstName: e.target.value,
                       })
                     }
-                    className="w-full px-4 py-2 border-2 border-[#C8A27B]/40 rounded-xl bg-[#F8F4EE] focus:outline-none focus:border-[#4A2F19]"
+                    className="w-full px-4 py-2 border-2 border-[var(--brand-accent)]/40 rounded-xl bg-[#F8F4EE] focus:outline-none focus:border-[#4A2F19]"
                     required
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-semibold text-[#4A2F19] mb-2">
+                  <label className="block text-sm font-semibold text-[var(--brand-primary)] mb-2">
                     Last Name <span className="text-red-500">*</span>
                   </label>
                   <input
@@ -539,14 +539,14 @@ const TrainerManagement = () => {
                     onChange={(e) =>
                       setCreateData({ ...createData, lastName: e.target.value })
                     }
-                    className="w-full px-4 py-2 border-2 border-[#C8A27B]/40 rounded-xl bg-[#F8F4EE] focus:outline-none focus:border-[#4A2F19]"
+                    className="w-full px-4 py-2 border-2 border-[var(--brand-accent)]/40 rounded-xl bg-[#F8F4EE] focus:outline-none focus:border-[#4A2F19]"
                     required
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-[#4A2F19] mb-2">
+                <label className="block text-sm font-semibold text-[var(--brand-primary)] mb-2">
                   Email <span className="text-red-500">*</span>
                 </label>
                 <input
@@ -555,13 +555,13 @@ const TrainerManagement = () => {
                   onChange={(e) =>
                     setCreateData({ ...createData, email: e.target.value })
                   }
-                  className="w-full px-4 py-2 border-2 border-[#C8A27B]/40 rounded-xl bg-[#F8F4EE] focus:outline-none focus:border-[#4A2F19]"
+                  className="w-full px-4 py-2 border-2 border-[var(--brand-accent)]/40 rounded-xl bg-[#F8F4EE] focus:outline-none focus:border-[#4A2F19]"
                   required
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-[#4A2F19] mb-2">
+                <label className="block text-sm font-semibold text-[var(--brand-primary)] mb-2">
                   Phone Number <span className="text-red-500">*</span>
                 </label>
                 <input
@@ -573,13 +573,13 @@ const TrainerManagement = () => {
                       phoneNumber: e.target.value,
                     })
                   }
-                  className="w-full px-4 py-2 border-2 border-[#C8A27B]/40 rounded-xl bg-[#F8F4EE] focus:outline-none focus:border-[#4A2F19]"
+                  className="w-full px-4 py-2 border-2 border-[var(--brand-accent)]/40 rounded-xl bg-[#F8F4EE] focus:outline-none focus:border-[#4A2F19]"
                   required
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-[#4A2F19] mb-2">
+                <label className="block text-sm font-semibold text-[var(--brand-primary)] mb-2">
                   Trainer Role <span className="text-red-500">*</span>
                 </label>
                 <select
@@ -590,7 +590,7 @@ const TrainerManagement = () => {
                       trainerRole: e.target.value,
                     })
                   }
-                  className="w-full px-4 py-2 border-2 border-[#C8A27B]/40 rounded-xl bg-[#F8F4EE] focus:outline-none focus:border-[#4A2F19] appearance-none cursor-pointer"
+                  className="w-full px-4 py-2 border-2 border-[var(--brand-accent)]/40 rounded-xl bg-[#F8F4EE] focus:outline-none focus:border-[#4A2F19] appearance-none cursor-pointer"
                   required
                 >
                   <option value="">Select a role</option>
@@ -661,7 +661,7 @@ const TrainerManagement = () => {
         <div className="fixed inset-0 backdrop-blur-md bg-opacity-50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-xl shadow-2xl max-w-2xl w-full p-6">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-xl font-bold text-[#1A1A1A]">
+              <h3 className="text-xl font-bold text-[var(--text-primary)]">
                 Trainer Details
               </h3>
               <button
@@ -669,23 +669,23 @@ const TrainerManagement = () => {
                   setShowDetailsModal(false);
                   setSelectedTrainer(null);
                 }}
-                className="text-[#6B4423] hover:text-[#1A1A1A]"
+                className="text-[var(--text-primary)] hover:text-[var(--text-primary)]"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
             <div className="space-y-4">
-              <div className="flex items-center gap-4 pb-4 border-b border-[#C8A27B]/30">
-                <div className="w-16 h-16 rounded-full bg-[#4A2F19] text-white flex items-center justify-center text-2xl font-semibold">
+              <div className="flex items-center gap-4 pb-4 border-b border-[var(--border-default)]">
+                <div className="w-16 h-16 rounded-full bg-[var(--brand-primary)] text-white flex items-center justify-center text-2xl font-semibold">
                   {selectedTrainer.firstName?.[0]}
                   {selectedTrainer.lastName?.[0]}
                 </div>
                 <div>
-                  <h4 className="text-xl font-bold text-[#1A1A1A]">
+                  <h4 className="text-xl font-bold text-[var(--text-primary)]">
                     {selectedTrainer.firstName} {selectedTrainer.lastName}
                   </h4>
-                  <p className="text-sm text-[#6B4423]">
+                  <p className="text-sm text-[var(--text-primary)]">
                     {selectedTrainer.trainerRole}
                   </p>
                 </div>
@@ -693,26 +693,26 @@ const TrainerManagement = () => {
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="bg-[#F8F4EE] rounded-lg p-4">
-                  <p className="text-xs text-[#6B4423] mb-1">Email</p>
-                  <p className="text-sm font-semibold text-[#1A1A1A]">
+                  <p className="text-xs text-[var(--text-primary)] mb-1">Email</p>
+                  <p className="text-sm font-semibold text-[var(--text-primary)]">
                     {selectedTrainer.email}
                   </p>
                 </div>
                 <div className="bg-[#F8F4EE] rounded-lg p-4">
-                  <p className="text-xs text-[#6B4423] mb-1">Phone</p>
-                  <p className="text-sm font-semibold text-[#1A1A1A]">
+                  <p className="text-xs text-[var(--text-primary)] mb-1">Phone</p>
+                  <p className="text-sm font-semibold text-[var(--text-primary)]">
                     {selectedTrainer.phoneNumber}
                   </p>
                 </div>
                 <div className="bg-[#F8F4EE] rounded-lg p-4">
-                  <p className="text-xs text-[#6B4423] mb-1">Trainer ID</p>
-                  <p className="text-sm font-semibold text-[#1A1A1A]">
+                  <p className="text-xs text-[var(--text-primary)] mb-1">Trainer ID</p>
+                  <p className="text-sm font-semibold text-[var(--text-primary)]">
                     {selectedTrainer.id}
                   </p>
                 </div>
                 <div className="bg-[#F8F4EE] rounded-lg p-4">
-                  <p className="text-xs text-[#6B4423] mb-1">Created</p>
-                  <p className="text-sm font-semibold text-[#1A1A1A]">
+                  <p className="text-xs text-[var(--text-primary)] mb-1">Created</p>
+                  <p className="text-sm font-semibold text-[var(--text-primary)]">
                     {formatDate(selectedTrainer.createdAt)}
                   </p>
                 </div>
@@ -720,7 +720,7 @@ const TrainerManagement = () => {
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="bg-[#F8F4EE] rounded-lg p-4">
-                  <p className="text-xs text-[#6B4423] mb-2">
+                  <p className="text-xs text-[var(--text-primary)] mb-2">
                     Verification Status
                   </p>
                   {selectedTrainer.isVerified ? (
@@ -738,7 +738,7 @@ const TrainerManagement = () => {
                   )}
                 </div>
                 <div className="bg-[#F8F4EE] rounded-lg p-4">
-                  <p className="text-xs text-[#6B4423] mb-2">Active Status</p>
+                  <p className="text-xs text-[var(--text-primary)] mb-2">Active Status</p>
                   {selectedTrainer.isActive ? (
                     <div className="flex items-center gap-2 text-green-700">
                       <Power className="w-4 h-4" />
@@ -806,7 +806,7 @@ const TrainerManagement = () => {
         <div className="fixed inset-0 backdrop-blur-md bg-opacity-50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-xl shadow-2xl max-w-md w-full p-6">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-xl font-bold text-[#1A1A1A]">
+              <h3 className="text-xl font-bold text-[var(--text-primary)]">
                 Delete Trainer Account
               </h3>
               <button
@@ -814,7 +814,7 @@ const TrainerManagement = () => {
                   setShowDeleteModal(false);
                   setSelectedTrainer(null);
                 }}
-                className="text-[#6B4423] hover:text-[#1A1A1A]"
+                className="text-[var(--text-primary)] hover:text-[var(--text-primary)]"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -834,7 +834,7 @@ const TrainerManagement = () => {
                 </div>
               </div>
 
-              <p className="text-[#4A2F19]">
+              <p className="text-[var(--brand-primary)]">
                 Are you sure you want to delete{" "}
                 <strong>
                   {selectedTrainer.firstName} {selectedTrainer.lastName}

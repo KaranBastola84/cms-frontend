@@ -123,7 +123,7 @@ const Checkout = () => {
 
   if (cartItems.length === 0) {
     return (
-      <div className="min-h-screen bg-[#0F0F0F] py-20 flex items-center justify-center">
+      <div className="min-h-screen bg-[var(--bg-sidebar)] py-20 flex items-center justify-center">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
           <div className="text-center py-24 luxury-card bg-[#1A1A1A]">
             <ShoppingCart className="w-24 h-24 text-[#333333] mx-auto mb-8" strokeWidth={1} />
@@ -147,19 +147,19 @@ const Checkout = () => {
   }
 
   return (
-    <div className="min-h-screen bg-[#0F0F0F] py-16">
+    <div className="min-h-screen bg-[var(--bg-sidebar)] py-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="mb-12">
           <button
             onClick={() => navigate("/products")}
-            className="flex items-center gap-2 text-[#808080] hover:text-[#C6A36A] mb-8 transition-colors text-sm uppercase tracking-widest font-semibold"
+            className="flex items-center gap-2 text-[#808080] hover:text-[var(--brand-accent)] mb-8 transition-colors text-sm uppercase tracking-widest font-semibold"
           >
             <ArrowLeft className="w-4 h-4" />
             Return to Store
           </button>
           <h1 className="text-4xl md:text-5xl font-heading text-white uppercase tracking-widest">Secure Checkout</h1>
-          <p className="text-[#E0E0E0] mt-3 font-light text-lg">
+          <p className="text-[var(--text-secondary)] mt-3 font-light text-lg">
             {getItemCount()} items in your cart
           </p>
         </div>
@@ -168,8 +168,8 @@ const Checkout = () => {
           {/* Cart Items Section */}
           <div className="lg:col-span-2 space-y-6">
             <div className="luxury-card p-8 bg-[#1A1A1A]">
-              <h2 className="text-2xl font-heading text-white mb-8 flex items-center gap-3 uppercase tracking-widest border-b border-[#ffffff10] pb-6">
-                <ShoppingCart className="w-6 h-6 text-[#C6A36A]" />
+              <h2 className="text-2xl font-heading text-white mb-8 flex items-center gap-3 uppercase tracking-widest border-b border-[var(--border-subtle)] pb-6">
+                <ShoppingCart className="w-6 h-6 text-[var(--brand-accent)]" />
                 Cart Items
               </h2>
 
@@ -177,10 +177,10 @@ const Checkout = () => {
                 {cartItems.map((item) => (
                   <div
                     key={item.id}
-                    className="flex flex-col sm:flex-row gap-6 p-6 bg-[#0F0F0F] border border-[#ffffff10] rounded-xl hover:border-[#C6A36A]/50 transition-colors"
+                    className="flex flex-col sm:flex-row gap-6 p-6 bg-[var(--bg-sidebar)] border border-[var(--border-subtle)] rounded-xl hover:border-[#C6A36A]/50 transition-colors"
                   >
                     {/* Product Image */}
-                    <div className="w-full sm:w-32 h-32 bg-[#1A1A1A] rounded-lg overflow-hidden shrink-0 border border-[#ffffff05]">
+                    <div className="w-full sm:w-32 h-32 bg-[#1A1A1A] rounded-lg overflow-hidden shrink-0 border border-[var(--border-subtle)]">
                       {item.imageUrl ? (
                         <img
                           src={getImageUrl(item.imageUrl)}
@@ -196,22 +196,22 @@ const Checkout = () => {
 
                     {/* Product Details */}
                     <div className="flex-1 flex flex-col justify-center">
-                      <h3 className="font-heading text-lg text-white truncate mb-2 group-hover:text-[#C6A36A] transition-colors">
+                      <h3 className="font-heading text-lg text-white truncate mb-2 group-hover:text-[var(--brand-accent)] transition-colors">
                         {item.name}
                       </h3>
-                      <p className="text-[#C6A36A] font-medium text-lg mb-2">
+                      <p className="text-[var(--brand-accent)] font-medium text-lg mb-2">
                         ${item.price.toFixed(2)}
                       </p>
                       {item.stockQuantity < 10 && (
-                        <p className="text-[#C6A36A] text-xs uppercase tracking-wider font-semibold opacity-80">
+                        <p className="text-[var(--brand-accent)] text-xs uppercase tracking-wider font-semibold opacity-80">
                           Limited Availability: {item.stockQuantity} remaining
                         </p>
                       )}
                     </div>
 
                     {/* Quantity Controls */}
-                    <div className="flex sm:flex-col items-center sm:items-end justify-between sm:justify-center gap-4 border-t sm:border-t-0 sm:border-l border-[#ffffff10] pt-4 sm:pt-0 sm:pl-6">
-                      <div className="flex items-center gap-2 bg-[#1A1A1A] border border-[#ffffff15] rounded-lg p-1">
+                    <div className="flex sm:flex-col items-center sm:items-end justify-between sm:justify-center gap-4 border-t sm:border-t-0 sm:border-l border-[var(--border-subtle)] pt-4 sm:pt-0 sm:pl-6">
+                      <div className="flex items-center gap-2 bg-[#1A1A1A] border border-[var(--border-subtle)] rounded-lg p-1">
                         <button
                           onClick={() =>
                             handleQuantityChange(
@@ -220,7 +220,7 @@ const Checkout = () => {
                               item.stockQuantity,
                             )
                           }
-                          className="p-1 hover:bg-[#333333] hover:text-[#C6A36A] text-white rounded transition-colors disabled:opacity-30 disabled:hover:bg-transparent"
+                          className="p-1 hover:bg-[#333333] hover:text-[var(--brand-accent)] text-white rounded transition-colors disabled:opacity-30 disabled:hover:bg-transparent"
                           disabled={item.quantity <= 1}
                         >
                           <Minus className="w-4 h-4" />
@@ -236,7 +236,7 @@ const Checkout = () => {
                               item.stockQuantity,
                             )
                           }
-                          className="p-1 hover:bg-[#333333] hover:text-[#C6A36A] text-white rounded transition-colors disabled:opacity-30 disabled:hover:bg-transparent"
+                          className="p-1 hover:bg-[#333333] hover:text-[var(--brand-accent)] text-white rounded transition-colors disabled:opacity-30 disabled:hover:bg-transparent"
                           disabled={item.quantity >= item.stockQuantity}
                         >
                           <Plus className="w-4 h-4" />
@@ -266,7 +266,7 @@ const Checkout = () => {
 
             {/* Customer Information Form */}
             <div className="luxury-card p-8 bg-[#1A1A1A]">
-              <h2 className="text-2xl font-heading text-white mb-8 border-b border-[#ffffff10] pb-6 uppercase tracking-widest">
+              <h2 className="text-2xl font-heading text-white mb-8 border-b border-[var(--border-subtle)] pb-6 uppercase tracking-widest">
                 Billing Details
               </h2>
               <form className="space-y-6">
@@ -352,28 +352,28 @@ const Checkout = () => {
           {/* Order Summary Section */}
           <div className="lg:col-span-1">
             <div className="luxury-card p-8 bg-[#1A1A1A] sticky top-28">
-              <h2 className="text-2xl font-heading text-white mb-8 border-b border-[#ffffff10] pb-6 uppercase tracking-widest">
+              <h2 className="text-2xl font-heading text-white mb-8 border-b border-[var(--border-subtle)] pb-6 uppercase tracking-widest">
                 Order Summary
               </h2>
 
               {/* Totals */}
               <div className="space-y-4 mb-8">
-                <div className="flex justify-between text-[#CCCCCC]">
+                <div className="flex justify-between text-[var(--text-secondary)]">
                   <span>Subtotal ({getItemCount()} items)</span>
                   <span>${subtotal.toFixed(2)}</span>
                 </div>
-                <div className="flex justify-between text-[#CCCCCC]">
+                <div className="flex justify-between text-[var(--text-secondary)]">
                   <span>Tax (10%)</span>
                   <span>${tax.toFixed(2)}</span>
                 </div>
-                <div className="flex justify-between text-[#CCCCCC]">
+                <div className="flex justify-between text-[var(--text-secondary)]">
                   <span>Shipping</span>
                   <span>${shipping.toFixed(2)}</span>
                 </div>
-                <div className="border-t border-[#ffffff10] pt-6 mt-6">
+                <div className="border-t border-[var(--border-subtle)] pt-6 mt-6">
                   <div className="flex justify-between text-2xl font-heading font-bold text-white">
                     <span>Total</span>
-                    <span className="text-[#C6A36A]">
+                    <span className="text-[var(--brand-accent)]">
                       ${total.toFixed(2)}
                     </span>
                   </div>

@@ -161,8 +161,8 @@ function FeeManagement() {
     return (
       <div className="flex items-center justify-center h-96">
         <div className="text-center">
-          <Loader2 className="w-8 h-8 text-[#4A2F19] animate-spin mx-auto mb-2" />
-          <p className="text-[#6B4423] text-sm">Loading fee structures...</p>
+          <Loader2 className="w-8 h-8 text-[var(--brand-primary)] animate-spin mx-auto mb-2" />
+          <p className="text-[var(--text-primary)] text-sm">Loading fee structures...</p>
         </div>
       </div>
     );
@@ -190,7 +190,7 @@ function FeeManagement() {
         </div>
         <button
           onClick={() => setShowCreateModal(true)}
-          className="px-4 py-2 bg-[#4A2F19] text-white rounded-lg hover:bg-[#3D2817] transition-colors flex items-center"
+          className="px-4 py-2 bg-[var(--brand-primary)] text-white rounded-lg hover:bg-[#3D2817] transition-colors flex items-center"
         >
           <Plus className="w-4 h-4 mr-2" />
           Add Fee Structure
@@ -268,13 +268,13 @@ function FeeManagement() {
             <div className="bg-[#FFF8F0] px-6 py-4 border-b border-[#E8DCC8]">
               <div className="flex items-center justify-between">
                 <div className="flex items-center">
-                  <BookOpen className="w-5 h-5 text-[#4A2F19] mr-2" />
+                  <BookOpen className="w-5 h-5 text-[var(--brand-primary)] mr-2" />
                   <h2 className="text-xl font-bold text-[#3D2817]">
                     {courseName}
                   </h2>
                 </div>
                 <div className="flex items-center gap-4">
-                  <div className="text-lg font-bold text-[#4A2F19]">
+                  <div className="text-lg font-bold text-[var(--brand-primary)]">
                     Total: $
                     {groupedFees[courseName]
                       .filter((f) => f.isActive)
@@ -285,7 +285,7 @@ function FeeManagement() {
                     onClick={() =>
                       fetchCourseDetails(groupedFees[courseName][0].courseId)
                     }
-                    className="flex items-center gap-2 px-3 py-2 bg-[#4A2F19] text-white rounded-lg hover:bg-[#3D2817] transition-colors text-sm"
+                    className="flex items-center gap-2 px-3 py-2 bg-[var(--brand-primary)] text-white rounded-lg hover:bg-[#3D2817] transition-colors text-sm"
                   >
                     <Info className="w-4 h-4" />
                     View Details
@@ -331,7 +331,7 @@ function FeeManagement() {
                     </div>
 
                     <div className="flex justify-between items-center pt-3 border-t border-[#E8DCC8]">
-                      <span className="text-2xl font-bold text-[#4A2F19]">
+                      <span className="text-2xl font-bold text-[var(--brand-primary)]">
                         ${fee.amount.toLocaleString()}
                       </span>
                       {fee.isActive ? (
@@ -444,7 +444,7 @@ function FeeManagement() {
                   onChange={(e) =>
                     setNewFee({ ...newFee, isActive: e.target.checked })
                   }
-                  className="w-4 h-4 text-[#4A2F19] border-[#E8DCC8] rounded"
+                  className="w-4 h-4 text-[var(--brand-primary)] border-[#E8DCC8] rounded"
                 />
                 <label
                   htmlFor="isActive"
@@ -457,7 +457,7 @@ function FeeManagement() {
               <div className="flex gap-4 pt-4">
                 <button
                   type="submit"
-                  className="flex-1 px-4 py-2 bg-[#4A2F19] text-white rounded-lg hover:bg-[#3D2817] transition-colors flex items-center justify-center"
+                  className="flex-1 px-4 py-2 bg-[var(--brand-primary)] text-white rounded-lg hover:bg-[#3D2817] transition-colors flex items-center justify-center"
                 >
                   <Save className="w-4 h-4 mr-2" />
                   Create Fee
@@ -547,7 +547,7 @@ function FeeManagement() {
                   onChange={(e) =>
                     setEditingFee({ ...editingFee, isActive: e.target.checked })
                   }
-                  className="w-4 h-4 text-[#4A2F19] border-[#E8DCC8] rounded"
+                  className="w-4 h-4 text-[var(--brand-primary)] border-[#E8DCC8] rounded"
                 />
                 <label
                   htmlFor="editIsActive"
@@ -560,7 +560,7 @@ function FeeManagement() {
               <div className="flex gap-4 pt-4">
                 <button
                   type="submit"
-                  className="flex-1 px-4 py-2 bg-[#4A2F19] text-white rounded-lg hover:bg-[#3D2817] transition-colors flex items-center justify-center"
+                  className="flex-1 px-4 py-2 bg-[var(--brand-primary)] text-white rounded-lg hover:bg-[#3D2817] transition-colors flex items-center justify-center"
                 >
                   <Save className="w-4 h-4 mr-2" />
                   Update Fee
@@ -607,8 +607,8 @@ function FeeManagement() {
 
             {loadingCourseDetails ? (
               <div className="p-12 text-center">
-                <Loader2 className="w-8 h-8 text-[#4A2F19] animate-spin mx-auto mb-2" />
-                <p className="text-[#6B4423]">Loading course details...</p>
+                <Loader2 className="w-8 h-8 text-[var(--brand-primary)] animate-spin mx-auto mb-2" />
+                <p className="text-[var(--text-primary)]">Loading course details...</p>
               </div>
             ) : courseDetails ? (
               <div className="p-6 space-y-6">
@@ -618,7 +618,7 @@ function FeeManagement() {
                     <h3 className="text-lg font-semibold text-[#3D2817]">
                       Total Course Fee
                     </h3>
-                    <div className="text-3xl font-bold text-[#4A2F19]">
+                    <div className="text-3xl font-bold text-[var(--brand-primary)]">
                       ${courseDetails.totalFee?.toLocaleString()}
                     </div>
                   </div>
@@ -650,7 +650,7 @@ function FeeManagement() {
                               </p>
                             )}
                           </div>
-                          <div className="text-lg font-bold text-[#4A2F19]">
+                          <div className="text-lg font-bold text-[var(--brand-primary)]">
                             ${item.amount?.toLocaleString()}
                           </div>
                         </div>
@@ -699,7 +699,7 @@ function FeeManagement() {
                                 {fee.description}
                               </p>
                             </div>
-                            <div className="text-lg font-bold text-[#4A2F19]">
+                            <div className="text-lg font-bold text-[var(--brand-primary)]">
                               ${fee.amount?.toLocaleString()}
                             </div>
                           </div>

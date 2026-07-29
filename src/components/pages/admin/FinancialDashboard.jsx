@@ -52,8 +52,8 @@ function FinancialDashboard() {
     return (
       <div className="flex items-center justify-center h-96">
         <div className="text-center">
-          <Loader2 className="w-8 h-8 text-[#4A2F19] animate-spin mx-auto mb-2" />
-          <p className="text-[#6B4423] text-sm">
+          <Loader2 className="w-8 h-8 text-[var(--brand-primary)] animate-spin mx-auto mb-2" />
+          <p className="text-[var(--text-primary)] text-sm">
             Loading financial dashboard...
           </p>
         </div>
@@ -110,7 +110,7 @@ function FinancialDashboard() {
         </div>
         <button
           onClick={fetchDashboardData}
-          className="px-4 py-2 bg-[#4A2F19] text-white rounded-lg hover:bg-[#3D2817] transition-colors"
+          className="px-4 py-2 bg-[var(--brand-primary)] text-white rounded-lg hover:bg-[#3D2817] transition-colors"
         >
           Refresh Data
         </button>
@@ -151,7 +151,7 @@ function FinancialDashboard() {
           <div className="space-y-4">
             <div className="flex justify-between items-center p-4 bg-[#FFF8F0] rounded-lg">
               <div className="flex items-center">
-                <CreditCard className="w-5 h-5 text-[#4A2F19] mr-3" />
+                <CreditCard className="w-5 h-5 text-[var(--brand-primary)] mr-3" />
                 <span className="text-[#3D2817] font-medium">
                   Stripe Revenue
                 </span>
@@ -162,7 +162,7 @@ function FinancialDashboard() {
             </div>
             <div className="flex justify-between items-center p-4 bg-[#FFF8F0] rounded-lg">
               <div className="flex items-center">
-                <DollarSign className="w-5 h-5 text-[#4A2F19] mr-3" />
+                <DollarSign className="w-5 h-5 text-[var(--brand-primary)] mr-3" />
                 <span className="text-[#3D2817] font-medium">Cash Revenue</span>
               </div>
               <span className="text-lg font-bold text-[#3D2817]">
@@ -171,7 +171,7 @@ function FinancialDashboard() {
             </div>
             <div className="flex justify-between items-center p-4 bg-[#FFF8F0] rounded-lg">
               <div className="flex items-center">
-                <Users className="w-5 h-5 text-[#4A2F19] mr-3" />
+                <Users className="w-5 h-5 text-[var(--brand-primary)] mr-3" />
                 <span className="text-[#3D2817] font-medium">
                   Paid Students
                 </span>
@@ -261,7 +261,7 @@ function FinancialDashboard() {
           {overdueInstallments.length > 5 && (
             <Link
               to="/admin/finance/outstanding-payments"
-              className="block text-center text-[#4A2F19] hover:underline mt-4"
+              className="block text-center text-[var(--brand-primary)] hover:underline mt-4"
             >
               View all {overdueInstallments.length} overdue
             </Link>
@@ -310,7 +310,7 @@ function FinancialDashboard() {
           {upcomingInstallments.length > 5 && (
             <Link
               to="/admin/finance/payment-plans"
-              className="block text-center text-[#4A2F19] hover:underline mt-4"
+              className="block text-center text-[var(--brand-primary)] hover:underline mt-4"
             >
               View all {upcomingInstallments.length} upcoming
             </Link>

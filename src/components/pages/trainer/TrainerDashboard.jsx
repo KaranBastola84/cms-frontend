@@ -199,7 +199,7 @@ function TrainerDashboard() {
           </div>
 
           <div className="flex flex-wrap items-center gap-2">
-            <label className="text-sm text-[#6B4423] font-semibold">
+            <label className="text-sm text-[var(--text-primary)] font-semibold">
               Overview Limit
             </label>
             <select
@@ -214,7 +214,7 @@ function TrainerDashboard() {
               ))}
             </select>
 
-            <label className="text-sm text-[#6B4423] font-semibold ml-2">
+            <label className="text-sm text-[var(--text-primary)] font-semibold ml-2">
               Timeline Limit
             </label>
             <select
@@ -232,7 +232,7 @@ function TrainerDashboard() {
             <button
               onClick={() => fetchDashboard({ silent: true })}
               disabled={refreshing}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[#4A2F19] text-white hover:bg-[#3D2817] disabled:opacity-60"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[var(--brand-primary)] text-white hover:bg-[#3D2817] disabled:opacity-60"
             >
               {refreshing ? (
                 <Loader2 className="w-4 h-4 animate-spin" />
@@ -292,7 +292,7 @@ function TrainerDashboard() {
                     <p className="text-sm text-[#8B6F47] font-semibold m-0">
                       {item.label}
                     </p>
-                    <Icon className="w-5 h-5 text-[#4A2F19]" />
+                    <Icon className="w-5 h-5 text-[var(--brand-primary)]" />
                   </div>
                   <p className="text-2xl font-bold text-[#2C1C14] mt-3 mb-0">
                     {item.value}
@@ -304,7 +304,7 @@ function TrainerDashboard() {
 
       <div className="bg-white rounded-xl border border-[#E8DCC8] p-5 shadow-sm">
         <div className="flex items-center gap-2 mb-4">
-          <Activity className="w-5 h-5 text-[#4A2F19]" />
+          <Activity className="w-5 h-5 text-[var(--brand-primary)]" />
           <h2 className="text-lg font-bold text-[#2C1C14] m-0">
             Quick Actions
           </h2>
@@ -340,7 +340,7 @@ function TrainerDashboard() {
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-4">
         <div className="bg-white rounded-xl border border-[#E8DCC8] p-5 shadow-sm">
           <div className="flex items-center gap-2 mb-4">
-            <ClipboardCheck className="w-5 h-5 text-[#4A2F19]" />
+            <ClipboardCheck className="w-5 h-5 text-[var(--brand-primary)]" />
             <h3 className="text-lg font-bold text-[#2C1C14] m-0">
               Attendance Today
             </h3>
@@ -363,31 +363,31 @@ function TrainerDashboard() {
               </p>
               <div className="space-y-2 text-sm">
                 <div className="flex justify-between">
-                  <span className="text-[#6B4423]">Marked</span>
+                  <span className="text-[var(--text-primary)]">Marked</span>
                   <span className="font-semibold text-[#2C1C14]">
                     {attendanceToday.totalMarked || 0}
                   </span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-[#6B4423]">Present</span>
+                  <span className="text-[var(--text-primary)]">Present</span>
                   <span className="font-semibold text-green-700">
                     {attendanceToday.present || 0}
                   </span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-[#6B4423]">Absent</span>
+                  <span className="text-[var(--text-primary)]">Absent</span>
                   <span className="font-semibold text-red-700">
                     {attendanceToday.absent || 0}
                   </span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-[#6B4423]">Late</span>
+                  <span className="text-[var(--text-primary)]">Late</span>
                   <span className="font-semibold text-amber-700">
                     {attendanceToday.late || 0}
                   </span>
                 </div>
                 <div className="flex justify-between border-t border-[#EEE1CE] pt-2 mt-2">
-                  <span className="text-[#6B4423] font-semibold">Rate</span>
+                  <span className="text-[var(--text-primary)] font-semibold">Rate</span>
                   <span className="font-bold text-[#2C1C14]">
                     {formatPercentage(attendanceToday.attendanceRate)}
                   </span>
@@ -425,7 +425,7 @@ function TrainerDashboard() {
                   <p className="font-semibold text-[#2C1C14] m-0">
                     {batch.batchName}
                   </p>
-                  <p className="text-sm text-[#6B4423] m-0 mt-1">
+                  <p className="text-sm text-[var(--text-primary)] m-0 mt-1">
                     {batch.courseName}
                   </p>
                   <p className="text-xs text-[#8B6F47] m-0 mt-1">
@@ -472,7 +472,7 @@ function TrainerDashboard() {
                   <p className="font-semibold text-[#2C1C14] m-0">
                     {batch.batchName}
                   </p>
-                  <p className="text-sm text-[#6B4423] m-0 mt-1">
+                  <p className="text-sm text-[var(--text-primary)] m-0 mt-1">
                     {batch.courseName}
                   </p>
                   <p className="text-xs text-[#8B6F47] m-0 mt-1">
@@ -518,7 +518,7 @@ function TrainerDashboard() {
                   <p className="font-semibold text-[#2C1C14] m-0">
                     {student.studentName}
                   </p>
-                  <p className="text-sm text-[#6B4423] m-0 mt-1">
+                  <p className="text-sm text-[var(--text-primary)] m-0 mt-1">
                     {student.batchName}
                   </p>
                   <p className="text-xs text-[#8B6F47] m-0 mt-1">
@@ -551,37 +551,37 @@ function TrainerDashboard() {
           ) : (
             <div className="space-y-2 text-sm">
               <div className="flex justify-between">
-                <span className="text-[#6B4423]">Assigned Batches</span>
+                <span className="text-[var(--text-primary)]">Assigned Batches</span>
                 <span className="font-semibold text-[#2C1C14]">
                   {summary.assignedBatches || 0}
                 </span>
               </div>
               <div className="flex justify-between">
-                <span className="text-[#6B4423]">Active Batches</span>
+                <span className="text-[var(--text-primary)]">Active Batches</span>
                 <span className="font-semibold text-[#2C1C14]">
                   {summary.activeBatches || 0}
                 </span>
               </div>
               <div className="flex justify-between">
-                <span className="text-[#6B4423]">Upcoming (7 Days)</span>
+                <span className="text-[var(--text-primary)]">Upcoming (7 Days)</span>
                 <span className="font-semibold text-[#2C1C14]">
                   {summary.upcomingBatchesNext7Days || 0}
                 </span>
               </div>
               <div className="flex justify-between">
-                <span className="text-[#6B4423]">Students in Batches</span>
+                <span className="text-[var(--text-primary)]">Students in Batches</span>
                 <span className="font-semibold text-[#2C1C14]">
                   {summary.totalStudentsInMyBatches || 0}
                 </span>
               </div>
               <div className="flex justify-between">
-                <span className="text-[#6B4423]">Marked Today</span>
+                <span className="text-[var(--text-primary)]">Marked Today</span>
                 <span className="font-semibold text-[#2C1C14]">
                   {summary.studentsMarkedToday || 0}
                 </span>
               </div>
               <div className="flex justify-between border-t border-[#EEE1CE] pt-2 mt-2">
-                <span className="text-[#6B4423] font-semibold">
+                <span className="text-[var(--text-primary)] font-semibold">
                   7-Day Attendance Rate
                 </span>
                 <span className="font-bold text-[#2C1C14]">
@@ -640,7 +640,7 @@ function TrainerDashboard() {
                     {normalizedActionUrl && (
                       <Link
                         to={normalizedActionUrl}
-                        className="inline-flex items-center gap-1 text-sm font-semibold text-[#4A2F19] hover:text-[#3D2817]"
+                        className="inline-flex items-center gap-1 text-sm font-semibold text-[var(--brand-primary)] hover:text-[#3D2817]"
                       >
                         Open
                         <ArrowUpRight className="w-4 h-4" />
@@ -651,7 +651,7 @@ function TrainerDashboard() {
                   <p className="font-semibold text-[#2C1C14] m-0 mt-2">
                     {event.title}
                   </p>
-                  <p className="text-sm text-[#6B4423] m-0 mt-1">
+                  <p className="text-sm text-[var(--text-primary)] m-0 mt-1">
                     {event.description || "-"}
                   </p>
                   <p className="text-xs text-[#8B6F47] m-0 mt-1">

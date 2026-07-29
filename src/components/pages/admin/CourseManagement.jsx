@@ -243,8 +243,8 @@ const CourseManagement = () => {
     return (
       <div className="flex items-center justify-center h-96">
         <div className="text-center">
-          <Loader2 className="w-8 h-8 text-[#4A2F19] animate-spin mx-auto mb-2" />
-          <p className="text-[#6B4423] text-sm">Loading courses...</p>
+          <Loader2 className="w-8 h-8 text-[var(--brand-primary)] animate-spin mx-auto mb-2" />
+          <p className="text-[var(--text-primary)] text-sm">Loading courses...</p>
         </div>
       </div>
     );
@@ -264,7 +264,7 @@ const CourseManagement = () => {
 
         <button
           onClick={openCreateModal}
-          className="px-4 py-2 bg-[#4A2F19] text-white rounded-lg hover:bg-[#3D2817] transition-colors flex items-center"
+          className="px-4 py-2 bg-[var(--brand-primary)] text-white rounded-lg hover:bg-[#3D2817] transition-colors flex items-center"
         >
           <Plus className="w-4 h-4 mr-2" />
           Add Course
@@ -313,7 +313,7 @@ const CourseManagement = () => {
               type="checkbox"
               checked={activeOnly}
               onChange={(e) => setActiveOnly(e.target.checked)}
-              className="w-4 h-4 text-[#4A2F19] rounded border-[#E8DCC8] focus:ring-[#4A2F19]"
+              className="w-4 h-4 text-[var(--brand-primary)] rounded border-[#E8DCC8] focus:ring-[#4A2F19]"
             />
             Show active only
           </label>
@@ -325,19 +325,19 @@ const CourseManagement = () => {
           <table className="min-w-full">
             <thead className="bg-[#FFF8F0] border-b border-[#E8DCC8]">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-[#6B4423] uppercase">
+                <th className="px-6 py-3 text-left text-xs font-semibold text-[var(--text-primary)] uppercase">
                   Course
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-[#6B4423] uppercase">
+                <th className="px-6 py-3 text-left text-xs font-semibold text-[var(--text-primary)] uppercase">
                   Duration
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-[#6B4423] uppercase">
+                <th className="px-6 py-3 text-left text-xs font-semibold text-[var(--text-primary)] uppercase">
                   Fees
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-[#6B4423] uppercase">
+                <th className="px-6 py-3 text-left text-xs font-semibold text-[var(--text-primary)] uppercase">
                   Status
                 </th>
-                <th className="px-6 py-3 text-right text-xs font-semibold text-[#6B4423] uppercase">
+                <th className="px-6 py-3 text-right text-xs font-semibold text-[var(--text-primary)] uppercase">
                   Actions
                 </th>
               </tr>
@@ -533,7 +533,7 @@ const CourseManagement = () => {
                       isActive: e.target.checked,
                     }))
                   }
-                  className="w-4 h-4 text-[#4A2F19] rounded border-[#E8DCC8] focus:ring-[#4A2F19]"
+                  className="w-4 h-4 text-[var(--brand-primary)] rounded border-[#E8DCC8] focus:ring-[#4A2F19]"
                 />
                 Active course
               </label>
@@ -542,14 +542,14 @@ const CourseManagement = () => {
                 <button
                   type="button"
                   onClick={resetModalState}
-                  className="px-4 py-2 border border-[#E8DCC8] rounded-lg text-[#6B4423] hover:bg-gray-50"
+                  className="px-4 py-2 border border-[#E8DCC8] rounded-lg text-[var(--text-primary)] hover:bg-gray-50"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={saving}
-                  className="px-4 py-2 bg-[#4A2F19] text-white rounded-lg hover:bg-[#3D2817] flex items-center disabled:opacity-60"
+                  className="px-4 py-2 bg-[var(--brand-primary)] text-white rounded-lg hover:bg-[#3D2817] flex items-center disabled:opacity-60"
                 >
                   {saving ? (
                     <>
@@ -575,7 +575,7 @@ const CourseManagement = () => {
             <h3 className="text-lg font-semibold text-[#3D2817] mb-2">
               Delete Course
             </h3>
-            <p className="text-sm text-[#6B4423] mb-6">
+            <p className="text-sm text-[var(--text-primary)] mb-6">
               Are you sure you want to delete{" "}
               <strong>{deletingCourse.name}</strong>? This action cannot be
               undone.
@@ -587,7 +587,7 @@ const CourseManagement = () => {
                   setShowDeleteConfirm(false);
                   setDeletingCourse(null);
                 }}
-                className="px-4 py-2 border border-[#E8DCC8] rounded-lg text-[#6B4423] hover:bg-gray-50"
+                className="px-4 py-2 border border-[#E8DCC8] rounded-lg text-[var(--text-primary)] hover:bg-gray-50"
               >
                 Cancel
               </button>

@@ -178,8 +178,8 @@ const AllUsers = () => {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="flex flex-col items-center gap-4">
-          <RefreshCw className="w-8 h-8 text-[#4A2F19] animate-spin" />
-          <p className="text-[#4A2F19] font-semibold">Loading users...</p>
+          <RefreshCw className="w-8 h-8 text-[var(--brand-primary)] animate-spin" />
+          <p className="text-[var(--brand-primary)] font-semibold">Loading users...</p>
         </div>
       </div>
     );
@@ -192,10 +192,10 @@ const AllUsers = () => {
         <div className="mb-6">
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h1 className="text-3xl font-bold text-[#1A1A1A] mb-2">
+              <h1 className="text-3xl font-bold text-[var(--text-primary)] mb-2">
                 All Users
               </h1>
-              <p className="text-[#6B4423]">
+              <p className="text-[var(--text-primary)]">
                 Manage all users in the system ({filteredUsers.length} users)
               </p>
             </div>
@@ -212,27 +212,27 @@ const AllUsers = () => {
           </div>
 
           {/* Filters */}
-          <div className="bg-white rounded-xl shadow-coffee-md p-4 border border-[#C8A27B]/30">
+          <div className="bg-white rounded-xl shadow-coffee-md p-4 border border-[var(--border-default)]">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {/* Search */}
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#6B4423]" />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--text-primary)]" />
                 <input
                   type="text"
                   placeholder="Search by username or email..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 border-2 border-[#C8A27B]/40 rounded-lg bg-[#F8F4EE] focus:outline-none focus:border-[#4A2F19] transition-colors"
+                  className="w-full pl-10 pr-4 py-2 border-2 border-[var(--brand-accent)]/40 rounded-lg bg-[#F8F4EE] focus:outline-none focus:border-[#4A2F19] transition-colors"
                 />
               </div>
 
               {/* Role Filter */}
               <div className="relative">
-                <Filter className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#6B4423]" />
+                <Filter className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--text-primary)]" />
                 <select
                   value={roleFilter}
                   onChange={(e) => setRoleFilter(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 border-2 border-[#C8A27B]/40 rounded-lg bg-[#F8F4EE] focus:outline-none focus:border-[#4A2F19] transition-colors appearance-none cursor-pointer"
+                  className="w-full pl-10 pr-4 py-2 border-2 border-[var(--brand-accent)]/40 rounded-lg bg-[#F8F4EE] focus:outline-none focus:border-[#4A2F19] transition-colors appearance-none cursor-pointer"
                 >
                   <option value="All">All Roles</option>
                   {roles.map((role) => (
@@ -245,11 +245,11 @@ const AllUsers = () => {
 
               {/* Status Filter */}
               <div className="relative">
-                <Filter className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#6B4423]" />
+                <Filter className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--text-primary)]" />
                 <select
                   value={statusFilter}
                   onChange={(e) => setStatusFilter(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 border-2 border-[#C8A27B]/40 rounded-lg bg-[#F8F4EE] focus:outline-none focus:border-[#4A2F19] transition-colors appearance-none cursor-pointer"
+                  className="w-full pl-10 pr-4 py-2 border-2 border-[var(--brand-accent)]/40 rounded-lg bg-[#F8F4EE] focus:outline-none focus:border-[#4A2F19] transition-colors appearance-none cursor-pointer"
                 >
                   <option value="All">All Status</option>
                   <option value="Active">Active</option>
@@ -261,27 +261,27 @@ const AllUsers = () => {
         </div>
 
         {/* Users Table */}
-        <div className="bg-white rounded-xl shadow-coffee-md border border-[#C8A27B]/30 overflow-hidden">
+        <div className="bg-white rounded-xl shadow-coffee-md border border-[var(--border-default)] overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-[#EFE7D3] border-b-2 border-[#C8A27B]">
+              <thead className="bg-[var(--bg-surface-alt)] border-b-2 border-[var(--brand-accent)]">
                 <tr>
-                  <th className="px-6 py-4 text-left text-sm font-bold text-[#1A1A1A]">
+                  <th className="px-6 py-4 text-left text-sm font-bold text-[var(--text-primary)]">
                     User
                   </th>
-                  <th className="px-6 py-4 text-left text-sm font-bold text-[#1A1A1A]">
+                  <th className="px-6 py-4 text-left text-sm font-bold text-[var(--text-primary)]">
                     Email
                   </th>
-                  <th className="px-6 py-4 text-left text-sm font-bold text-[#1A1A1A]">
+                  <th className="px-6 py-4 text-left text-sm font-bold text-[var(--text-primary)]">
                     Role
                   </th>
-                  <th className="px-6 py-4 text-left text-sm font-bold text-[#1A1A1A]">
+                  <th className="px-6 py-4 text-left text-sm font-bold text-[var(--text-primary)]">
                     Status
                   </th>
-                  <th className="px-6 py-4 text-left text-sm font-bold text-[#1A1A1A]">
+                  <th className="px-6 py-4 text-left text-sm font-bold text-[var(--text-primary)]">
                     Created
                   </th>
-                  <th className="px-6 py-4 text-left text-sm font-bold text-[#1A1A1A]">
+                  <th className="px-6 py-4 text-left text-sm font-bold text-[var(--text-primary)]">
                     Actions
                   </th>
                 </tr>
@@ -291,11 +291,11 @@ const AllUsers = () => {
                   <tr>
                     <td colSpan="6" className="px-6 py-12 text-center">
                       <div className="flex flex-col items-center gap-3">
-                        <Users className="w-16 h-16 text-[#C8A27B] opacity-50" />
-                        <p className="text-[#6B4423] font-semibold">
+                        <Users className="w-16 h-16 text-[var(--brand-accent)] opacity-50" />
+                        <p className="text-[var(--text-primary)] font-semibold">
                           No users found
                         </p>
-                        <p className="text-sm text-[#6B4423]">
+                        <p className="text-sm text-[var(--text-primary)]">
                           Try adjusting your filters
                         </p>
                       </div>
@@ -309,15 +309,15 @@ const AllUsers = () => {
                     >
                       <td className="px-6 py-4">
                         <div className="flex items-center gap-3">
-                          <div className="bg-[#EFE7D3] p-2 rounded-full">
-                            <Users className="w-4 h-4 text-[#4A2F19]" />
+                          <div className="bg-[var(--bg-surface-alt)] p-2 rounded-full">
+                            <Users className="w-4 h-4 text-[var(--brand-primary)]" />
                           </div>
-                          <span className="font-semibold text-[#1A1A1A]">
+                          <span className="font-semibold text-[var(--text-primary)]">
                             {user.username}
                           </span>
                         </div>
                       </td>
-                      <td className="px-6 py-4 text-[#4A2F19]">{user.email}</td>
+                      <td className="px-6 py-4 text-[var(--brand-primary)]">{user.email}</td>
                       <td className="px-6 py-4">
                         <span
                           className={`inline-flex items-center px-3 py-1 rounded-lg text-xs font-bold border ${getRoleBadgeColor(
@@ -340,7 +340,7 @@ const AllUsers = () => {
                           </span>
                         )}
                       </td>
-                      <td className="px-6 py-4 text-sm text-[#6B4423]">
+                      <td className="px-6 py-4 text-sm text-[var(--text-primary)]">
                         {formatDate(user.createdAt)}
                       </td>
                       <td className="px-6 py-4">
@@ -407,7 +407,7 @@ const AllUsers = () => {
                 <div className="coffee-gradient p-2 rounded-lg">
                   <UserCog className="w-5 h-5 text-white" />
                 </div>
-                <h3 className="text-xl font-bold text-[#1A1A1A]">
+                <h3 className="text-xl font-bold text-[var(--text-primary)]">
                   Change User Role
                 </h3>
               </div>
@@ -417,27 +417,27 @@ const AllUsers = () => {
                   setSelectedUser(null);
                   setNewRole("");
                 }}
-                className="text-[#6B4423] hover:text-[#1A1A1A] transition-colors"
+                className="text-[var(--text-primary)] hover:text-[var(--text-primary)] transition-colors"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
             <div className="mb-6">
-              <p className="text-[#6B4423] mb-4">
+              <p className="text-[var(--text-primary)] mb-4">
                 Change role for{" "}
-                <span className="font-bold text-[#1A1A1A]">
+                <span className="font-bold text-[var(--text-primary)]">
                   {selectedUser?.username}
                 </span>
               </p>
 
-              <label className="block text-sm font-semibold text-[#4A2F19] mb-2">
+              <label className="block text-sm font-semibold text-[var(--brand-primary)] mb-2">
                 Select New Role
               </label>
               <select
                 value={newRole}
                 onChange={(e) => setNewRole(e.target.value)}
-                className="w-full px-4 py-3 border-2 border-[#C8A27B]/40 rounded-xl bg-[#F8F4EE] focus:outline-none focus:border-[#4A2F19] transition-colors"
+                className="w-full px-4 py-3 border-2 border-[var(--brand-accent)]/40 rounded-xl bg-[#F8F4EE] focus:outline-none focus:border-[#4A2F19] transition-colors"
               >
                 {roles.map((role) => (
                   <option key={role} value={role}>
@@ -490,7 +490,7 @@ const AllUsers = () => {
                 <div className="bg-red-100 p-2 rounded-lg">
                   <Trash2 className="w-5 h-5 text-red-700" />
                 </div>
-                <h3 className="text-xl font-bold text-[#1A1A1A]">
+                <h3 className="text-xl font-bold text-[var(--text-primary)]">
                   Delete User
                 </h3>
               </div>
@@ -499,22 +499,22 @@ const AllUsers = () => {
                   setShowDeleteModal(false);
                   setSelectedUser(null);
                 }}
-                className="text-[#6B4423] hover:text-[#1A1A1A] transition-colors"
+                className="text-[var(--text-primary)] hover:text-[var(--text-primary)] transition-colors"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
             <div className="mb-6">
-              <p className="text-[#6B4423] mb-2">
+              <p className="text-[var(--text-primary)] mb-2">
                 Are you sure you want to delete this user?
               </p>
-              <div className="bg-[#F8F4EE] p-4 rounded-lg border border-[#C8A27B]/40">
-                <p className="font-bold text-[#1A1A1A] mb-1">
+              <div className="bg-[#F8F4EE] p-4 rounded-lg border border-[var(--brand-accent)]/40">
+                <p className="font-bold text-[var(--text-primary)] mb-1">
                   {selectedUser?.username}
                 </p>
-                <p className="text-sm text-[#6B4423]">{selectedUser?.email}</p>
-                <p className="text-sm text-[#6B4423] mt-2">
+                <p className="text-sm text-[var(--text-primary)]">{selectedUser?.email}</p>
+                <p className="text-sm text-[var(--text-primary)] mt-2">
                   Role:{" "}
                   <span className="font-semibold">{selectedUser?.role}</span>
                 </p>

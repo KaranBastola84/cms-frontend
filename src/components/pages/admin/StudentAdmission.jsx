@@ -662,7 +662,7 @@ const StudentAdmission = () => {
               loadSummaryAndDocuments(activeStudentId);
             }
           }}
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[#4A2F19] text-white hover:bg-[#3d2715]"
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[var(--brand-primary)] text-white hover:bg-[#3d2715]"
           disabled={submitting}
         >
           <RefreshCw className="w-4 h-4" />
@@ -672,16 +672,16 @@ const StudentAdmission = () => {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2 space-y-6">
-          <section className="bg-white p-6 rounded-xl border border-[#C8A27B]/30 shadow-sm">
+          <section className="bg-white p-6 rounded-xl border border-[var(--border-default)] shadow-sm">
             <div className="flex items-center gap-2 mb-4">
-              <UserPlus className="w-5 h-5 text-[#4A2F19]" />
-              <h2 className="text-xl font-semibold text-[#4A2F19]">
+              <UserPlus className="w-5 h-5 text-[var(--brand-primary)]" />
+              <h2 className="text-xl font-semibold text-[var(--brand-primary)]">
                 Step 1. Create Student
               </h2>
             </div>
 
             {loadingRefs ? (
-              <div className="flex items-center gap-2 text-[#6B4423]">
+              <div className="flex items-center gap-2 text-[var(--text-primary)]">
                 <Loader2 className="w-4 h-4 animate-spin" />
                 Loading course and batch options...
               </div>
@@ -695,7 +695,7 @@ const StudentAdmission = () => {
                   value={formData.name}
                   onChange={handleFormChange}
                   placeholder="Student Name *"
-                  className="px-3 py-2 border rounded-lg border-[#C8A27B]/40"
+                  className="px-3 py-2 border rounded-lg border-[var(--brand-accent)]/40"
                 />
                 <input
                   name="email"
@@ -703,20 +703,20 @@ const StudentAdmission = () => {
                   onChange={handleFormChange}
                   placeholder="Email *"
                   type="email"
-                  className="px-3 py-2 border rounded-lg border-[#C8A27B]/40"
+                  className="px-3 py-2 border rounded-lg border-[var(--brand-accent)]/40"
                 />
                 <input
                   name="phone"
                   value={formData.phone}
                   onChange={handleFormChange}
                   placeholder="Phone *"
-                  className="px-3 py-2 border rounded-lg border-[#C8A27B]/40"
+                  className="px-3 py-2 border rounded-lg border-[var(--brand-accent)]/40"
                 />
                 <select
                   name="courseId"
                   value={formData.courseId}
                   onChange={handleFormChange}
-                  className="px-3 py-2 border rounded-lg border-[#C8A27B]/40"
+                  className="px-3 py-2 border rounded-lg border-[var(--brand-accent)]/40"
                 >
                   <option value="">Select Course *</option>
                   {courses.map((course) => {
@@ -732,7 +732,7 @@ const StudentAdmission = () => {
                   name="batchId"
                   value={formData.batchId}
                   onChange={handleFormChange}
-                  className="px-3 py-2 border rounded-lg border-[#C8A27B]/40"
+                  className="px-3 py-2 border rounded-lg border-[var(--brand-accent)]/40"
                 >
                   <option value="">Select Batch *</option>
                   {filteredBatches.map((batch) => {
@@ -753,21 +753,21 @@ const StudentAdmission = () => {
                   type="number"
                   min="0"
                   step="0.01"
-                  className="px-3 py-2 border rounded-lg border-[#C8A27B]/40"
+                  className="px-3 py-2 border rounded-lg border-[var(--brand-accent)]/40"
                 />
                 <input
                   name="address"
                   value={formData.address}
                   onChange={handleFormChange}
                   placeholder="Address (optional)"
-                  className="px-3 py-2 border rounded-lg border-[#C8A27B]/40 md:col-span-2"
+                  className="px-3 py-2 border rounded-lg border-[var(--brand-accent)]/40 md:col-span-2"
                 />
                 <input
                   name="emergencyContact"
                   value={formData.emergencyContact}
                   onChange={handleFormChange}
                   placeholder="Emergency Contact (optional)"
-                  className="px-3 py-2 border rounded-lg border-[#C8A27B]/40 md:col-span-2"
+                  className="px-3 py-2 border rounded-lg border-[var(--brand-accent)]/40 md:col-span-2"
                 />
                 <textarea
                   name="notes"
@@ -775,7 +775,7 @@ const StudentAdmission = () => {
                   onChange={handleFormChange}
                   placeholder="Notes (optional)"
                   rows={3}
-                  className="px-3 py-2 border rounded-lg border-[#C8A27B]/40 md:col-span-2"
+                  className="px-3 py-2 border rounded-lg border-[var(--brand-accent)]/40 md:col-span-2"
                 />
                 <div className="md:col-span-2 flex items-center justify-between">
                   <p className="text-sm text-[#8B6F47]">
@@ -784,7 +784,7 @@ const StudentAdmission = () => {
                   </p>
                   <button
                     type="submit"
-                    className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[#4A2F19] text-white hover:bg-[#3d2715] disabled:opacity-70"
+                    className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[var(--brand-primary)] text-white hover:bg-[#3d2715] disabled:opacity-70"
                     disabled={submitting}
                   >
                     {submitting ? (
@@ -799,10 +799,10 @@ const StudentAdmission = () => {
             )}
           </section>
 
-          <section className="bg-white p-6 rounded-xl border border-[#C8A27B]/30 shadow-sm">
+          <section className="bg-white p-6 rounded-xl border border-[var(--border-default)] shadow-sm">
             <div className="flex items-center gap-2 mb-4">
-              <Upload className="w-5 h-5 text-[#4A2F19]" />
-              <h2 className="text-xl font-semibold text-[#4A2F19]">
+              <Upload className="w-5 h-5 text-[var(--brand-primary)]" />
+              <h2 className="text-xl font-semibold text-[var(--brand-primary)]">
                 Step 2. Upload Documents (Optional)
               </h2>
             </div>
@@ -811,7 +811,7 @@ const StudentAdmission = () => {
               <select
                 value={documentType}
                 onChange={(e) => setDocumentType(Number(e.target.value))}
-                className="px-3 py-2 border rounded-lg border-[#C8A27B]/40"
+                className="px-3 py-2 border rounded-lg border-[var(--brand-accent)]/40"
               >
                 {documentTypeOptions.map((type) => (
                   <option key={type.value} value={type.value}>
@@ -824,11 +824,11 @@ const StudentAdmission = () => {
                 value={documentDescription}
                 onChange={(e) => setDocumentDescription(e.target.value)}
                 placeholder="Document description (optional)"
-                className="px-3 py-2 border rounded-lg border-[#C8A27B]/40"
+                className="px-3 py-2 border rounded-lg border-[var(--brand-accent)]/40"
               />
 
               <div className="space-y-2">
-                <label className="block text-sm text-[#6B4423]">
+                <label className="block text-sm text-[var(--text-primary)]">
                   Single document
                 </label>
                 <input
@@ -841,7 +841,7 @@ const StudentAdmission = () => {
                 <button
                   type="button"
                   onClick={handleSingleDocumentUpload}
-                  className="w-full px-4 py-2 rounded-lg bg-[#6B4423] text-white hover:bg-[#5A3A21] disabled:opacity-70"
+                  className="w-full px-4 py-2 rounded-lg bg-[var(--brand-primary-hover)] text-white hover:bg-[#5A3A21] disabled:opacity-70"
                   disabled={submitting}
                 >
                   Upload Single
@@ -849,7 +849,7 @@ const StudentAdmission = () => {
               </div>
 
               <div className="space-y-2">
-                <label className="block text-sm text-[#6B4423]">
+                <label className="block text-sm text-[var(--text-primary)]">
                   Multiple documents
                 </label>
                 <input
@@ -863,7 +863,7 @@ const StudentAdmission = () => {
                 <button
                   type="button"
                   onClick={handleMultiDocumentUpload}
-                  className="w-full px-4 py-2 rounded-lg bg-[#6B4423] text-white hover:bg-[#5A3A21] disabled:opacity-70"
+                  className="w-full px-4 py-2 rounded-lg bg-[var(--brand-primary-hover)] text-white hover:bg-[#5A3A21] disabled:opacity-70"
                   disabled={submitting}
                 >
                   Upload Multiple
@@ -877,17 +877,17 @@ const StudentAdmission = () => {
             </p>
           </section>
 
-          <section className="bg-white p-6 rounded-xl border border-[#C8A27B]/30 shadow-sm space-y-4">
+          <section className="bg-white p-6 rounded-xl border border-[var(--border-default)] shadow-sm space-y-4">
             <div className="flex items-center gap-2">
-              <DollarSign className="w-5 h-5 text-[#4A2F19]" />
-              <h2 className="text-xl font-semibold text-[#4A2F19]">
+              <DollarSign className="w-5 h-5 text-[var(--brand-primary)]" />
+              <h2 className="text-xl font-semibold text-[var(--brand-primary)]">
                 Step 4. Payment
               </h2>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="p-4 rounded-lg border border-[#C8A27B]/30 bg-[#fffaf2]">
-                <h3 className="font-semibold text-[#4A2F19] mb-3">
+              <div className="p-4 rounded-lg border border-[var(--border-default)] bg-[#fffaf2]">
+                <h3 className="font-semibold text-[var(--brand-primary)] mb-3">
                   Option A: Cash Payment
                 </h3>
                 <input
@@ -897,14 +897,14 @@ const StudentAdmission = () => {
                   value={cashAmount}
                   onChange={(e) => setCashAmount(e.target.value)}
                   placeholder="Cash amount"
-                  className="w-full px-3 py-2 border rounded-lg border-[#C8A27B]/40"
+                  className="w-full px-3 py-2 border rounded-lg border-[var(--brand-accent)]/40"
                 />
                 <textarea
                   rows={3}
                   value={cashRemarks}
                   onChange={(e) => setCashRemarks(e.target.value)}
                   placeholder="Remarks (optional)"
-                  className="mt-2 w-full px-3 py-2 border rounded-lg border-[#C8A27B]/40"
+                  className="mt-2 w-full px-3 py-2 border rounded-lg border-[var(--brand-accent)]/40"
                 />
                 <button
                   type="button"
@@ -916,8 +916,8 @@ const StudentAdmission = () => {
                 </button>
               </div>
 
-              <div className="p-4 rounded-lg border border-[#C8A27B]/30 bg-[#fffaf2] space-y-3">
-                <h3 className="font-semibold text-[#4A2F19]">
+              <div className="p-4 rounded-lg border border-[var(--border-default)] bg-[#fffaf2] space-y-3">
+                <h3 className="font-semibold text-[var(--brand-primary)]">
                   Option B: Stripe Payment
                 </h3>
                 {!stripePublishableKey && (
@@ -934,18 +934,18 @@ const StudentAdmission = () => {
                   value={stripeAmount}
                   onChange={(e) => setStripeAmount(e.target.value)}
                   placeholder="Stripe amount"
-                  className="w-full px-3 py-2 border rounded-lg border-[#C8A27B]/40"
+                  className="w-full px-3 py-2 border rounded-lg border-[var(--brand-accent)]/40"
                 />
                 <input
                   value={stripeInstallmentId}
                   onChange={(e) => setStripeInstallmentId(e.target.value)}
                   placeholder="Installment ID (optional)"
-                  className="w-full px-3 py-2 border rounded-lg border-[#C8A27B]/40"
+                  className="w-full px-3 py-2 border rounded-lg border-[var(--brand-accent)]/40"
                 />
                 <select
                   value={stripeCurrency}
                   onChange={(e) => setStripeCurrency(e.target.value)}
-                  className="w-full px-3 py-2 border rounded-lg border-[#C8A27B]/40"
+                  className="w-full px-3 py-2 border rounded-lg border-[var(--brand-accent)]/40"
                 >
                   <option value="usd">USD</option>
                   <option value="eur">EUR</option>
@@ -967,8 +967,8 @@ const StudentAdmission = () => {
                 </button>
 
                 {stripeClientSecret && stripePromise && (
-                  <div className="pt-2 border-t border-[#C8A27B]/20">
-                    <p className="text-xs text-[#6B4423] mb-2">
+                  <div className="pt-2 border-t border-[var(--border-subtle)]">
+                    <p className="text-xs text-[var(--text-primary)] mb-2">
                       Secure Stripe Checkout
                     </p>
                     <Elements
@@ -996,10 +996,10 @@ const StudentAdmission = () => {
 
                 {lastStripePayment?.paymentId && (
                   <div className="pt-2 space-y-2 text-sm">
-                    <p className="text-[#4A2F19]">
+                    <p className="text-[var(--brand-primary)]">
                       Payment ID: <strong>{lastStripePayment.paymentId}</strong>
                     </p>
-                    <p className="text-[#6B4423]">
+                    <p className="text-[var(--text-primary)]">
                       Status:{" "}
                       <strong>{lastStripePayment.status || "Pending"}</strong>
                     </p>
@@ -1025,23 +1025,23 @@ const StudentAdmission = () => {
             </p>
           </section>
 
-          <section className="bg-white p-6 rounded-xl border border-[#C8A27B]/30 shadow-sm space-y-4">
+          <section className="bg-white p-6 rounded-xl border border-[var(--border-default)] shadow-sm space-y-4">
             <div className="flex items-center gap-2">
-              <Users className="w-5 h-5 text-[#4A2F19]" />
-              <h2 className="text-xl font-semibold text-[#4A2F19]">
+              <Users className="w-5 h-5 text-[var(--brand-primary)]" />
+              <h2 className="text-xl font-semibold text-[var(--brand-primary)]">
                 Step 5. Enrolled Verification
               </h2>
             </div>
 
             {loadingLists ? (
-              <div className="flex items-center gap-2 text-[#6B4423]">
+              <div className="flex items-center gap-2 text-[var(--text-primary)]">
                 <Loader2 className="w-4 h-4 animate-spin" />
                 Loading student lists...
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="border border-[#C8A27B]/30 rounded-lg p-4">
-                  <h3 className="font-semibold text-[#4A2F19] mb-3">
+                <div className="border border-[var(--border-default)] rounded-lg p-4">
+                  <h3 className="font-semibold text-[var(--brand-primary)] mb-3">
                     All Students ({allStudents.length})
                   </h3>
                   <div className="space-y-2 max-h-72 overflow-y-auto">
@@ -1055,14 +1055,14 @@ const StudentAdmission = () => {
                         return (
                           <div
                             key={id}
-                            className="p-2 rounded border border-[#C8A27B]/20"
+                            className="p-2 rounded border border-[var(--border-subtle)]"
                           >
                             <div className="flex items-center justify-between gap-2">
                               <div>
-                                <p className="font-medium text-[#4A2F19]">
+                                <p className="font-medium text-[var(--brand-primary)]">
                                   {student.name || "Unnamed"}
                                 </p>
-                                <p className="text-xs text-[#6B4423]">
+                                <p className="text-xs text-[var(--text-primary)]">
                                   {student.email || "No email"}
                                 </p>
                               </div>
@@ -1074,7 +1074,7 @@ const StudentAdmission = () => {
                                 onClick={() =>
                                   handleSelectExistingStudent(student)
                                 }
-                                className="text-xs px-2 py-1 rounded bg-[#4A2F19] text-white"
+                                className="text-xs px-2 py-1 rounded bg-[var(--brand-primary)] text-white"
                               >
                                 Select
                               </button>
@@ -1083,7 +1083,7 @@ const StudentAdmission = () => {
                                 onClick={() =>
                                   handleLoadStudentProfile(student)
                                 }
-                                className="text-xs px-2 py-1 rounded bg-[#6B4423] text-white"
+                                className="text-xs px-2 py-1 rounded bg-[var(--brand-primary-hover)] text-white"
                               >
                                 View Details
                               </button>
@@ -1095,8 +1095,8 @@ const StudentAdmission = () => {
                   </div>
                 </div>
 
-                <div className="border border-[#C8A27B]/30 rounded-lg p-4">
-                  <h3 className="font-semibold text-[#4A2F19] mb-3">
+                <div className="border border-[var(--border-default)] rounded-lg p-4">
+                  <h3 className="font-semibold text-[var(--brand-primary)] mb-3">
                     Enrolled Students ({enrolledStudents.length})
                   </h3>
                   <div className="space-y-2 max-h-72 overflow-y-auto">
@@ -1135,41 +1135,41 @@ const StudentAdmission = () => {
             )}
 
             {selectedStudentDetail && (
-              <div className="p-4 rounded-lg border border-[#C8A27B]/30 bg-[#fffaf2]">
-                <h3 className="font-semibold text-[#4A2F19] mb-2">
+              <div className="p-4 rounded-lg border border-[var(--border-default)] bg-[#fffaf2]">
+                <h3 className="font-semibold text-[var(--brand-primary)] mb-2">
                   Student Details Snapshot
                 </h3>
-                <p className="text-sm text-[#4A2F19]">
+                <p className="text-sm text-[var(--brand-primary)]">
                   Name: {selectedStudentDetail.name || "-"}
                 </p>
-                <p className="text-sm text-[#4A2F19]">
+                <p className="text-sm text-[var(--brand-primary)]">
                   Email: {selectedStudentDetail.email || "-"}
                 </p>
-                <p className="text-sm text-[#4A2F19]">
+                <p className="text-sm text-[var(--brand-primary)]">
                   Phone: {selectedStudentDetail.phone || "-"}
                 </p>
-                <p className="text-sm text-[#4A2F19]">
+                <p className="text-sm text-[var(--brand-primary)]">
                   Status: {selectedStudentDetail.status || "-"}
                 </p>
-                <p className="text-sm text-[#4A2F19]">
+                <p className="text-sm text-[var(--brand-primary)]">
                   Course:{" "}
                   {selectedStudentDetail.courseName ||
                     selectedStudentDetail.course?.name ||
                     "-"}
                 </p>
-                <p className="text-sm text-[#4A2F19]">
+                <p className="text-sm text-[var(--brand-primary)]">
                   Batch:{" "}
                   {selectedStudentDetail.batchName ||
                     selectedStudentDetail.batch?.name ||
                     "-"}
                 </p>
-                <p className="text-sm text-[#4A2F19]">
+                <p className="text-sm text-[var(--brand-primary)]">
                   Fees Paid: {formatMoney(selectedStudentDetail.feesPaid)}
                 </p>
-                <p className="text-sm text-[#4A2F19]">
+                <p className="text-sm text-[var(--brand-primary)]">
                   Fees Total: {formatMoney(selectedStudentDetail.feesTotal)}
                 </p>
-                <p className="text-sm text-[#4A2F19]">
+                <p className="text-sm text-[var(--brand-primary)]">
                   Admission Date:{" "}
                   {selectedStudentDetail.admissionDate
                     ? new Date(
@@ -1183,15 +1183,15 @@ const StudentAdmission = () => {
         </div>
 
         <aside className="space-y-4">
-          <section className="bg-white p-5 rounded-xl border border-[#C8A27B]/30 shadow-sm sticky top-4">
+          <section className="bg-white p-5 rounded-xl border border-[var(--border-default)] shadow-sm sticky top-4">
             <div className="flex items-center justify-between mb-3">
-              <h2 className="text-lg font-semibold text-[#4A2F19]">
+              <h2 className="text-lg font-semibold text-[var(--brand-primary)]">
                 Step 3. Registration Summary
               </h2>
               <button
                 type="button"
                 onClick={refreshSummary}
-                className="text-xs px-2 py-1 rounded bg-[#4A2F19] text-white"
+                className="text-xs px-2 py-1 rounded bg-[var(--brand-primary)] text-white"
                 disabled={submitting || !activeStudentId}
               >
                 Refresh
@@ -1203,20 +1203,20 @@ const StudentAdmission = () => {
                 Create or select a student to view summary.
               </p>
             ) : loadingSummary ? (
-              <div className="flex items-center gap-2 text-sm text-[#6B4423]">
+              <div className="flex items-center gap-2 text-sm text-[var(--text-primary)]">
                 <Loader2 className="w-4 h-4 animate-spin" />
                 Loading summary...
               </div>
             ) : (
               <div className="space-y-3 text-sm">
-                <div className="p-3 rounded-lg bg-[#fffaf2] border border-[#C8A27B]/20">
-                  <p className="font-semibold text-[#4A2F19]">
+                <div className="p-3 rounded-lg bg-[#fffaf2] border border-[var(--border-subtle)]">
+                  <p className="font-semibold text-[var(--brand-primary)]">
                     {registrationSummary?.name || activeStudent?.name || "-"}
                   </p>
-                  <p className="text-[#6B4423]">
+                  <p className="text-[var(--text-primary)]">
                     {registrationSummary?.email || activeStudent?.email || "-"}
                   </p>
-                  <p className="text-[#6B4423]">
+                  <p className="text-[var(--text-primary)]">
                     {registrationSummary?.phone || activeStudent?.phone || "-"}
                   </p>
                   <div className="mt-2">
@@ -1227,42 +1227,42 @@ const StudentAdmission = () => {
                 </div>
 
                 <div className="space-y-1">
-                  <p className="text-[#4A2F19]">
+                  <p className="text-[var(--brand-primary)]">
                     <strong>Course:</strong>{" "}
                     {registrationSummary?.courseName ||
                       selectedCourse?.name ||
                       "-"}
                   </p>
-                  <p className="text-[#4A2F19]">
+                  <p className="text-[var(--brand-primary)]">
                     <strong>Batch:</strong>{" "}
                     {registrationSummary?.batchName || "-"}
                   </p>
-                  <p className="text-[#4A2F19]">
+                  <p className="text-[var(--brand-primary)]">
                     <strong>Fees Total:</strong>{" "}
                     {formatMoney(
                       registrationSummary?.feesTotal ?? formData.feesTotal,
                     )}
                   </p>
-                  <p className="text-[#4A2F19]">
+                  <p className="text-[var(--brand-primary)]">
                     <strong>Fees Paid:</strong>{" "}
                     {formatMoney(registrationSummary?.feesPaid)}
                   </p>
-                  <p className="text-[#4A2F19]">
+                  <p className="text-[var(--brand-primary)]">
                     <strong>Fees Remaining:</strong>{" "}
                     {formatMoney(
                       registrationSummary?.feesRemaining ??
                         registrationSummary?.remainingFees,
                     )}
                   </p>
-                  <p className="text-[#4A2F19]">
+                  <p className="text-[var(--brand-primary)]">
                     <strong>Notes:</strong>{" "}
                     {registrationSummary?.notes || formData.notes || "-"}
                   </p>
                 </div>
 
-                <div className="pt-2 border-t border-[#C8A27B]/20">
-                  <p className="font-semibold text-[#4A2F19]">Documents</p>
-                  <p className="text-[#6B4423]">
+                <div className="pt-2 border-t border-[var(--border-subtle)]">
+                  <p className="font-semibold text-[var(--brand-primary)]">Documents</p>
+                  <p className="text-[var(--text-primary)]">
                     {registrationSummary?.uploadedDocumentsCount ??
                       studentDocuments.length}
                     {registrationSummary?.requiredDocumentsCount
@@ -1287,12 +1287,12 @@ const StudentAdmission = () => {
                           return (
                             <div
                               key={fileName}
-                              className="text-xs p-2 rounded border border-[#C8A27B]/20 bg-white"
+                              className="text-xs p-2 rounded border border-[var(--border-subtle)] bg-white"
                             >
-                              <p className="font-medium text-[#4A2F19]">
+                              <p className="font-medium text-[var(--brand-primary)]">
                                 {fileName}
                               </p>
-                              <p className="text-[#6B4423]">
+                              <p className="text-[var(--text-primary)]">
                                 Document ID unavailable
                               </p>
                             </div>
@@ -1302,12 +1302,12 @@ const StudentAdmission = () => {
                         return (
                           <div
                             key={documentId}
-                            className="text-xs p-2 rounded border border-[#C8A27B]/20 bg-white"
+                            className="text-xs p-2 rounded border border-[var(--border-subtle)] bg-white"
                           >
-                            <p className="font-medium text-[#4A2F19]">
+                            <p className="font-medium text-[var(--brand-primary)]">
                               {fileName}
                             </p>
-                            <p className="text-[#6B4423]">
+                            <p className="text-[var(--text-primary)]">
                               Type:{" "}
                               {doc.documentTypeName || doc.documentType || "-"}
                             </p>
@@ -1339,7 +1339,7 @@ const StudentAdmission = () => {
                   </div>
                 </div>
 
-                <div className="pt-2 border-t border-[#C8A27B]/20 text-[#6B4423] text-xs">
+                <div className="pt-2 border-t border-[var(--border-subtle)] text-[var(--text-primary)] text-xs">
                   <div className="flex items-center gap-2">
                     <FileText className="w-3 h-3" /> {studentDocuments.length}{" "}
                     document(s) listed
@@ -1350,9 +1350,9 @@ const StudentAdmission = () => {
                   </div>
                 </div>
 
-                <div className="pt-2 border-t border-[#C8A27B]/20">
-                  <p className="font-semibold text-[#4A2F19]">Cash Payments</p>
-                  <p className="text-[#6B4423]">
+                <div className="pt-2 border-t border-[var(--border-subtle)]">
+                  <p className="font-semibold text-[var(--brand-primary)]">Cash Payments</p>
+                  <p className="text-[var(--text-primary)]">
                     {cashPayments.length} recorded
                   </p>
                   <div className="space-y-2 mt-2 max-h-48 overflow-y-auto">
@@ -1370,21 +1370,21 @@ const StudentAdmission = () => {
                         return (
                           <div
                             key={rowKey}
-                            className="p-2 rounded border border-[#C8A27B]/20 bg-white"
+                            className="p-2 rounded border border-[var(--border-subtle)] bg-white"
                           >
-                            <p className="text-sm font-semibold text-[#4A2F19]">
+                            <p className="text-sm font-semibold text-[var(--brand-primary)]">
                               {formatMoney(payment.amount)}
                             </p>
-                            <p className="text-xs text-[#6B4423]">
+                            <p className="text-xs text-[var(--text-primary)]">
                               Processed by: {payment.processedBy || "-"}
                             </p>
-                            <p className="text-xs text-[#6B4423]">
+                            <p className="text-xs text-[var(--text-primary)]">
                               Paid at:{" "}
                               {payment.paidAt
                                 ? new Date(payment.paidAt).toLocaleString()
                                 : "-"}
                             </p>
-                            <p className="text-xs text-[#6B4423]">
+                            <p className="text-xs text-[var(--text-primary)]">
                               Remarks: {payment.remarks || "-"}
                             </p>
                           </div>

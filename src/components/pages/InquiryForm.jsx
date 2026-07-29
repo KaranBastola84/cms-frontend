@@ -189,19 +189,19 @@ const InquiryForm = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#0F0F0F] py-16">
+    <div className="min-h-screen bg-[var(--bg-sidebar)] py-16">
       {/* Form Section */}
       <div className="container mx-auto px-4">
         <div className="max-w-3xl mx-auto">
           {/* Header */}
           <div className="text-center mb-12 fade-in">
-            <div className="inline-flex items-center justify-center p-5 bg-[#1A1A1A] border border-[#ffffff15] rounded-2xl mb-6 shadow-2xl">
-              <Coffee className="w-10 h-10 text-[#C6A36A]" strokeWidth={2} />
+            <div className="inline-flex items-center justify-center p-5 bg-[#1A1A1A] border border-[var(--border-subtle)] rounded-2xl mb-6 shadow-2xl">
+              <Coffee className="w-10 h-10 text-[var(--brand-accent)]" strokeWidth={2} />
             </div>
             <h1 className="text-4xl md:text-5xl font-heading text-white mb-4 uppercase tracking-widest">
               Course Inquiry
             </h1>
-            <p className="text-[#E0E0E0] text-lg max-w-xl mx-auto font-light leading-relaxed">
+            <p className="text-[var(--text-secondary)] text-lg max-w-xl mx-auto font-light leading-relaxed">
               Interested in mastering the art of coffee? Fill out the form below
               and our admissions team will contact you within 24 hours.
             </p>
@@ -235,7 +235,7 @@ const InquiryForm = () => {
                 className="text-sm font-bold text-white mb-3 flex items-center gap-2 uppercase tracking-widest"
                 htmlFor="fullName"
               >
-                <User className="w-4 h-4 text-[#C6A36A]" />
+                <User className="w-4 h-4 text-[var(--brand-accent)]" />
                 Full Name <span className="text-[#C62828]">*</span>
               </label>
               <input
@@ -267,7 +267,7 @@ const InquiryForm = () => {
                   className="text-sm font-bold text-white mb-3 flex items-center gap-2 uppercase tracking-widest"
                   htmlFor="email"
                 >
-                  <Mail className="w-4 h-4 text-[#C6A36A]" />
+                  <Mail className="w-4 h-4 text-[var(--brand-accent)]" />
                   Email Address <span className="text-[#C62828]">*</span>
                 </label>
                 <input
@@ -297,7 +297,7 @@ const InquiryForm = () => {
                   className="text-sm font-bold text-white mb-3 flex items-center gap-2 uppercase tracking-widest"
                   htmlFor="phoneNumber"
                 >
-                  <Phone className="w-4 h-4 text-[#C6A36A]" />
+                  <Phone className="w-4 h-4 text-[var(--brand-accent)]" />
                   Phone Number <span className="text-[#C62828]">*</span>
                 </label>
                 <input
@@ -329,7 +329,7 @@ const InquiryForm = () => {
                 className="text-sm font-bold text-white mb-3 flex items-center gap-2 uppercase tracking-widest"
                 htmlFor="courseInterest"
               >
-                <BookOpen className="w-4 h-4 text-[#C6A36A]" />
+                <BookOpen className="w-4 h-4 text-[var(--brand-accent)]" />
                 Course of Interest <span className="text-[#C62828]">*</span>
               </label>
               <select
@@ -338,7 +338,7 @@ const InquiryForm = () => {
                 value={formData.courseInterest}
                 onChange={handleChange}
                 required
-                className={`w-full luxury-input cursor-pointer bg-[#0F0F0F] text-white ${
+                className={`w-full luxury-input cursor-pointer bg-[var(--bg-sidebar)] text-white ${
                   validationErrors.courseInterest
                     ? "border-[#C62828] focus:border-[#C62828] bg-[#C62828]/5"
                     : ""
@@ -365,7 +365,7 @@ const InquiryForm = () => {
                 className="text-sm font-bold text-white mb-3 flex items-center gap-2 uppercase tracking-widest"
                 htmlFor="message"
               >
-                <MessageSquare className="w-4 h-4 text-[#C6A36A]" />
+                <MessageSquare className="w-4 h-4 text-[var(--brand-accent)]" />
                 Your Message <span className="text-[#C62828]">*</span>
               </label>
               <textarea
@@ -448,19 +448,19 @@ const InquiryForm = () => {
           </form>
 
           {/* Additional Info */}
-          <div className="mt-12 bg-[#1A1A1A] border border-[#ffffff15] p-8 rounded-2xl shadow-2xl text-center group cursor-default">
+          <div className="mt-12 bg-[#1A1A1A] border border-[var(--border-subtle)] p-8 rounded-2xl shadow-2xl text-center group cursor-default">
             <p className="text-sm text-white mb-3 font-heading uppercase tracking-widest flex items-center justify-center gap-3">
-              <Phone className="w-4 h-4 text-[#C6A36A]" />
+              <Phone className="w-4 h-4 text-[var(--brand-accent)]" />
               Prefer to consult directly?
             </p>
             <a
               href="tel:+9779826320515"
-              className="inline-block text-2xl md:text-3xl font-heading font-normal text-[#C6A36A] hover:text-white transition-colors no-underline mb-3"
+              className="inline-block text-2xl md:text-3xl font-heading font-normal text-[var(--brand-accent)] hover:text-white transition-colors no-underline mb-3"
             >
               +977 9826320515
             </a>
-            <p className="text-xs text-[#E0E0E0] uppercase tracking-wider flex items-center justify-center gap-2 font-medium">
-              <Clock className="w-3 h-3 text-[#C6A36A]" />
+            <p className="text-xs text-[var(--text-secondary)] uppercase tracking-wider flex items-center justify-center gap-2 font-medium">
+              <Clock className="w-3 h-3 text-[var(--brand-accent)]" />
               Admissions Available Mon-Fri, 9 AM - 6 PM
             </p>
           </div>

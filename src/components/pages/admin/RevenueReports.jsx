@@ -166,7 +166,7 @@ function RevenueReports() {
         {(revenueData || courseRevenueData) && (
           <button
             onClick={exportReport}
-            className="px-4 py-2 bg-[#4A2F19] text-white rounded-lg hover:bg-[#3D2817] transition-colors flex items-center"
+            className="px-4 py-2 bg-[var(--brand-primary)] text-white rounded-lg hover:bg-[#3D2817] transition-colors flex items-center"
           >
             <Download className="w-4 h-4 mr-2" />
             Export CSV
@@ -283,7 +283,7 @@ function RevenueReports() {
           <button
             onClick={handleGenerateReport}
             disabled={loading}
-            className="w-full px-6 py-3 bg-[#4A2F19] text-white rounded-lg hover:bg-[#3D2817] transition-colors flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full px-6 py-3 bg-[var(--brand-primary)] text-white rounded-lg hover:bg-[#3D2817] transition-colors flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {loading ? (
               <>
@@ -368,7 +368,7 @@ function RevenueReports() {
                   <span className="text-[#3D2817] font-medium">
                     Total Transactions
                   </span>
-                  <span className="text-lg font-bold text-[#4A2F19]">
+                  <span className="text-lg font-bold text-[var(--brand-primary)]">
                     {toNumber(revenueData.totalTransactions).toLocaleString()}
                   </span>
                 </div>
@@ -415,7 +415,7 @@ function RevenueReports() {
                   <span className="text-[#3D2817] font-medium">
                     Average Transaction
                   </span>
-                  <span className="text-lg font-bold text-[#4A2F19]">
+                  <span className="text-lg font-bold text-[var(--brand-primary)]">
                     $
                     {toNumber(
                       revenueData.averageTransactionValue,
@@ -503,7 +503,7 @@ function RevenueReports() {
                 <span className="text-[#3D2817] font-medium">
                   Revenue per Enrollment
                 </span>
-                <span className="text-lg font-bold text-[#4A2F19]">
+                <span className="text-lg font-bold text-[var(--brand-primary)]">
                   ${courseRevenueData.averageRevenuePerStudent.toLocaleString()}
                 </span>
               </div>

@@ -122,26 +122,26 @@ const StaffVerification = () => {
   };
 
   return (
-    <div className="min-h-[calc(100vh-200px)] flex items-center justify-center p-6 bg-[#0F0F0F]">
-      <div className="luxury-card p-10 w-full max-w-md bg-[#1A1A1A] border-[#ffffff15] fade-in transform transition-transform duration-500 hover:scale-[1.01]">
+    <div className="min-h-[calc(100vh-200px)] flex items-center justify-center p-6 bg-[var(--bg-sidebar)]">
+      <div className="luxury-card p-10 w-full max-w-md bg-[#1A1A1A] border-[var(--border-subtle)] fade-in transform transition-transform duration-500 hover:scale-[1.01]">
         <div className="text-center mb-10">
-          <div className="inline-flex items-center justify-center p-5 bg-[#0F0F0F] rounded-2xl mb-6 shadow-[0_4px_20px_rgba(0,0,0,0.5)] border border-[#ffffff10]">
-            <ShieldCheck className="w-10 h-10 text-[#C6A36A]" strokeWidth={2} />
+          <div className="inline-flex items-center justify-center p-5 bg-[var(--bg-sidebar)] rounded-2xl mb-6 shadow-[0_4px_20px_rgba(0,0,0,0.5)] border border-[var(--border-subtle)]">
+            <ShieldCheck className="w-10 h-10 text-[var(--brand-accent)]" strokeWidth={2} />
           </div>
           <h2 className="text-3xl font-heading font-normal text-white mb-3 uppercase tracking-widest">
             Staff Verification
           </h2>
-          <p className="text-sm text-[#E0E0E0] font-light tracking-wide">
+          <p className="text-sm text-[var(--text-secondary)] font-light tracking-wide">
             Verify your OTP and set your password
           </p>
         </div>
 
         {/* Info Banner */}
-        <div className="bg-[#0F0F0F] border border-[#ffffff10] rounded-lg p-4 mb-8">
+        <div className="bg-[var(--bg-sidebar)] border border-[var(--border-subtle)] rounded-lg p-4 mb-8">
           <div className="flex gap-3">
-            <AlertCircle className="w-5 h-5 text-[#C6A36A] shrink-0 mt-0.5" />
-            <div className="text-sm text-[#CCCCCC]">
-              <p className="font-heading uppercase tracking-widest text-[#E0E0E0] mb-2 text-xs">Important:</p>
+            <AlertCircle className="w-5 h-5 text-[var(--brand-accent)] shrink-0 mt-0.5" />
+            <div className="text-sm text-[var(--text-secondary)]">
+              <p className="font-heading uppercase tracking-widest text-[var(--text-secondary)] mb-2 text-xs">Important:</p>
               <ul className="list-disc list-inside space-y-1 font-light text-[13px] leading-relaxed">
                 <li>Check your email for the 6-digit verification code</li>
                 <li>Code remains valid for 15 minutes</li>
@@ -158,7 +158,7 @@ const StaffVerification = () => {
               htmlFor="email"
               className="text-xs font-bold text-white flex items-center gap-2 uppercase tracking-widest"
             >
-              <Mail className="w-4 h-4 text-[#C6A36A]" />
+              <Mail className="w-4 h-4 text-[var(--brand-accent)]" />
               Email Address
             </label>
             <input
@@ -190,7 +190,7 @@ const StaffVerification = () => {
               htmlFor="otp"
               className="text-xs font-bold text-white flex items-center gap-2 uppercase tracking-widest"
             >
-              <KeyRound className="w-4 h-4 text-[#C6A36A]" />
+              <KeyRound className="w-4 h-4 text-[var(--brand-accent)]" />
               6-Digit Code
             </label>
             <input
@@ -224,7 +224,7 @@ const StaffVerification = () => {
               htmlFor="password"
               className="text-xs font-bold text-white flex items-center gap-2 uppercase tracking-widest"
             >
-              <Lock className="w-4 h-4 text-[#C6A36A]" />
+              <Lock className="w-4 h-4 text-[var(--brand-accent)]" />
               New Password
             </label>
             <input
@@ -256,7 +256,7 @@ const StaffVerification = () => {
               htmlFor="confirmPassword"
               className="text-xs font-bold text-white flex items-center gap-2 uppercase tracking-widest"
             >
-              <CheckCircle className="w-4 h-4 text-[#C6A36A]" />
+              <CheckCircle className="w-4 h-4 text-[var(--brand-accent)]" />
               Confirm Password
             </label>
             <input
@@ -292,7 +292,7 @@ const StaffVerification = () => {
           >
             {loading ? (
               <>
-                <Loader2 className="w-4 h-4 animate-spin text-[#1A1A1A]" />
+                <Loader2 className="w-4 h-4 animate-spin text-[var(--text-primary)]" />
                 Verifying...
               </>
             ) : (
@@ -305,12 +305,12 @@ const StaffVerification = () => {
         </form>
 
         {/* Additional Info */}
-        <div className="mt-8 pt-8 border-t border-[#ffffff10] text-center">
+        <div className="mt-8 pt-8 border-t border-[var(--border-subtle)] text-center">
           <p className="text-[10px] text-[#808080] uppercase tracking-widest mb-3">
             Already authenticated?{" "}
             <a
               href="/login"
-              className="text-[#E0E0E0] font-bold hover:text-[#C6A36A] transition-colors ml-1"
+              className="text-[var(--text-secondary)] font-bold hover:text-[var(--brand-accent)] transition-colors ml-1"
             >
               Sign In
             </a>

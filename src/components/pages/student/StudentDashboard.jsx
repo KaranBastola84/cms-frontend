@@ -240,7 +240,7 @@ function StudentDashboard() {
           </div>
 
           <div className="flex flex-wrap items-center gap-2">
-            <label className="text-sm text-[#6B4423] font-semibold">
+            <label className="text-sm text-[var(--text-primary)] font-semibold">
               Overview Limit
             </label>
             <select
@@ -255,7 +255,7 @@ function StudentDashboard() {
               ))}
             </select>
 
-            <label className="text-sm text-[#6B4423] font-semibold ml-2">
+            <label className="text-sm text-[var(--text-primary)] font-semibold ml-2">
               Timeline Limit
             </label>
             <select
@@ -273,7 +273,7 @@ function StudentDashboard() {
             <button
               onClick={() => fetchDashboard({ silent: true })}
               disabled={refreshing}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[#4A2F19] text-white hover:bg-[#3D2817] disabled:opacity-60"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[var(--brand-primary)] text-white hover:bg-[#3D2817] disabled:opacity-60"
             >
               {refreshing ? (
                 <Loader2 className="w-4 h-4 animate-spin" />
@@ -323,16 +323,16 @@ function StudentDashboard() {
                   {item.label}
                 </p>
                 {index % 4 === 0 && (
-                  <BookOpen className="w-5 h-5 text-[#4A2F19]" />
+                  <BookOpen className="w-5 h-5 text-[var(--brand-primary)]" />
                 )}
                 {index % 4 === 1 && (
-                  <CreditCard className="w-5 h-5 text-[#4A2F19]" />
+                  <CreditCard className="w-5 h-5 text-[var(--brand-primary)]" />
                 )}
                 {index % 4 === 2 && (
-                  <Calendar className="w-5 h-5 text-[#4A2F19]" />
+                  <Calendar className="w-5 h-5 text-[var(--brand-primary)]" />
                 )}
                 {index % 4 === 3 && (
-                  <FileText className="w-5 h-5 text-[#4A2F19]" />
+                  <FileText className="w-5 h-5 text-[var(--brand-primary)]" />
                 )}
               </div>
               <p className="text-2xl font-bold text-[#2C1C14] mt-3 mb-0">
@@ -351,7 +351,7 @@ function StudentDashboard() {
 
       <div className="bg-white rounded-xl border border-[#E8DCC8] p-5 shadow-sm">
         <div className="flex items-center gap-2 mb-4">
-          <Clock className="w-5 h-5 text-[#4A2F19]" />
+          <Clock className="w-5 h-5 text-[var(--brand-primary)]" />
           <h2 className="text-lg font-bold text-[#2C1C14] m-0">
             Quick Actions
           </h2>
@@ -411,7 +411,7 @@ function StudentDashboard() {
             <div className="space-y-2 text-sm">
               {detailItems.map((item) => (
                 <div key={item.key} className="flex justify-between gap-4">
-                  <span className="text-[#6B4423]">{item.label}</span>
+                  <span className="text-[var(--text-primary)]">{item.label}</span>
                   <span className="font-semibold text-[#2C1C14] text-right">
                     {item.value}
                   </span>
@@ -472,7 +472,7 @@ function StudentDashboard() {
                       {normalizedActionUrl && (
                         <Link
                           to={normalizedActionUrl}
-                          className="inline-flex items-center gap-1 text-sm font-semibold text-[#4A2F19] hover:text-[#3D2817]"
+                          className="inline-flex items-center gap-1 text-sm font-semibold text-[var(--brand-primary)] hover:text-[#3D2817]"
                         >
                           Open
                           <ArrowUpRight className="w-4 h-4" />
@@ -483,7 +483,7 @@ function StudentDashboard() {
                     <p className="font-semibold text-[#2C1C14] m-0 mt-2">
                       {event?.title || event?.message || "Update"}
                     </p>
-                    <p className="text-sm text-[#6B4423] m-0 mt-1">
+                    <p className="text-sm text-[var(--text-primary)] m-0 mt-1">
                       {event?.description || "-"}
                     </p>
                     <p className="text-xs text-[#8B6F47] m-0 mt-1">
@@ -506,9 +506,9 @@ function StudentDashboard() {
             >
               <div className="flex items-center gap-2 mb-4">
                 {sectionIndex % 2 === 0 ? (
-                  <BookOpen className="w-5 h-5 text-[#4A2F19]" />
+                  <BookOpen className="w-5 h-5 text-[var(--brand-primary)]" />
                 ) : (
-                  <User className="w-5 h-5 text-[#4A2F19]" />
+                  <User className="w-5 h-5 text-[var(--brand-primary)]" />
                 )}
                 <h3 className="text-lg font-bold text-[#2C1C14] m-0">
                   {section.label}
@@ -566,7 +566,7 @@ function StudentDashboard() {
                           {extraFields.map(([key, value]) => (
                             <p
                               key={key}
-                              className="text-xs text-[#6B4423] m-0 mt-1"
+                              className="text-xs text-[var(--text-primary)] m-0 mt-1"
                             >
                               {toLabel(key)}: {formatValue(value)}
                             </p>

@@ -5,10 +5,10 @@ const StudentManagement = () => {
   return (
     <div className="space-y-4">
       <div>
-        <h1 className="text-3xl font-bold text-[#1A1A1A] mb-2">
+        <h1 className="text-3xl font-bold text-[var(--text-primary)] mb-2">
           Student Management
         </h1>
-        <p className="text-[#6B4423]">
+        <p className="text-[var(--text-primary)]">
           View, filter, and manage student records including enrolled students.
         </p>
       </div>

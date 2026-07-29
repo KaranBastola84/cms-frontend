@@ -261,8 +261,8 @@ const Inquiries = () => {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="flex flex-col items-center gap-4">
-          <RefreshCw className="w-8 h-8 text-[#4A2F19] animate-spin" />
-          <p className="text-[#4A2F19] font-semibold">Loading inquiries...</p>
+          <RefreshCw className="w-8 h-8 text-[var(--brand-primary)] animate-spin" />
+          <p className="text-[var(--brand-primary)] font-semibold">Loading inquiries...</p>
         </div>
       </div>
     );
@@ -275,10 +275,10 @@ const Inquiries = () => {
         <div className="mb-6">
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h1 className="text-3xl font-bold text-[#1A1A1A] mb-2">
+              <h1 className="text-3xl font-bold text-[var(--text-primary)] mb-2">
                 Inquiries & Follow-ups
               </h1>
-              <p className="text-[#6B4423]">
+              <p className="text-[var(--text-primary)]">
                 Manage and track course inquiries ({filteredInquiries.length}{" "}
                 inquiries)
               </p>
@@ -296,27 +296,27 @@ const Inquiries = () => {
           </div>
 
           {/* Filters */}
-          <div className="bg-white rounded-xl shadow-coffee-md p-4 border border-[#C8A27B]/30">
+          <div className="bg-white rounded-xl shadow-coffee-md p-4 border border-[var(--border-default)]">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {/* Search */}
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#6B4423]" />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--text-primary)]" />
                 <input
                   type="text"
                   placeholder="Search by name, email, or phone..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 border-2 border-[#C8A27B]/40 rounded-lg bg-[#F8F4EE] focus:outline-none focus:border-[#4A2F19] transition-colors"
+                  className="w-full pl-10 pr-4 py-2 border-2 border-[var(--brand-accent)]/40 rounded-lg bg-[#F8F4EE] focus:outline-none focus:border-[#4A2F19] transition-colors"
                 />
               </div>
 
               {/* Status Filter */}
               <div className="relative">
-                <Filter className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#6B4423]" />
+                <Filter className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--text-primary)]" />
                 <select
                   value={statusFilter}
                   onChange={(e) => setStatusFilter(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 border-2 border-[#C8A27B]/40 rounded-lg bg-[#F8F4EE] focus:outline-none focus:border-[#4A2F19] transition-colors appearance-none cursor-pointer"
+                  className="w-full pl-10 pr-4 py-2 border-2 border-[var(--brand-accent)]/40 rounded-lg bg-[#F8F4EE] focus:outline-none focus:border-[#4A2F19] transition-colors appearance-none cursor-pointer"
                 >
                   <option value="">All Status</option>
                   {statuses.map((status) => (
@@ -329,11 +329,11 @@ const Inquiries = () => {
 
               {/* Assigned To Filter */}
               <div className="relative">
-                <Filter className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#6B4423]" />
+                <Filter className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--text-primary)]" />
                 <select
                   value={assignedFilter}
                   onChange={(e) => setAssignedFilter(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 border-2 border-[#C8A27B]/40 rounded-lg bg-[#F8F4EE] focus:outline-none focus:border-[#4A2F19] transition-colors appearance-none cursor-pointer"
+                  className="w-full pl-10 pr-4 py-2 border-2 border-[var(--brand-accent)]/40 rounded-lg bg-[#F8F4EE] focus:outline-none focus:border-[#4A2F19] transition-colors appearance-none cursor-pointer"
                 >
                   <option value="">All Assigned</option>
                   {staff.map((member) => (
@@ -348,27 +348,27 @@ const Inquiries = () => {
         </div>
 
         {/* Inquiries Table */}
-        <div className="bg-white rounded-xl shadow-coffee-md border border-[#C8A27B]/30 overflow-hidden">
+        <div className="bg-white rounded-xl shadow-coffee-md border border-[var(--border-default)] overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-[#EFE7D3] border-b-2 border-[#C8A27B]">
+              <thead className="bg-[var(--bg-surface-alt)] border-b-2 border-[var(--brand-accent)]">
                 <tr>
-                  <th className="px-6 py-4 text-left text-sm font-bold text-[#1A1A1A]">
+                  <th className="px-6 py-4 text-left text-sm font-bold text-[var(--text-primary)]">
                     Inquirer
                   </th>
-                  <th className="px-6 py-4 text-left text-sm font-bold text-[#1A1A1A]">
+                  <th className="px-6 py-4 text-left text-sm font-bold text-[var(--text-primary)]">
                     Course Interest
                   </th>
-                  <th className="px-6 py-4 text-left text-sm font-bold text-[#1A1A1A]">
+                  <th className="px-6 py-4 text-left text-sm font-bold text-[var(--text-primary)]">
                     Status
                   </th>
-                  <th className="px-6 py-4 text-left text-sm font-bold text-[#1A1A1A]">
+                  <th className="px-6 py-4 text-left text-sm font-bold text-[var(--text-primary)]">
                     Assigned To
                   </th>
-                  <th className="px-6 py-4 text-left text-sm font-bold text-[#1A1A1A]">
+                  <th className="px-6 py-4 text-left text-sm font-bold text-[var(--text-primary)]">
                     Submitted
                   </th>
-                  <th className="px-6 py-4 text-left text-sm font-bold text-[#1A1A1A]">
+                  <th className="px-6 py-4 text-left text-sm font-bold text-[var(--text-primary)]">
                     Actions
                   </th>
                 </tr>
@@ -378,8 +378,8 @@ const Inquiries = () => {
                   <tr>
                     <td colSpan="6" className="px-6 py-12 text-center">
                       <div className="flex flex-col items-center gap-3">
-                        <MessageSquare className="w-16 h-16 text-[#C8A27B] opacity-50" />
-                        <p className="text-[#6B4423] font-semibold">
+                        <MessageSquare className="w-16 h-16 text-[var(--brand-accent)] opacity-50" />
+                        <p className="text-[var(--text-primary)] font-semibold">
                           No inquiries found
                         </p>
                       </div>
@@ -393,18 +393,18 @@ const Inquiries = () => {
                     >
                       <td className="px-6 py-4">
                         <div>
-                          <p className="font-semibold text-[#1A1A1A]">
+                          <p className="font-semibold text-[var(--text-primary)]">
                             {inquiry.fullName}
                           </p>
-                          <p className="text-sm text-[#6B4423]">
+                          <p className="text-sm text-[var(--text-primary)]">
                             {inquiry.email}
                           </p>
-                          <p className="text-sm text-[#6B4423]">
+                          <p className="text-sm text-[var(--text-primary)]">
                             {inquiry.phoneNumber}
                           </p>
                         </div>
                       </td>
-                      <td className="px-6 py-4 text-[#4A2F19]">
+                      <td className="px-6 py-4 text-[var(--brand-primary)]">
                         {inquiry.courseInterest || "Not specified"}
                       </td>
                       <td className="px-6 py-4">
@@ -418,20 +418,20 @@ const Inquiries = () => {
                       </td>
                       <td className="px-6 py-4">
                         {inquiry.assignedTo ? (
-                          <span className="text-sm text-[#4A2F19] font-semibold">
+                          <span className="text-sm text-[var(--brand-primary)] font-semibold">
                             {`${inquiry.assignedTo.firstName} ${inquiry.assignedTo.lastName}`}
                           </span>
                         ) : inquiry.assignedToUsername ? (
-                          <span className="text-sm text-[#4A2F19] font-semibold">
+                          <span className="text-sm text-[var(--brand-primary)] font-semibold">
                             {inquiry.assignedToUsername}
                           </span>
                         ) : (
-                          <span className="text-sm text-[#6B4423] italic">
+                          <span className="text-sm text-[var(--text-primary)] italic">
                             Unassigned
                           </span>
                         )}
                       </td>
-                      <td className="px-6 py-4 text-sm text-[#6B4423]">
+                      <td className="px-6 py-4 text-sm text-[var(--text-primary)]">
                         {formatDate(inquiry.submittedAt)}
                       </td>
                       <td className="px-6 py-4">
@@ -491,21 +491,21 @@ const Inquiries = () => {
 
           {/* Pagination */}
           {totalPages > 1 && (
-            <div className="px-6 py-4 bg-[#EFE7D3] border-t border-[#C8A27B]/30 flex items-center justify-between">
+            <div className="px-6 py-4 bg-[var(--bg-surface-alt)] border-t border-[var(--border-default)] flex items-center justify-between">
               <button
                 onClick={() => setPage(page - 1)}
                 disabled={page === 1}
-                className="px-4 py-2 bg-white text-[#4A2F19] font-semibold rounded-lg hover:bg-[#F8F4EE] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="px-4 py-2 bg-white text-[var(--brand-primary)] font-semibold rounded-lg hover:bg-[#F8F4EE] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 Previous
               </button>
-              <span className="text-[#4A2F19] font-semibold">
+              <span className="text-[var(--brand-primary)] font-semibold">
                 Page {page} of {totalPages}
               </span>
               <button
                 onClick={() => setPage(page + 1)}
                 disabled={page === totalPages}
-                className="px-4 py-2 bg-white text-[#4A2F19] font-semibold rounded-lg hover:bg-[#F8F4EE] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="px-4 py-2 bg-white text-[var(--brand-primary)] font-semibold rounded-lg hover:bg-[#F8F4EE] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 Next
               </button>
@@ -519,7 +519,7 @@ const Inquiries = () => {
         <div className="fixed inset-0 backdrop-blur-md fbackdrop-blur-mdlex items-center justify-center z-50 p-4 overflow-y-auto">
           <div className="bg-white rounded-xl shadow-2xl max-w-3xl w-full p-6 my-8">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-xl font-bold text-[#1A1A1A]">
+              <h3 className="text-xl font-bold text-[var(--text-primary)]">
                 Inquiry Details
               </h3>
               <button
@@ -528,7 +528,7 @@ const Inquiries = () => {
                   setSelectedInquiry(null);
                   setFollowUps([]);
                 }}
-                className="text-[#6B4423] hover:text-[#1A1A1A]"
+                className="text-[var(--text-primary)] hover:text-[var(--text-primary)]"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -537,31 +537,31 @@ const Inquiries = () => {
             <div className="space-y-4 mb-6">
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <p className="text-sm text-[#6B4423] font-semibold">
+                  <p className="text-sm text-[var(--text-primary)] font-semibold">
                     Full Name
                   </p>
-                  <p className="text-[#1A1A1A]">{selectedInquiry.fullName}</p>
+                  <p className="text-[var(--text-primary)]">{selectedInquiry.fullName}</p>
                 </div>
                 <div>
-                  <p className="text-sm text-[#6B4423] font-semibold">Email</p>
-                  <p className="text-[#1A1A1A]">{selectedInquiry.email}</p>
+                  <p className="text-sm text-[var(--text-primary)] font-semibold">Email</p>
+                  <p className="text-[var(--text-primary)]">{selectedInquiry.email}</p>
                 </div>
                 <div>
-                  <p className="text-sm text-[#6B4423] font-semibold">Phone</p>
-                  <p className="text-[#1A1A1A]">
+                  <p className="text-sm text-[var(--text-primary)] font-semibold">Phone</p>
+                  <p className="text-[var(--text-primary)]">
                     {selectedInquiry.phoneNumber}
                   </p>
                 </div>
                 <div>
-                  <p className="text-sm text-[#6B4423] font-semibold">
+                  <p className="text-sm text-[var(--text-primary)] font-semibold">
                     Course Interest
                   </p>
-                  <p className="text-[#1A1A1A]">
+                  <p className="text-[var(--text-primary)]">
                     {selectedInquiry.courseInterest || "N/A"}
                   </p>
                 </div>
                 <div>
-                  <p className="text-sm text-[#6B4423] font-semibold">Status</p>
+                  <p className="text-sm text-[var(--text-primary)] font-semibold">Status</p>
                   <span
                     className={`inline-flex items-center px-3 py-1 rounded-lg text-xs font-bold ${getStatusBadge(selectedInquiry.status).color}`}
                   >
@@ -569,10 +569,10 @@ const Inquiries = () => {
                   </span>
                 </div>
                 <div>
-                  <p className="text-sm text-[#6B4423] font-semibold">
+                  <p className="text-sm text-[var(--text-primary)] font-semibold">
                     Assigned To
                   </p>
-                  <p className="text-[#1A1A1A]">
+                  <p className="text-[var(--text-primary)]">
                     {selectedInquiry.assignedTo
                       ? `${selectedInquiry.assignedTo.firstName} ${selectedInquiry.assignedTo.lastName}`
                       : selectedInquiry.assignedToUsername || "Unassigned"}
@@ -581,20 +581,20 @@ const Inquiries = () => {
               </div>
 
               <div>
-                <p className="text-sm text-[#6B4423] font-semibold mb-1">
+                <p className="text-sm text-[var(--text-primary)] font-semibold mb-1">
                   Message
                 </p>
-                <p className="text-[#1A1A1A] bg-[#F8F4EE] p-3 rounded-lg">
+                <p className="text-[var(--text-primary)] bg-[#F8F4EE] p-3 rounded-lg">
                   {selectedInquiry.message}
                 </p>
               </div>
 
               {selectedInquiry.responseNotes && (
                 <div>
-                  <p className="text-sm text-[#6B4423] font-semibold mb-1">
+                  <p className="text-sm text-[var(--text-primary)] font-semibold mb-1">
                     Response Notes
                   </p>
-                  <p className="text-[#1A1A1A] bg-[#F8F4EE] p-3 rounded-lg">
+                  <p className="text-[var(--text-primary)] bg-[#F8F4EE] p-3 rounded-lg">
                     {selectedInquiry.responseNotes}
                   </p>
                 </div>
@@ -602,8 +602,8 @@ const Inquiries = () => {
             </div>
 
             {/* Follow-ups Section */}
-            <div className="border-t border-[#C8A27B]/30 pt-4">
-              <h4 className="font-bold text-[#1A1A1A] mb-3 flex items-center gap-2">
+            <div className="border-t border-[var(--border-default)] pt-4">
+              <h4 className="font-bold text-[var(--text-primary)] mb-3 flex items-center gap-2">
                 <MessageCircle className="w-5 h-5" />
                 Follow-up Notes
               </h4>
@@ -615,7 +615,7 @@ const Inquiries = () => {
                   placeholder="Add a follow-up note..."
                   value={followUpNote}
                   onChange={(e) => setFollowUpNote(e.target.value)}
-                  className="flex-1 px-4 py-2 border-2 border-[#C8A27B]/40 rounded-lg focus:outline-none focus:border-[#4A2F19]"
+                  className="flex-1 px-4 py-2 border-2 border-[var(--brand-accent)]/40 rounded-lg focus:outline-none focus:border-[#4A2F19]"
                   disabled={actionLoading}
                 />
                 <button
@@ -631,7 +631,7 @@ const Inquiries = () => {
               {/* Follow-ups List */}
               <div className="space-y-2 max-h-60 overflow-y-auto">
                 {followUps.length === 0 ? (
-                  <p className="text-[#6B4423] text-sm italic text-center py-4">
+                  <p className="text-[var(--text-primary)] text-sm italic text-center py-4">
                     No follow-up notes yet
                   </p>
                 ) : (
@@ -640,8 +640,8 @@ const Inquiries = () => {
                       key={followUp.id}
                       className="bg-[#F8F4EE] p-3 rounded-lg"
                     >
-                      <p className="text-[#1A1A1A] text-sm">{followUp.note}</p>
-                      <div className="flex items-center gap-2 mt-2 text-xs text-[#6B4423]">
+                      <p className="text-[var(--text-primary)] text-sm">{followUp.note}</p>
+                      <div className="flex items-center gap-2 mt-2 text-xs text-[var(--text-primary)]">
                         <span className="font-semibold">
                           {followUp.createdBy
                             ? `${followUp.createdBy.firstName} ${followUp.createdBy.lastName}`
@@ -664,7 +664,7 @@ const Inquiries = () => {
         <div className="fixed inset-0 backdrop-blur-md bg-opacity-50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-xl shadow-2xl max-w-md w-full p-6">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-xl font-bold text-[#1A1A1A]">
+              <h3 className="text-xl font-bold text-[var(--text-primary)]">
                 Update Status
               </h3>
               <button
@@ -672,7 +672,7 @@ const Inquiries = () => {
                   setShowStatusModal(false);
                   setSelectedInquiry(null);
                 }}
-                className="text-[#6B4423] hover:text-[#1A1A1A]"
+                className="text-[var(--text-primary)] hover:text-[var(--text-primary)]"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -680,7 +680,7 @@ const Inquiries = () => {
 
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-semibold text-[#4A2F19] mb-2">
+                <label className="block text-sm font-semibold text-[var(--brand-primary)] mb-2">
                   Status
                 </label>
                 <select
@@ -688,7 +688,7 @@ const Inquiries = () => {
                   onChange={(e) =>
                     setStatusData({ ...statusData, status: e.target.value })
                   }
-                  className="w-full px-4 py-3 border-2 border-[#C8A27B]/40 rounded-xl bg-[#F8F4EE] focus:outline-none focus:border-[#4A2F19]"
+                  className="w-full px-4 py-3 border-2 border-[var(--brand-accent)]/40 rounded-xl bg-[#F8F4EE] focus:outline-none focus:border-[#4A2F19]"
                 >
                   <option value="">Select status</option>
                   {statuses.map((status) => (
@@ -700,7 +700,7 @@ const Inquiries = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-[#4A2F19] mb-2">
+                <label className="block text-sm font-semibold text-[var(--brand-primary)] mb-2">
                   Response Notes (Optional)
                 </label>
                 <textarea
@@ -712,7 +712,7 @@ const Inquiries = () => {
                     })
                   }
                   rows={4}
-                  className="w-full px-4 py-3 border-2 border-[#C8A27B]/40 rounded-xl bg-[#F8F4EE] focus:outline-none focus:border-[#4A2F19]"
+                  className="w-full px-4 py-3 border-2 border-[var(--brand-accent)]/40 rounded-xl bg-[#F8F4EE] focus:outline-none focus:border-[#4A2F19]"
                   placeholder="Add any notes about this status update..."
                 />
               </div>
@@ -751,7 +751,7 @@ const Inquiries = () => {
         <div className="fixed inset-0 backdrop-blur-md bg-opacity-50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-xl shadow-2xl max-w-md w-full p-6">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-xl font-bold text-[#1A1A1A]">
+              <h3 className="text-xl font-bold text-[var(--text-primary)]">
                 Assign Inquiry
               </h3>
               <button
@@ -759,20 +759,20 @@ const Inquiries = () => {
                   setShowAssignModal(false);
                   setSelectedInquiry(null);
                 }}
-                className="text-[#6B4423] hover:text-[#1A1A1A]"
+                className="text-[var(--text-primary)] hover:text-[var(--text-primary)]"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
             <div className="mb-6">
-              <label className="block text-sm font-semibold text-[#4A2F19] mb-2">
+              <label className="block text-sm font-semibold text-[var(--brand-primary)] mb-2">
                 Assign To
               </label>
               <select
                 value={assignedToId}
                 onChange={(e) => setAssignedToId(e.target.value)}
-                className="w-full px-4 py-3 border-2 border-[#C8A27B]/40 rounded-xl bg-[#F8F4EE] focus:outline-none focus:border-[#4A2F19]"
+                className="w-full px-4 py-3 border-2 border-[var(--brand-accent)]/40 rounded-xl bg-[#F8F4EE] focus:outline-none focus:border-[#4A2F19]"
               >
                 <option value="">Select staff member</option>
                 {staff.map((member) => (
@@ -816,7 +816,7 @@ const Inquiries = () => {
         <div className="fixed inset-0 backdrop-blur-md  bg-opacity-50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-xl shadow-2xl max-w-md w-full p-6">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-xl font-bold text-[#1A1A1A]">
+              <h3 className="text-xl font-bold text-[var(--text-primary)]">
                 Delete Inquiry
               </h3>
               <button
@@ -824,21 +824,21 @@ const Inquiries = () => {
                   setShowDeleteModal(false);
                   setSelectedInquiry(null);
                 }}
-                className="text-[#6B4423] hover:text-[#1A1A1A]"
+                className="text-[var(--text-primary)] hover:text-[var(--text-primary)]"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
             <div className="mb-6">
-              <p className="text-[#6B4423] mb-3">
+              <p className="text-[var(--text-primary)] mb-3">
                 Are you sure you want to delete this inquiry?
               </p>
               <div className="bg-[#F8F4EE] p-4 rounded-lg">
-                <p className="font-bold text-[#1A1A1A]">
+                <p className="font-bold text-[var(--text-primary)]">
                   {selectedInquiry.fullName}
                 </p>
-                <p className="text-sm text-[#6B4423]">
+                <p className="text-sm text-[var(--text-primary)]">
                   {selectedInquiry.email}
                 </p>
               </div>

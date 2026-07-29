@@ -58,17 +58,17 @@ const ProductReview = ({ productId }) => {
     <div className="space-y-12">
       <div className="grid md:grid-cols-2 gap-12">
         {/* Review Form */}
-        <div className="bg-[#0F0F0F] p-8 rounded-2xl border border-[#ffffff05] shadow-xl h-fit">
-          <h3 className="text-xl font-heading font-bold text-white mb-2 uppercase tracking-widest">
+        <div className="bg-[var(--bg-surface)] p-8 rounded-2xl border border-[var(--border-subtle)] shadow-lg h-fit">
+          <h3 className="text-xl font-heading font-bold text-[var(--text-primary)] mb-2 uppercase tracking-widest">
             Share Your Experience
           </h3>
-          <p className="text-[#A0A0A0] text-sm mb-8 font-light tracking-wide italic">
+          <p className="text-[var(--text-secondary)] text-sm mb-8 tracking-wide">
             Your feedback helps us maintain our standards of excellence.
           </p>
           
           <form onSubmit={handleSubmit} className="space-y-5">
             <div className="space-y-1.5">
-              <label className="text-[10px] font-bold text-[#C6A36A] uppercase tracking-[0.2em] ml-2">Guest Name</label>
+              <label className="text-[10px] font-bold text-[var(--brand-primary)] uppercase tracking-[0.2em] ml-2">Guest Name</label>
               <input
                 type="text"
                 name="customerName"
@@ -76,12 +76,12 @@ const ProductReview = ({ productId }) => {
                 onChange={handleChange}
                 placeholder="Ex: John Smith"
                 required
-                className="luxury-input !rounded-xl !bg-[#1A1A1A] !border-[#ffffff10]"
+                className="w-full px-4 py-3 bg-[var(--bg-page)] border border-[var(--border-subtle)] rounded-xl focus:border-[var(--brand-primary)] focus:outline-none transition-colors"
               />
             </div>
 
             <div className="space-y-1.5">
-              <label className="text-[10px] font-bold text-[#C6A36A] uppercase tracking-[0.2em] ml-2">Email Address</label>
+              <label className="text-[10px] font-bold text-[var(--brand-primary)] uppercase tracking-[0.2em] ml-2">Email Address</label>
               <input
                 type="email"
                 name="customerEmail"
@@ -89,20 +89,20 @@ const ProductReview = ({ productId }) => {
                 onChange={handleChange}
                 placeholder="john@example.com"
                 required
-                className="luxury-input !rounded-xl !bg-[#1A1A1A] !border-[#ffffff10]"
+                className="w-full px-4 py-3 bg-[var(--bg-page)] border border-[var(--border-subtle)] rounded-xl focus:border-[var(--brand-primary)] focus:outline-none transition-colors"
               />
             </div>
 
             <div className="space-y-1.5">
-              <label className="text-[10px] font-bold text-[#C6A36A] uppercase tracking-[0.2em] ml-2">Product Rating</label>
+              <label className="text-[10px] font-bold text-[var(--brand-primary)] uppercase tracking-[0.2em] ml-2">Product Rating</label>
               <select
                 name="rating"
                 value={form.rating}
                 onChange={handleChange}
-                className="luxury-input !rounded-xl !bg-[#1A1A1A] !border-[#ffffff10] appearance-none"
+                className="w-full px-4 py-3 bg-[var(--bg-page)] border border-[var(--border-subtle)] rounded-xl focus:border-[var(--brand-primary)] focus:outline-none transition-colors appearance-none"
               >
                 {[5, 4, 3, 2, 1].map((r) => (
-                  <option key={r} value={r} className="bg-[#1A1A1A]">
+                  <option key={r} value={r} className="bg-[var(--bg-page)] text-[var(--text-primary)]">
                     {r} {r === 5 ? "Exceptional" : r === 4 ? "Excellent" : r === 3 ? "Satisfactory" : r === 2 ? "Fair" : "Poor"} ({r} Star{r > 1 ? "s" : ""})
                   </option>
                 ))}
@@ -110,7 +110,7 @@ const ProductReview = ({ productId }) => {
             </div>
 
             <div className="space-y-1.5">
-              <label className="text-[10px] font-bold text-[#C6A36A] uppercase tracking-[0.2em] ml-2">Your Testimonial</label>
+              <label className="text-[10px] font-bold text-[var(--brand-primary)] uppercase tracking-[0.2em] ml-2">Your Testimonial</label>
               <textarea
                 name="reviewText"
                 value={form.reviewText}
@@ -118,13 +118,13 @@ const ProductReview = ({ productId }) => {
                 placeholder="Describe your journey with this selection..."
                 required
                 rows={4}
-                className="luxury-input !rounded-xl !bg-[#1A1A1A] !border-[#ffffff10] resize-none"
+                className="w-full px-4 py-3 bg-[var(--bg-page)] border border-[var(--border-subtle)] rounded-xl focus:border-[var(--brand-primary)] focus:outline-none transition-colors resize-none"
               />
             </div>
 
             <button
               type="submit"
-              className="w-full btn-gold-primary py-4 text-xs font-black tracking-[0.3em] uppercase transform active:scale-95 mt-4"
+              className="w-full btn-primary py-4 text-xs font-bold tracking-[0.3em] uppercase transform active:scale-95 mt-4 shadow-md"
             >
               Submit Testimonial
             </button>
@@ -133,43 +133,43 @@ const ProductReview = ({ productId }) => {
 
         {/* Reviews List */}
         <div className="flex flex-col">
-          <h3 className="text-xl font-heading font-bold text-white mb-8 uppercase tracking-widest flex items-center gap-3">
-            <Star className="w-5 h-5 text-[#C6A36A] fill-current" />
+          <h3 className="text-xl font-heading font-bold text-[var(--text-primary)] mb-8 uppercase tracking-widest flex items-center gap-3">
+            <Star className="w-5 h-5 text-[var(--brand-primary)] fill-current" />
             Verified Experiences
           </h3>
           
           <div className="space-y-6">
             {loading ? (
               <div className="flex items-center justify-center py-12">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#C6A36A]"></div>
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[var(--brand-primary)]"></div>
               </div>
             ) : reviews.filter(r => r.isApproved).length === 0 ? (
-              <div className="text-center py-20 bg-[#0F0F0F]/50 rounded-2xl border border-[#ffffff05] border-dashed">
-                <p className="text-[#A0A0A0] font-light tracking-widest uppercase text-xs">No reviews have been published yet.</p>
+              <div className="text-center py-20 bg-[var(--bg-surface)] rounded-2xl border border-[var(--border-subtle)] border-dashed">
+                <p className="text-[var(--text-secondary)] font-bold tracking-widest uppercase text-xs">No reviews have been published yet.</p>
               </div>
             ) : (
               <div className="space-y-6 max-h-[600px] overflow-y-auto pr-4 custom-scrollbar">
                 {reviews
                   .filter((r) => r.isApproved)
                   .map((review) => (
-                    <div key={review.id} className="bg-[#1A1A1A]/40 border border-[#ffffff05] rounded-2xl p-6 hover:border-[#C6A36A]/20 transition-all group">
+                    <div key={review.id} className="bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-2xl p-6 hover:border-[var(--brand-primary)] transition-all group shadow-sm">
                       <div className="flex items-center justify-between mb-4">
                         <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#1A1A1A] to-[#333333] border border-[#ffffff10] flex items-center justify-center text-white font-bold text-xs uppercase">
+                          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[var(--brand-primary)] to-[var(--brand-secondary)] flex items-center justify-center text-white font-bold text-xs uppercase shadow-inner">
                             {review.customerName.charAt(0)}
                           </div>
                           <div>
-                            <span className="block font-bold text-white text-sm tracking-wide">{review.customerName}</span>
-                            <span className="text-[10px] text-[#A0A0A0] uppercase tracking-widest">Verified Collector</span>
+                            <span className="block font-bold text-[var(--text-primary)] text-sm tracking-wide">{review.customerName}</span>
+                            <span className="text-[10px] text-[var(--text-secondary)] font-bold uppercase tracking-widest">Verified Collector</span>
                           </div>
                         </div>
-                        <div className="flex text-[#C6A36A]">
+                        <div className="flex text-[var(--brand-primary)]">
                           {[...Array(review.rating)].map((_, i) => (
                             <Star key={i} className="w-3 h-3 fill-current" />
                           ))}
                         </div>
                       </div>
-                      <p className="text-[#E0E0E0] text-sm leading-relaxed font-light italic pl-4 border-l border-[#C6A36A]/20">
+                      <p className="text-[var(--text-secondary)] text-sm leading-relaxed border-l-2 border-[var(--brand-primary)] pl-4">
                         "{review.reviewText}"
                       </p>
                     </div>

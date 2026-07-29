@@ -195,7 +195,7 @@ const PermissionManagement = () => {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-96 text-[#4A2F19]">
+      <div className="flex items-center justify-center h-96 text-[var(--brand-primary)]">
         <Loader2 className="w-6 h-6 mr-2 animate-spin" />
         Loading permission management...
       </div>
@@ -206,26 +206,26 @@ const PermissionManagement = () => {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-[#1A1A1A]">
+          <h1 className="text-3xl font-bold text-[var(--text-primary)]">
             Permission Management
           </h1>
-          <p className="text-[#6B4423] mt-1">
+          <p className="text-[var(--text-primary)] mt-1">
             Configure role defaults and per-user permission overrides.
           </p>
         </div>
         <button
           onClick={loadData}
-          className="px-4 py-2 rounded-lg bg-[#4A2F19] text-white hover:bg-[#3D2817] inline-flex items-center gap-2"
+          className="px-4 py-2 rounded-lg bg-[var(--brand-primary)] text-white hover:bg-[#3D2817] inline-flex items-center gap-2"
         >
           <RefreshCw className="w-4 h-4" />
           Refresh
         </button>
       </div>
 
-      <section className="bg-white rounded-xl border border-[#C8A27B]/30 shadow-sm p-4 md:p-6">
+      <section className="bg-white rounded-xl border border-[var(--border-default)] shadow-sm p-4 md:p-6">
         <div className="flex items-center gap-2 mb-4">
-          <ShieldCheck className="w-5 h-5 text-[#4A2F19]" />
-          <h2 className="text-xl font-semibold text-[#1A1A1A] m-0">
+          <ShieldCheck className="w-5 h-5 text-[var(--brand-primary)]" />
+          <h2 className="text-xl font-semibold text-[var(--text-primary)] m-0">
             Role Defaults
           </h2>
         </div>
@@ -234,13 +234,13 @@ const PermissionManagement = () => {
           <table className="w-full min-w-250 border border-[#E5D4BC]">
             <thead className="bg-[#F8F4EE]">
               <tr>
-                <th className="text-left px-3 py-2 text-sm font-semibold text-[#4A2F19] border-b border-[#E5D4BC]">
+                <th className="text-left px-3 py-2 text-sm font-semibold text-[var(--brand-primary)] border-b border-[#E5D4BC]">
                   Permission
                 </th>
                 {ROLE_LIST.map((role) => (
                   <th
                     key={role}
-                    className="text-center px-3 py-2 text-sm font-semibold text-[#4A2F19] border-b border-[#E5D4BC]"
+                    className="text-center px-3 py-2 text-sm font-semibold text-[var(--brand-primary)] border-b border-[#E5D4BC]"
                   >
                     {role}
                   </th>
@@ -253,7 +253,7 @@ const PermissionManagement = () => {
                   <tr>
                     <td
                       colSpan={1 + ROLE_LIST.length}
-                      className="px-3 py-2 text-xs font-bold uppercase text-[#6B4423] bg-[#FFF9F0] border-y border-[#E5D4BC]"
+                      className="px-3 py-2 text-xs font-bold uppercase text-[var(--text-primary)] bg-[#FFF9F0] border-y border-[#E5D4BC]"
                     >
                       {category}
                     </td>
@@ -261,10 +261,10 @@ const PermissionManagement = () => {
                   {items.map((perm) => (
                     <tr key={perm.key} className="border-b border-[#F1E7D8]">
                       <td className="px-3 py-2">
-                        <p className="text-sm font-medium text-[#1A1A1A] m-0">
+                        <p className="text-sm font-medium text-[var(--text-primary)] m-0">
                           {perm.name}
                         </p>
-                        <p className="text-xs text-[#6B4423] m-0">{perm.key}</p>
+                        <p className="text-xs text-[var(--text-primary)] m-0">{perm.key}</p>
                       </td>
                       {ROLE_LIST.map((role) => (
                         <td
@@ -310,10 +310,10 @@ const PermissionManagement = () => {
         </div>
       </section>
 
-      <section className="bg-white rounded-xl border border-[#C8A27B]/30 shadow-sm p-4 md:p-6">
+      <section className="bg-white rounded-xl border border-[var(--border-default)] shadow-sm p-4 md:p-6">
         <div className="flex items-center gap-2 mb-4">
-          <UserCog className="w-5 h-5 text-[#4A2F19]" />
-          <h2 className="text-xl font-semibold text-[#1A1A1A] m-0">
+          <UserCog className="w-5 h-5 text-[var(--brand-primary)]" />
+          <h2 className="text-xl font-semibold text-[var(--text-primary)] m-0">
             Per-User Overrides
           </h2>
         </div>
@@ -323,12 +323,12 @@ const PermissionManagement = () => {
             value={userId}
             onChange={(e) => setUserId(e.target.value)}
             placeholder="Enter user ID"
-            className="px-3 py-2 border border-[#C8A27B]/40 rounded-lg w-full md:w-64"
+            className="px-3 py-2 border border-[var(--brand-accent)]/40 rounded-lg w-full md:w-64"
           />
           <button
             onClick={loadUserPermissions}
             disabled={userLoading}
-            className="px-4 py-2 rounded-lg bg-[#4A2F19] text-white hover:bg-[#3D2817] disabled:opacity-60 inline-flex items-center gap-2"
+            className="px-4 py-2 rounded-lg bg-[var(--brand-primary)] text-white hover:bg-[#3D2817] disabled:opacity-60 inline-flex items-center gap-2"
           >
             {userLoading ? (
               <Loader2 className="w-4 h-4 animate-spin" />
@@ -338,7 +338,7 @@ const PermissionManagement = () => {
             Load User Permissions
           </button>
           {userRole && (
-            <span className="px-3 py-2 rounded-lg bg-[#F8F4EE] text-[#4A2F19] text-sm">
+            <span className="px-3 py-2 rounded-lg bg-[#F8F4EE] text-[var(--brand-primary)] text-sm">
               Role: {userRole}
             </span>
           )}
@@ -348,22 +348,22 @@ const PermissionManagement = () => {
           <>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-2 mb-4 text-sm">
               <div className="p-3 rounded-lg border border-[#E5D4BC] bg-[#FFFDF9]">
-                <p className="m-0 font-semibold text-[#1A1A1A]">User</p>
-                <p className="m-0 text-[#6B4423]">{username || "-"}</p>
+                <p className="m-0 font-semibold text-[var(--text-primary)]">User</p>
+                <p className="m-0 text-[var(--text-primary)]">{username || "-"}</p>
               </div>
               <div className="p-3 rounded-lg border border-[#E5D4BC] bg-[#FFFDF9]">
-                <p className="m-0 font-semibold text-[#1A1A1A]">
+                <p className="m-0 font-semibold text-[var(--text-primary)]">
                   Granted Overrides
                 </p>
-                <p className="m-0 text-[#6B4423]">
+                <p className="m-0 text-[var(--text-primary)]">
                   {grantedOverrides.join(", ") || "None"}
                 </p>
               </div>
               <div className="p-3 rounded-lg border border-[#E5D4BC] bg-[#FFFDF9]">
-                <p className="m-0 font-semibold text-[#1A1A1A]">
+                <p className="m-0 font-semibold text-[var(--text-primary)]">
                   Revoked Overrides
                 </p>
-                <p className="m-0 text-[#6B4423]">
+                <p className="m-0 text-[var(--text-primary)]">
                   {revokedOverrides.join(", ") || "None"}
                 </p>
               </div>
@@ -382,10 +382,10 @@ const PermissionManagement = () => {
                     className="mt-1 w-4 h-4"
                   />
                   <div>
-                    <p className="text-sm font-medium text-[#1A1A1A] m-0">
+                    <p className="text-sm font-medium text-[var(--text-primary)] m-0">
                       {perm.name}
                     </p>
-                    <p className="text-xs text-[#6B4423] m-0">{perm.key}</p>
+                    <p className="text-xs text-[var(--text-primary)] m-0">{perm.key}</p>
                     <p className="text-xs text-[#8B6F47] m-0">
                       {userRoleSet.has(perm.key)
                         ? "Role default"

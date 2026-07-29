@@ -205,8 +205,8 @@ const Settings = () => {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="flex flex-col items-center gap-4">
-          <RefreshCw className="w-8 h-8 text-[#4A2F19] animate-spin" />
-          <p className="text-[#4A2F19] font-semibold">Loading profile...</p>
+          <RefreshCw className="w-8 h-8 text-[var(--brand-primary)] animate-spin" />
+          <p className="text-[var(--brand-primary)] font-semibold">Loading profile...</p>
         </div>
       </div>
     );
@@ -216,27 +216,27 @@ const Settings = () => {
     <div className="min-h-screen bg-[#F8F4EE] p-6">
       <div className="max-w-4xl mx-auto">
         <div className="mb-6">
-          <h1 className="text-3xl font-bold text-[#1A1A1A] mb-2">Settings</h1>
-          <p className="text-[#6B4423]">
+          <h1 className="text-3xl font-bold text-[var(--text-primary)] mb-2">Settings</h1>
+          <p className="text-[var(--text-primary)]">
             Manage your profile and account settings
           </p>
         </div>
 
         {/* Profile Information Section */}
-        <div className="bg-white rounded-xl shadow-coffee-md p-6 mb-6 border border-[#C8A27B]/30">
-          <div className="flex items-center justify-between mb-6 pb-4 border-b border-[#C8A27B]/30">
+        <div className="bg-white rounded-xl shadow-coffee-md p-6 mb-6 border border-[var(--border-default)]">
+          <div className="flex items-center justify-between mb-6 pb-4 border-b border-[var(--border-default)]">
             <div className="flex items-center gap-3">
               <div className="coffee-gradient p-3 rounded-xl">
                 <User className="w-6 h-6 text-white" />
               </div>
-              <h2 className="text-xl font-bold text-[#1A1A1A]">
+              <h2 className="text-xl font-bold text-[var(--text-primary)]">
                 Profile Information
               </h2>
             </div>
             {!editingProfile && (
               <button
                 onClick={handleEditProfile}
-                className="flex items-center gap-2 px-4 py-2 bg-[#4A2F19] hover:bg-[#6B4423] text-white rounded-lg font-semibold transition-colors"
+                className="flex items-center gap-2 px-4 py-2 bg-[var(--brand-primary)] hover:bg-[var(--brand-primary-hover)] text-white rounded-lg font-semibold transition-colors"
               >
                 <Edit className="w-4 h-4" />
                 Edit Profile
@@ -250,7 +250,7 @@ const Settings = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {/* First Name */}
                 <div>
-                  <label className="block text-sm font-semibold text-[#4A2F19] mb-2">
+                  <label className="block text-sm font-semibold text-[var(--brand-primary)] mb-2">
                     First Name <span className="text-red-500">*</span>
                   </label>
                   <input
@@ -258,7 +258,7 @@ const Settings = () => {
                     name="firstName"
                     value={profileData.firstName}
                     onChange={handleProfileChange}
-                    className="w-full px-4 py-3 border-2 border-[#C8A27B]/40 rounded-xl bg-[#F8F4EE] focus:outline-none focus:border-[#4A2F19] transition-colors"
+                    className="w-full px-4 py-3 border-2 border-[var(--brand-accent)]/40 rounded-xl bg-[#F8F4EE] focus:outline-none focus:border-[#4A2F19] transition-colors"
                     placeholder="Enter first name"
                     disabled={savingProfile}
                   />
@@ -266,7 +266,7 @@ const Settings = () => {
 
                 {/* Last Name */}
                 <div>
-                  <label className="block text-sm font-semibold text-[#4A2F19] mb-2">
+                  <label className="block text-sm font-semibold text-[var(--brand-primary)] mb-2">
                     Last Name <span className="text-red-500">*</span>
                   </label>
                   <input
@@ -274,7 +274,7 @@ const Settings = () => {
                     name="lastName"
                     value={profileData.lastName}
                     onChange={handleProfileChange}
-                    className="w-full px-4 py-3 border-2 border-[#C8A27B]/40 rounded-xl bg-[#F8F4EE] focus:outline-none focus:border-[#4A2F19] transition-colors"
+                    className="w-full px-4 py-3 border-2 border-[var(--brand-accent)]/40 rounded-xl bg-[#F8F4EE] focus:outline-none focus:border-[#4A2F19] transition-colors"
                     placeholder="Enter last name"
                     disabled={savingProfile}
                   />
@@ -282,7 +282,7 @@ const Settings = () => {
 
                 {/* Email */}
                 <div>
-                  <label className="block text-sm font-semibold text-[#4A2F19] mb-2">
+                  <label className="block text-sm font-semibold text-[var(--brand-primary)] mb-2">
                     Email <span className="text-red-500">*</span>
                   </label>
                   <input
@@ -290,7 +290,7 @@ const Settings = () => {
                     name="email"
                     value={profileData.email}
                     onChange={handleProfileChange}
-                    className="w-full px-4 py-3 border-2 border-[#C8A27B]/40 rounded-xl bg-[#F8F4EE] focus:outline-none focus:border-[#4A2F19] transition-colors"
+                    className="w-full px-4 py-3 border-2 border-[var(--brand-accent)]/40 rounded-xl bg-[#F8F4EE] focus:outline-none focus:border-[#4A2F19] transition-colors"
                     placeholder="Enter email"
                     disabled={savingProfile}
                   />
@@ -298,7 +298,7 @@ const Settings = () => {
 
                 {/* Phone Number */}
                 <div>
-                  <label className="block text-sm font-semibold text-[#4A2F19] mb-2">
+                  <label className="block text-sm font-semibold text-[var(--brand-primary)] mb-2">
                     Phone Number <span className="text-red-500">*</span>
                   </label>
                   <input
@@ -306,7 +306,7 @@ const Settings = () => {
                     name="phoneNumber"
                     value={profileData.phoneNumber}
                     onChange={handleProfileChange}
-                    className="w-full px-4 py-3 border-2 border-[#C8A27B]/40 rounded-xl bg-[#F8F4EE] focus:outline-none focus:border-[#4A2F19] transition-colors"
+                    className="w-full px-4 py-3 border-2 border-[var(--brand-accent)]/40 rounded-xl bg-[#F8F4EE] focus:outline-none focus:border-[#4A2F19] transition-colors"
                     placeholder="Enter phone number"
                     disabled={savingProfile}
                   />
@@ -347,14 +347,14 @@ const Settings = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* First Name */}
               <div className="flex items-start gap-3">
-                <div className="bg-[#EFE7D3] p-2 rounded-lg">
-                  <User className="w-5 h-5 text-[#4A2F19]" />
+                <div className="bg-[var(--bg-surface-alt)] p-2 rounded-lg">
+                  <User className="w-5 h-5 text-[var(--brand-primary)]" />
                 </div>
                 <div>
-                  <p className="text-sm text-[#6B4423] font-semibold mb-1">
+                  <p className="text-sm text-[var(--text-primary)] font-semibold mb-1">
                     First Name
                   </p>
-                  <p className="text-[#1A1A1A] font-bold">
+                  <p className="text-[var(--text-primary)] font-bold">
                     {profile?.firstName || "Not set"}
                   </p>
                 </div>
@@ -362,14 +362,14 @@ const Settings = () => {
 
               {/* Last Name */}
               <div className="flex items-start gap-3">
-                <div className="bg-[#EFE7D3] p-2 rounded-lg">
-                  <User className="w-5 h-5 text-[#4A2F19]" />
+                <div className="bg-[var(--bg-surface-alt)] p-2 rounded-lg">
+                  <User className="w-5 h-5 text-[var(--brand-primary)]" />
                 </div>
                 <div>
-                  <p className="text-sm text-[#6B4423] font-semibold mb-1">
+                  <p className="text-sm text-[var(--text-primary)] font-semibold mb-1">
                     Last Name
                   </p>
-                  <p className="text-[#1A1A1A] font-bold">
+                  <p className="text-[var(--text-primary)] font-bold">
                     {profile?.lastName || "Not set"}
                   </p>
                 </div>
@@ -377,27 +377,27 @@ const Settings = () => {
 
               {/* Email */}
               <div className="flex items-start gap-3">
-                <div className="bg-[#EFE7D3] p-2 rounded-lg">
-                  <Mail className="w-5 h-5 text-[#4A2F19]" />
+                <div className="bg-[var(--bg-surface-alt)] p-2 rounded-lg">
+                  <Mail className="w-5 h-5 text-[var(--brand-primary)]" />
                 </div>
                 <div>
-                  <p className="text-sm text-[#6B4423] font-semibold mb-1">
+                  <p className="text-sm text-[var(--text-primary)] font-semibold mb-1">
                     Email
                   </p>
-                  <p className="text-[#1A1A1A] font-bold">{profile?.email}</p>
+                  <p className="text-[var(--text-primary)] font-bold">{profile?.email}</p>
                 </div>
               </div>
 
               {/* Phone Number */}
               <div className="flex items-start gap-3">
-                <div className="bg-[#EFE7D3] p-2 rounded-lg">
-                  <Phone className="w-5 h-5 text-[#4A2F19]" />
+                <div className="bg-[var(--bg-surface-alt)] p-2 rounded-lg">
+                  <Phone className="w-5 h-5 text-[var(--brand-primary)]" />
                 </div>
                 <div>
-                  <p className="text-sm text-[#6B4423] font-semibold mb-1">
+                  <p className="text-sm text-[var(--text-primary)] font-semibold mb-1">
                     Phone Number
                   </p>
-                  <p className="text-[#1A1A1A] font-bold">
+                  <p className="text-[var(--text-primary)] font-bold">
                     {profile?.phoneNumber || "Not set"}
                   </p>
                 </div>
@@ -405,14 +405,14 @@ const Settings = () => {
 
               {/* Username (Read-only) */}
               <div className="flex items-start gap-3">
-                <div className="bg-[#EFE7D3] p-2 rounded-lg">
-                  <User className="w-5 h-5 text-[#4A2F19]" />
+                <div className="bg-[var(--bg-surface-alt)] p-2 rounded-lg">
+                  <User className="w-5 h-5 text-[var(--brand-primary)]" />
                 </div>
                 <div>
-                  <p className="text-sm text-[#6B4423] font-semibold mb-1">
+                  <p className="text-sm text-[var(--text-primary)] font-semibold mb-1">
                     Username
                   </p>
-                  <p className="text-[#1A1A1A] font-bold">
+                  <p className="text-[var(--text-primary)] font-bold">
                     {profile?.username}
                   </p>
                 </div>
@@ -420,14 +420,14 @@ const Settings = () => {
 
               {/* Role (Read-only) */}
               <div className="flex items-start gap-3">
-                <div className="bg-[#EFE7D3] p-2 rounded-lg">
-                  <Shield className="w-5 h-5 text-[#4A2F19]" />
+                <div className="bg-[var(--bg-surface-alt)] p-2 rounded-lg">
+                  <Shield className="w-5 h-5 text-[var(--brand-primary)]" />
                 </div>
                 <div>
-                  <p className="text-sm text-[#6B4423] font-semibold mb-1">
+                  <p className="text-sm text-[var(--text-primary)] font-semibold mb-1">
                     Role
                   </p>
-                  <span className="inline-block px-3 py-1 bg-[#4A2F19] text-white text-sm font-bold rounded-lg">
+                  <span className="inline-block px-3 py-1 bg-[var(--brand-primary)] text-white text-sm font-bold rounded-lg">
                     {profile?.role}
                   </span>
                 </div>
@@ -435,11 +435,11 @@ const Settings = () => {
 
               {/* Account Status (Read-only) */}
               <div className="flex items-start gap-3">
-                <div className="bg-[#EFE7D3] p-2 rounded-lg">
-                  <Shield className="w-5 h-5 text-[#4A2F19]" />
+                <div className="bg-[var(--bg-surface-alt)] p-2 rounded-lg">
+                  <Shield className="w-5 h-5 text-[var(--brand-primary)]" />
                 </div>
                 <div>
-                  <p className="text-sm text-[#6B4423] font-semibold mb-1">
+                  <p className="text-sm text-[var(--text-primary)] font-semibold mb-1">
                     Account Status
                   </p>
                   <span
@@ -456,14 +456,14 @@ const Settings = () => {
 
               {/* Created At (Read-only) */}
               <div className="flex items-start gap-3">
-                <div className="bg-[#EFE7D3] p-2 rounded-lg">
-                  <Calendar className="w-5 h-5 text-[#4A2F19]" />
+                <div className="bg-[var(--bg-surface-alt)] p-2 rounded-lg">
+                  <Calendar className="w-5 h-5 text-[var(--brand-primary)]" />
                 </div>
                 <div>
-                  <p className="text-sm text-[#6B4423] font-semibold mb-1">
+                  <p className="text-sm text-[var(--text-primary)] font-semibold mb-1">
                     Member Since
                   </p>
-                  <p className="text-[#1A1A1A] font-bold">
+                  <p className="text-[var(--text-primary)] font-bold">
                     {formatDate(profile?.createdAt)}
                   </p>
                 </div>
@@ -471,14 +471,14 @@ const Settings = () => {
 
               {/* Last Updated (Read-only) */}
               <div className="flex items-start gap-3">
-                <div className="bg-[#EFE7D3] p-2 rounded-lg">
-                  <Calendar className="w-5 h-5 text-[#4A2F19]" />
+                <div className="bg-[var(--bg-surface-alt)] p-2 rounded-lg">
+                  <Calendar className="w-5 h-5 text-[var(--brand-primary)]" />
                 </div>
                 <div>
-                  <p className="text-sm text-[#6B4423] font-semibold mb-1">
+                  <p className="text-sm text-[var(--text-primary)] font-semibold mb-1">
                     Last Updated
                   </p>
-                  <p className="text-[#1A1A1A] font-bold">
+                  <p className="text-[var(--text-primary)] font-bold">
                     {formatDate(profile?.updatedAt)}
                   </p>
                 </div>
@@ -488,12 +488,12 @@ const Settings = () => {
         </div>
 
         {/* Change Password Section */}
-        <div className="bg-white rounded-xl shadow-coffee-md p-6 border border-[#C8A27B]/30">
-          <div className="flex items-center gap-3 mb-6 pb-4 border-b border-[#C8A27B]/30">
+        <div className="bg-white rounded-xl shadow-coffee-md p-6 border border-[var(--border-default)]">
+          <div className="flex items-center gap-3 mb-6 pb-4 border-b border-[var(--border-default)]">
             <div className="coffee-gradient p-3 rounded-xl">
               <Lock className="w-6 h-6 text-white" />
             </div>
-            <h2 className="text-xl font-bold text-[#1A1A1A]">
+            <h2 className="text-xl font-bold text-[var(--text-primary)]">
               Change Password
             </h2>
           </div>
@@ -501,7 +501,7 @@ const Settings = () => {
           <form onSubmit={handlePasswordSubmit} className="space-y-4">
             {/* Current Password */}
             <div>
-              <label className="block text-sm font-semibold text-[#4A2F19] mb-2">
+              <label className="block text-sm font-semibold text-[var(--brand-primary)] mb-2">
                 Current Password
               </label>
               <div className="relative">
@@ -510,14 +510,14 @@ const Settings = () => {
                   name="currentPassword"
                   value={passwordData.currentPassword}
                   onChange={handlePasswordChange}
-                  className="w-full px-4 py-3 pr-12 border-2 border-[#C8A27B]/40 rounded-xl bg-[#F8F4EE] focus:outline-none focus:border-[#4A2F19] transition-colors"
+                  className="w-full px-4 py-3 pr-12 border-2 border-[var(--brand-accent)]/40 rounded-xl bg-[#F8F4EE] focus:outline-none focus:border-[#4A2F19] transition-colors"
                   placeholder="Enter current password"
                   disabled={changingPassword}
                 />
                 <button
                   type="button"
                   onClick={() => setShowCurrentPassword(!showCurrentPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-[#6B4423] hover:text-[#4A2F19]"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--text-primary)] hover:text-[var(--brand-primary)]"
                 >
                   {showCurrentPassword ? (
                     <EyeOff className="w-5 h-5" />
@@ -530,7 +530,7 @@ const Settings = () => {
 
             {/* New Password */}
             <div>
-              <label className="block text-sm font-semibold text-[#4A2F19] mb-2">
+              <label className="block text-sm font-semibold text-[var(--brand-primary)] mb-2">
                 New Password
               </label>
               <div className="relative">
@@ -539,14 +539,14 @@ const Settings = () => {
                   name="newPassword"
                   value={passwordData.newPassword}
                   onChange={handlePasswordChange}
-                  className="w-full px-4 py-3 pr-12 border-2 border-[#C8A27B]/40 rounded-xl bg-[#F8F4EE] focus:outline-none focus:border-[#4A2F19] transition-colors"
+                  className="w-full px-4 py-3 pr-12 border-2 border-[var(--brand-accent)]/40 rounded-xl bg-[#F8F4EE] focus:outline-none focus:border-[#4A2F19] transition-colors"
                   placeholder="Enter new password"
                   disabled={changingPassword}
                 />
                 <button
                   type="button"
                   onClick={() => setShowNewPassword(!showNewPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-[#6B4423] hover:text-[#4A2F19]"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--text-primary)] hover:text-[var(--brand-primary)]"
                 >
                   {showNewPassword ? (
                     <EyeOff className="w-5 h-5" />
@@ -555,14 +555,14 @@ const Settings = () => {
                   )}
                 </button>
               </div>
-              <p className="text-xs text-[#6B4423] mt-1">
+              <p className="text-xs text-[var(--text-primary)] mt-1">
                 Password must be at least 6 characters long
               </p>
             </div>
 
             {/* Confirm New Password */}
             <div>
-              <label className="block text-sm font-semibold text-[#4A2F19] mb-2">
+              <label className="block text-sm font-semibold text-[var(--brand-primary)] mb-2">
                 Confirm New Password
               </label>
               <div className="relative">
@@ -571,14 +571,14 @@ const Settings = () => {
                   name="confirmPassword"
                   value={passwordData.confirmPassword}
                   onChange={handlePasswordChange}
-                  className="w-full px-4 py-3 pr-12 border-2 border-[#C8A27B]/40 rounded-xl bg-[#F8F4EE] focus:outline-none focus:border-[#4A2F19] transition-colors"
+                  className="w-full px-4 py-3 pr-12 border-2 border-[var(--brand-accent)]/40 rounded-xl bg-[#F8F4EE] focus:outline-none focus:border-[#4A2F19] transition-colors"
                   placeholder="Confirm new password"
                   disabled={changingPassword}
                 />
                 <button
                   type="button"
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-[#6B4423] hover:text-[#4A2F19]"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--text-primary)] hover:text-[var(--brand-primary)]"
                 >
                   {showConfirmPassword ? (
                     <EyeOff className="w-5 h-5" />

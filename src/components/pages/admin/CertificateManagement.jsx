@@ -401,10 +401,10 @@ function CertificateManagement() {
       <div className="max-w-7xl mx-auto space-y-6">
         <div className="flex items-center justify-between gap-4 flex-wrap">
           <div>
-            <h1 className="text-3xl font-bold text-[#1A1A1A] mb-2">
+            <h1 className="text-3xl font-bold text-[var(--text-primary)] mb-2">
               Certificate Lifecycle Management
             </h1>
-            <p className="text-[#6B4423]">
+            <p className="text-[var(--text-primary)]">
               Review trainer recommendations, validate eligibility, issue
               certificates, and revoke when required.
             </p>
@@ -425,34 +425,34 @@ function CertificateManagement() {
           </button>
         </div>
 
-        <div className="bg-white rounded-2xl shadow-coffee-md border border-[#C8A27B]/30 p-6">
-          <h2 className="text-xl font-bold text-[#1A1A1A] mb-4">
+        <div className="bg-white rounded-2xl shadow-coffee-md border border-[var(--border-default)] p-6">
+          <h2 className="text-xl font-bold text-[var(--text-primary)] mb-4">
             Pending Recommendation Queue
           </h2>
 
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-[#EFE7D3] border-b border-[#C8A27B]">
+              <thead className="bg-[var(--bg-surface-alt)] border-b border-[var(--brand-accent)]">
                 <tr>
-                  <th className="px-4 py-3 text-left text-sm font-bold text-[#1A1A1A]">
+                  <th className="px-4 py-3 text-left text-sm font-bold text-[var(--text-primary)]">
                     Certificate ID
                   </th>
-                  <th className="px-4 py-3 text-left text-sm font-bold text-[#1A1A1A]">
+                  <th className="px-4 py-3 text-left text-sm font-bold text-[var(--text-primary)]">
                     Student
                   </th>
-                  <th className="px-4 py-3 text-left text-sm font-bold text-[#1A1A1A]">
+                  <th className="px-4 py-3 text-left text-sm font-bold text-[var(--text-primary)]">
                     Module
                   </th>
-                  <th className="px-4 py-3 text-left text-sm font-bold text-[#1A1A1A]">
+                  <th className="px-4 py-3 text-left text-sm font-bold text-[var(--text-primary)]">
                     Progress
                   </th>
-                  <th className="px-4 py-3 text-left text-sm font-bold text-[#1A1A1A]">
+                  <th className="px-4 py-3 text-left text-sm font-bold text-[var(--text-primary)]">
                     Status
                   </th>
-                  <th className="px-4 py-3 text-left text-sm font-bold text-[#1A1A1A]">
+                  <th className="px-4 py-3 text-left text-sm font-bold text-[var(--text-primary)]">
                     Recommended
                   </th>
-                  <th className="px-4 py-3 text-left text-sm font-bold text-[#1A1A1A]">
+                  <th className="px-4 py-3 text-left text-sm font-bold text-[var(--text-primary)]">
                     Actions
                   </th>
                 </tr>
@@ -462,7 +462,7 @@ function CertificateManagement() {
                   <tr>
                     <td
                       colSpan={7}
-                      className="px-4 py-10 text-center text-[#6B4423]"
+                      className="px-4 py-10 text-center text-[var(--text-primary)]"
                     >
                       <span className="inline-flex items-center gap-2">
                         <RefreshCw className="w-4 h-4 animate-spin" />
@@ -474,7 +474,7 @@ function CertificateManagement() {
                   <tr>
                     <td
                       colSpan={7}
-                      className="px-4 py-10 text-center text-[#6B4423]"
+                      className="px-4 py-10 text-center text-[var(--text-primary)]"
                     >
                       No recommendations in the queue.
                     </td>
@@ -493,21 +493,21 @@ function CertificateManagement() {
                         key={`${certificateId || "recommendation"}-${index}`}
                         className="hover:bg-[#F8F4EE]/60"
                       >
-                        <td className="px-4 py-3 text-sm text-[#1A1A1A]">
+                        <td className="px-4 py-3 text-sm text-[var(--text-primary)]">
                           {certificateId || "-"}
                         </td>
-                        <td className="px-4 py-3 text-sm text-[#4A2F19]">
+                        <td className="px-4 py-3 text-sm text-[var(--brand-primary)]">
                           {pickDisplay(
                             recommendation,
                             ["studentName", "fullName"],
                             "-",
                           )}
-                          <div className="text-xs text-[#6B4423]">
+                          <div className="text-xs text-[var(--text-primary)]">
                             ID:{" "}
                             {pickDisplay(recommendation, ["studentId"], "-")}
                           </div>
                         </td>
-                        <td className="px-4 py-3 text-sm text-[#4A2F19]">
+                        <td className="px-4 py-3 text-sm text-[var(--brand-primary)]">
                           {pickDisplay(recommendation, [
                             "moduleName",
                             "module",
@@ -515,7 +515,7 @@ function CertificateManagement() {
                             "title",
                           ])}
                         </td>
-                        <td className="px-4 py-3 text-sm text-[#4A2F19]">
+                        <td className="px-4 py-3 text-sm text-[var(--brand-primary)]">
                           {pickDisplay(
                             recommendation,
                             ["progressPercent", "progress"],
@@ -530,7 +530,7 @@ function CertificateManagement() {
                             {status}
                           </span>
                         </td>
-                        <td className="px-4 py-3 text-sm text-[#6B4423]">
+                        <td className="px-4 py-3 text-sm text-[var(--text-primary)]">
                           {formatDate(
                             recommendation?.recommendedAt ||
                               recommendation?.createdAt ||
@@ -544,7 +544,7 @@ function CertificateManagement() {
                               handleSelectRecommendation(recommendation)
                             }
                             disabled={!certificateId}
-                            className="px-3 py-1.5 text-xs font-semibold rounded-lg border border-[#C8A27B] text-[#4A2F19] hover:bg-[#F8F4EE] flex items-center gap-1 disabled:opacity-50"
+                            className="px-3 py-1.5 text-xs font-semibold rounded-lg border border-[var(--brand-accent)] text-[var(--brand-primary)] hover:bg-[#F8F4EE] flex items-center gap-1 disabled:opacity-50"
                           >
                             <Eye className="w-3.5 h-3.5" />
                             Select
@@ -559,14 +559,14 @@ function CertificateManagement() {
           </div>
         </div>
 
-        <div className="bg-white rounded-2xl shadow-coffee-md border border-[#C8A27B]/30 p-6 space-y-4">
-          <h2 className="text-xl font-bold text-[#1A1A1A]">
+        <div className="bg-white rounded-2xl shadow-coffee-md border border-[var(--border-default)] p-6 space-y-4">
+          <h2 className="text-xl font-bold text-[var(--text-primary)]">
             Certificate Control Panel
           </h2>
 
           <div className="flex flex-wrap items-end gap-3">
             <div>
-              <label className="block text-sm font-semibold text-[#4A2F19] mb-2">
+              <label className="block text-sm font-semibold text-[var(--brand-primary)] mb-2">
                 Certificate ID
               </label>
               <input
@@ -574,7 +574,7 @@ function CertificateManagement() {
                 min="1"
                 value={certificateIdInput}
                 onChange={(event) => setCertificateIdInput(event.target.value)}
-                className="px-4 py-2 rounded-lg border-2 border-[#C8A27B]/40 bg-[#F8F4EE] focus:outline-none focus:border-[#4A2F19]"
+                className="px-4 py-2 rounded-lg border-2 border-[var(--brand-accent)]/40 bg-[#F8F4EE] focus:outline-none focus:border-[#4A2F19]"
                 placeholder="Enter certificate ID"
               />
             </div>
@@ -583,7 +583,7 @@ function CertificateManagement() {
               type="button"
               onClick={handleLoadByInput}
               disabled={detailsLoading || eligibilityLoading}
-              className="px-4 py-2 rounded-lg bg-[#4A2F19] text-white font-semibold hover:bg-[#6B4423] transition-colors flex items-center gap-2 disabled:opacity-60"
+              className="px-4 py-2 rounded-lg bg-[var(--brand-primary)] text-white font-semibold hover:bg-[var(--brand-primary-hover)] transition-colors flex items-center gap-2 disabled:opacity-60"
             >
               {detailsLoading || eligibilityLoading ? (
                 <RefreshCw className="w-4 h-4 animate-spin" />
@@ -597,7 +597,7 @@ function CertificateManagement() {
               type="button"
               onClick={handleDownload}
               disabled={downloading || !selectedIdForDisplay}
-              className="px-4 py-2 rounded-lg border border-[#C8A27B] text-[#4A2F19] font-semibold hover:bg-[#F8F4EE] transition-colors flex items-center gap-2 disabled:opacity-60"
+              className="px-4 py-2 rounded-lg border border-[var(--brand-accent)] text-[var(--brand-primary)] font-semibold hover:bg-[#F8F4EE] transition-colors flex items-center gap-2 disabled:opacity-60"
             >
               {downloading ? (
                 <RefreshCw className="w-4 h-4 animate-spin" />
@@ -609,51 +609,51 @@ function CertificateManagement() {
           </div>
 
           {selectedIdForDisplay && (
-            <p className="text-sm text-[#6B4423]">
+            <p className="text-sm text-[var(--text-primary)]">
               Selected Certificate ID: {selectedIdForDisplay}
             </p>
           )}
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <div className="bg-white rounded-2xl shadow-coffee-md border border-[#C8A27B]/30 p-6">
+          <div className="bg-white rounded-2xl shadow-coffee-md border border-[var(--border-default)] p-6">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-xl font-bold text-[#1A1A1A]">
+              <h2 className="text-xl font-bold text-[var(--text-primary)]">
                 Certificate Details
               </h2>
               {detailsLoading && (
-                <RefreshCw className="w-4 h-4 text-[#6B4423] animate-spin" />
+                <RefreshCw className="w-4 h-4 text-[var(--text-primary)] animate-spin" />
               )}
             </div>
 
             {!certificateDetails ? (
-              <p className="text-[#6B4423]">
+              <p className="text-[var(--text-primary)]">
                 Load a certificate ID to view detail summary.
               </p>
             ) : (
               <div className="space-y-2 text-sm">
-                <p className="text-[#4A2F19]">
-                  <span className="font-semibold text-[#1A1A1A]">Number:</span>{" "}
+                <p className="text-[var(--brand-primary)]">
+                  <span className="font-semibold text-[var(--text-primary)]">Number:</span>{" "}
                   {pickDisplay(certificateDetails, [
                     "certificateNumber",
                     "number",
                     "code",
                   ])}
                 </p>
-                <p className="text-[#4A2F19]">
-                  <span className="font-semibold text-[#1A1A1A]">Status:</span>{" "}
+                <p className="text-[var(--brand-primary)]">
+                  <span className="font-semibold text-[var(--text-primary)]">Status:</span>{" "}
                   {pickDisplay(certificateDetails, [
                     "status",
                     "certificateStatus",
                     "state",
                   ])}
                 </p>
-                <p className="text-[#4A2F19]">
-                  <span className="font-semibold text-[#1A1A1A]">Student:</span>{" "}
+                <p className="text-[var(--brand-primary)]">
+                  <span className="font-semibold text-[var(--text-primary)]">Student:</span>{" "}
                   {pickDisplay(certificateDetails, ["studentName", "fullName"])}
                 </p>
-                <p className="text-[#4A2F19]">
-                  <span className="font-semibold text-[#1A1A1A]">Module:</span>{" "}
+                <p className="text-[var(--brand-primary)]">
+                  <span className="font-semibold text-[var(--text-primary)]">Module:</span>{" "}
                   {pickDisplay(certificateDetails, [
                     "moduleName",
                     "module",
@@ -661,8 +661,8 @@ function CertificateManagement() {
                     "title",
                   ])}
                 </p>
-                <p className="text-[#4A2F19]">
-                  <span className="font-semibold text-[#1A1A1A]">
+                <p className="text-[var(--brand-primary)]">
+                  <span className="font-semibold text-[var(--text-primary)]">
                     Issued At:
                   </span>{" "}
                   {formatDate(
@@ -670,18 +670,18 @@ function CertificateManagement() {
                       certificateDetails?.issueDate,
                   )}
                 </p>
-                <p className="text-[#4A2F19]">
-                  <span className="font-semibold text-[#1A1A1A]">
+                <p className="text-[var(--brand-primary)]">
+                  <span className="font-semibold text-[var(--text-primary)]">
                     Delivery Mode:
                   </span>{" "}
                   {pickDisplay(certificateDetails, ["deliveryMode"], "-")}
                 </p>
 
                 <details className="mt-4">
-                  <summary className="cursor-pointer text-[#4A2F19] font-semibold">
+                  <summary className="cursor-pointer text-[var(--brand-primary)] font-semibold">
                     View Raw Payload
                   </summary>
-                  <pre className="mt-2 bg-[#F8F4EE] border border-[#C8A27B]/30 rounded-xl p-3 overflow-auto text-xs text-[#4A2F19]">
+                  <pre className="mt-2 bg-[#F8F4EE] border border-[var(--border-default)] rounded-xl p-3 overflow-auto text-xs text-[var(--brand-primary)]">
                     {JSON.stringify(certificateDetails, null, 2)}
                   </pre>
                 </details>
@@ -689,18 +689,18 @@ function CertificateManagement() {
             )}
           </div>
 
-          <div className="bg-white rounded-2xl shadow-coffee-md border border-[#C8A27B]/30 p-6">
+          <div className="bg-white rounded-2xl shadow-coffee-md border border-[var(--border-default)] p-6">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-xl font-bold text-[#1A1A1A]">
+              <h2 className="text-xl font-bold text-[var(--text-primary)]">
                 Eligibility Review
               </h2>
               {eligibilityLoading && (
-                <RefreshCw className="w-4 h-4 text-[#6B4423] animate-spin" />
+                <RefreshCw className="w-4 h-4 text-[var(--text-primary)] animate-spin" />
               )}
             </div>
 
             {!eligibility ? (
-              <p className="text-[#6B4423]">
+              <p className="text-[var(--text-primary)]">
                 Run eligibility check for trainer recommendation, attendance,
                 and fee clearance.
               </p>
@@ -726,7 +726,7 @@ function CertificateManagement() {
                 )}
 
                 {eligibilityChecks.length === 0 ? (
-                  <p className="text-sm text-[#6B4423]">
+                  <p className="text-sm text-[var(--text-primary)]">
                     No structured check list was returned by the API. Open the
                     raw payload for details.
                   </p>
@@ -735,10 +735,10 @@ function CertificateManagement() {
                     {eligibilityChecks.map((check) => (
                       <div
                         key={check.key}
-                        className="border border-[#C8A27B]/30 rounded-xl p-3"
+                        className="border border-[var(--border-default)] rounded-xl p-3"
                       >
                         <div className="flex items-center justify-between gap-2">
-                          <p className="font-semibold text-[#1A1A1A] m-0">
+                          <p className="font-semibold text-[var(--text-primary)] m-0">
                             {check.label}
                           </p>
                           <span
@@ -752,7 +752,7 @@ function CertificateManagement() {
                           </span>
                         </div>
                         {check.note && (
-                          <p className="text-sm text-[#6B4423] mt-1 m-0">
+                          <p className="text-sm text-[var(--text-primary)] mt-1 m-0">
                             {check.note}
                           </p>
                         )}
@@ -762,10 +762,10 @@ function CertificateManagement() {
                 )}
 
                 <details className="mt-4">
-                  <summary className="cursor-pointer text-[#4A2F19] font-semibold">
+                  <summary className="cursor-pointer text-[var(--brand-primary)] font-semibold">
                     View Raw Eligibility Payload
                   </summary>
-                  <pre className="mt-2 bg-[#F8F4EE] border border-[#C8A27B]/30 rounded-xl p-3 overflow-auto text-xs text-[#4A2F19]">
+                  <pre className="mt-2 bg-[#F8F4EE] border border-[var(--border-default)] rounded-xl p-3 overflow-auto text-xs text-[var(--brand-primary)]">
                     {JSON.stringify(eligibility, null, 2)}
                   </pre>
                 </details>
@@ -775,13 +775,13 @@ function CertificateManagement() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <div className="bg-white rounded-2xl shadow-coffee-md border border-[#C8A27B]/30 p-6 space-y-3">
-            <h2 className="text-xl font-bold text-[#1A1A1A]">
+          <div className="bg-white rounded-2xl shadow-coffee-md border border-[var(--border-default)] p-6 space-y-3">
+            <h2 className="text-xl font-bold text-[var(--text-primary)]">
               Issue Certificate
             </h2>
 
             <div>
-              <label className="block text-sm font-semibold text-[#4A2F19] mb-2">
+              <label className="block text-sm font-semibold text-[var(--brand-primary)] mb-2">
                 Delivery Mode
               </label>
               <select
@@ -792,7 +792,7 @@ function CertificateManagement() {
                     deliveryMode: event.target.value,
                   }))
                 }
-                className="w-full px-4 py-2 rounded-lg border-2 border-[#C8A27B]/40 bg-[#F8F4EE] focus:outline-none focus:border-[#4A2F19]"
+                className="w-full px-4 py-2 rounded-lg border-2 border-[var(--brand-accent)]/40 bg-[#F8F4EE] focus:outline-none focus:border-[#4A2F19]"
               >
                 <option value={DELIVERY_MODE.DIGITAL}>Digital</option>
                 <option value={DELIVERY_MODE.OFFICE_PICKUP}>
@@ -802,7 +802,7 @@ function CertificateManagement() {
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-[#4A2F19] mb-2">
+              <label className="block text-sm font-semibold text-[var(--brand-primary)] mb-2">
                 Admin Notes (optional)
               </label>
               <textarea
@@ -815,7 +815,7 @@ function CertificateManagement() {
                     adminNotes: event.target.value,
                   }))
                 }
-                className="w-full px-4 py-2 rounded-lg border-2 border-[#C8A27B]/40 bg-[#F8F4EE] focus:outline-none focus:border-[#4A2F19]"
+                className="w-full px-4 py-2 rounded-lg border-2 border-[var(--brand-accent)]/40 bg-[#F8F4EE] focus:outline-none focus:border-[#4A2F19]"
                 placeholder="Optional issuance notes"
               />
             </div>
@@ -835,8 +835,8 @@ function CertificateManagement() {
             </button>
           </div>
 
-          <div className="bg-white rounded-2xl shadow-coffee-md border border-[#C8A27B]/30 p-6 space-y-3">
-            <h2 className="text-xl font-bold text-[#1A1A1A]">
+          <div className="bg-white rounded-2xl shadow-coffee-md border border-[var(--border-default)] p-6 space-y-3">
+            <h2 className="text-xl font-bold text-[var(--text-primary)]">
               Revoke Certificate
             </h2>
 
@@ -847,7 +847,7 @@ function CertificateManagement() {
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-[#4A2F19] mb-2">
+              <label className="block text-sm font-semibold text-[var(--brand-primary)] mb-2">
                 Reason
               </label>
               <textarea
@@ -855,7 +855,7 @@ function CertificateManagement() {
                 rows={4}
                 value={revokeReason}
                 onChange={(event) => setRevokeReason(event.target.value)}
-                className="w-full px-4 py-2 rounded-lg border-2 border-[#C8A27B]/40 bg-[#F8F4EE] focus:outline-none focus:border-[#4A2F19]"
+                className="w-full px-4 py-2 rounded-lg border-2 border-[var(--brand-accent)]/40 bg-[#F8F4EE] focus:outline-none focus:border-[#4A2F19]"
                 placeholder="Provide revocation reason"
               />
             </div>
@@ -876,7 +876,7 @@ function CertificateManagement() {
           </div>
         </div>
 
-        <div className="flex items-center gap-3 rounded-xl bg-[#EFE7D3] border border-[#C8A27B]/40 px-4 py-3 text-sm text-[#4A2F19]">
+        <div className="flex items-center gap-3 rounded-xl bg-[var(--bg-surface-alt)] border border-[var(--brand-accent)]/40 px-4 py-3 text-sm text-[var(--brand-primary)]">
           <Award className="w-4 h-4" />
           Lifecycle: Recommended to Eligibility Check to Issued to Optional
           Revoked.

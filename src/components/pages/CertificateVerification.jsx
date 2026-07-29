@@ -139,19 +139,19 @@ function CertificateVerification() {
     <div className="min-h-screen bg-[#F8F4EE] p-6">
       <div className="max-w-4xl mx-auto space-y-6">
         <div className="text-center space-y-3">
-          <div className="inline-flex w-14 h-14 rounded-2xl bg-[#EFE7D3] text-[#4A2F19] items-center justify-center">
+          <div className="inline-flex w-14 h-14 rounded-2xl bg-[var(--bg-surface-alt)] text-[var(--brand-primary)] items-center justify-center">
             <QrCode className="w-7 h-7" />
           </div>
-          <h1 className="text-3xl font-bold text-[#1A1A1A]">
+          <h1 className="text-3xl font-bold text-[var(--text-primary)]">
             Certificate Verification
           </h1>
-          <p className="text-[#6B4423]">
+          <p className="text-[var(--text-primary)]">
             Validate certificate authenticity using certificate number and an
             optional security token.
           </p>
         </div>
 
-        <div className="bg-white rounded-2xl shadow-coffee-md border border-[#C8A27B]/30 p-6">
+        <div className="bg-white rounded-2xl shadow-coffee-md border border-[var(--border-default)] p-6">
           <form
             onSubmit={(event) => {
               event.preventDefault();
@@ -160,27 +160,27 @@ function CertificateVerification() {
             className="grid grid-cols-1 md:grid-cols-2 gap-4"
           >
             <div>
-              <label className="block text-sm font-semibold text-[#4A2F19] mb-2">
+              <label className="block text-sm font-semibold text-[var(--brand-primary)] mb-2">
                 Certificate Number
               </label>
               <input
                 type="text"
                 value={certificateNumber}
                 onChange={(event) => setCertificateNumber(event.target.value)}
-                className="w-full px-4 py-2 rounded-lg border-2 border-[#C8A27B]/40 bg-[#F8F4EE] focus:outline-none focus:border-[#4A2F19]"
+                className="w-full px-4 py-2 rounded-lg border-2 border-[var(--brand-accent)]/40 bg-[#F8F4EE] focus:outline-none focus:border-[#4A2F19]"
                 placeholder="Example: CERT-2026-000123"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-[#4A2F19] mb-2">
+              <label className="block text-sm font-semibold text-[var(--brand-primary)] mb-2">
                 Verification Token (optional)
               </label>
               <input
                 type="text"
                 value={token}
                 onChange={(event) => setToken(event.target.value)}
-                className="w-full px-4 py-2 rounded-lg border-2 border-[#C8A27B]/40 bg-[#F8F4EE] focus:outline-none focus:border-[#4A2F19]"
+                className="w-full px-4 py-2 rounded-lg border-2 border-[var(--brand-accent)]/40 bg-[#F8F4EE] focus:outline-none focus:border-[#4A2F19]"
                 placeholder="Optional token or QR value"
               />
             </div>
@@ -202,7 +202,7 @@ function CertificateVerification() {
           </form>
         </div>
 
-        <div className="bg-white rounded-2xl shadow-coffee-md border border-[#C8A27B]/30 p-6 space-y-4">
+        <div className="bg-white rounded-2xl shadow-coffee-md border border-[var(--border-default)] p-6 space-y-4">
           <div
             className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-lg font-semibold ${verificationState.className}`}
           >
@@ -211,21 +211,21 @@ function CertificateVerification() {
           </div>
 
           {!result ? (
-            <p className="text-[#6B4423]">
+            <p className="text-[var(--text-primary)]">
               Enter a certificate number and run verification.
             </p>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-              <div className="rounded-xl bg-[#F8F4EE] border border-[#C8A27B]/30 p-4">
-                <p className="m-0 text-[#6B4423]">Certificate Number</p>
-                <p className="m-0 mt-1 font-semibold text-[#1A1A1A]">
+              <div className="rounded-xl bg-[#F8F4EE] border border-[var(--border-default)] p-4">
+                <p className="m-0 text-[var(--text-primary)]">Certificate Number</p>
+                <p className="m-0 mt-1 font-semibold text-[var(--text-primary)]">
                   {pickDisplay(result, ["certificateNumber", "number", "code"])}
                 </p>
               </div>
 
-              <div className="rounded-xl bg-[#F8F4EE] border border-[#C8A27B]/30 p-4">
-                <p className="m-0 text-[#6B4423]">Status</p>
-                <p className="m-0 mt-1 font-semibold text-[#1A1A1A]">
+              <div className="rounded-xl bg-[#F8F4EE] border border-[var(--border-default)] p-4">
+                <p className="m-0 text-[var(--text-primary)]">Status</p>
+                <p className="m-0 mt-1 font-semibold text-[var(--text-primary)]">
                   {pickDisplay(result, [
                     "status",
                     "certificateStatus",
@@ -234,16 +234,16 @@ function CertificateVerification() {
                 </p>
               </div>
 
-              <div className="rounded-xl bg-[#F8F4EE] border border-[#C8A27B]/30 p-4">
-                <p className="m-0 text-[#6B4423]">Student</p>
-                <p className="m-0 mt-1 font-semibold text-[#1A1A1A]">
+              <div className="rounded-xl bg-[#F8F4EE] border border-[var(--border-default)] p-4">
+                <p className="m-0 text-[var(--text-primary)]">Student</p>
+                <p className="m-0 mt-1 font-semibold text-[var(--text-primary)]">
                   {pickDisplay(result, ["studentName", "fullName", "student"])}
                 </p>
               </div>
 
-              <div className="rounded-xl bg-[#F8F4EE] border border-[#C8A27B]/30 p-4">
-                <p className="m-0 text-[#6B4423]">Module</p>
-                <p className="m-0 mt-1 font-semibold text-[#1A1A1A]">
+              <div className="rounded-xl bg-[#F8F4EE] border border-[var(--border-default)] p-4">
+                <p className="m-0 text-[var(--text-primary)]">Module</p>
+                <p className="m-0 mt-1 font-semibold text-[var(--text-primary)]">
                   {pickDisplay(result, [
                     "moduleName",
                     "module",
@@ -253,9 +253,9 @@ function CertificateVerification() {
                 </p>
               </div>
 
-              <div className="rounded-xl bg-[#F8F4EE] border border-[#C8A27B]/30 p-4 md:col-span-2">
-                <p className="m-0 text-[#6B4423]">Issued / Updated</p>
-                <p className="m-0 mt-1 font-semibold text-[#1A1A1A]">
+              <div className="rounded-xl bg-[#F8F4EE] border border-[var(--border-default)] p-4 md:col-span-2">
+                <p className="m-0 text-[var(--text-primary)]">Issued / Updated</p>
+                <p className="m-0 mt-1 font-semibold text-[var(--text-primary)]">
                   {formatDate(
                     result?.issuedAt || result?.issueDate || result?.updatedAt,
                   )}
@@ -263,10 +263,10 @@ function CertificateVerification() {
               </div>
 
               <details className="md:col-span-2">
-                <summary className="cursor-pointer text-[#4A2F19] font-semibold">
+                <summary className="cursor-pointer text-[var(--brand-primary)] font-semibold">
                   View Raw Verification Payload
                 </summary>
-                <pre className="mt-2 bg-[#F8F4EE] border border-[#C8A27B]/30 rounded-xl p-3 overflow-auto text-xs text-[#4A2F19]">
+                <pre className="mt-2 bg-[#F8F4EE] border border-[var(--border-default)] rounded-xl p-3 overflow-auto text-xs text-[var(--brand-primary)]">
                   {JSON.stringify(result, null, 2)}
                 </pre>
               </details>

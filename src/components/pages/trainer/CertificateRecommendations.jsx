@@ -183,21 +183,21 @@ function CertificateRecommendations() {
       <div className="max-w-7xl mx-auto space-y-6">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-[#1A1A1A] mb-2">
+            <h1 className="text-3xl font-bold text-[var(--text-primary)] mb-2">
               Certificate Recommendations
             </h1>
-            <p className="text-[#6B4423]">
+            <p className="text-[var(--text-primary)]">
               Recommend students for module completion certificates and review
               current certificate records.
             </p>
           </div>
-          <div className="w-14 h-14 rounded-2xl bg-[#EFE7D3] text-[#4A2F19] flex items-center justify-center">
+          <div className="w-14 h-14 rounded-2xl bg-[var(--bg-surface-alt)] text-[var(--brand-primary)] flex items-center justify-center">
             <Award className="w-7 h-7" />
           </div>
         </div>
 
-        <div className="bg-white rounded-2xl shadow-coffee-md border border-[#C8A27B]/30 p-6">
-          <h2 className="text-xl font-bold text-[#1A1A1A] mb-4">
+        <div className="bg-white rounded-2xl shadow-coffee-md border border-[var(--border-default)] p-6">
+          <h2 className="text-xl font-bold text-[var(--text-primary)] mb-4">
             Submit Recommendation
           </h2>
 
@@ -206,7 +206,7 @@ function CertificateRecommendations() {
             className="grid grid-cols-1 md:grid-cols-2 gap-4"
           >
             <div>
-              <label className="block text-sm font-semibold text-[#4A2F19] mb-2">
+              <label className="block text-sm font-semibold text-[var(--brand-primary)] mb-2">
                 Student ID
               </label>
               <input
@@ -220,13 +220,13 @@ function CertificateRecommendations() {
                   }))
                 }
                 required
-                className="w-full px-4 py-2 rounded-lg border-2 border-[#C8A27B]/40 bg-[#F8F4EE] focus:outline-none focus:border-[#4A2F19]"
+                className="w-full px-4 py-2 rounded-lg border-2 border-[var(--brand-accent)]/40 bg-[#F8F4EE] focus:outline-none focus:border-[#4A2F19]"
                 placeholder="Enter student ID"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-[#4A2F19] mb-2">
+              <label className="block text-sm font-semibold text-[var(--brand-primary)] mb-2">
                 Module Name
               </label>
               <input
@@ -240,13 +240,13 @@ function CertificateRecommendations() {
                   }))
                 }
                 required
-                className="w-full px-4 py-2 rounded-lg border-2 border-[#C8A27B]/40 bg-[#F8F4EE] focus:outline-none focus:border-[#4A2F19]"
+                className="w-full px-4 py-2 rounded-lg border-2 border-[var(--brand-accent)]/40 bg-[#F8F4EE] focus:outline-none focus:border-[#4A2F19]"
                 placeholder="Example: Advanced Latte Art"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-[#4A2F19] mb-2">
+              <label className="block text-sm font-semibold text-[var(--brand-primary)] mb-2">
                 Progress Percent (0-100)
               </label>
               <input
@@ -262,13 +262,13 @@ function CertificateRecommendations() {
                   }))
                 }
                 required
-                className="w-full px-4 py-2 rounded-lg border-2 border-[#C8A27B]/40 bg-[#F8F4EE] focus:outline-none focus:border-[#4A2F19]"
+                className="w-full px-4 py-2 rounded-lg border-2 border-[var(--brand-accent)]/40 bg-[#F8F4EE] focus:outline-none focus:border-[#4A2F19]"
                 placeholder="95"
               />
             </div>
 
             <div className="md:col-span-2">
-              <label className="block text-sm font-semibold text-[#4A2F19] mb-2">
+              <label className="block text-sm font-semibold text-[var(--brand-primary)] mb-2">
                 Recommendation Notes (optional)
               </label>
               <textarea
@@ -281,7 +281,7 @@ function CertificateRecommendations() {
                     recommendationNotes: event.target.value,
                   }))
                 }
-                className="w-full px-4 py-2 rounded-lg border-2 border-[#C8A27B]/40 bg-[#F8F4EE] focus:outline-none focus:border-[#4A2F19]"
+                className="w-full px-4 py-2 rounded-lg border-2 border-[var(--brand-accent)]/40 bg-[#F8F4EE] focus:outline-none focus:border-[#4A2F19]"
                 placeholder="Share key readiness notes for admin review"
               />
             </div>
@@ -305,9 +305,9 @@ function CertificateRecommendations() {
           </form>
         </div>
 
-        <div className="bg-white rounded-2xl shadow-coffee-md border border-[#C8A27B]/30 p-6">
+        <div className="bg-white rounded-2xl shadow-coffee-md border border-[var(--border-default)] p-6">
           <div className="flex items-center justify-between flex-wrap gap-3 mb-4">
-            <h2 className="text-xl font-bold text-[#1A1A1A]">
+            <h2 className="text-xl font-bold text-[var(--text-primary)]">
               Student Certificate Records
             </h2>
 
@@ -317,14 +317,14 @@ function CertificateRecommendations() {
                 min="1"
                 value={lookupStudentId}
                 onChange={(event) => setLookupStudentId(event.target.value)}
-                className="px-3 py-2 rounded-lg border-2 border-[#C8A27B]/40 bg-[#F8F4EE] focus:outline-none focus:border-[#4A2F19]"
+                className="px-3 py-2 rounded-lg border-2 border-[var(--brand-accent)]/40 bg-[#F8F4EE] focus:outline-none focus:border-[#4A2F19]"
                 placeholder="Student ID"
               />
               <button
                 type="button"
                 onClick={handleLookupCertificates}
                 disabled={fetchingCertificates}
-                className="px-4 py-2 rounded-lg bg-[#4A2F19] text-white font-semibold hover:bg-[#6B4423] transition-colors flex items-center gap-2 disabled:opacity-60"
+                className="px-4 py-2 rounded-lg bg-[var(--brand-primary)] text-white font-semibold hover:bg-[var(--brand-primary-hover)] transition-colors flex items-center gap-2 disabled:opacity-60"
               >
                 {fetchingCertificates ? (
                   <RefreshCw className="w-4 h-4 animate-spin" />
@@ -338,24 +338,24 @@ function CertificateRecommendations() {
 
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-[#EFE7D3] border-b border-[#C8A27B]">
+              <thead className="bg-[var(--bg-surface-alt)] border-b border-[var(--brand-accent)]">
                 <tr>
-                  <th className="px-4 py-3 text-left text-sm font-bold text-[#1A1A1A]">
+                  <th className="px-4 py-3 text-left text-sm font-bold text-[var(--text-primary)]">
                     Certificate ID
                   </th>
-                  <th className="px-4 py-3 text-left text-sm font-bold text-[#1A1A1A]">
+                  <th className="px-4 py-3 text-left text-sm font-bold text-[var(--text-primary)]">
                     Number
                   </th>
-                  <th className="px-4 py-3 text-left text-sm font-bold text-[#1A1A1A]">
+                  <th className="px-4 py-3 text-left text-sm font-bold text-[var(--text-primary)]">
                     Module
                   </th>
-                  <th className="px-4 py-3 text-left text-sm font-bold text-[#1A1A1A]">
+                  <th className="px-4 py-3 text-left text-sm font-bold text-[var(--text-primary)]">
                     Status
                   </th>
-                  <th className="px-4 py-3 text-left text-sm font-bold text-[#1A1A1A]">
+                  <th className="px-4 py-3 text-left text-sm font-bold text-[var(--text-primary)]">
                     Updated
                   </th>
-                  <th className="px-4 py-3 text-left text-sm font-bold text-[#1A1A1A]">
+                  <th className="px-4 py-3 text-left text-sm font-bold text-[var(--text-primary)]">
                     Actions
                   </th>
                 </tr>
@@ -365,7 +365,7 @@ function CertificateRecommendations() {
                   <tr>
                     <td
                       colSpan={6}
-                      className="px-4 py-10 text-center text-[#6B4423]"
+                      className="px-4 py-10 text-center text-[var(--text-primary)]"
                     >
                       No certificate records loaded.
                     </td>
@@ -375,21 +375,21 @@ function CertificateRecommendations() {
                     const certificateId = getCertificateId(certificate);
                     return (
                       <tr key={`${certificateId || "row"}-${index}`}>
-                        <td className="px-4 py-3 text-sm text-[#1A1A1A]">
+                        <td className="px-4 py-3 text-sm text-[var(--text-primary)]">
                           {certificateId || "-"}
                         </td>
-                        <td className="px-4 py-3 text-sm text-[#4A2F19]">
+                        <td className="px-4 py-3 text-sm text-[var(--brand-primary)]">
                           {getCertificateNumber(certificate)}
                         </td>
-                        <td className="px-4 py-3 text-sm text-[#4A2F19]">
+                        <td className="px-4 py-3 text-sm text-[var(--brand-primary)]">
                           {getModuleName(certificate)}
                         </td>
                         <td className="px-4 py-3 text-sm">
-                          <span className="px-2 py-1 rounded-md bg-[#EFE7D3] text-[#4A2F19] font-semibold">
+                          <span className="px-2 py-1 rounded-md bg-[var(--bg-surface-alt)] text-[var(--brand-primary)] font-semibold">
                             {String(getStatus(certificate))}
                           </span>
                         </td>
-                        <td className="px-4 py-3 text-sm text-[#6B4423]">
+                        <td className="px-4 py-3 text-sm text-[var(--text-primary)]">
                           {getIssuedDate(certificate)}
                         </td>
                         <td className="px-4 py-3">
@@ -398,7 +398,7 @@ function CertificateRecommendations() {
                               type="button"
                               onClick={() => handleViewDetails(certificate)}
                               disabled={loadingDetails}
-                              className="px-3 py-1.5 text-xs font-semibold rounded-lg border border-[#C8A27B] text-[#4A2F19] hover:bg-[#F8F4EE] flex items-center gap-1 disabled:opacity-60"
+                              className="px-3 py-1.5 text-xs font-semibold rounded-lg border border-[var(--brand-accent)] text-[var(--brand-primary)] hover:bg-[#F8F4EE] flex items-center gap-1 disabled:opacity-60"
                             >
                               <Eye className="w-3.5 h-3.5" />
                               View
@@ -410,7 +410,7 @@ function CertificateRecommendations() {
                                 !certificateId ||
                                 downloadingId === certificateId
                               }
-                              className="px-3 py-1.5 text-xs font-semibold rounded-lg bg-[#4A2F19] text-white hover:bg-[#6B4423] flex items-center gap-1 disabled:opacity-60"
+                              className="px-3 py-1.5 text-xs font-semibold rounded-lg bg-[var(--brand-primary)] text-white hover:bg-[var(--brand-primary-hover)] flex items-center gap-1 disabled:opacity-60"
                             >
                               {downloadingId === certificateId ? (
                                 <RefreshCw className="w-3.5 h-3.5 animate-spin" />
@@ -431,11 +431,11 @@ function CertificateRecommendations() {
         </div>
 
         {selectedCertificate && (
-          <div className="bg-white rounded-2xl shadow-coffee-md border border-[#C8A27B]/30 p-6">
-            <h2 className="text-xl font-bold text-[#1A1A1A] mb-3">
+          <div className="bg-white rounded-2xl shadow-coffee-md border border-[var(--border-default)] p-6">
+            <h2 className="text-xl font-bold text-[var(--text-primary)] mb-3">
               Certificate Details
             </h2>
-            <pre className="bg-[#F8F4EE] border border-[#C8A27B]/30 rounded-xl p-4 overflow-auto text-sm text-[#4A2F19]">
+            <pre className="bg-[#F8F4EE] border border-[var(--border-default)] rounded-xl p-4 overflow-auto text-sm text-[var(--brand-primary)]">
               {JSON.stringify(selectedCertificate, null, 2)}
             </pre>
           </div>

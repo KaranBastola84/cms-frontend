@@ -195,8 +195,8 @@ function AuditLogs() {
     return (
       <div className="flex items-center justify-center h-96">
         <div className="text-center">
-          <Loader2 className="w-8 h-8 text-[#4A2F19] animate-spin mx-auto mb-2" />
-          <p className="text-[#6B4423] text-sm">Loading audit logs...</p>
+          <Loader2 className="w-8 h-8 text-[var(--brand-primary)] animate-spin mx-auto mb-2" />
+          <p className="text-[var(--text-primary)] text-sm">Loading audit logs...</p>
         </div>
       </div>
     );
@@ -225,13 +225,13 @@ function AuditLogs() {
           {/* Search */}
           <div className="flex-1">
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-[#6B4423]" />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-[var(--text-primary)]" />
               <input
                 type="text"
                 placeholder="Search by user, action, or IP address..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 rounded-lg border border-[#C8A27B]/30 bg-[#F5EFE6]/50 focus:outline-none focus:border-[#4A2F19] focus:ring-2 focus:ring-[#4A2F19]/20 transition-all"
+                className="w-full pl-10 pr-4 py-2 rounded-lg border border-[var(--border-default)] bg-[var(--bg-page)] focus:outline-none focus:border-[#4A2F19] focus:ring-2 focus:ring-[#4A2F19]/20 transition-all"
               />
             </div>
           </div>
@@ -241,7 +241,7 @@ function AuditLogs() {
             <select
               value={filterModule}
               onChange={(e) => setFilterModule(e.target.value)}
-              className="px-4 py-2 rounded-lg border border-[#C8A27B]/30 bg-[#F5EFE6]/50 focus:outline-none focus:border-[#4A2F19] focus:ring-2 focus:ring-[#4A2F19]/20 transition-all"
+              className="px-4 py-2 rounded-lg border border-[var(--border-default)] bg-[var(--bg-page)] focus:outline-none focus:border-[#4A2F19] focus:ring-2 focus:ring-[#4A2F19]/20 transition-all"
             >
               {modules.map((module) => (
                 <option key={module} value={module}>
@@ -256,7 +256,7 @@ function AuditLogs() {
             <select
               value={filterAction}
               onChange={(e) => setFilterAction(e.target.value)}
-              className="px-4 py-2 rounded-lg border border-[#C8A27B]/30 bg-[#F5EFE6]/50 focus:outline-none focus:border-[#4A2F19] focus:ring-2 focus:ring-[#4A2F19]/20 transition-all"
+              className="px-4 py-2 rounded-lg border border-[var(--border-default)] bg-[var(--bg-page)] focus:outline-none focus:border-[#4A2F19] focus:ring-2 focus:ring-[#4A2F19]/20 transition-all"
             >
               <option value="All">All Actions</option>
               {Object.entries(actionTypes).map(([key, value]) => (
@@ -270,7 +270,7 @@ function AuditLogs() {
           {/* Refresh Button */}
           <button
             onClick={fetchAuditLogs}
-            className="px-4 py-2 bg-[#4A2F19] text-white rounded-lg hover:bg-[#6B4423] transition-all flex items-center gap-2"
+            className="px-4 py-2 bg-[var(--brand-primary)] text-white rounded-lg hover:bg-[var(--brand-primary-hover)] transition-all flex items-center gap-2"
           >
             <RefreshCw className="w-4 h-4" />
             Refresh
@@ -279,7 +279,7 @@ function AuditLogs() {
           <button
             onClick={handleExportPdf}
             disabled={exporting}
-            className="px-4 py-2 bg-[#6B4423] text-white rounded-lg hover:bg-[#8B5E34] transition-all flex items-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
+            className="px-4 py-2 bg-[var(--brand-primary-hover)] text-white rounded-lg hover:bg-[#8B5E34] transition-all flex items-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
           >
             {exporting ? (
               <Loader2 className="w-4 h-4 animate-spin" />
@@ -291,7 +291,7 @@ function AuditLogs() {
         </div>
 
         {/* Summary */}
-        <div className="mt-4 flex items-center gap-2 text-sm text-[#6B4423]">
+        <div className="mt-4 flex items-center gap-2 text-sm text-[var(--text-primary)]">
           <Filter className="w-4 h-4" />
           <span>
             Showing <strong>{filteredLogs.length}</strong> of{" "}
@@ -304,11 +304,11 @@ function AuditLogs() {
       <div className="space-y-3">
         {filteredLogs.length === 0 ? (
           <div className="coffee-card text-center py-12">
-            <Shield className="w-16 h-16 mx-auto mb-4 text-[#6B4423] opacity-30" />
-            <p className="text-[#4A2F19] font-semibold mb-2">
+            <Shield className="w-16 h-16 mx-auto mb-4 text-[var(--text-primary)] opacity-30" />
+            <p className="text-[var(--brand-primary)] font-semibold mb-2">
               No audit logs found
             </p>
-            <p className="text-sm text-[#6B4423]">
+            <p className="text-sm text-[var(--text-primary)]">
               {searchTerm || filterModule !== "All" || filterAction !== "All"
                 ? "Try adjusting your filters"
                 : "System activity will appear here"}
@@ -337,13 +337,13 @@ function AuditLogs() {
                           <span className={`font-bold ${action.color}`}>
                             {action.label}
                           </span>
-                          <span className="text-[#6B4423] text-sm">•</span>
-                          <ModuleIcon className="w-4 h-4 text-[#6B4423]" />
-                          <span className="text-[#6B4423] text-sm font-semibold">
+                          <span className="text-[var(--text-primary)] text-sm">•</span>
+                          <ModuleIcon className="w-4 h-4 text-[var(--text-primary)]" />
+                          <span className="text-[var(--text-primary)] text-sm font-semibold">
                             {log.module}
                           </span>
                         </div>
-                        <p className="text-[#1A1A1A] font-medium m-0 mb-1">
+                        <p className="text-[var(--text-primary)] font-medium m-0 mb-1">
                           {log.additionalInfo}
                         </p>
                       </div>
@@ -351,15 +351,15 @@ function AuditLogs() {
                         onClick={() =>
                           setExpandedLog(isExpanded ? null : log.logId)
                         }
-                        className="p-1 hover:bg-[#EFE7D3] rounded transition-colors shrink-0"
+                        className="p-1 hover:bg-[var(--bg-surface-alt)] rounded transition-colors shrink-0"
                         title="View details"
                       >
-                        <Eye className="w-4 h-4 text-[#6B4423]" />
+                        <Eye className="w-4 h-4 text-[var(--text-primary)]" />
                       </button>
                     </div>
 
                     {/* User & Metadata */}
-                    <div className="flex flex-wrap gap-4 text-xs text-[#6B4423]">
+                    <div className="flex flex-wrap gap-4 text-xs text-[var(--text-primary)]">
                       <div className="flex items-center gap-1">
                         <Users className="w-3 h-3" />
                         <span>{log.userEmail}</span>
@@ -377,24 +377,24 @@ function AuditLogs() {
 
                     {/* Expanded Details */}
                     {isExpanded && (
-                      <div className="mt-4 pt-4 border-t border-[#C8A27B]/30">
+                      <div className="mt-4 pt-4 border-t border-[var(--border-default)]">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                           {log.previousValue && (
                             <div>
-                              <p className="text-xs font-bold text-[#6B4423] mb-1">
+                              <p className="text-xs font-bold text-[var(--text-primary)] mb-1">
                                 Previous Value:
                               </p>
-                              <pre className="text-xs bg-[#EFE7D3]/50 p-3 rounded overflow-x-auto max-h-40">
+                              <pre className="text-xs bg-[var(--bg-surface-alt)] p-3 rounded overflow-x-auto max-h-40">
                                 {formatJsonValue(log.previousValue)}
                               </pre>
                             </div>
                           )}
                           {log.newValue && (
                             <div>
-                              <p className="text-xs font-bold text-[#6B4423] mb-1">
+                              <p className="text-xs font-bold text-[var(--text-primary)] mb-1">
                                 New Value:
                               </p>
-                              <pre className="text-xs bg-[#EFE7D3]/50 p-3 rounded overflow-x-auto max-h-40">
+                              <pre className="text-xs bg-[var(--bg-surface-alt)] p-3 rounded overflow-x-auto max-h-40">
                                 {formatJsonValue(log.newValue)}
                               </pre>
                             </div>

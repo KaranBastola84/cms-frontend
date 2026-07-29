@@ -265,7 +265,7 @@ const OrderManagement = () => {
           <div className="flex gap-2">
             <button
               onClick={() => setShowFilters(!showFilters)}
-              className="flex items-center gap-2 px-4 py-2 border-2 border-[#4A2F19] text-[#4A2F19] rounded-lg hover:bg-[#4A2F19] hover:text-white transition-colors"
+              className="flex items-center gap-2 px-4 py-2 border-2 border-[#4A2F19] text-[var(--brand-primary)] rounded-lg hover:bg-[var(--brand-primary)] hover:text-white transition-colors"
             >
               <Filter className="w-5 h-5" />
               Filters
@@ -432,7 +432,7 @@ const OrderManagement = () => {
                     <td className="px-6 py-4 whitespace-nowrap">
                       <button
                         onClick={() => handleViewOrder(order.id)}
-                        className="text-[#4A2F19] hover:text-[#3A2515] transition-colors"
+                        className="text-[var(--brand-primary)] hover:text-[#3A2515] transition-colors"
                         title="View Details"
                       >
                         <Eye className="w-5 h-5" />
@@ -557,7 +557,7 @@ const OrderDetailsModal = ({
                 <h3 className="font-semibold text-gray-900">Order Status</h3>
                 <button
                   onClick={onUpdateStatus}
-                  className="text-sm text-[#4A2F19] hover:underline font-medium"
+                  className="text-sm text-[var(--brand-primary)] hover:underline font-medium"
                 >
                   Update
                 </button>
@@ -574,7 +574,7 @@ const OrderDetailsModal = ({
                 <h3 className="font-semibold text-gray-900">Payment Status</h3>
                 <button
                   onClick={onUpdatePayment}
-                  className="text-sm text-[#4A2F19] hover:underline font-medium"
+                  className="text-sm text-[var(--brand-primary)] hover:underline font-medium"
                 >
                   Update
                 </button>
@@ -674,7 +674,7 @@ const OrderDetailsModal = ({
                 <span className="text-lg font-semibold text-gray-900">
                   Total Amount
                 </span>
-                <span className="text-2xl font-bold text-[#4A2F19]">
+                <span className="text-2xl font-bold text-[var(--brand-primary)]">
                   Rs. {order.totalAmount?.toFixed(2)}
                 </span>
               </div>
@@ -781,7 +781,7 @@ const UpdateStatusModal = ({ order, onClose, onUpdate }) => {
             </button>
             <button
               type="submit"
-              className="flex-1 px-4 py-2 bg-[#4A2F19] text-white rounded-lg hover:bg-[#3A2515] transition-colors"
+              className="flex-1 px-4 py-2 bg-[var(--brand-primary)] text-white rounded-lg hover:bg-[#3A2515] transition-colors"
             >
               Update Status
             </button>
@@ -861,7 +861,7 @@ const UpdatePaymentModal = ({ order, onClose, onUpdate }) => {
             </button>
             <button
               type="submit"
-              className="flex-1 px-4 py-2 bg-[#4A2F19] text-white rounded-lg hover:bg-[#3A2515] transition-colors"
+              className="flex-1 px-4 py-2 bg-[var(--brand-primary)] text-white rounded-lg hover:bg-[#3A2515] transition-colors"
             >
               Update Payment
             </button>

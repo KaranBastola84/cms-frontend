@@ -118,23 +118,23 @@ function CertificateRecords() {
       <div className="max-w-7xl mx-auto space-y-6">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-[#1A1A1A] mb-2">
+            <h1 className="text-3xl font-bold text-[var(--text-primary)] mb-2">
               Certificate Records
             </h1>
-            <p className="text-[#6B4423]">
+            <p className="text-[var(--text-primary)]">
               Lookup student certificates, open details, and download available
               files.
             </p>
           </div>
-          <div className="w-14 h-14 rounded-2xl bg-[#EFE7D3] text-[#4A2F19] flex items-center justify-center">
+          <div className="w-14 h-14 rounded-2xl bg-[var(--bg-surface-alt)] text-[var(--brand-primary)] flex items-center justify-center">
             <ShieldCheck className="w-7 h-7" />
           </div>
         </div>
 
-        <div className="bg-white rounded-2xl shadow-coffee-md border border-[#C8A27B]/30 p-6">
+        <div className="bg-white rounded-2xl shadow-coffee-md border border-[var(--border-default)] p-6">
           <div className="flex flex-wrap items-end gap-3">
             <div>
-              <label className="block text-sm font-semibold text-[#4A2F19] mb-2">
+              <label className="block text-sm font-semibold text-[var(--brand-primary)] mb-2">
                 Student ID
               </label>
               <input
@@ -142,7 +142,7 @@ function CertificateRecords() {
                 min="1"
                 value={studentId}
                 onChange={(event) => setStudentId(event.target.value)}
-                className="px-4 py-2 rounded-lg border-2 border-[#C8A27B]/40 bg-[#F8F4EE] focus:outline-none focus:border-[#4A2F19]"
+                className="px-4 py-2 rounded-lg border-2 border-[var(--brand-accent)]/40 bg-[#F8F4EE] focus:outline-none focus:border-[#4A2F19]"
                 placeholder="Enter student ID"
               />
             </div>
@@ -151,7 +151,7 @@ function CertificateRecords() {
               type="button"
               onClick={loadRecords}
               disabled={loading}
-              className="px-4 py-2 rounded-lg bg-[#4A2F19] text-white font-semibold hover:bg-[#6B4423] transition-colors flex items-center gap-2 disabled:opacity-60"
+              className="px-4 py-2 rounded-lg bg-[var(--brand-primary)] text-white font-semibold hover:bg-[var(--brand-primary-hover)] transition-colors flex items-center gap-2 disabled:opacity-60"
             >
               {loading ? (
                 <RefreshCw className="w-4 h-4 animate-spin" />
@@ -164,24 +164,24 @@ function CertificateRecords() {
 
           <div className="overflow-x-auto mt-6">
             <table className="w-full">
-              <thead className="bg-[#EFE7D3] border-b border-[#C8A27B]">
+              <thead className="bg-[var(--bg-surface-alt)] border-b border-[var(--brand-accent)]">
                 <tr>
-                  <th className="px-4 py-3 text-left text-sm font-bold text-[#1A1A1A]">
+                  <th className="px-4 py-3 text-left text-sm font-bold text-[var(--text-primary)]">
                     Certificate ID
                   </th>
-                  <th className="px-4 py-3 text-left text-sm font-bold text-[#1A1A1A]">
+                  <th className="px-4 py-3 text-left text-sm font-bold text-[var(--text-primary)]">
                     Number
                   </th>
-                  <th className="px-4 py-3 text-left text-sm font-bold text-[#1A1A1A]">
+                  <th className="px-4 py-3 text-left text-sm font-bold text-[var(--text-primary)]">
                     Module
                   </th>
-                  <th className="px-4 py-3 text-left text-sm font-bold text-[#1A1A1A]">
+                  <th className="px-4 py-3 text-left text-sm font-bold text-[var(--text-primary)]">
                     Status
                   </th>
-                  <th className="px-4 py-3 text-left text-sm font-bold text-[#1A1A1A]">
+                  <th className="px-4 py-3 text-left text-sm font-bold text-[var(--text-primary)]">
                     Issued
                   </th>
-                  <th className="px-4 py-3 text-left text-sm font-bold text-[#1A1A1A]">
+                  <th className="px-4 py-3 text-left text-sm font-bold text-[var(--text-primary)]">
                     Actions
                   </th>
                 </tr>
@@ -191,7 +191,7 @@ function CertificateRecords() {
                   <tr>
                     <td
                       colSpan={6}
-                      className="px-4 py-10 text-center text-[#6B4423]"
+                      className="px-4 py-10 text-center text-[var(--text-primary)]"
                     >
                       Search by student ID to see certificate records.
                     </td>
@@ -204,17 +204,17 @@ function CertificateRecords() {
                         key={`${certificateId || "record"}-${index}`}
                         className="hover:bg-[#F8F4EE]/60"
                       >
-                        <td className="px-4 py-3 text-sm text-[#1A1A1A]">
+                        <td className="px-4 py-3 text-sm text-[var(--text-primary)]">
                           {certificateId || "-"}
                         </td>
-                        <td className="px-4 py-3 text-sm text-[#4A2F19]">
+                        <td className="px-4 py-3 text-sm text-[var(--brand-primary)]">
                           {getDisplay(certificate, [
                             "certificateNumber",
                             "number",
                             "code",
                           ])}
                         </td>
-                        <td className="px-4 py-3 text-sm text-[#4A2F19]">
+                        <td className="px-4 py-3 text-sm text-[var(--brand-primary)]">
                           {getDisplay(certificate, [
                             "moduleName",
                             "module",
@@ -222,8 +222,8 @@ function CertificateRecords() {
                             "title",
                           ])}
                         </td>
-                        <td className="px-4 py-3 text-sm text-[#4A2F19]">
-                          <span className="px-2 py-1 rounded-md bg-[#EFE7D3] font-semibold">
+                        <td className="px-4 py-3 text-sm text-[var(--brand-primary)]">
+                          <span className="px-2 py-1 rounded-md bg-[var(--bg-surface-alt)] font-semibold">
                             {getDisplay(certificate, [
                               "status",
                               "certificateStatus",
@@ -231,7 +231,7 @@ function CertificateRecords() {
                             ])}
                           </span>
                         </td>
-                        <td className="px-4 py-3 text-sm text-[#6B4423]">
+                        <td className="px-4 py-3 text-sm text-[var(--text-primary)]">
                           {formatDate(
                             certificate?.issuedAt ||
                               certificate?.issueDate ||
@@ -244,7 +244,7 @@ function CertificateRecords() {
                               type="button"
                               onClick={() => viewDetails(certificate)}
                               disabled={loadingDetails}
-                              className="px-3 py-1.5 text-xs font-semibold rounded-lg border border-[#C8A27B] text-[#4A2F19] hover:bg-[#F8F4EE] flex items-center gap-1 disabled:opacity-60"
+                              className="px-3 py-1.5 text-xs font-semibold rounded-lg border border-[var(--brand-accent)] text-[var(--brand-primary)] hover:bg-[#F8F4EE] flex items-center gap-1 disabled:opacity-60"
                             >
                               <Eye className="w-3.5 h-3.5" />
                               View
@@ -256,7 +256,7 @@ function CertificateRecords() {
                                 !certificateId ||
                                 downloadingId === certificateId
                               }
-                              className="px-3 py-1.5 text-xs font-semibold rounded-lg bg-[#4A2F19] text-white hover:bg-[#6B4423] flex items-center gap-1 disabled:opacity-60"
+                              className="px-3 py-1.5 text-xs font-semibold rounded-lg bg-[var(--brand-primary)] text-white hover:bg-[var(--brand-primary-hover)] flex items-center gap-1 disabled:opacity-60"
                             >
                               {downloadingId === certificateId ? (
                                 <RefreshCw className="w-3.5 h-3.5 animate-spin" />
@@ -277,11 +277,11 @@ function CertificateRecords() {
         </div>
 
         {selectedCertificate && (
-          <div className="bg-white rounded-2xl shadow-coffee-md border border-[#C8A27B]/30 p-6">
-            <h2 className="text-xl font-bold text-[#1A1A1A] mb-3">
+          <div className="bg-white rounded-2xl shadow-coffee-md border border-[var(--border-default)] p-6">
+            <h2 className="text-xl font-bold text-[var(--text-primary)] mb-3">
               Certificate Details
             </h2>
-            <pre className="bg-[#F8F4EE] border border-[#C8A27B]/30 rounded-xl p-4 overflow-auto text-sm text-[#4A2F19]">
+            <pre className="bg-[#F8F4EE] border border-[var(--border-default)] rounded-xl p-4 overflow-auto text-sm text-[var(--brand-primary)]">
               {JSON.stringify(selectedCertificate, null, 2)}
             </pre>
           </div>

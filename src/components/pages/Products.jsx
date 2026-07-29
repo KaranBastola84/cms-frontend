@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
+import gsap from "gsap";
 import {
   Search,
   ShoppingCart,
@@ -105,6 +106,21 @@ const Products = () => {
     loadProducts();
   }, [loadProducts]);
 
+  const containerRef = useRef(null);
+
+  useEffect(() => {
+    if (!loading && products.length > 0 && containerRef.current) {
+      const ctx = gsap.context(() => {
+        gsap.fromTo(
+          ".product-card-anim",
+          { y: 20, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.5, stagger: 0.1, ease: "power2.out", delay: 0.1 }
+        );
+      }, containerRef);
+      return () => ctx.revert();
+    }
+  }, [loading, products]);
+
   const handleSearch = (e) => {
     e.preventDefault();
     setCurrentPage(1);
@@ -147,16 +163,16 @@ const Products = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#0F0F0F] pt-28">
+    <div ref={containerRef} className="min-h-screen bg-[var(--bg-page)] pt-28">
       {/* Page Header */}
-      <div className="bg-[#1A1A1A] border-y border-[#ffffff05] py-16 mb-12 relative overflow-hidden">
+      <div className="bg-[var(--brand-primary)] py-16 mb-12 relative overflow-hidden">
         {/* Background glow and styling */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60%] h-[100%] bg-[#C6A36A]/5 blur-[100px] rounded-full pointer-events-none" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60%] h-[100%] bg-white/10 blur-[100px] rounded-full pointer-events-none" />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
-          <h1 className="text-4xl md:text-5xl font-heading font-normal text-white uppercase tracking-widest mb-4">
-            Curriculum <span className="text-[#C6A36A] italic lowercase font-serif">&</span> Programs
+          <h1 className="text-4xl md:text-5xl font-heading font-bold text-white uppercase tracking-widest mb-4">
+            Curriculum <span className="text-[var(--brand-secondary)] italic lowercase font-serif">&</span> Programs
           </h1>
-          <p className="text-[#E0E0E0] max-w-2xl mx-auto font-light tracking-wide">
+          <p className="text-white/80 max-w-2xl mx-auto tracking-wide">
             Explore our world-class specialty coffee courses. Elevate your craft with certified professional training.
           </p>
         </div>
@@ -167,8 +183,8 @@ const Products = () => {
         {featuredProducts.length > 0 && (
           <div className="mb-16">
             <div className="flex items-center gap-3 mb-8">
-              <Star className="w-8 h-8 text-[#C6A36A] fill-current" />
-              <h2 className="text-3xl font-heading font-bold text-white uppercase tracking-widest">
+              <Star className="w-8 h-8 text-[var(--brand-primary)] fill-current" />
+              <h2 className="text-3xl font-heading font-bold text-[var(--text-primary)] uppercase tracking-widest">
                 Featured Programs
               </h2>
             </div>
@@ -187,18 +203,18 @@ const Products = () => {
         )}
 
         {/* Search and Filters */}
-        <div className="bg-[#1A1A1A] border border-[#ffffff10] rounded-2xl p-8 mb-12 shadow-2xl">
+        <div className="bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-2xl p-8 mb-12 shadow-lg">
           <div className="flex flex-col md:flex-row gap-4">
             {/* Search Bar */}
             <form onSubmit={handleSearch} className="flex-1">
               <div className="relative">
-                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-[#CCCCCC] w-5 h-5" />
+                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-[var(--text-secondary)] w-5 h-5" />
                 <input
                   type="text"
                   placeholder="Search programs..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-12 pr-4 py-4 bg-[#0F0F0F] border border-[#ffffff15] rounded-xl text-white placeholder-[#CCCCCC] focus:outline-none focus:border-[#C6A36A] transition-colors"
+                  className="w-full pl-12 pr-4 py-4 bg-[var(--bg-page)] border border-[var(--border-subtle)] rounded-xl text-[var(--text-primary)] placeholder-[#A0A0A0] focus:outline-none focus:border-[var(--brand-primary)] transition-colors"
                 />
               </div>
             </form>
@@ -206,22 +222,22 @@ const Products = () => {
             {/* Filter Toggle */}
             <button
               onClick={() => setShowFilters(!showFilters)}
-              className="flex items-center gap-2 px-8 py-4 bg-[#1A1A1A] border border-[#ffffff15] text-white rounded-xl hover:border-[#C6A36A] transition-colors uppercase tracking-widest text-sm font-bold"
+              className="flex items-center gap-2 px-8 py-4 bg-[var(--bg-surface-alt)] border border-[var(--border-default)] text-[var(--text-primary)] rounded-xl hover:border-[var(--brand-primary)] transition-colors uppercase tracking-widest text-sm font-bold"
             >
-              <Filter className="w-5 h-5 text-[#C6A36A]" />
+              <Filter className="w-5 h-5 text-[var(--brand-primary)]" />
               Filters
             </button>
           </div>
 
           {/* Category Filters */}
           {showFilters && (
-            <div className="mt-8 pt-8 border-t border-[#ffffff10]">
+            <div className="mt-8 pt-8 border-t border-[var(--border-subtle)]">
               <div className="flex items-center justify-between mb-6">
-                <h3 className="font-heading font-semibold text-white uppercase tracking-widest text-sm">Categories</h3>
+                <h3 className="font-heading font-bold text-[var(--text-primary)] uppercase tracking-widest text-sm">Categories</h3>
                 {(selectedCategory || searchQuery) && (
                   <button
                     onClick={clearFilters}
-                    className="text-sm text-[#CCCCCC] hover:text-[#C6A36A] flex items-center gap-1 transition-colors uppercase tracking-wider font-semibold"
+                    className="text-sm text-[var(--text-secondary)] hover:text-[var(--brand-primary)] flex items-center gap-1 transition-colors uppercase tracking-wider font-semibold"
                   >
                     <X className="w-4 h-4" />
                     Clear Filters
@@ -235,8 +251,8 @@ const Products = () => {
                     onClick={() => handleCategoryFilter(category)}
                     className={`px-5 py-2.5 rounded-full border transition-all text-sm uppercase tracking-wider font-semibold ${
                       selectedCategory === category
-                        ? "bg-[#C6A36A] text-[#0F0F0F] border-[#C6A36A]"
-                        : "bg-transparent text-[#E0E0E0] border-[#ffffff20] hover:border-[#C6A36A] hover:text-white"
+                        ? "bg-[var(--brand-primary)] text-white border-[var(--brand-primary)]"
+                        : "bg-transparent text-[var(--text-secondary)] border-[var(--border-default)] hover:border-[var(--brand-primary)] hover:text-[var(--brand-primary)]"
                     }`}
                   >
                     {category}
@@ -250,31 +266,32 @@ const Products = () => {
         {/* Products Grid */}
         <div className="mb-16">
           <div className="flex items-center justify-between mb-10">
-            <h2 className="text-3xl font-heading font-bold text-white uppercase tracking-widest">All Programs</h2>
-            <p className="text-[#E0E0E0] text-sm uppercase tracking-wider font-semibold">
+            <h2 className="text-3xl font-heading font-bold text-[var(--text-primary)] uppercase tracking-widest">All Programs</h2>
+            <p className="text-[var(--text-secondary)] text-sm uppercase tracking-wider font-semibold">
               {totalItems} {totalItems === 1 ? "program" : "programs"} found
             </p>
           </div>
 
           {loading ? (
             <div className="flex items-center justify-center py-32">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#C6A36A]"></div>
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[var(--brand-primary)]"></div>
             </div>
           ) : products.length === 0 ? (
-            <div className="text-center py-32 border border-[#ffffff05] bg-[#1A1A1A] rounded-2xl">
-              <Package className="w-20 h-20 text-[#666666] mx-auto mb-6" />
-              <p className="text-2xl font-heading text-white">No programs found</p>
-              <p className="text-[#CCCCCC] mt-3 font-light">Try adjusting your filters</p>
+            <div className="text-center py-32 border border-[var(--border-subtle)] bg-[var(--bg-surface)] rounded-2xl">
+              <Package className="w-20 h-20 text-[var(--border-strong)] mx-auto mb-6" />
+              <p className="text-2xl font-heading font-bold text-[var(--text-primary)]">No programs found</p>
+              <p className="text-[var(--text-secondary)] mt-3">Try adjusting your filters</p>
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
               {products.map((product) => (
-                <ProductCard
-                  key={product.id}
-                  product={product}
-                  onViewDetails={handleViewDetails}
-                  onAddToCart={addToCart}
-                />
+                <div key={product.id} className="product-card-anim">
+                  <ProductCard
+                    product={product}
+                    onViewDetails={handleViewDetails}
+                    onAddToCart={addToCart}
+                  />
+                </div>
               ))}
             </div>
           )}
@@ -286,7 +303,7 @@ const Products = () => {
             <button
               onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
               disabled={currentPage === 1}
-              className="p-3 rounded-lg border border-[#ffffff15] bg-[#1A1A1A] text-white hover:border-[#C6A36A] disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+              className="p-3 rounded-lg border border-[var(--border-subtle)] bg-[var(--bg-surface)] text-[var(--text-primary)] hover:border-[var(--brand-primary)] hover:text-[var(--brand-primary)] disabled:opacity-30 disabled:cursor-not-allowed transition-all"
             >
               <ChevronLeft className="w-5 h-5" />
             </button>
@@ -304,8 +321,8 @@ const Products = () => {
                     onClick={() => setCurrentPage(page)}
                     className={`w-12 h-12 rounded-lg flex items-center justify-center font-bold text-sm transition-all ${
                       currentPage === page
-                        ? "bg-[#C6A36A] text-[#0F0F0F]"
-                        : "border border-[#ffffff15] bg-[#1A1A1A] text-white hover:border-[#C6A36A]"
+                        ? "bg-[var(--brand-primary)] text-white"
+                        : "border border-[var(--border-subtle)] bg-[var(--bg-surface)] text-[var(--text-primary)] hover:border-[var(--brand-primary)] hover:text-[var(--brand-primary)]"
                     }`}
                   >
                     {page}
@@ -313,7 +330,7 @@ const Products = () => {
                 );
               } else if (page === currentPage - 2 || page === currentPage + 2) {
                 return (
-                  <span key={page} className="px-3 text-[#CCCCCC]">
+                  <span key={page} className="px-3 text-[var(--text-secondary)]">
                     ...
                   </span>
                 );
@@ -326,7 +343,7 @@ const Products = () => {
                 setCurrentPage((prev) => Math.min(totalPages, prev + 1))
               }
               disabled={currentPage === totalPages}
-              className="p-3 rounded-lg border border-[#ffffff15] bg-[#1A1A1A] text-white hover:border-[#C6A36A] disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+              className="p-3 rounded-lg border border-[var(--border-subtle)] bg-[var(--bg-surface)] text-[var(--text-primary)] hover:border-[var(--brand-primary)] hover:text-[var(--brand-primary)] disabled:opacity-30 disabled:cursor-not-allowed transition-all"
             >
               <ChevronRight className="w-5 h-5" />
             </button>
@@ -338,18 +355,17 @@ const Products = () => {
   );
 };
 
-// Product Card Component
 const ProductCard = ({ product, onViewDetails, onAddToCart, featured }) => {
   const isLowStock = product.stockQuantity <= product.lowStockThreshold;
   const isOutOfStock = product.stockQuantity === 0;
 
   return (
     <div
-      className={`luxury-card flex flex-col group ${featured ? "border-[#C6A36A] shadow-[0_0_20px_rgba(198,163,106,0.1)]" : "border-[#ffffff10]"}`}
+      className={`card flex flex-col group h-full hover:-translate-y-1 ${featured ? "border-[var(--brand-primary)] shadow-lg" : ""}`}
     >
       {/* Product Image */}
       <div
-        className="relative h-64 bg-[#0F0F0F] overflow-hidden cursor-pointer"
+        className="relative h-64 bg-[var(--bg-page)] overflow-hidden cursor-pointer"
         onClick={() => onViewDetails(product)}
       >
         {product.imageUrl ? (
@@ -364,8 +380,8 @@ const ProductCard = ({ product, onViewDetails, onAddToCart, featured }) => {
           </div>
         )}
         {featured && (
-          <div className="absolute top-4 right-4 bg-[#0F0F0F]/80 backdrop-blur-sm border border-[#ffffff10] text-white px-3 py-1 text-[10px] tracking-widest font-semibold uppercase flex items-center gap-1.5 z-20">
-            <Star className="w-3 h-3 text-[#C6A36A] fill-current" />
+          <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm border border-[var(--border-subtle)] text-[var(--text-primary)] px-3 py-1 text-[10px] tracking-widest font-bold uppercase flex items-center gap-1.5 z-20 rounded-md">
+            <Star className="w-3 h-3 text-[var(--brand-primary)] fill-current" />
             Featured
           </div>
         )}
@@ -377,19 +393,19 @@ const ProductCard = ({ product, onViewDetails, onAddToCart, featured }) => {
           </div>
         )}
         {isLowStock && !isOutOfStock && (
-          <div className="absolute top-4 left-4 bg-[#C6A36A] text-[#0F0F0F] px-3 py-1 text-[10px] font-bold tracking-widest uppercase z-20">
+          <div className="absolute top-4 left-4 bg-[#F59E0B] text-white px-3 py-1 text-[10px] font-bold tracking-widest uppercase z-20 rounded-md">
             Low Stock
           </div>
         )}
       </div>
 
       {/* Product Info */}
-      <div className="p-6 flex-1 flex flex-col relative bg-[#1A1A1A]">
+      <div className="p-6 flex-1 flex flex-col relative bg-[var(--bg-surface)]">
         <div className="flex items-center justify-between mb-4">
-          <span className="text-[10px] font-semibold text-[#C6A36A] tracking-[0.2em] uppercase">
+          <span className="text-[10px] font-bold text-[var(--brand-primary)] tracking-[0.2em] uppercase">
             {product.category}
           </span>
-          <div className="flex text-[#C6A36A]">
+          <div className="flex text-[var(--brand-primary)]">
             <Star className="w-3 h-3 fill-current mx-0.5" />
             <Star className="w-3 h-3 fill-current mx-0.5" />
             <Star className="w-3 h-3 fill-current mx-0.5" />
@@ -397,26 +413,26 @@ const ProductCard = ({ product, onViewDetails, onAddToCart, featured }) => {
             <Star className="w-3 h-3 fill-current mx-0.5" />
           </div>
         </div>
-        <h3 className="text-xl font-heading font-bold text-white mb-3 line-clamp-2 group-hover:text-[#C6A36A] transition-colors">
+        <h3 className="text-xl font-heading font-bold text-[var(--text-primary)] mb-3 line-clamp-2 group-hover:text-[var(--brand-primary)] transition-colors">
           {product.name}
         </h3>
-        <p className="text-[#E0E0E0] text-sm mb-6 line-clamp-3 font-light leading-relaxed flex-1">
+        <p className="text-[var(--text-secondary)] text-sm mb-6 line-clamp-3 leading-relaxed flex-1">
           {product.description}
         </p>
 
-        <div className="flex items-center justify-between border-t border-[#ffffff10] pt-6 mt-auto">
+        <div className="flex items-center justify-between border-t border-[var(--border-subtle)] pt-6 mt-auto">
           <div>
-            <p className="text-2xl font-bold text-white mb-1">
+            <p className="text-2xl font-bold text-[var(--text-primary)] mb-1">
               ${product.price.toFixed(2)}
             </p>
-            <p className="text-[10px] text-[#E0E0E0] uppercase tracking-wider font-medium">
+            <p className="text-[10px] text-[var(--text-secondary)] uppercase tracking-wider font-bold">
               {product.stockQuantity} in stock
             </p>
           </div>
           <div className="flex gap-3">
             <button
               onClick={() => onViewDetails(product)}
-              className="w-10 h-10 rounded-full border border-[#ffffff15] text-[#E0E0E0] hover:text-[#C6A36A] hover:border-[#C6A36A] flex items-center justify-center transition-all bg-[#0F0F0F]"
+              className="w-10 h-10 rounded-full border border-[var(--border-subtle)] text-[var(--text-secondary)] hover:text-[var(--brand-primary)] hover:border-[var(--brand-primary)] flex items-center justify-center transition-all bg-[var(--bg-page)]"
               title="View Details"
             >
               <Search className="w-4 h-4" />
@@ -424,7 +440,7 @@ const ProductCard = ({ product, onViewDetails, onAddToCart, featured }) => {
             <button
               onClick={() => onAddToCart(product)}
               disabled={isOutOfStock}
-              className="w-10 h-10 rounded-full bg-[#C6A36A] text-[#0F0F0F] hover:bg-[#D4B785] flex items-center justify-center transition-all disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-105"
+              className="w-10 h-10 rounded-full bg-[var(--brand-primary)] text-white hover:bg-[var(--brand-primary-hover)] flex items-center justify-center transition-all disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-105 shadow-md"
               title="Add to Cart"
             >
               <ShoppingCart className="w-4 h-4" />

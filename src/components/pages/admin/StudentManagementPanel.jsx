@@ -215,13 +215,13 @@ const StudentManagementPanel = () => {
   };
 
   return (
-    <section className="mt-8 bg-white rounded-xl shadow-coffee-md border border-[#C8A27B]/30 p-4 md:p-6">
+    <section className="mt-8 bg-white rounded-xl shadow-coffee-md border border-[var(--border-default)] p-4 md:p-6">
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-4">
         <div>
-          <h2 className="text-2xl font-bold text-[#1A1A1A]">
+          <h2 className="text-2xl font-bold text-[var(--text-primary)]">
             Student Management
           </h2>
-          <p className="text-[#6B4423]">
+          <p className="text-[var(--text-primary)]">
             Manage student records and quickly view enrolled students.
           </p>
         </div>
@@ -237,22 +237,22 @@ const StudentManagementPanel = () => {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 mb-4">
         <div className="relative lg:col-span-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#6B4423]" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--text-primary)]" />
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search by name, email, phone"
-            className="w-full pl-10 pr-4 py-2 border-2 border-[#C8A27B]/40 rounded-lg bg-[#F8F4EE] focus:outline-none focus:border-[#4A2F19]"
+            className="w-full pl-10 pr-4 py-2 border-2 border-[var(--brand-accent)]/40 rounded-lg bg-[#F8F4EE] focus:outline-none focus:border-[#4A2F19]"
           />
         </div>
 
         <div className="relative">
-          <Filter className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#6B4423]" />
+          <Filter className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--text-primary)]" />
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 border-2 border-[#C8A27B]/40 rounded-lg bg-[#F8F4EE] focus:outline-none focus:border-[#4A2F19] appearance-none"
+            className="w-full pl-10 pr-4 py-2 border-2 border-[var(--brand-accent)]/40 rounded-lg bg-[#F8F4EE] focus:outline-none focus:border-[#4A2F19] appearance-none"
           >
             {STUDENT_STATUSES.map((status) => (
               <option key={status} value={status}>
@@ -264,18 +264,18 @@ const StudentManagementPanel = () => {
 
         <div className="flex gap-2">
           <div className="relative flex-1">
-            <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#6B4423]" />
+            <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--text-primary)]" />
             <input
               type="email"
               value={emailLookup}
               onChange={(e) => setEmailLookup(e.target.value)}
               placeholder="Find by exact email"
-              className="w-full pl-10 pr-4 py-2 border-2 border-[#C8A27B]/40 rounded-lg bg-[#F8F4EE] focus:outline-none focus:border-[#4A2F19]"
+              className="w-full pl-10 pr-4 py-2 border-2 border-[var(--brand-accent)]/40 rounded-lg bg-[#F8F4EE] focus:outline-none focus:border-[#4A2F19]"
             />
           </div>
           <button
             onClick={handleFindByEmail}
-            className="px-4 py-2 rounded-lg bg-[#4A2F19] text-white hover:bg-[#3D2817]"
+            className="px-4 py-2 rounded-lg bg-[var(--brand-primary)] text-white hover:bg-[#3D2817]"
           >
             Find
           </button>
@@ -283,34 +283,34 @@ const StudentManagementPanel = () => {
       </div>
 
       {loading ? (
-        <div className="py-10 flex items-center justify-center gap-2 text-[#6B4423]">
+        <div className="py-10 flex items-center justify-center gap-2 text-[var(--text-primary)]">
           <RefreshCw className="w-5 h-5 animate-spin" />
           Loading students...
         </div>
       ) : (
-        <div className="overflow-x-auto rounded-lg border border-[#C8A27B]/30">
+        <div className="overflow-x-auto rounded-lg border border-[var(--border-default)]">
           <table className="w-full min-w-245">
-            <thead className="bg-[#EFE7D3] border-b border-[#C8A27B]/50">
+            <thead className="bg-[var(--bg-surface-alt)] border-b border-[var(--brand-accent)]/50">
               <tr>
-                <th className="px-4 py-3 text-left text-xs font-bold text-[#1A1A1A]">
+                <th className="px-4 py-3 text-left text-xs font-bold text-[var(--text-primary)]">
                   Student
                 </th>
-                <th className="px-4 py-3 text-left text-xs font-bold text-[#1A1A1A]">
+                <th className="px-4 py-3 text-left text-xs font-bold text-[var(--text-primary)]">
                   Contact
                 </th>
-                <th className="px-4 py-3 text-left text-xs font-bold text-[#1A1A1A]">
+                <th className="px-4 py-3 text-left text-xs font-bold text-[var(--text-primary)]">
                   Status
                 </th>
-                <th className="px-4 py-3 text-left text-xs font-bold text-[#1A1A1A]">
+                <th className="px-4 py-3 text-left text-xs font-bold text-[var(--text-primary)]">
                   Fees
                 </th>
-                <th className="px-4 py-3 text-left text-xs font-bold text-[#1A1A1A]">
+                <th className="px-4 py-3 text-left text-xs font-bold text-[var(--text-primary)]">
                   Admission
                 </th>
-                <th className="px-4 py-3 text-left text-xs font-bold text-[#1A1A1A]">
+                <th className="px-4 py-3 text-left text-xs font-bold text-[var(--text-primary)]">
                   Update Status
                 </th>
-                <th className="px-4 py-3 text-left text-xs font-bold text-[#1A1A1A]">
+                <th className="px-4 py-3 text-left text-xs font-bold text-[var(--text-primary)]">
                   Actions
                 </th>
               </tr>
@@ -320,7 +320,7 @@ const StudentManagementPanel = () => {
                 <tr>
                   <td
                     colSpan={7}
-                    className="px-4 py-12 text-center text-[#6B4423]"
+                    className="px-4 py-12 text-center text-[var(--text-primary)]"
                   >
                     <div className="flex flex-col items-center gap-2">
                       <Users className="w-10 h-10 opacity-50" />
@@ -335,29 +335,29 @@ const StudentManagementPanel = () => {
                   return (
                     <tr key={studentId} className="hover:bg-[#F8F4EE]/60">
                       <td className="px-4 py-3">
-                        <p className="font-semibold text-[#1A1A1A]">
+                        <p className="font-semibold text-[var(--text-primary)]">
                           {student.name || "-"}
                         </p>
-                        <p className="text-xs text-[#6B4423]">
+                        <p className="text-xs text-[var(--text-primary)]">
                           ID: {studentId || "-"}
                         </p>
                       </td>
-                      <td className="px-4 py-3 text-sm text-[#4A2F19]">
+                      <td className="px-4 py-3 text-sm text-[var(--brand-primary)]">
                         <p>{student.email || "-"}</p>
-                        <p className="text-xs text-[#6B4423]">
+                        <p className="text-xs text-[var(--text-primary)]">
                           {student.phone || "-"}
                         </p>
                       </td>
                       <td className="px-4 py-3">
-                        <span className="inline-flex px-2 py-1 rounded-md bg-[#EFE7D3] text-[#4A2F19] text-xs font-semibold">
+                        <span className="inline-flex px-2 py-1 rounded-md bg-[var(--bg-surface-alt)] text-[var(--brand-primary)] text-xs font-semibold">
                           {student.status || "-"}
                         </span>
                       </td>
-                      <td className="px-4 py-3 text-sm text-[#4A2F19]">
+                      <td className="px-4 py-3 text-sm text-[var(--brand-primary)]">
                         {formatAmount(student.feesPaid)} /{" "}
                         {formatAmount(student.feesTotal)}
                       </td>
-                      <td className="px-4 py-3 text-sm text-[#4A2F19]">
+                      <td className="px-4 py-3 text-sm text-[var(--brand-primary)]">
                         {formatDateTime(student.admissionDate)}
                       </td>
                       <td className="px-4 py-3">
@@ -374,7 +374,7 @@ const StudentManagementPanel = () => {
                                 [studentId]: e.target.value,
                               }))
                             }
-                            className="px-2 py-1 border border-[#C8A27B]/40 rounded-lg bg-[#F8F4EE] text-sm"
+                            className="px-2 py-1 border border-[var(--brand-accent)]/40 rounded-lg bg-[#F8F4EE] text-sm"
                           >
                             {STUDENT_STATUSES.filter((s) => s !== "All").map(
                               (status) => (
@@ -401,7 +401,7 @@ const StudentManagementPanel = () => {
                           <button
                             onClick={() => openStudentDetails(studentId)}
                             disabled={rowBusy}
-                            className="p-2 rounded-lg bg-[#EFE7D3] text-[#4A2F19] hover:bg-[#E2D4BA]"
+                            className="p-2 rounded-lg bg-[var(--bg-surface-alt)] text-[var(--brand-primary)] hover:bg-[#E2D4BA]"
                             title="View details"
                           >
                             <Eye className="w-4 h-4" />
@@ -429,23 +429,23 @@ const StudentManagementPanel = () => {
         <div className="fixed inset-0 backdrop-blur-md bg-opacity-50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto p-6">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-xl font-bold text-[#1A1A1A]">
+              <h3 className="text-xl font-bold text-[var(--text-primary)]">
                 Student Profile
               </h3>
               <button
                 onClick={closeDetails}
-                className="text-[#6B4423] hover:text-[#1A1A1A]"
+                className="text-[var(--text-primary)] hover:text-[var(--text-primary)]"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
             {detailsLoading ? (
-              <div className="py-8 text-center text-[#6B4423]">Loading...</div>
+              <div className="py-8 text-center text-[var(--text-primary)]">Loading...</div>
             ) : (
               <div className="space-y-6 text-sm">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="p-4 rounded-lg bg-[#F8F4EE] border border-[#C8A27B]/30">
+                  <div className="p-4 rounded-lg bg-[#F8F4EE] border border-[var(--border-default)]">
                     <p>
                       <strong>Name:</strong> {selectedDetails?.name || "-"}
                     </p>
@@ -459,7 +459,7 @@ const StudentManagementPanel = () => {
                       <strong>Status:</strong> {selectedDetails?.status || "-"}
                     </p>
                   </div>
-                  <div className="p-4 rounded-lg bg-[#F8F4EE] border border-[#C8A27B]/30">
+                  <div className="p-4 rounded-lg bg-[#F8F4EE] border border-[var(--border-default)]">
                     <p>
                       <strong>Course:</strong>{" "}
                       {selectedSummary?.courseName || "-"}
@@ -487,14 +487,14 @@ const StudentManagementPanel = () => {
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div className="rounded-lg border border-[#C8A27B]/30 p-4">
-                    <h4 className="font-semibold mb-2 text-[#4A2F19] inline-flex items-center gap-2">
+                  <div className="rounded-lg border border-[var(--border-default)] p-4">
+                    <h4 className="font-semibold mb-2 text-[var(--brand-primary)] inline-flex items-center gap-2">
                       <Wallet className="w-4 h-4" />
                       Payments ({selectedPayments.length})
                     </h4>
                     <div className="space-y-2 max-h-56 overflow-y-auto">
                       {selectedPayments.length === 0 ? (
-                        <p className="text-xs text-[#6B4423]">
+                        <p className="text-xs text-[var(--text-primary)]">
                           No payment records
                         </p>
                       ) : (
@@ -504,7 +504,7 @@ const StudentManagementPanel = () => {
                             className="p-2 rounded bg-[#F8F4EE]"
                           >
                             <p>Amount: {formatAmount(item.amount)}</p>
-                            <p className="text-xs text-[#6B4423]">
+                            <p className="text-xs text-[var(--text-primary)]">
                               {formatDateTime(
                                 item.paidAt ||
                                   item.paymentDate ||
@@ -517,14 +517,14 @@ const StudentManagementPanel = () => {
                     </div>
                   </div>
 
-                  <div className="rounded-lg border border-[#C8A27B]/30 p-4">
-                    <h4 className="font-semibold mb-2 text-[#4A2F19] inline-flex items-center gap-2">
+                  <div className="rounded-lg border border-[var(--border-default)] p-4">
+                    <h4 className="font-semibold mb-2 text-[var(--brand-primary)] inline-flex items-center gap-2">
                       <Wallet className="w-4 h-4" />
                       Cash Payments ({selectedCashPayments.length})
                     </h4>
                     <div className="space-y-2 max-h-56 overflow-y-auto">
                       {selectedCashPayments.length === 0 ? (
-                        <p className="text-xs text-[#6B4423]">
+                        <p className="text-xs text-[var(--text-primary)]">
                           No cash payment records
                         </p>
                       ) : (
@@ -534,10 +534,10 @@ const StudentManagementPanel = () => {
                             className="p-2 rounded bg-[#F8F4EE]"
                           >
                             <p>Amount: {formatAmount(item.amount)}</p>
-                            <p className="text-xs text-[#6B4423]">
+                            <p className="text-xs text-[var(--text-primary)]">
                               By: {item.processedBy || "-"}
                             </p>
-                            <p className="text-xs text-[#6B4423]">
+                            <p className="text-xs text-[var(--text-primary)]">
                               {formatDateTime(item.paidAt)}
                             </p>
                           </div>
@@ -546,14 +546,14 @@ const StudentManagementPanel = () => {
                     </div>
                   </div>
 
-                  <div className="rounded-lg border border-[#C8A27B]/30 p-4">
-                    <h4 className="font-semibold mb-2 text-[#4A2F19] inline-flex items-center gap-2">
+                  <div className="rounded-lg border border-[var(--border-default)] p-4">
+                    <h4 className="font-semibold mb-2 text-[var(--brand-primary)] inline-flex items-center gap-2">
                       <FileText className="w-4 h-4" />
                       Documents ({selectedDocuments.length})
                     </h4>
                     <div className="space-y-2 max-h-56 overflow-y-auto">
                       {selectedDocuments.length === 0 ? (
-                        <p className="text-xs text-[#6B4423]">No documents</p>
+                        <p className="text-xs text-[var(--text-primary)]">No documents</p>
                       ) : (
                         selectedDocuments.map((item, idx) => (
                           <div
@@ -561,7 +561,7 @@ const StudentManagementPanel = () => {
                             className="p-2 rounded bg-[#F8F4EE]"
                           >
                             <p>{item.fileName || item.name || "Document"}</p>
-                            <p className="text-xs text-[#6B4423]">
+                            <p className="text-xs text-[var(--text-primary)]">
                               {item.documentTypeName ||
                                 item.documentType ||
                                 "-"}

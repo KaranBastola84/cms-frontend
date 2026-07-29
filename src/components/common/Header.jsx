@@ -40,21 +40,21 @@ const Header = () => {
     <header 
       className={`fixed top-0 w-full z-50 transition-all duration-300 ${
         isScrolled 
-          ? "bg-[#0F0F0F] bg-opacity-95 backdrop-blur-md border-b border-[#ffffff10] py-4" 
+          ? "bg-[var(--bg-sidebar)] bg-opacity-95 backdrop-blur-md border-b border-[var(--border-subtle)] py-4" 
           : "bg-transparent py-6"
       }`}
     >
       <div className="max-w-7xl mx-auto px-6 w-full flex justify-between items-center">
         {/* Brand */}
         <Link to="/" className="no-underline flex items-center gap-3 group">
-          <div className="text-[#C6A36A] transition-transform duration-300 group-hover:scale-110">
+          <div className="text-[var(--brand-accent)] transition-transform duration-300 group-hover:scale-110">
             <Coffee className="w-8 h-8" strokeWidth={1.5} />
           </div>
           <div className="flex flex-col">
             <h1 className="text-white text-2xl font-heading font-bold m-0 tracking-widest uppercase">
               Brewista
             </h1>
-            <span className="text-[#C6A36A] text-[10px] tracking-[0.3em] uppercase mt-0.5">
+            <span className="text-[var(--brand-accent)] text-[10px] tracking-[0.3em] uppercase mt-0.5">
               Academy
             </span>
           </div>
@@ -64,14 +64,14 @@ const Header = () => {
         <nav className="hidden md:flex items-center gap-8">
           <Link
             to="/products"
-            className="text-[#E0E0E0] hover:text-[#C6A36A] transition-colors font-medium flex items-center gap-2 text-sm uppercase tracking-widest no-underline"
+            className="text-[var(--text-secondary)] hover:text-[var(--brand-accent)] transition-colors font-medium flex items-center gap-2 text-sm uppercase tracking-widest no-underline"
           >
             <span>Programs</span>
           </Link>
 
           <Link
             to="/inquiry"
-            className="text-[#E0E0E0] hover:text-[#C6A36A] transition-colors font-medium flex items-center gap-2 text-sm uppercase tracking-widest no-underline"
+            className="text-[var(--text-secondary)] hover:text-[var(--brand-accent)] transition-colors font-medium flex items-center gap-2 text-sm uppercase tracking-widest no-underline"
           >
             <span>Admissions</span>
           </Link>
@@ -80,7 +80,7 @@ const Header = () => {
 
           <Link
             to="/checkout"
-            className="text-[#E0E0E0] hover:text-white transition-colors relative"
+            className="text-[var(--text-secondary)] hover:text-white transition-colors relative"
             aria-label="View Cart"
           >
             <ShoppingCart className="w-5 h-5" />
@@ -93,22 +93,22 @@ const Header = () => {
 
           {user ? (
             <div className="flex items-center gap-6">
-              <div className="flex items-center gap-3 border-l border-[#ffffff15] pl-6">
+              <div className="flex items-center gap-3 border-l border-[var(--border-subtle)] pl-6">
                 <div className="flex flex-col text-right">
                   <span className="text-white text-sm font-medium tracking-wide">
                     {user.username}
                   </span>
-                  <span className="text-[#CCCCCC] text-[10px] tracking-wider uppercase">
+                  <span className="text-[var(--text-secondary)] text-[10px] tracking-wider uppercase">
                     {user.role}
                   </span>
                 </div>
                 <div className="w-8 h-8 rounded-full bg-[#1A1A1A] border border-[#C6A36A]/50 flex items-center justify-center">
-                  <User className="w-4 h-4 text-[#C6A36A]" />
+                  <User className="w-4 h-4 text-[var(--brand-accent)]" />
                 </div>
               </div>
               <button
                 onClick={handleLogout}
-                className="text-[#E0E0E0] hover:text-[#C6A36A] transition-colors bg-transparent border-none cursor-pointer"
+                className="text-[var(--text-secondary)] hover:text-[var(--brand-accent)] transition-colors bg-transparent border-none cursor-pointer"
                 title="Logout"
               >
                 <LogOut className="w-4 h-4" />
@@ -135,11 +135,11 @@ const Header = () => {
 
       {/* Mobile Navigation Dropdown */}
       {mobileMenuOpen && (
-        <div className="md:hidden absolute top-full left-0 w-full bg-[#0F0F0F] border-b border-[#ffffff10] shadow-2xl py-6 px-6 flex flex-col gap-6">
+        <div className="md:hidden absolute top-full left-0 w-full bg-[var(--bg-sidebar)] border-b border-[var(--border-subtle)] shadow-2xl py-6 px-6 flex flex-col gap-6">
            <Link to="/products" className="text-white text-lg tracking-widest uppercase no-underline" onClick={() => setMobileMenuOpen(false)}>Programs</Link>
            <Link to="/inquiry" className="text-white text-lg tracking-widest uppercase no-underline" onClick={() => setMobileMenuOpen(false)}>Admissions</Link>
            <Link to="/checkout" className="text-white text-lg tracking-widest uppercase no-underline flex justify-between" onClick={() => setMobileMenuOpen(false)}>
-              Cart <span className="text-[#C6A36A]">({cartItemCount})</span>
+              Cart <span className="text-[var(--brand-accent)]">({cartItemCount})</span>
            </Link>
            
            <div className="h-px w-full bg-[#ffffff10]"></div>
@@ -147,11 +147,11 @@ const Header = () => {
            {user ? (
              <div className="flex flex-col gap-4">
                 <div className="flex items-center gap-3">
-                  <User className="w-5 h-5 text-[#C6A36A]" />
+                  <User className="w-5 h-5 text-[var(--brand-accent)]" />
                   <span className="text-white">{user.username}</span>
-                  <span className="text-[#CCCCCC] text-sm">- {user.role}</span>
+                  <span className="text-[var(--text-secondary)] text-sm">- {user.role}</span>
                 </div>
-                <button onClick={() => { handleLogout(); setMobileMenuOpen(false); }} className="text-left text-[#C6A36A] bg-transparent border-none text-lg tracking-widest uppercase">
+                <button onClick={() => { handleLogout(); setMobileMenuOpen(false); }} className="text-left text-[var(--brand-accent)] bg-transparent border-none text-lg tracking-widest uppercase">
                   Logout
                 </button>
              </div>
